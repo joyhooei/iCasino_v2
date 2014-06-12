@@ -147,6 +147,8 @@ public:
     void btn_Up_click(CCObject *sender, TouchEventType type);
     void btn_Theo_click(CCObject *sender, TouchEventType type);
     
+	void callBackFunction_LatBai(CCNode *pSend);
+
     //Server
     void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
     void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);

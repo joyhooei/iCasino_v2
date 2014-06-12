@@ -15,6 +15,8 @@
 #include "Nan3Cay.h"
 #include "LayerBet_Lieng.h"
 #include "SliderCustomLoader.h"
+#include "mUtils.h"
+#include "_Chat_.h"
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
 
@@ -279,6 +281,19 @@ void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr
 		CCLOG("EXT_EVENT_UN_READY_NTF");
     }
     
+	else if (strcmp(EXT_EVENT_ERROR_READY_NTF.c_str(),cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<long> errc = param->GetInt("errc");
+		if (errc != NULL)
+		{
+			if (*errc == 30)
+			{
+				Chat *toast = new Chat("Đợi người chơi khác sẵn sàng", -1);
+				this->addChild(toast);
+			}
+		}
+	}
+
     else if(strcmp("nt",cmd->c_str())==0){
         //"uid":"dautv3","mb":1000,"betal":"4,1,2"
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
@@ -666,7 +681,7 @@ void Lieng::action_UpdateListUser(string lsUser){
 				btnReady->setTitleText("Sẵn Sàng");
 			}
             
-            frameBet_Me->setValueBet((betValue+" $").c_str());
+            frameBet_Me->setValueBet((mUtils::convertMoneyEx(atoi(betValue.c_str())) + " $").c_str());
             frameBet_Me->setPosition(ccp(75,396));
             frameBet_Me->setVisible(true);
         }
@@ -681,7 +696,7 @@ void Lieng::action_UpdateListUser(string lsUser){
                         layerAvatars->setFlag(kUserLeft, true);
                     }
                     
-                    frameBet_Left->setValueBet((betValue+" $").c_str());
+                    frameBet_Left->setValueBet((mUtils::convertMoneyEx(atoi(betValue.c_str())) + " $").c_str());
                     frameBet_Left->setPosition(ccp(109,278));
                     frameBet_Left->setVisible(true);
                     break;
@@ -695,7 +710,7 @@ void Lieng::action_UpdateListUser(string lsUser){
                         layerAvatars->setFlag(kUserRight, true);
                     }
                     
-                    frameBet_Right->setValueBet((betValue+" $").c_str());
+                    frameBet_Right->setValueBet((mUtils::convertMoneyEx(atoi(betValue.c_str())) + " $").c_str());
                     frameBet_Right->setPosition(ccp(WIDTH_DESIGN-109-frameBet_Right->getKc_width(),278));
                     frameBet_Right->setVisible(true);
                     break;
@@ -709,7 +724,7 @@ void Lieng::action_UpdateListUser(string lsUser){
                         layerAvatars->setFlag(kUserTop, true);
                     }
                     
-                    frameBet_Top->setValueBet((betValue+" $").c_str());
+                    frameBet_Top->setValueBet((mUtils::convertMoneyEx(atoi(betValue.c_str())) + " $").c_str());
                     frameBet_Top->setPosition(ccp(454, 440));
                     frameBet_Top->setVisible(true);
             }
@@ -1134,10 +1149,26 @@ void Lieng::btn_NanBai_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
 		CCLOG("Btn Nan Bai");
 		Nan3Cay *BaCay = Nan3Cay::create();
+		BaCay->setCallbackFunc(this,callfuncN_selector(Lieng::callBackFunction_LatBai));
 		BaCay->initListCardHand(_list_cards);
 		this->addChild(BaCay);
     }
 }
+
+void Lieng::callBackFunction_LatBai(CCNode *pSend){
+	if(_list_cards!=""){
+		createCardMe(_list_cards);
+		btnNanBai->setTouchEnabled(false);
+		btnNanBai->setVisible(false);
+		btnXemBai->setVisible(false);
+		btnXemBai->setTouchEnabled(false);
+		moveButtonRight();
+	}
+	else{
+		CCLOG("Not OK");
+	}
+}
+
 void Lieng::btn_To_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
 		cocos2d::extension::CCBReader * ccbReader = NULL;

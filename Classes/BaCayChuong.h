@@ -145,6 +145,8 @@ public:
 	void btn_XemBai_click(CCObject *sender, TouchEventType type);
 	void btn_NanBai_click(CCObject *sender, TouchEventType type);
 
+	void callBackFunction_LatBai(CCNode *pSend);
+
 	//Server
 	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);

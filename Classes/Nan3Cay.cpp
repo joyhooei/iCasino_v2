@@ -1,8 +1,16 @@
 ﻿#include "Nan3Cay.h"
 
-Nan3Cay::Nan3Cay(){
+Nan3Cay::Nan3Cay():m_callback(NULL)
+	,m_callbackListener(NULL)
+{
 
 }
+
+Nan3Cay::Nan3Cay( CCObject *pSender )
+{
+
+}
+
 
 Nan3Cay::~Nan3Cay(){
 
@@ -78,6 +86,7 @@ bool Nan3Cay::init(){
 	return true;
 }
 
+
 void Nan3Cay::initListCardHand(string lsCards){
 	vector<string> arr = Dsplit(lsCards,'-');
 	for (int i=0; i<arr.size(); i++)
@@ -98,6 +107,10 @@ void Nan3Cay::initListCardHand(string lsCards){
 	cardIndex = (int)cardOnhand->count() - 1;
 }
 
+void Nan3Cay::setCallbackFunc(CCObject* target, SEL_CallFuncN callfun){
+	m_callback = target;
+	m_callbackListener = callfun;
+}
 
 void Nan3Cay::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent){
 	CCSetIterator iterator = pTouches->begin();
@@ -260,6 +273,13 @@ void Nan3Cay::movePockerFinish(CardChan *pCard,int pos){
 }
 
 void Nan3Cay::closeLayerNanBai(){
+	//callback
+
+	CCLOG("Call back");
+	if (m_callback && m_callbackListener)
+	{
+		(m_callback->*m_callbackListener)(this);
+	}
 	this->removeFromParentAndCleanup(true);
 }
 

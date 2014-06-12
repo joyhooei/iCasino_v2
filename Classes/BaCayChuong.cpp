@@ -15,6 +15,8 @@
 #include "SliderCustomLoader.h"
 #include "LayerBet_BaCayChuong.h"
 #include "Nan3Cay.h"
+#include "_Chat_.h"
+#include "mUtils.h"
 //#include "mUtils.h"
 
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
@@ -313,6 +315,18 @@ void BaCayChuong::OnExtensionResponse(unsigned long long ptrContext, boost::shar
 		CCLOG("EXT_EVENT_START");
     }
     
+
+	else if(strcmp(EXT_EVENT_ERROR_READY_NTF.c_str(),cmd->c_str()) == 0){
+		boost::shared_ptr<long> errc = param->GetInt("errc");
+		if (errc != NULL)
+		{
+			if (*errc == 30)
+			{
+				Chat *toast = new Chat("Đợi người chơi khác sẵn sàng", -1);
+				this->addChild(toast);
+			}
+		}
+	}
     // List Card NTF
     else if(strcmp(EXT_EVENT_LISTCARD_NTF.c_str(), cmd->c_str())==0){
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
@@ -589,7 +603,7 @@ void BaCayChuong::action_UpdateListUser(string lsUser){
 			layerAvatars->getUserByPos(kUserMe)->setIcon(_url);
 			layerAvatars->getUserByPos(kUserMe)->setMoney(_test);
             
-            frameBet_Me->setValueBet((n[2]+" $").c_str());
+            frameBet_Me->setValueBet((mUtils::convertMoneyEx(atoi(n[2].c_str())) + " $").c_str());
             frameBet_Me->setPosition(ccp(75,396));
             frameBet_Me->setVisible(true);
             
@@ -613,7 +627,7 @@ void BaCayChuong::action_UpdateListUser(string lsUser){
                     layerAvatars->getUserByPos(kUserLeft)->setMoney(_test);
 					layerAvatars->getUserByPos(kUserLeft)->setIcon(_url);
                     
-                    frameBet_Left->setValueBet((n[2]+" $").c_str());
+                    frameBet_Left->setValueBet((mUtils::convertMoneyEx(atoi(n[2].c_str())) + " $").c_str());
                     frameBet_Left->setPosition(ccp(109,278));
                     frameBet_Left->setVisible(true);
                     
@@ -631,7 +645,7 @@ void BaCayChuong::action_UpdateListUser(string lsUser){
                     layerAvatars->getUserByPos(kUserRight)->setMoney(_test);
 					layerAvatars->getUserByPos(kUserRight)->setIcon(_url);
                     
-                    frameBet_Right->setValueBet((n[2]+" $").c_str());
+                    frameBet_Right->setValueBet((mUtils::convertMoneyEx(atoi(n[2].c_str())) + " $").c_str());
                     frameBet_Right->setPosition(ccp(WIDTH_DESIGN-109-frameBet_Right->getKc_width(),278));
                     frameBet_Right->setVisible(true);
                     
@@ -649,7 +663,7 @@ void BaCayChuong::action_UpdateListUser(string lsUser){
                     layerAvatars->getUserByPos(kUserTop)->setMoney(_test);
 					layerAvatars->getUserByPos(kUserTop)->setIcon(_url);
                     
-                    frameBet_Top->setValueBet((n[2]+" $").c_str());
+                    frameBet_Top->setValueBet((mUtils::convertMoneyEx(atoi(n[2].c_str())) + " $").c_str());
                     frameBet_Top->setPosition(ccp(454, 440));
                     frameBet_Top->setVisible(true);
                     
@@ -1122,7 +1136,9 @@ void BaCayChuong::btn_DatCuoc_click(CCObject *sender, TouchEventType type){
                 ccbReader->release();
             }
         }else{
-            CCLOG("Bạn đã sẵn sàng, không thể đặt cược");
+            //CCLOG("Bạn đã sẵn sàng, không thể đặt cược");
+			Chat *toast = new Chat("Bạn đã sẵn sàng, không thể đặt cược", -1);
+			this->addChild(toast);
         }
     }
 }
@@ -1149,8 +1165,22 @@ void BaCayChuong::btn_NanBai_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
         CCLOG("Btn Nan Bai");
 		Nan3Cay *BaCay = Nan3Cay::create();
+		BaCay->setCallbackFunc(this,callfuncN_selector(BaCayChuong::callBackFunction_LatBai));
 		BaCay->initListCardHand(_list_cards);
 		this->addChild(BaCay);
+	}
+}
+
+void BaCayChuong::callBackFunction_LatBai(CCNode *pSend){
+	if(_list_cards!=""){
+		createCardMe(_list_cards);
+		btnNanBai->setTouchEnabled(false);
+		btnNanBai->setVisible(false);
+		btnXemBai->setVisible(false);
+		btnXemBai->setTouchEnabled(false);
+	}
+	else{
+		CCLOG("Not OK");
 	}
 }
 

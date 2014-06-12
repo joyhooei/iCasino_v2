@@ -11,6 +11,7 @@
 #include "_Button_inGame_.h"
 #include "Requests/ExtensionRequest.h"
 #include "CardChan.h"
+#include "_Chat_.h"
 
 LayerChanGame::LayerChanGame(){
 	CCLOG("Nhay vao chan Game");
@@ -37,9 +38,15 @@ LayerChanGame::LayerChanGame(){
 	EXT_EVENT_RES_DISCARD = "rshofc";
 	EXT_EVENT_GAME_RESULT = "grs";
 	EXT_SRVNTF_ONE_EXPECTING_U = "ntfoeu";
+	EXT_SRVNTF_ONE_EXPECTING_CHIU = "ntfoechiu";	
+	EXT_EVENT_RES_U = "rsU";
+	EXT_EVENT_REQ_U = "rqU";
+	EXT_EVENT_REQ_CHIU_CARD = "rqchiuc";
 
 	_list_user = "";
 	mylistCard = "";
+	currentPlayer = "";
+
 	gameStarted = false;
 	flagChiaBai = false;
 
@@ -148,6 +155,32 @@ LayerChanGame::LayerChanGame(){
 	btnEate->setTitleColor(ccRED);
 	btnEate->setVisible(false);
 	uLayer->addWidget(btnEate);
+
+	//btn Ù
+	btnU = UIButton::create();
+	btnU->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
+	btnU->setTitleText("Ù");
+	btnU->setAnchorPoint(ccp(0,0));
+	btnU->setPosition(ccp(WIDTH_DESIGN-btnEate->getContentSize().width - btnU->getContentSize().width - 30, 20));
+	btnU->setTouchEnabled(false);
+	btnU->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_U_Click));
+	btnU->setTitleFontSize(20);
+	btnU->setTitleColor(ccRED);
+	btnU->setVisible(false);
+	uLayer->addWidget(btnU);
+
+	//btn Chíu
+	btnChiu = UIButton::create();
+	btnChiu->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
+	btnChiu->setTitleText("Chíu");
+	btnChiu->setAnchorPoint(ccp(0,0));
+	btnChiu->setPosition(ccp(WIDTH_DESIGN-btnEate->getContentSize().width - btnChiu->getContentSize().width - 30, btnChiu->getContentSize().height + 30));
+	btnChiu->setTouchEnabled(false);
+	btnChiu->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_Chiu_Click));
+	btnChiu->setTitleFontSize(20);
+	btnChiu->setTitleColor(ccRED);
+	btnChiu->setVisible(false);
+	uLayer->addWidget(btnChiu);
 
 	lblDetail = UILabel::create();
 	lblDetail->setText("");
@@ -321,8 +354,6 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 				}
 			}
 		}
-
-		CCLOG("user: %s lc: %s",_usrn.c_str(),_lc.c_str());
 		CCLOG("EXT_EVENT_LISTCARD_NTF");
 	}
 
@@ -361,7 +392,8 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	else if (strcmp(EXT_SRVNTF_CURRENT_PLAYING_USER.c_str(), cmd->c_str())==0){
 		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
 		if (usrn != NULL) {
-			setCurrentPlayer(usrn->c_str(),countDiscard);
+			currentPlayer = usrn->c_str();
+			setCurrentPlayer(currentPlayer,countDiscard);
 		}
 		CCLOG("EXT_SRVNTF_CURRENT_PLAYING_USER");
 	}
@@ -451,11 +483,40 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		CCLOG("EXT_SRVNTF_ANBAO");
 	}
 
+	// Chíu
+	else if (strcmp(EXT_SRVNTF_ONE_EXPECTING_CHIU.c_str(),cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+		if (usrn != NULL)
+		{
+			CCLOG("Co nguoi chiu: %s",usrn->c_str());
+			whenConguoi_Chiu(usrn->c_str());
+		}
+		CCLOG("EXT_SRVNTF_ONE_EXPECTING_CHIU");
+	}
+	
+	//Bao U
+	else if(strcmp(EXT_EVENT_RES_U.c_str(),cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<long> rscode = param->GetInt("rscode");
+		if (rscode != NULL)
+		{
+			if (*rscode == 0)
+			{
+				CCLOG("Co the xuong U");
+				// Bao U
+			}
+			
+		}
+		
+	}
+
 	//Bao co the u
 	else if (strcmp(EXT_SRVNTF_ONE_EXPECTING_U.c_str(), cmd->c_str())==0){
 		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
 		if (usrn != NULL) {
 			whenConguoi_ChoU(usrn->c_str());
+			CCLOG("nguoi cho U: %s",usrn->c_str());
 		}
 		CCLOG("EXT_SRVNTF_ONE_EXPECTING_U");
 	}
@@ -671,7 +732,16 @@ void LayerChanGame::setMyListCards(string listCards){
 
 //sort myListCard
 void LayerChanGame::sortMyListCards(string listCards){
+	
+	CCLOG("List card me: %d",CARD_ME->count());
+	CCLOG("List card: %s",listCards.c_str());
 	vector<string> list = Dsplit(listCards, ';');
+	CCLOG("list.length: %d", (int)list.size());
+	if ((int)list.size() > (int)CARD_ME->count())
+	{
+		setMyListCards(listCards);
+	}
+	
 	for(int i=0;i<list.size();i++){
 		vector<string> info = Dsplit(list[i], ':');
 		CardChan* pCard = (CardChan*)CARD_ME->objectAtIndex(i);
@@ -816,17 +886,17 @@ void LayerChanGame::action_AnCuaTren(string f_user, string t_user, string cardnu
 		switch (tpos) {
 		case kUserLeft:
 			toX = (float)CARD_D_LEFT_top->count() * w_card + left_d_left;
-			toY = bottom_d_left - 25;
+			toY = bottom_d_left;
 			f = kUserLeft;
 			break;
 		case kUserRight:
 			toX = left_d_right - (float)CARD_D_RIGHT_top->count() * w_card;
-			toY = bottom_d_right - 25;
+			toY = bottom_d_right;
 			f = kUserRight;
 			break;
 		case kUserTop:
 			toX = (float)CARD_D_TOP_top->count() * w_card + left_d_top;
-			toY = bottom_d_top - 25;
+			toY = bottom_d_top;
 			f = kUserTop;
 			break;
 		default:
@@ -868,6 +938,143 @@ void LayerChanGame::action_ChiuBai(string f_user, string t_user, string cardnu, 
 
 void LayerChanGame::action_TraCua(string f_user, string t_user, string cardnu, string cardsu){
 	CCLOG("Trả cửa");
+	int fpos = -1;
+	int tpos = -1;
+	fpos = getPosUserByName(f_user,_list_user);
+	tpos = getPosUserByName(t_user,_list_user);
+	if (strcmp(f_user.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
+	{
+		action_TraCua_ME(tpos, cardnu, cardsu);
+	}
+	else
+	{
+		action_TraCua_NOTME(fpos, tpos, cardnu, cardsu);
+	}
+}
+
+void LayerChanGame::action_TraCua_ME(int tpos, string cardnu, string cardsu){
+	CCObject *t;
+	CCARRAY_FOREACH(CARD_ME, t){
+		CardChan *pCard =  dynamic_cast<CardChan*>(t);
+		if (pCard->getFlag() && pCard->getNumber() == atoi(cardnu.c_str()) && pCard->getSuite() == atoi(cardsu.c_str())) {
+			float rotate = -(pCard->getRotation());
+			CCActionInterval *rotateTo = CCRotateBy::create(0.4, rotate);
+			CCActionInterval *scaleBy = CCScaleBy::create(0.4, w_card/w_cardhand,h_card/h_cardhand);
+			
+			float toX = 0;
+			float toY = 0;
+			int f = -1;
+			switch(tpos){
+			case kUserLeft:
+				toX = (float)CARD_C_LEFT->count() * w_card + left_chi_left;
+				toY = bottom_chi_left;
+				f = kUserLeft;
+				break;
+			case kUserRight:
+				toX = (float)CARD_C_RIGHT->count() * w_card + left_chi_right;
+				toY = bottom_chi_right;
+				f = kUserRight;
+				break;
+			case kUserTop:
+				toX = (float)CARD_C_LEFT->count() * w_card + left_chi_top;
+				toY = bottom_chi_top;
+				f = kUserTop;
+				break;
+			}
+			CCActionInterval *moveTo = CCMoveTo::create(0.4, ccp(toX,toY));
+
+			pCard->runAction(moveTo);
+			pCard->runAction(rotateTo);
+			pCard->runAction(scaleBy);
+			CARD_ME->removeObject(pCard);
+			switch(f){
+			case kUserLeft:
+				CARD_C_LEFT->addObject(pCard);
+				break;
+			case kUserRight:
+				CARD_C_RIGHT->addObject(pCard);
+				break;
+			case kUserTop:
+				CARD_C_TOP->addObject(pCard);
+				break;
+			}
+			this->refreshListCard();
+		}
+	}
+}
+
+void LayerChanGame::action_TraCua_NOTME(int fpos, int tpos, string cardnu, string cardsu){
+	CardChan* pCard = CardChan::create();
+	pCard->loadTexture(findTypeCard(cardnu, cardsu).c_str());
+	pCard->setSizeCard(w_card, h_card);
+	pCard->setTouchEnabled(false);
+
+	//Xac dinh vi tri
+	switch (fpos) {
+	case kUserLeft:
+		pCard->setPosition(ccp(33, 171));
+		break;
+	case kUserRight:
+		pCard->setPosition(ccp(732, 171));
+		break;
+	case kUserTop:
+		pCard->setPosition(ccp(33, 171));
+		break;
+	default:
+		break;
+	}
+	uLayer->addChild(pCard);
+
+	//di chuyen den:
+	float toX = -1;
+	float toY = -1;
+	int f = -1;
+
+	switch(tpos){
+	case kUserMe:
+		toX = (float)CARD_C_ME->count() * w_card + left_chi_me;
+		toY = bottom_chi_me;
+		f = kUserMe;
+		break;
+	case kUserLeft:
+		toX = (float)CARD_C_LEFT->count() * w_card + left_chi_left;
+		toY = bottom_chi_left;
+		f = kUserLeft;
+		break;
+	case kUserRight:
+		toX = (float)CARD_C_RIGHT->count() * w_card + left_chi_right;
+		toY = bottom_chi_right;
+		f = kUserRight;
+		break;
+	case kUserTop:
+		toX = (float)CARD_C_TOP->count() * w_card + left_chi_top;
+		toY = bottom_chi_top;
+		f = kUserTop;
+		break;
+	default:
+		break;
+	}
+	
+	CCActionInterval *moveTo = CCMoveTo::create(0.4, ccp(toX,toY));
+	pCard->runAction(moveTo);
+
+	switch(f){
+	case kUserMe:
+		CARD_C_ME->addObject(pCard);
+		break;
+	case kUserLeft:
+		CARD_C_LEFT->addObject(pCard);
+		break;
+	case kUserRight:
+		CARD_C_RIGHT->addObject(pCard);
+		break;
+	case kUserTop:
+		CARD_C_TOP->addObject(pCard);
+		break;
+	default:
+		break;
+	}
+
 }
 
 //** Đánh bài ***//
@@ -1001,19 +1208,19 @@ void LayerChanGame::action_ChuyenBai_NOTME(int pos, string cardnu, string cardsu
 	case kUserLeft:
 		pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserLeft)->getPosition().x, layerAvatars->getUserByPos(kUserLeft)->getPosition().y));
 		toX = (float)CARD_D_LEFT_bottom->count() * w_card + left_d_left;
-		toY = bottom_d_left;
+		toY = bottom_d_left - 25;
 		f = kUserLeft;
 		break;
 	case kUserRight:
 		pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserRight)->getPosition().x, layerAvatars->getUserByPos(kUserRight)->getPosition().y));
 		toX = left_d_right - (float)CARD_D_RIGHT_bottom->count() * w_card;
-		toY = bottom_d_right;
+		toY = bottom_d_right - 25;
 		f = kUserRight;
 		break;
 	case kUserTop:
 		pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserTop)->getPosition().x, layerAvatars->getUserByPos(kUserTop)->getPosition().y));
 		toX = (float)CARD_D_TOP_bottom->count() * w_card + left_d_top;
-		toY = bottom_d_top;
+		toY = bottom_d_top - 25;
 		f = kUserTop;
 		break;
 	default:
@@ -1040,6 +1247,7 @@ void LayerChanGame::action_ChuyenBai_NOTME(int pos, string cardnu, string cardsu
 
 void LayerChanGame::action_An_U(string f_user, string t_user, string cardnu, string cardsu){
 	CCLOG("Ăn Ù");
+	action_AnCuaTren(f_user,t_user,cardnu,cardsu);
 }
 
 string LayerChanGame::findTypeCard(string number,string suite){
@@ -1327,16 +1535,67 @@ void LayerChanGame::error_AnBao(long rscode){
 
 //Khi co nguoi cho U
 void LayerChanGame::whenConguoi_ChoU(string uid){
-	if(strcmp(uid.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+	string myName = "";
+	myName = GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str();
+
+	if(strcmp(uid.c_str(),myName.c_str()) == 0){
 		// Hiển thị button Ù
+		btnU->setVisible(true);
+		btnU->setTouchEnabled(true);
+		if(strcmp(myName.c_str(),currentPlayer.c_str()) == 0)
+		{
+			
+		}
+		else
+		{
+			btnEate->setVisible(true);
+			btnEate->setTouchEnabled(true);
+		}
+
 	}else{
-		//Ẩn Hết các button của mình đi
+		Chat *toast = new Chat(""+uid+" Đang chờ Ù, Đợi nhà này sướng", -1);
+		this->addChild(toast);
+
+		hideAllButton();
+
 		//start timer của người chơi chờ Ù
+		switch(getPosUserByName(uid,_list_user)){
+			case kUserLeft:
+				layerAvatars->getUserByPos(kUserLeft)->startTimer();
+				break;
+			case kUserRight:
+				layerAvatars->getUserByPos(kUserRight)->startTimer();
+				break;
+			case kUserTop:
+				layerAvatars->getUserByPos(kUserTop)->startTimer();
+				break;
+		}
+	}
+}
+
+//Co nguoi co the chiu
+void LayerChanGame::whenConguoi_Chiu(string uid){
+	string myName = "";
+	myName = GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str();
+
+	if (strcmp(uid.c_str(),myName.c_str()) == 0)
+	{
+		btnChiu->setVisible(true);
+		btnChiu->setTouchEnabled(true);
+	}
+	else
+	{
+		if(strcmp(myName.c_str(),currentPlayer.c_str()) == 0){
+			hideAllButton();
+		}
 	}
 }
 
 //set End Game
 void LayerChanGame::setEndGame(){
+	currentPlayer = "";
+	mylistCard = "";
+
 	flagChiaBai = false;
 	countDiscard = 0;
 	_coutZorder = 0;
@@ -1376,7 +1635,6 @@ void LayerChanGame::deleteAllCardFromArray(CCArray *P){
 		CardChan *uu = (CardChan*)P->objectAtIndex(P->count()-1);
 		P->removeObject(uu);
 		uu->removeFromParentAndCleanup(true);
-		//        uLayer->removeChild(uu);
 	}
 }
 
@@ -1409,6 +1667,8 @@ void LayerChanGame::btn_take_click(CCObject *sender, TouchEventType type){
 		}
 		if (count == 0) {
 			CCLOG("Chọn 1 lá bài để đánh");
+			Chat *toast = new Chat("Chọn 1 lá bài để đánh",-1);
+			this->addChild(toast);
 		}
 		else{
 			count = 0;
@@ -1456,10 +1716,78 @@ void LayerChanGame::btn_eate_click(CCObject *sender, TouchEventType type){
 			}
 		}
 		if (count == 0) {
-			CCLOG("Chọn 1 lá bài để ăn");
+			Chat *toast = new Chat("Chọn 1 lá bài để ăn", -1);
+			this->addChild(toast);
 		}
 		else{
 			count = 0;
 		}
 	}
+}
+
+void LayerChanGame::btn_U_Click(CCObject *sender, TouchEventType type){
+	if (type == TOUCH_EVENT_ENDED)
+	{
+		CCLOG("Send U to server !");
+		boost::shared_ptr<Room> lstRooms = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+		boost::shared_ptr<ISFSObject> params (new SFSObject());
+		boost::shared_ptr<IRequest> resObj (new ExtensionRequest(EXT_EVENT_REQ_U,params,lstRooms));
+		GameServer::getSingleton().getSmartFox()->Send(resObj);
+	}
+}
+
+void LayerChanGame::btn_Chiu_Click(CCObject *sender, TouchEventType type){
+	if (type = TOUCH_EVENT_ENDED)
+	{
+		boost::shared_ptr<Room> lstRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+		int count = 0;
+		for(int i = 0; i < (int)CARD_ME->count(); i++)
+		{
+			CardChan *pCard = (CardChan*)CARD_ME->objectAtIndex(i);
+			if (pCard->getFlag())
+			{
+				count++;
+				boost::shared_ptr<ISFSObject> params (new SFSObject());
+				params->PutByte("cardnu", pCard->getNumber());
+				params->PutByte("cardsu", pCard->getSuite());
+				boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_REQ_CHIU_CARD,params,lstRoom));
+				GameServer::getSingleton().getSmartFox()->Send(request);
+			}
+		}
+		if (count == 0)
+		{
+			Chat *toast = new Chat("Chọn 1 lá bài để chíu", -1);
+			this->addChild(toast);
+		}
+		else
+		{
+			count == 0;
+		}
+	}
+}
+
+void LayerChanGame::hideAllButton(){
+	btnReady->setVisible(false);
+	btnReady->setTouchEnabled(false);
+
+	btnEate->setVisible(false);
+	btnEate->setTouchEnabled(false);
+
+	btnBoc->setVisible(false);
+	btnBoc->setTouchEnabled(false);
+
+	btnDuoi->setVisible(false);
+	btnDuoi->setTouchEnabled(false);
+
+	btnTake->setVisible(false);
+	btnTake->setTouchEnabled(false);
+
+	btnChiu->setVisible(false);
+	btnChiu->setTouchEnabled(false);
+
+	btnU->setVisible(false);
+	btnU->setTouchEnabled(false);
+}
+void LayerChanGame::resetPositionButton(){
+
 }

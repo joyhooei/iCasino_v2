@@ -62,8 +62,13 @@ private:
 	CCArray *cardOnhand;
 
 	UIButton *btnBack;
+
+	CCObject* m_callback;
+	SEL_CallFuncN m_callbackListener;
+
 public:
 	Nan3Cay();
+	Nan3Cay(CCObject *pSender);
 	~Nan3Cay();
 	bool init();
 	CREATE_FUNC(Nan3Cay);
@@ -80,6 +85,8 @@ public:
 
 	void movePockerFinish(CardChan *pCard,int pos);
 	void closeLayerNanBai();
+
+	void setCallbackFunc(CCObject* target, SEL_CallFuncN callfun);
 };
 
 #endif;

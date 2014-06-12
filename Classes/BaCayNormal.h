@@ -118,6 +118,8 @@ public:
 	void btn_XemBai_click(CCObject *sender, TouchEventType type);
 	void btn_NanBai_click(CCObject *sender, TouchEventType type);
 
+	void callBackFunction_LatBai(CCNode *pSend);
+
 	//Server
 	void updateEvent( float dt );
 	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);

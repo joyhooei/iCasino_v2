@@ -15,7 +15,7 @@
 #include "Nan3Cay.h"
 #include "_Chat_inGame_.h"
 #include "mUtils.h"
-
+#include "_Chat_.h"
 
 BaCayNormal::BaCayNormal():CARD_RIGHT(NULL),CARD_ME(NULL),CARD_TOP(NULL),CARD_LEFT(NULL){
     
@@ -426,6 +426,20 @@ void BaCayNormal::OnExtensionResponse(unsigned long long ptrContext, boost::shar
         }
     }
     
+	//ready error
+	else if (strcmp("e_rntf",cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<long> errc = param->GetInt("errc");
+		if (errc != NULL)
+		{
+			if (*errc == 30)
+			{
+				Chat *toast = new Chat("Đợi người chơi khác sẵn sàng", -1);
+				this->addChild(toast);
+			}
+		}
+	}
+
     //user unready
     else if(strcmp(EXT_EVENT_UNREADY_NTF.c_str(), cmd->c_str())==0){
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
@@ -581,9 +595,23 @@ void BaCayNormal::btn_NanBai_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
 		CCLOG("Btn Nan Bai");
 		Nan3Cay *BaCay = Nan3Cay::create();
+		BaCay->setCallbackFunc(this,callfuncN_selector(BaCayNormal::callBackFunction_LatBai));
 		BaCay->initListCardHand(_list_cards);
 		this->addChild(BaCay);
     }
+}
+
+void BaCayNormal::callBackFunction_LatBai(CCNode *pSend){
+	if(_list_cards!=""){
+		createCardMe(_list_cards);
+		btnNanBai->setTouchEnabled(false);
+		btnNanBai->setVisible(false);
+		btnXemBai->setVisible(false);
+		btnXemBai->setTouchEnabled(false);
+	}
+	else{
+		CCLOG("Not OK");
+	}
 }
 /******** End Button ------------------*/
 

@@ -89,9 +89,15 @@ private:
 	string EXT_EVENT_RES_DISCARD;
 	string EXT_EVENT_GAME_RESULT;
 	string EXT_SRVNTF_ONE_EXPECTING_U;
+	string EXT_SRVNTF_ONE_EXPECTING_CHIU;
+	string EXT_EVENT_RES_U;
+	string EXT_EVENT_REQ_U;
+	string EXT_EVENT_REQ_CHIU_CARD;
 
 	string _list_user;
 	string mylistCard;
+	string currentPlayer;
+
 	bool gameStarted;
 	bool flagChiaBai;
 
@@ -133,6 +139,8 @@ private:
 	UIButton *btnBoc;
 	UIButton *btnEate;
 	UIButton *btnDuoi;
+	UIButton *btnU;
+	UIButton *btnChiu;
 	UILabel *lblDetail;
 
 
@@ -176,6 +184,8 @@ public:
 	void error_AnBao(long rscode);
 	void setEndGame();
 	void whenConguoi_ChoU(string uid);
+	void whenConguoi_Chiu(string uid);
+
 	void deleteAllCardFromArray(CCArray *P);
 
 	void takeCards(string f_user, string t_user, string cardnu, string cardsu, int crdorg);
@@ -184,6 +194,8 @@ public:
 	void action_AnCuaTri(string f_user, string t_user, string cardnu, string cardsu);
 	void action_ChiuBai(string f_user, string t_user, string cardnu, string cardsu);
 	void action_TraCua(string f_user, string t_user, string cardnu, string cardsu);
+	void action_TraCua_ME(int tpos, string cardnu, string cardsu);
+	void action_TraCua_NOTME(int fpos, int tpos, string cardnu, string cardsu);
 
 	void action_DanhBai(string f_user, string cardnu, string cardsu);
 	void action_DanhBai_ME(string cardnu,string cardsu);
@@ -205,6 +217,11 @@ public:
 	void btn_boc_click(CCObject *sender, TouchEventType type);
 	void btn_eate_click(CCObject *sender, TouchEventType type);
 	void btn_Duoi_click(CCObject *sender, TouchEventType type);
+	void btn_U_Click(CCObject *sender, TouchEventType type);
+	void btn_Chiu_Click(CCObject *sender, TouchEventType type);
+
+	void hideAllButton();
+	void resetPositionButton();
 
 	void CardTouch(CCObject *pSender,TouchEventType type);
 
