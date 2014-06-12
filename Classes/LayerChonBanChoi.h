@@ -13,6 +13,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "GameServer.h"
+#include "NotificationCallback.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -26,6 +27,7 @@ class LayerChonBanChoi
 , public cocos2d::extension::CCTableViewDataSource
 , public cocos2d::extension::CCTableViewDelegate
 , public PlayerCallBack
+, public NotificationCallBack
 {
 private:
     enum tagLabelInRow{
@@ -38,6 +40,9 @@ private:
         tagListRoom=0,
         tagListPlay=1
     };
+	enum tagNotification{
+		tagComfirmInvite = 100
+	};
     
     cocos2d::CCLabelTTF *lblTitle;
     
@@ -51,11 +56,15 @@ private:
     
     CCBReader * ccbReader;
     CCNodeLoaderLibrary * ccNodeLoaderLibrary;
+
+	int mRoomID4Invite;
 public:
     LayerChonBanChoi();
     virtual ~LayerChonBanChoi();
     
-    CREATE_FUNC(LayerChonBanChoi);
+	CREATE_FUNC(LayerChonBanChoi);
+
+	void notificationCallBack(bool isOK, int tag);
     
     void setGameID(int gID);
     

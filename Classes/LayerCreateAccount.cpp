@@ -14,6 +14,7 @@
 #include "_Chat_.h"
 #include "SceneManager.h"
 #include <string.h>
+#include "LayerLogin.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -32,10 +33,14 @@ LayerCreateAccount::LayerCreateAccount()
 
 LayerCreateAccount::~LayerCreateAccount()
 {
-
+	//CallBack
+	if (m_callback && m_callbackListener){
+		(m_callbackListener->*m_callback)();
+	}
+	//
 	boost::shared_ptr<IRequest> request (new LogoutRequest());
-
 	GameServer::getSingleton().getSmartFox()->Send(request);
+	//
 	if( GameServer::getSingleton().getSmartFox() == NULL) 
 		return;
 	GameServer::getSingleton().removeListeners(this);
@@ -43,6 +48,11 @@ LayerCreateAccount::~LayerCreateAccount()
 
 void LayerCreateAccount::notificationCallBack(bool isOK, int tag){
 	CCLOG("callbackNtf****");
+// 	this->setTouchEnabled(true);
+// 	if( isOK ){
+// 		LayerLogin* layer = SceneManager::getSingleton().getLayerLogin();
+// 		layer->setUserAndPassInfo(txtUsername->getText(), txtPassword->getText());
+// 	}
 }
 
 // CCBSelectorResolver interface
@@ -71,7 +81,38 @@ void LayerCreateAccount::onButtonSex(CCObject* pSender)
 
 void LayerCreateAccount::onButtonCreate(CCObject* pSender)
 {
-	
+	//Validate
+	if( strlen(txtUsername->getText())<6 ){
+		Chat *toast = new Chat("Tài khoản phải lớn hơn 6 ký tự!", -1);
+		this->addChild(toast);
+		return;
+	}
+	if( strlen(txtPassword->getText())<6 ){
+		Chat *toast = new Chat("Mật khẩu phải lớn hơn 6 ký tự!", -1);
+		this->addChild(toast);
+		return;
+	}
+	if( strcmp(txtPassword->getText(), txtRePassword->getText())!=0 ){
+		Chat *toast = new Chat("Mật khẩu không trùng!", -1);
+		this->addChild(toast);
+		return;
+	}
+	if( strlen(txtEmail->getText())<6 ){
+		Chat *toast = new Chat("Email không đúng!", -1);
+		this->addChild(toast);
+		return;
+	}
+	//regist
+	//Send request
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("aI", txtUsername->getText());
+	params->PutUtfString("aN", txtUsername->getText());
+	params->PutUtfString("aP", txtPassword->getText());
+	params->PutUtfString("aM", txtEmail->getText());
+	params->PutInt("aT",  1);
+	params->PutInt("aS", isMan?1:0);
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("rr", params));
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 
@@ -130,22 +171,57 @@ void LayerCreateAccount::initTextField(CCEditBox* txt, const char* hintText){
 }
 
 void LayerCreateAccount::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-	
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];
+	boost::shared_ptr<string> cmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
+
+	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
+	if(strcmp("rg", cmd->c_str())==0){
+		int rc = *param->GetInt("rc");
+		if( rc==0 ){//OK
+			LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+			if( !SceneManager::getSingleton().showNotification() ){
+				CCLOG("NTF Dialog already open!");
+				return;
+			}
+			CCLOG("lbfree OK");
+			//CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
+			LayerLogin* layerLogin = SceneManager::getSingleton().getLayerLogin();
+			layerLogin->setUserAndPassInfo(txtUsername->getText(), txtPassword->getText());
+			//
+			layer->setNotificationOptions("ĐĂNG KÝ THÀNH CÔNG", 
+				CCString::createWithFormat("Bạn đã đăng ký tài khoản: %s\n thành công!\n Bạn có muốn đăng nhập ngay?", txtUsername->getText())->getCString()
+				, true , "Có", 1, this );
+		}else{//Not OK
+			Chat *toast = new Chat(CCString::createWithFormat("ĐĂNG KÝ THẤt BẠI\n%s", param->GetUtfString("rd")->c_str())->getCString(), -1);
+// 				this->removeFromParentAndCleanup(true);
+ 			this->addChild(toast);
+//				layer->setNotificationOptions("ĐĂNG KÝ THẤt BẠI", 
+//					param->GetUtfString("rd")->c_str(), false , "", 1, this 			
+		}
+	}
 }
 
 void LayerCreateAccount::OnSmartFoxConnection( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
 {
 	CCLOG("Register: OnSmartFoxConnection()");
 	//send login
-
-	boost::shared_ptr<IRequest> request (new LoginRequest("", "", "RegisterZone"));
-
-	GameServer::getSingleton().getSmartFox()->Send(request);
+	doLogin();
 }
 
 void LayerCreateAccount::OnSmartFoxLogin( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
 {
 	CCLOG("Register: OnSmartFoxLogin()");
+}
+
+void LayerCreateAccount::OnSmartFoxLoginError( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	CCLOG("Register: OnSmartFoxLoginError()");
+
+	Chat *toast = new Chat("Có lỗi kết nối tới server đăng ký!", -1);
+	this->removeFromParentAndCleanup(true);
+	this->getParent()->addChild(toast);
 }
 
 void LayerCreateAccount::connect2RegistZone()
@@ -173,4 +249,26 @@ void LayerCreateAccount::onEnter()
 void LayerCreateAccount::onExit()
 {
 	CCLayer::onExit();
+}
+
+void LayerCreateAccount::doLogin()
+{
+	//login zone when connect success
+	boost::shared_ptr<IRequest> request (new LoginRequest("", "123456", "RegisterZone"));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+}
+
+void LayerCreateAccount::setCallbackFunc( CCObject* target, SEL_CallFunc callfunc )
+{
+	m_callbackListener = target;
+	m_callback = callfunc;  
+}
+
+void LayerCreateAccount::doConnect()
+{
+	if( GameServer::getSingleton().getSmartFox()->IsConnected() ){
+		doLogin();
+	}else{
+		connect2RegistZone();
+	}
 }

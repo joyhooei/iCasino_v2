@@ -36,6 +36,9 @@ private:
     CCEditBox* txtPhone;
     CCEditBox* txtEmail;
     bool isMan;
+
+	CCObject* m_callbackListener;
+	SEL_CallFunc m_callback;
 public:
     LayerCreateAccount();
 	virtual ~LayerCreateAccount();
@@ -43,6 +46,11 @@ public:
 	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual void onEnter();
 	virtual void onExit();
+
+	void setCallbackFunc(CCObject* target, SEL_CallFunc callfun);
+
+	void doLogin();
+	void doConnect();
     
 	void notificationCallBack(bool, int tag);
     void initTextField(CCEditBox* txt, const char* hintText);
@@ -64,6 +72,7 @@ public:
 	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxConnection(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxLogin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxLoginError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 };
 
 class LayerCreateAccountLoader : public cocos2d::extension::CCLayerLoader

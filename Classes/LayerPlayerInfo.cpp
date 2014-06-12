@@ -57,7 +57,6 @@ void LayerPlayerInfo::onButtonInviteFriend(CCObject* pSender)
 void LayerPlayerInfo::onButtonUnFriend(CCObject* pSender)
 {
 	CCLOG("onButtonUnFriend");
-	CCLOG("onButtonInviteFriend");
 	boost::shared_ptr<ISFSObject> params (new SFSObject());
 	params->PutUtfString("aI", mFriendID.c_str());
 	boost::shared_ptr<IRequest> request (new ExtensionRequest("rarf", params));
@@ -68,6 +67,13 @@ void LayerPlayerInfo::onButtonUnFriend(CCObject* pSender)
 void LayerPlayerInfo::onButtonKick(CCObject* pSender)
 {
 	CCLOG("onButtonKick");
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("uid", mFriendID.c_str());
+	params->PutUtfString("id", mFriendID.c_str());
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("kckrq", params));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+	//
+	this->removeFromParentAndCleanup(true);
 }
 
 

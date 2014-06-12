@@ -12,9 +12,6 @@
 #include "Requests/LoginRequest.h"
 #include "SceneManager.h"
 #include "_Chat_.h"
-#include "LayerPlayerInfo.h"
-#include "LayerPasswordRoom.h"
-#include "LayerGameChan_XuongU.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -26,17 +23,8 @@ LayerLogin::LayerLogin()
     txtUsername = NULL;
 
 	chkSaveInfo = NULL;
-    
-    ccbReader = NULL;
-    ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-    
-    // register loaders
-    ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerCreateAccount",   LayerCreateAccountLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerForgotPassword",   LayerForgotPasswordLoader::loader());
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPlayerInfo",   LayerPlayerInfoLoader::loader());
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPasswordRoom",   LayerPasswordRoomLoader::loader());
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_XuongU",   LayerGameChan_XuongULoader::loader());
+
+	isRegistPopupShown = false;
     //
     GameServer::getSingleton().addListeners(this);
 }
@@ -109,23 +97,28 @@ void LayerLogin::onButtonLoginWithFacebook(CCObject* pSender){
 //        this->addChild(mLayer, 1, 1);
 //        ccbReader->release();
 //    }
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-    LayerGameChan_XuongU* mLayer;
-    if (ccbReader)
-    {
-        mLayer = (LayerGameChan_XuongU *)ccbReader->readNodeGraphFromFile( "LayerGameChan_XuongU.ccbi" );
-        this->addChild(mLayer, 1, 1);
-        ccbReader->release();
-    }
+//     ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+//     LayerGameChan_XuongU* mLayer;
+//     if (ccbReader)
+//     {
+//         mLayer = (LayerGameChan_XuongU *)ccbReader->readNodeGraphFromFile( "LayerGameChan_XuongU.ccbi" );
+//         this->addChild(mLayer, 1, 1);
+//         ccbReader->release();
+//     }
 }
 void LayerLogin::onButtonCreateAccount(CCObject* pSender){
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	CCNodeLoaderLibrary * ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+    CCBReader * ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerCreateAccount* mLayer;
     if (ccbReader)
     {
         mLayer = (LayerCreateAccount *)ccbReader->readNodeGraphFromFile( "LayerCreateAccount.ccbi" );
         this->addChild(mLayer, 1, 1);
         ccbReader->release();
+		//
+		isRegistPopupShown = true;
+		mLayer->setCallbackFunc(this, callfunc_selector(LayerLogin::popupCallback));
+		mLayer->doConnect();
     }
 }
 
@@ -198,11 +191,15 @@ void LayerLogin::selectedStateEvent(CCObject* pSender, CheckBoxEventType type){
 
 void LayerLogin::OnSmartFoxConnection(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent)
 {
+	if( isRegistPopupShown ) 
+		return;
     CCLog("LayerLogin: OnSmartFoxConnection");
     doLogin();
 }
 
 void LayerLogin::OnSmartFoxLogin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	if( isRegistPopupShown ) 
+		return;
     CCLOG("LayerLogin::OnSmartFoxLogin() - Login OK");
     if( chkSaveInfo->getSelectedState() ){//save info
 		saveInfo();
@@ -210,6 +207,8 @@ void LayerLogin::OnSmartFoxLogin(unsigned long long ptrContext, boost::shared_pt
     SceneManager::getSingleton().gotoMain();
 }
 void LayerLogin::OnSmartFoxLoginError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	if( isRegistPopupShown ) 
+		return;
     CCLOG("LayerLogin::OnSmartFoxLoginError() - Login error");
     
     boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
@@ -218,6 +217,17 @@ void LayerLogin::OnSmartFoxLoginError(unsigned long long ptrContext, boost::shar
 	boost::shared_ptr<string> message (new string("OnSmartFoxLoginError Failure: " +  *ptrErrorMessage + " !"));
     CCLog("Error string: %s", message->c_str());
     
-    Chat *toast = new Chat("Tên đăng nhập hoặc mật khẩu không đúng!", -1);
+    Chat *toast = new Chat(message->c_str(), -1);
     this->addChild(toast);
+}
+
+void LayerLogin::popupCallback(  )
+{
+	isRegistPopupShown = false;
+}
+
+void LayerLogin::setUserAndPassInfo( const char* username, const char* password )
+{
+	txtUsername->setText(username);
+	txtPassword->setText(password);
 }

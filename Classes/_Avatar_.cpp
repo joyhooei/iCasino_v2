@@ -143,6 +143,8 @@ void Avatar::onTouch(CCObject *pObject, TouchEventType pType) {
 		{
 			CCLog("Invite User!!!!!!!!!!!!!");
 			CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+			ccNodeLoaderLibrary->unregisterCCNodeLoader("LayerSMS");
+			ccNodeLoaderLibrary->registerCCNodeLoader("LayerSMS",   LayerMoiChoiLoader::loader());
 			CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 			if (ccbReader)
 			{

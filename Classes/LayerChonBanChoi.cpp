@@ -14,8 +14,15 @@
 #include "CustomTableViewCell.h"
 
 #include "Requests/JoinRoomRequest.h"
+#include "Requests/SetUserVariablesRequest.h"
+#include "Entities/Variables/UserVariable.h"
+#include "Entities/Variables/SFSUserVariable.h"
+#include "Entities/Invitation/SFSInvitation.h"
+#include "Entities/Invitation/Invitation.h"
 #include "SceneManager.h"
 #include "_Chat_.h"
+
+#include <boost/make_shared.hpp>
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -39,7 +46,9 @@ LayerChonBanChoi::LayerChonBanChoi()
     ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerCreateRoom",   LayerCreateRoomLoader::loader());
     //
-    GameServer::getSingleton().addListeners(this);
+	GameServer::getSingleton().addListeners(this);
+
+	mRoomID4Invite = -1;
 }
 
 LayerChonBanChoi::~LayerChonBanChoi()
@@ -52,6 +61,12 @@ void LayerChonBanChoi::setGameID(int gID){
     CCLOG("setGameID: gId: %d", gID);
     lblTitle->setString( CCString::createWithFormat("CHỌN BÀN - %s", mUtils::getGameNameUpperCaseByID(gID)->getCString())->getCString() );
     tblListRooms->reloadData();
+	//
+	boost::shared_ptr<vector<boost::shared_ptr<UserVariable>>> collectionUserVariable (new vector<boost::shared_ptr<UserVariable>>());
+	boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("cvg", boost::make_shared<int>(gID), VARIABLETYPE_INT));
+	collectionUserVariable->push_back(variable);	//
+	boost::shared_ptr<IRequest> request (new SetUserVariablesRequest(collectionUserVariable)); 
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 // CCBSelectorResolver interface
@@ -165,6 +180,11 @@ void LayerChonBanChoi::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader
     nodeTableRooms->addChild(tblRooms);
     tblRooms->reloadData();
     //
+	boost::shared_ptr<vector<boost::shared_ptr<UserVariable>>> collectionUserVariable (new vector<boost::shared_ptr<UserVariable>>());
+ 	boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("pai", boost::make_shared<int>(1), VARIABLETYPE_INT));
+ 	collectionUserVariable->push_back(variable);	//
+	boost::shared_ptr<IRequest> request (new SetUserVariablesRequest(collectionUserVariable)); 
+	GameServer::getSingleton().getSmartFox()->Send(request);
     return;
 }
 
@@ -188,8 +208,14 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 			Chat *toast = new Chat("Phòng không tồn tại!!", -1);
 			this->addChild(toast);
             return;
-        }
-        
+		}
+		boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+        vector<string> rParams = mUtils::splitString( *ro->GetVariable("params")->GetStringValue(), '@' );
+		if( atol(rParams.at(0).c_str())> atol( myself->GetVariable("amf")->GetStringValue()->c_str() ) ){
+			Chat *toast = new Chat("Bạn không đủ tiền vào phòng!", -1);
+			this->addChild(toast);
+		}
+
         boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro,""));
         GameServer::getSingleton().getSmartFox()->Send(request);
     }else{
@@ -340,20 +366,64 @@ unsigned int LayerChonBanChoi::numberOfCellsInTableView(cocos2d::extension::CCTa
 
 
 void LayerChonBanChoi::OnSmartFoxInvitation(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    CCLOG("Invite Playe");
+	CCLOG("Invite Player");
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueInvitation = (*ptrEvetnParams)["invitation"];
+	boost::shared_ptr<Invitation::Invitation> invitation = ((boost::static_pointer_cast<Invitation::Invitation>(ptrEventParamValueInvitation)));
+
+// 	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+ 	boost::shared_ptr<ISFSObject> param = invitation->Params();
+	//
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	//Get PAI
+	CCLOG("Invitee: %s Inviter: %s, gameID: %s, minbet: %s", invitation->Invitee()->Name()->c_str(), invitation->Inviter()->Name()->c_str(),
+		 param->GetUtfString("gid")->c_str(), param->GetUtfString("mb")->c_str());
+	if( myself->GetVariable("pai")->GetStringValue()->compare("0")!=0 ){
+		LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+		if( !SceneManager::getSingleton().showNotification() ){
+			CCLOG("NTF Dialog already open!");
+			return;
+		}
+		mRoomID4Invite = atoi( param->GetUtfString("roomid")->c_str() );
+		layer->setNotificationOptions("THƯ MỜI CHƠi", 
+			CCString::createWithFormat("Người chơi %s mời bạn cùng chơi:\n%s\n Tiền cược: %s\n Bạn có muốn cùng tham gia?"
+				, invitation->Inviter()->Name()->c_str(), mUtils::getGameNameByID( atoi(param->GetUtfString("gid")->c_str()) )->getCString()
+				, param->GetUtfString("mb")->c_str())->getCString()
+			, true , "ĐỒNG Ý", tagComfirmInvite, this );
+	}
 }
 
 void LayerChonBanChoi::OnSmartFoxRoomJoin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("Join Room");
     SceneManager::getSingleton().gotoGameByTag(m_gID);
+	//Update, khong chap nhan loi moi nua
+	boost::shared_ptr<vector<boost::shared_ptr<UserVariable>>> collectionUserVariable (new vector<boost::shared_ptr<UserVariable>>());
+	boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("pai", boost::make_shared<int>(0), VARIABLETYPE_INT));
+	collectionUserVariable->push_back(variable);	//
+	boost::shared_ptr<IRequest> request (new SetUserVariablesRequest(collectionUserVariable)); 
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 void LayerChonBanChoi::OnSmartFoxRoomJoinError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("Join Room Error");
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueErrorMessage = (*ptrEventParams)["errorMessage"];
+	boost::shared_ptr<string> ptrErrorMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueErrorMessage);
+	boost::shared_ptr<string> message (new string("Join Room Failure: " +  *ptrErrorMessage));
+	//
+	Chat *toast = new Chat(message->c_str(), -1);
+	this->addChild(toast);
 }
 
 void LayerChonBanChoi::OnSmartFoxRoomCreationError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("Create Room Error");
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueErrorMessage = (*ptrEventParams)["errorMessage"];
+	boost::shared_ptr<string> ptrErrorMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueErrorMessage);
+	boost::shared_ptr<string> message (new string("Room Create Failure: " +  *ptrErrorMessage));
+	//
+	Chat *toast = new Chat(message->c_str(), -1);
+	this->addChild(toast);
 }
 
 void LayerChonBanChoi::OnSmartFoxRoomAdd(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -362,15 +432,52 @@ void LayerChonBanChoi::OnSmartFoxRoomAdd(unsigned long long ptrContext, boost::s
 
 void LayerChonBanChoi::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("User Exit Room Ở chọn bàn chơi");
-    //SceneManager::getSingleton().gotoMain();
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEvetnParams)["user"];
+	boost::shared_ptr<User> user = ((boost::static_pointer_cast<User>(ptrEventParamValueUser)));
+	if( user->IsItMe() ){
+		boost::shared_ptr<vector<boost::shared_ptr<UserVariable>>> collectionUserVariable (new vector<boost::shared_ptr<UserVariable>>());
+		boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("pai", boost::make_shared<int>(1), VARIABLETYPE_INT));
+		collectionUserVariable->push_back(variable);	//
+		boost::shared_ptr<IRequest> request (new SetUserVariablesRequest(collectionUserVariable)); 
+		GameServer::getSingleton().getSmartFox()->Send(request);
+	}
 }
 
 void LayerChonBanChoi::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
-    boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];
-    boost::shared_ptr<string> ptrNotifiedCmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
-    
-    boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	//
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];
+	boost::shared_ptr<string> cmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
 
-    CCLOG("cmd = %s",ptrNotifiedCmd->c_str());
+	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
+	//
+	if(strcmp("nem_ntf", cmd->c_str())==0){//EXT_EVENT_NOT_ENOUGH_MONEY_NTF = "nem_ntf";
+		//
+		Chat *toast = new Chat("Bạn không đủ tiền chơi tiếp!\nHãy nạp tiền để tiếp tục chơi.", -1);
+		this->addChild(toast);
+	}else if(strcmp("kkntf", cmd->c_str())==0){ ////EXT_EVENT_USER_KICKED_NOTIF    = "kkntf";
+		if( strcmp(myself->Name()->c_str(), param->GetUtfString("uid")->c_str() )==0 ){
+			Chat *toast = new Chat("Bạn đã bị đá ra khỏi phòng!", -1);
+			this->addChild(toast);
+		}else{
+			Chat *toast = new Chat( CCString::createWithFormat("Người chơi %s đã bị đá ra khỏi phòng!", param->GetUtfString("uid")->c_str())->getCString(), -1);
+			this->addChild(toast);
+		}
+	}
+}
+
+void LayerChonBanChoi::notificationCallBack( bool isOK, int tag )
+{
+	if( !isOK )
+		return;
+	switch(tag){
+	case tagComfirmInvite:
+		//Send request
+		boost::shared_ptr<IRequest> request (new JoinRoomRequest(12345,""));
+		GameServer::getSingleton().getSmartFox()->Send(request);
+		break;
+	}
 }

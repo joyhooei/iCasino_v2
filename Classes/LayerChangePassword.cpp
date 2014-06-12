@@ -46,12 +46,12 @@ void LayerChangePassword::onButtonUpdate(CCObject* pSender)
 	int len3 = strlen( txtNewPassword->getText() );
 	if(len1<6 || len1 >24 || len2<6 || len2 >24 || len3<6 || len3 >24){
 		Chat *toast = new Chat("Mật khẩu phải dài 6-24 ký tự!", -1);
-		this->addChild(toast);
+		this->getParent()->addChild(toast);
 		return;
 	}
 	if(strcmp(txtNewPassword->getText(), txtRePassword->getText())!=0){
 		Chat *toast = new Chat("Xác nhận mật khẩu không đúng!", -1);
-		this->addChild(toast);
+		this->getParent()->addChild(toast);
 		return;
 	}
     //Send request

@@ -407,6 +407,7 @@ void LayerAvatarInGame::stopAllTimer() {
 
 
 void LayerAvatarInGame::setPosChuong(int pos){
+	bool meIsBoss = false;
     switch (pos) {
         case kUserLeft:
             chuong->setPosition(ccp(101,175));
@@ -425,11 +426,16 @@ void LayerAvatarInGame::setPosChuong(int pos){
         case kUserMe:
             chuong->setPosition(ccp(175,420));
             chuong->setVisible(true);
+			meIsBoss = true;
             break;
         default:
             break;
     }
-    
+    //
+	this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
+	this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
+	this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
+	this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
 }
 
 

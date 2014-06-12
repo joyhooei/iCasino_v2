@@ -104,6 +104,10 @@ public:
 		return ccNodeLoaderLibrary;
 	}
 
+	LayerLogin* getLayerLogin(){
+		return layerLogin;
+	}
+
 	virtual bool init();
 	static cocos2d::CCScene* scene();
 	CREATE_FUNC(SceneManager);

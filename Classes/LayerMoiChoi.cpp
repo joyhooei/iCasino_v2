@@ -9,6 +9,7 @@
 #include "LayerMoiChoi.h"
 #include "mUtils.h"
 #include "Requests/ExtensionRequest.h"
+#include "GameServer.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -76,7 +77,6 @@ void LayerMoiChoi::onButtonClose(CCObject* pSender){
 // CCBSelectorResolver interface
 SEL_MenuHandler LayerMoiChoi::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, const char *pSelectorName)
 {
-    CCLOG("sfsdfsdf");
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnClose", LayerMoiChoi::onButtonClose);
     return NULL;
 }
@@ -104,7 +104,7 @@ void LayerMoiChoi::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
     
     tblTable->reloadData();
     //
-    lblTitle->setString("TỶ GIÁ");
+    lblTitle->setString("MỜI BẠN CHƠI");
 	//
 	this->setTouchEnabled(true);
     return;
@@ -112,7 +112,30 @@ void LayerMoiChoi::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 
 // hàm khi click vào 1 hành của table view
 void LayerMoiChoi::tableCellTouched(cocos2d::extension::CCTableView *table, cocos2d::extension::CCTableViewCell *cell){
-    CCLOG("Roomid: %d", 1);
+    CCLOG("Roomid: %d", cell->getTag());
+	int idx = cell->getTag();
+	StructFriendInfo sms = lstFriendInfos.at(idx);
+// 	if( sms==NULL )
+// 		return;
+	//
+	if( GameServer::getSingleton().getSmartFox()->LastJoinedRoom()==NULL )
+		return;
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	int groupId = atoi( GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str() );
+	vector<string> lstParams = mUtils::splitString( *GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue(), '@' );
+	//double mb = atof(lstParams.at(0).c_str());
+	//Send request
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("gid", GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
+	params->PutUtfString("mb", lstParams.at(0).c_str());
+	params->PutUtfString("roomid", CCString::createWithFormat("%d", GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->Id())->getCString() );
+	params->PutUtfString("lu", sms.aI.c_str());
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("rilu", params));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+
+	//remove it from list
+	lstFriendInfos.erase( lstFriendInfos.begin()+idx );
+	tblTable->reloadData();
 }
 
 // Hàm set giá trị width height cho 1 cell table view
@@ -128,11 +151,16 @@ CCTableViewCell* LayerMoiChoi::tableCellAtIndex(cocos2d::extension::CCTableView 
         cell = new CCTableViewCell();
         cell->autorelease();
         //Time
-        CCLabelTTF *labelName = CCLabelTTF::create(sms.aN.c_str(), "Helvetica", 16.0);
+        CCLabelTTF *labelName = CCLabelTTF::create(CCString::createWithFormat("%s - %s", sms.aN.c_str(), (sms.amf.c_str()) )->getCString()
+			, "Helvetica", 16.0);
+// 		CCLabelTTF *labelName = CCLabelTTF::create(sms.aN.c_str(), "Helvetica", 16.0);
         labelName->setPosition(ccp(nodeTable->getContentSize().width/2, 20));
 		labelName->setAnchorPoint(ccp(0.5, 0.5));
+		labelName->setTag(1);
         //        labelName->setTag(tag_NameFriend);
         cell->addChild(labelName);
+		CCLOG("uid: %d", sms.uid);
+		cell->setTag( idx );
         //Sprite
         CCSprite* line = CCSprite::createWithSpriteFrameName("assest/background_cell.png");
         line->setPosition(ccp(nodeTable->getContentSize().width/2,0));
@@ -142,6 +170,9 @@ CCTableViewCell* LayerMoiChoi::tableCellAtIndex(cocos2d::extension::CCTableView 
     }
     else
     {
+		CCLabelTTF *label1 = (CCLabelTTF *)cell->getChildByTag(1);
+		if( label1!=NULL )
+			label1->setString( CCString::createWithFormat("%s - %s", sms.aN.c_str(), mUtils::format_money( atol(sms.amf.c_str()) )->getCString() )->getCString());
         //        CCLabelTTF *label1 = getLabelFromTagID(cell, tag_cellTime);
         //        if( label1!=NULL )
         //            label1->setString(his.lastUpdateTime.c_str());
@@ -167,14 +198,15 @@ void LayerMoiChoi::OnExtensionResponse(unsigned long long ptrContext, boost::sha
     
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
     boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
-
-	if( strcmp( cmd->c_str(), "lip" ) ){
+	CCLOG("cmd=%s", cmd->c_str());
+	if( strcmp( cmd->c_str(), "lip" )==0 ){
 		boost::shared_ptr<string> lipv = param->GetUtfString("lipv");
 		CCLOG("lipv: %s", lipv->c_str());
 		if( strlen(lipv->c_str())==0 ){
 			//Nobody
 		}else{
 			//25,dautv12,dautv12,1315918.0,|
+			CCLOG("ListFriendInvite: %s", lipv->c_str());
 			vector<string> lstFriends = mUtils::splitString(*lipv, '|');
 			lstFriendInfos.clear();
 			for( int i = 0; i<lstFriends.size(); i++ ){

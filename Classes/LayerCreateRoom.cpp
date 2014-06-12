@@ -61,6 +61,8 @@ void LayerCreateRoom::onButtonCreate(CCObject* pSender)
     //sendRequest
     boost::shared_ptr<IRequest> request (new ExtensionRequest("rcroom",roomConfig));
     GameServer::getSingleton().getSmartFox()->Send(request);
+	//
+	this->removeFromParentAndCleanup(true);
 }
 
 void LayerCreateRoom::onButtonClose(CCObject* pSender)

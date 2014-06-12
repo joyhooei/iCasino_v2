@@ -32,8 +32,7 @@ private:
     
 	UICheckBox* chkSaveInfo;
 
-    CCBReader * ccbReader;
-    CCNodeLoaderLibrary * ccNodeLoaderLibrary;
+	bool isRegistPopupShown;
 public:
     LayerLogin();
     virtual ~LayerLogin();
@@ -42,6 +41,10 @@ public:
     
     void doLogin();
     void initTextField(CCEditBox* txt, const char* hintText);
+
+	void popupCallback();
+
+	void setUserAndPassInfo(const char* username, const char* password);
 
 	void readInfo();
 	void saveInfo();

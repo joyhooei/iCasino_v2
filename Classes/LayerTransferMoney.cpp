@@ -10,6 +10,7 @@
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
 #include "SceneManager.h"
+#include "_Chat_.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -55,6 +56,12 @@ SEL_MenuHandler LayerTransferMoney::onResolveCCBCCMenuItemSelector(cocos2d::CCOb
 
 void LayerTransferMoney::onButtonCreate(CCObject* pSender)
 {
+	//Validate
+	if( strlen( txtTransferTo->getText() ) == 0 ){
+		Chat *toast = new Chat("Chưa biết địa chỉ chuyển tới!", -1);
+		this->addChild(toast);
+		return;
+	}
     //Send request
     boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
     //

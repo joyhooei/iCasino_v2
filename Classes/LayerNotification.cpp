@@ -40,11 +40,6 @@ void LayerNotification::setMessage(const char* msg){
 void LayerNotification::setTwoButton(bool isTwoButton){
 	btnOK->setVisible(isTwoButton);
 	lblOK->setVisible(isTwoButton);
-	if( isTwoButton ){
-		//.
-	}else{
-
-	}
 }
 
 void LayerNotification::addListeners( NotificationCallBack * callBack )
