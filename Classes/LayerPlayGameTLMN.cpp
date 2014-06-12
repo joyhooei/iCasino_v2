@@ -8,6 +8,33 @@
 
 #include "LayerPlayGameTLMN.h"
 #include "SceneManager.h"
+#include "mUtils.h"
+
+vector<string> LayerPlayGameTLMN::split(string &S, const char &str) {
+	vector<string> arrStr;
+	string::iterator t, t2;
+
+	for (t = S.begin(); t < S.end(); ){
+		// Lặp từ vị trí bắt đầu
+		t2 = find(t, S.end(), str);
+
+		//kể từ vị trí t
+		if(t != t2){
+			arrStr.push_back(string(t, t2));
+		}
+		else if (t2 != S.end()) arrStr.push_back("");
+
+		if (t2 == S.end())
+		{
+			break;
+		}
+
+
+		t = t2 + 1;
+	}
+
+	return arrStr;
+}
 
 enum EXT_REPONSE {
     EXT_EVENT_USER_JOIN_NOTIF,      // jrntf
@@ -115,6 +142,29 @@ LayerPlayGameTLMN::~LayerPlayGameTLMN() {
 void LayerPlayGameTLMN::createBackgrounds() {
     BackgroundInGame *bg = BackgroundInGame::create();
     this->addChild(bg);
+
+	// thông tin bàn chơi và mức cược
+	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
+	boost::shared_ptr<string> param = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
+	string paramString = param->c_str();
+	vector<string> arrInfo = split(paramString, '@');
+	string money = arrInfo.at(0);
+
+	mUtils mu;
+	//string name = mu.getGameNameByID(id);
+	string name = "TLMN";
+	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
+
+	string result = "";
+	if (name.length() > 0 && moneyConvert.length() > 0)
+	{
+		result = name + " - cược:" + moneyConvert;
+	}
+	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	nameGame->setPosition(ccp(400-5, 213+10));
+	nameGame->setColor(ccWHITE);
+	nameGame->setOpacity(150);
+	bg->addChild(nameGame);
 }
 
 void LayerPlayGameTLMN::createAvatars() {
@@ -494,12 +544,34 @@ void LayerPlayGameTLMN::event_EXT_EVENT_AMF_TEST_NOTIF(){
     
     boost::shared_ptr<string> name = param->GetUtfString("uid");
     int money = (int) (*(param->GetDouble("amf")));
+	int resson = (int) (*(param->GetDouble("cbt")));
     
     CCLog("event_EXT_EVENT_AMF_TEST_NOTIF");
     if (name != NULL && money != NULL) {
+		CCLog("name= %s, money= %d", name->c_str(), money);
+
         int pos = layerAvatars->getPosByName(name->c_str());
         layerNumbers->showNumberByPos(pos, to_string(money));
-		CCLog("name= %s, money= %d", name->c_str(), money);
+
+		string ressonString = "";
+		switch (resson) {
+			case 1:
+				ressonString = "thối 2";
+				break;
+			case 2:
+				ressonString = "người thua bị thối 2";
+				break;
+			case 3:
+				ressonString = "chặn được 2";
+				break;
+			case 4:
+				ressonString = "bị bắt 2";
+				break;
+			case 5:
+				ressonString = "chặn lại 2";
+				break;
+		}
+		layerChats->showChatByPos(pos, ressonString);
     }
 }
 
@@ -627,6 +699,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_GAME_CHANGE_NOTIF(){
     if (ginf != NULL) {
         CCLog("%s", ginf->c_str());
         // neu da nhay vao day
+		layerChats->showChatByPos(-1, "Dựng lại bàn chơi đã lưu");
         getButtonByTag(kTagButtonReady)->setEnabled(false);
         getButtonByTag(kTagButtonSort)->setEnabled(true);
         

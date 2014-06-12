@@ -65,7 +65,8 @@ private:
 	};
 
 	int typeGame;
-    // chuỗi chứa thông tin cơ bản của người chơi
+	bool isGuess;
+	string myName;
     string listUser;
     
     // mảng chứa

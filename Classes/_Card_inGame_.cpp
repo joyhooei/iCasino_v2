@@ -366,7 +366,8 @@ void LayerCardInGame::refreshCardOnHand() {
         Card *card = (Card*) arrCardOnHand->objectAtIndex(i);
         card->setZOrder(i);
         card->stopAllActions();
-        
+        card->setClicked(false);
+
         CCMoveTo *actionMove =CCMoveTo::create(0.5, ccp(leftTheFirst + i * disCards, top));
         if (i == arrCardOnHand->count() - 1) {
             // nếu cần gợi ý hạ phỏm
@@ -931,7 +932,7 @@ void LayerCardInGame::actionHitCard(int kUser, int id) {
                 
                 if (!card->isVisible()) {
                     card->setVisible(true);
-                    card->setPosition(getStartPositionCardUserRight_Hit());
+                    card->setPosition(getStartPositionCardUserTop_Hit());
                 }
                 
                 card->setZOrder(ZORDER_TAKE + countCardTop_Take);
@@ -1052,7 +1053,7 @@ void LayerCardInGame::actionEatCard(int fromPosUser, int toPosUser, int pId) {
     
     Card *card = getCardByID(pId);
     card->setCardAte();
-	CCLog("Quan bai can tren tay can di chuyen la: id=%d, name=%s", card->getID(), card->getURL().c_str());
+	//CCLog("Quan bai can tren tay can di chuyen la: id=%d, name=%s", card->getID(), card->getURL().c_str());
     
     switch (fromPosUser) {
         case kUserMe: case kUserBot:

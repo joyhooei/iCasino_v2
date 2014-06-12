@@ -247,6 +247,8 @@ CCPoint LayerPlayGameChinessChess::convertPoint_TableToLayer(CCPoint point) {
 }
 
 void LayerPlayGameChinessChess::ccTouchesEnded(CCSet *pTouches, CCEvent *event){
+	if (this->nameCurrentTurn != myName) return; 
+
     CCSetIterator iterator = pTouches->begin();
     CCTouch *touch;
     touch = (CCTouch*)(*iterator);
@@ -265,12 +267,38 @@ void LayerPlayGameChinessChess::ccTouchesEnded(CCSet *pTouches, CCEvent *event){
             Chess *chess= arrChess.at(i);
             if (chess->getIDPos() == index) {
                 indexCurrent = index;
-                
                 chess->setClick(true);
-                if (!isIamTheFirst){
-                    drawCanMove(logicChess->getAllMovesFromPos(convertID(indexCurrent)));
+
+                if (isRedChess){
+					// nếu mình là quân đỏ thì mọi thao tác sẽ phải convertID 
+					vector<int> arrID = logicChess->getAllMovesFromPos(convertID(indexCurrent));
+					vector<int> arrIDConvert;
+					for (int i = 0; i < arrID.size(); i++) 
+					{
+						int id = arrID.at(i);
+						if (id < 0)
+						{
+							break;
+						}
+						arrIDConvert.push_back(convertID(id));
+					}
+                    drawCanMove(arrIDConvert);
 				}
-				else {drawCanMove(logicChess->getAllMovesFromPos(indexCurrent));}
+				else {
+					vector<int> arrID = logicChess->getAllMovesFromPos(indexCurrent);
+					vector<int> arrIDConvert;
+					for (int i = 0; i < arrID.size(); i++) 
+					{
+						int id = arrID.at(i);
+						if (id < 0)
+						{
+							break;
+						}
+						arrIDConvert.push_back(id);
+					}
+					
+					drawCanMove(arrIDConvert);
+				}
 
                 
                 isClick = true;
@@ -281,15 +309,13 @@ void LayerPlayGameChinessChess::ccTouchesEnded(CCSet *pTouches, CCEvent *event){
         }
         // nếu click vào thì ko có gì đáng bàn
         // ngược lại nếu ko click vào quân cờ nào của mình và trước đó đã click rồi thì
-        if (!isClick && indexCurrent) {
+        if (!isClick && indexCurrent > -1) {
             // gửi lên sv
             indexTarget = index;
             
-            if (isIamTheFirst) {
+            if (isRedChess) {
                 indexCurrent = convertID(indexCurrent);
                 indexTarget = convertID(indexTarget);
-            }
-            else {
             }
             
             if (indexCurrent > -1 && indexTarget > -1){
@@ -588,7 +614,7 @@ bool LayerPlayGameChinessChess::onAssignCCBMemberVariable(CCObject *pTarget, con
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblMaRed_status", CCLabelTTF*, lblMaRed_status);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblPhaoRed_status", CCLabelTTF*, lblPhaoRed_status);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblTuongRed_status", CCLabelTTF*, lblTuongRed_status);
-    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblSyRed_status", CCLabelTTF*, lblSyRed_status);
+    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblSyRed_statuss", CCLabelTTF*, lblSyRed_status);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblXeBlack_status", CCLabelTTF*, lblXeBlack_status);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblTotBlack_status", CCLabelTTF*, lblTotBlack_status);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblMaBlack_status", CCLabelTTF*, lblMaBlack_status);
@@ -610,16 +636,26 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
     
     createChess();
     
+
+	CCSize sizeTable = nodeTableChess->getContentSize();
     tag2 = CCSprite::create("tag_phom_1.png");
     //nodeTableChess->addChild(tag2);
-    
+    chieuTuongRed = CCSprite::create("chess/attack1.png");
+	chieuTuongRed->setPosition(ccp(sizeTable.width / 2, sizeTable.height / 2 - 100));
+	chieuTuongRed->setVisible(false);
+	chieuTuongBlack = CCSprite::create("chess/attack2.png");
+	chieuTuongBlack->setPosition(ccp(sizeTable.width / 2, sizeTable.height / 2 + 100));
+	chieuTuongBlack->setVisible(false);
+	nodeTableChess->addChild(chieuTuongRed, 100);
+	nodeTableChess->addChild(chieuTuongBlack, 100);
+
     // Khoi tao cac doi tuong o day
     myName = SceneManager::getSingleton().getMyName();
     indexCurrent = -1;
     indexTarget = -1;
     
     isStartedGame = false;
-    
+  
     //
     lblNameRed->setString("--");
     lblMoneyRed->setString("--");
@@ -631,7 +667,7 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
     lblMaRed_status->setString("--");
     lblTotRed_status->setString("--");
     lblTuongRed_status->setString("--");
-    //lblSyRed_status->setString("--");
+    lblSyRed_status->setString("--");
     //
     lblNameBlack->setString("--");
     lblMoneyBlack->setString("--");
@@ -644,8 +680,49 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
     lblTotBlack_status->setString("--");
     lblTuongBlack_status->setString("--");
     lblSyBlack_status->setString("--");
+
+	// thông tin bàn chơi và mức cược
+	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
+	boost::shared_ptr<string> param = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
+	string paramString = param->c_str();
+	vector<string> arrInfo = split(paramString, '@');
+	string money = arrInfo.at(0);
+
+	mUtils mu;
+	//string name = mu.getGameNameByID(id);
+	string name = " ";
+	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
+
+	string result = "";
+	if (name.length() > 0 && moneyConvert.length() > 0)
+	{
+		result = "Cược:" + moneyConvert;
+	}
+	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	nameGame->setPosition(ccp(nodeTableChess->getContentSize().width / 2, nodeTableChess->getContentSize().height / 2));
+	nameGame->setColor(ccBLACK);
+	nameGame->setOpacity(100);
+	nodeTableChess->addChild(nameGame, 0);
     
     return;
+}
+
+void LayerPlayGameChinessChess::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent) {
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
+
+	int    money = (int) (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	string name = boost::to_string(*ptrNotifiedUser->Name());
+
+	CCLOG("Update User Variables");
+	CCLOG("name=%s, money=%d", name.c_str(), money);
+
+	mUtils mu;
+	if (name==myName) {
+		lblMoneyBlack->setString(mu.convertMoneyEx(money).c_str());
+	}
+	else lblMoneyRed->setString(mu.convertMoneyEx(money).c_str());
 }
 
 void LayerPlayGameChinessChess::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -714,6 +791,30 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_START(){
     
     readyRed->setVisible(false);
     readyBlack->setVisible(false);
+
+	//lblNameRed->setString("--");
+	//lblMoneyRed->setString("--");
+	//lblWinRateRed->setString("--");
+	//lblTimeRed->setString("--");
+	//lblTotalTimeRed->setString("--");
+	lblXeRed_status->setString("--");
+	lblPhaoRed_status->setString("--");
+	lblMaRed_status->setString("--");
+	lblTotRed_status->setString("--");
+	lblTuongRed_status->setString("--");
+	lblSyRed_status->setString("--");
+	//
+	//lblNameBlack->setString("--");
+	//lblMoneyBlack->setString("--");
+	//lblWinRateBlack->setString("--");
+	//lblTimeBlack->setString("--");
+	//lblTotalTimeBlack->setString("--");
+	lblXeBlack_status->setString("--");
+	lblPhaoBlack_status->setString("--");
+	lblMaBlack_status->setString("--");
+	lblTotBlack_status->setString("--");
+	lblTuongBlack_status->setString("--");
+	lblSyBlack_status->setString("--");
     
     refreshChess();
 }
@@ -856,6 +957,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
             if(size < 2) return;
             
             if (myName == arr[0]) {
+				this->isRedChess = (arr[1] == "r");
                 if (i == 0){
                     isMaster = true;
                 }
@@ -921,15 +1023,12 @@ int LayerPlayGameChinessChess::convertID(int id) {
     }
     else {rowC = 4 - (row - 5);}
     
-//     CCLog("old ID = %d", id);
-//     CCLog("new ID = %d", rowC * 9 + colC);
     return (rowC * 9 + colC);
 }
 
 void LayerPlayGameChinessChess::moveChess(int fromID, int toID) {
     CCLog("action moveChess fromID=%d, toID=%d", fromID, toID);
-    if (isIamTheFirst) {
-        // mình là Player 1, đc đi trước và bị ngược ID
+    if (isRedChess) {
         logicChess->Move(convertID(fromID), convertID(toID));
     }
     else {
@@ -955,6 +1054,58 @@ void LayerPlayGameChinessChess::moveChess(int fromID, int toID) {
         }
     }
     
+	// thong tin so quan co con lai tren ban cua moi user
+	// xe_phao_ma_tuongj_si_tot (vd: 1_0_1_0_0_3)
+	int RED = 1;
+	int BLACK = 2;
+	string listChessRed, listChessBlack;
+	if (isRedChess) {
+		listChessRed = logicChess->getArrayLostPieces(RED);
+		listChessBlack = logicChess->getArrayLostPieces(BLACK);
+
+		if (!logicChess->IsKingSafe(BLACK)) {
+			CCLog("ben kia dang chieu tuong");
+			CCActionInterval *blink = CCBlink::create(2, 3);
+			chieuTuongRed->runAction(blink);
+		}
+		if (!logicChess->IsKingSafe(RED)) {
+			CCActionInterval *blink = CCBlink::create(2, 3);
+			chieuTuongBlack->runAction(blink);
+		}
+	}
+	else {
+		listChessRed = logicChess->getArrayLostPieces(BLACK);
+		listChessBlack = logicChess->getArrayLostPieces(RED);
+
+		if (!logicChess->IsKingSafe(RED)) {
+			CCLog("Minh la quan den: ben kia dang chieu tuong");
+			CCActionInterval *blink = CCBlink::create(2, 3);
+			chieuTuongRed->runAction(blink);
+		}
+		if (!logicChess->IsKingSafe(BLACK)) {
+			CCLog("Minh la quan den: Dang chieu tuong ben kia");
+			CCActionInterval *blink = CCBlink::create(2, 3);
+			chieuTuongBlack->runAction(blink);
+		}
+	}
+	vector<string> arrChessRed = split(listChessRed, '_');
+	vector<string> arrChessBlack = split(listChessBlack, '_');
+	if (arrChessRed.size() < 6 || arrChessBlack.size() < 6) return;
+	
+	lblXeRed_status->setString(arrChessRed.at(0).c_str());
+	lblPhaoRed_status->setString(arrChessRed.at(1).c_str());
+	lblMaRed_status->setString(arrChessRed.at(2).c_str());
+	lblTotRed_status->setString(arrChessRed.at(5).c_str());
+	lblTuongRed_status->setString(arrChessRed.at(3).c_str());
+	lblSyRed_status->setString(arrChessBlack.at(4).c_str());
+	//
+	lblXeBlack_status->setString(arrChessBlack.at(0).c_str());
+	lblPhaoBlack_status->setString(arrChessBlack.at(1).c_str());
+	lblMaBlack_status->setString(arrChessBlack.at(2).c_str());
+	lblTotBlack_status->setString(arrChessBlack.at(5).c_str());
+	lblTuongBlack_status->setString(arrChessBlack.at(3).c_str());
+	lblSyBlack_status->setString(arrChessBlack.at(4).c_str());
+	
 }
 
 

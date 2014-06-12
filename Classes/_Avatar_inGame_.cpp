@@ -46,26 +46,31 @@ bool LayerAvatarInGame::init() {
     this->setPosition(ccp(0, 0));
     
 	this->typeGame = 0;
+	this->myName = SceneManager::getSingleton().getMyName();
 
     Avatar *me = new Avatar(true);
     Avatar *left = new Avatar(false);
     Avatar *right = new Avatar(false);
     Avatar *top = new Avatar(false);
+	Avatar *bottom = new Avatar(false);
     
     me->setPosition(ccp(10, HEIGHT_DESIGN - 10 - me->getSizeThis().height));
     left->setPosition(ccp(10, HEIGHT_DESIGN / 2 - left->getSizeThis().height / 2));
     right->setPosition(ccp(WIDTH_DESIGN - 10 - right->getSizeThis().width, HEIGHT_DESIGN / 2 - left->getSizeThis().height / 2));
     top->setPosition(ccp(WIDTH_DESIGN / 2 - top->getSizeThis().width / 2, HEIGHT_DESIGN - 10 - top->getSizeThis().height));
-    
+    bottom->setPosition(ccp(top->getPositionX(), 10));
+
     me->setTag(kUserMe);
     left->setTag(kUserLeft);
     right->setTag(kUserRight);
     top->setTag(kUserTop);
-    
+    bottom->setTag(kUserBot);
+
     this->addChild(me);
     this->addChild(left);
     this->addChild(right);
     this->addChild(top);
+	this->addChild(bottom);
     
     chuong = UIImageView::create();
     chuong->loadTexture("Chuong.png");
@@ -121,6 +126,7 @@ void LayerAvatarInGame::setUnReadyAllUser() {
     setReady(kUserLeft, false);
     setReady(kUserRight, false);
     setReady(kUserTop, false);
+	setReady(kUserBot, false);
 }
 
 void LayerAvatarInGame::resetGame() {
@@ -199,20 +205,35 @@ int LayerAvatarInGame::getIndexInArrByName(string name) {
 }
 
 int LayerAvatarInGame::getPosByName(string pName) {
-    string myName = SceneManager::getSingleton().getMyName();
-    int pos = getIndexInArrByName(myName);
+	/*CCLog("pName= %s", pName.c_str());
+	for(int i = 0;i < arrName.size(); i++) {
+		CCLog("name[%d]= %s", i, arrName.at(i).c_str());
+	}*/
+
+    int pos = getIndexInArrByName(this->myName);
     
+	if (pos == -1)
+	{
+		isGuess = true;
+		return (getIndexInArrByName(pName));
+	}
     // tra lai vi tri
-    if (pos > -1){
-        for (int i = 0; i < arrName.size(); i++) {
+	else{
+		isGuess = false;
+		int countUser = arrName.size();
+        for (int i = 0; i < countUser; i++) {
             if (arrName[i] == pName) {
                 if (i == pos) {
                     return kUserMe;
-                } else if (i == (pos + 1) % 4) {
+					CCLog("-----Turn ME!");
+                } else if (i == (pos + 1) % countUser) {
+					CCLog("-----Turn RIGHT!");
                     return kUserRight;
-                } else if (i == (pos + 2) % 4) {
+                } else if (i == (pos + 2) % countUser) {
+					CCLog("-----Turn TOP!");
                     return kUserTop;
-                } else if (i == (pos + 3) % 4) {
+                } else if (i == (pos + 3) % countUser) {
+					CCLog("-----Turn LEFT!");
                     return kUserLeft;
                 }
                 
@@ -225,34 +246,36 @@ int LayerAvatarInGame::getPosByName(string pName) {
 }
 
 string LayerAvatarInGame::getNameByPos(int pPos) {
-    string myName = SceneManager::getSingleton().getMyName();
-    int pos = getIndexInArrByName(myName);
+    int pos = getIndexInArrByName(this->myName);
     
     // tra lai vi tri
-    if (pos > -1){
+	if (pos == -1) {
+		this->isGuess = true;
+		if (pPos < arrName.size() && pPos >= 0) return arrName.at(pPos);
+	}
+	else {
+		this->isGuess = false;
+		int countUser = arrName.size();
         switch (pPos) {
             case kUserMe:
-                return myName;
+                return this->myName;
                 break;
             
             case kUserRight:
-                return arrName[(pPos + 1) % 4];
+                return arrName[(pPos + 1) % countUser];
                 break;
                 
             case kUserTop:
-                return arrName[(pPos + 2) % 4];
+                return arrName[(pPos + 2) % countUser];
                 break;
                 
             case kUserLeft:
-                return arrName[(pPos + 3) % 4];
-                break;
-                
-            default:
+                return arrName[(pPos + 3) % countUser];
                 break;
         }
     }
-    
-    return "";
+
+	return "";
 }
 
 void LayerAvatarInGame::updateUsers() {
@@ -277,6 +300,7 @@ void LayerAvatarInGame::updateUsers() {
 	Avatar *avaLeft = getUserByPos(kUserLeft);
 	Avatar *avaRight = getUserByPos(kUserRight);
 	Avatar *avaTop = getUserByPos(kUserTop);
+	Avatar *avaBot = getUserByPos(kUserBot);
 
 	avaMe->setVisible(false);
 	avaMe->setTouchEnabled(false);
@@ -306,16 +330,24 @@ void LayerAvatarInGame::updateUsers() {
 	avaLeft->setName("");
 	avaLeft->setMoney("");
 	avaLeft->setAI("");
+	//
 	avaRight->setVisibleLayerInvite(true);
 	avaRight->setReady(false);
 	avaRight->setName("");
 	avaRight->setMoney("");
 	avaRight->setAI("");
+	//
 	avaTop->setVisibleLayerInvite(true);
 	avaTop->setReady(false);
 	avaTop->setName("");
 	avaTop->setMoney("");
 	avaTop->setAI("");
+	//
+	avaBot->setVisibleLayerInvite(true);
+	avaBot->setReady(false);
+	avaBot->setName("");
+	avaBot->setMoney("");
+	avaBot->setAI("");
 
 	// 2. Update info :D
     int length = arrName.size();
@@ -328,20 +360,35 @@ void LayerAvatarInGame::updateUsers() {
         int pos = getPosByName(name);
         if (pos < 0)
             break;
-        Avatar *user = getUserByPos(pos);
-        user->setName(name);
-        user->setFlag(atoi(flag.c_str()) == 1);
-        user->setIcon(url);
-		user->setAI(aI);
-
-		if (pos == kUserMe)
-		{
-			user->setVisible(true);
-			user->setTouchEnabled(true);
-			btnReady->setEnabled(true);
+		if (!isGuess){
+			getUserByPos(kUserBot)->setVisible(false); 
+			getUserByPos(kUserBot)->setTouchEnabled(false);
 		}
 		else {
-			user->setVisibleLayerInvite(false);
+			getUserByPos(kUserBot)->setVisible(true);
+			getUserByPos(kUserBot)->setTouchEnabled(true);
+		}
+		{
+			Avatar *user = getUserByPos(pos);
+			user->setName(name);
+			user->setFlag(atoi(flag.c_str()) == 1);
+			user->setIcon(url);
+			user->setAI(aI);
+
+			if (pos == kUserMe)
+			{
+				user->setVisible(true);
+				user->setTouchEnabled(true);
+				btnReady->setEnabled(true);
+			}
+			else {
+				user->setVisibleLayerInvite(false);
+			}
+		}
+		//else 
+		{
+			// nếu mình là khách
+
 		}
     }
 }

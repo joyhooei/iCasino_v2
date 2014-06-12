@@ -118,10 +118,13 @@ private:
 
 	CCSprite *tag;
 	CCSprite *tag2;
+	CCSprite *chieuTuongRed;
+	CCSprite *chieuTuongBlack;
 	vector<Chess*> arrChess;
 	bool isMaster;
 	bool isStartedGame;
 	bool isIamTheFirst;
+	bool isRedChess;  // ktra xem minh la quan do hay quan den
 
 	string myName;
 	string nameCurrentTurn;
@@ -165,6 +168,7 @@ public:
 	void onButtonUnReady(CCObject* pSender);
 	//Server
 	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	virtual void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
 	void event_EXT_EVENT_START();             // = “s”();
 	void event_EXT_EVENT_NEXT_TURN();         // = "nt"();
