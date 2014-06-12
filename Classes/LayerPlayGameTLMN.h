@@ -63,6 +63,7 @@ public:
     void initGame();
     void resetGame();
     
+	vector<string> split(string &S, const char &str);
     int    convertResponseToInt(string inString);
     string convertResponseToString(int inInt);
     Button* createButtonWithTitle_Position(const char *title, CCPoint pPoint);

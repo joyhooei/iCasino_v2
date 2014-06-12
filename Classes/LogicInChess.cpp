@@ -135,7 +135,17 @@ string ChessLogic::getArrayLostPieces(int side) {
     // str = KNIGHT + "_" + (2 - countKnight) + "-";
     // str = CANNON + "_" + (2 - countCannon) + "-";
     // str = ROOK + "_" + (2 - countRook);
-    str = countRook + '_' + countCannon + '_' + countKnight + '_' + countElephant + '_' + countBishop + '_' + countPawn;
+    
+	ostringstream osRook, osCannon, osKnight, osElephant, osBishop, osPawn;
+	osRook<<(countRook);
+	osCannon<<(countCannon);
+	osKnight<<(countKnight);
+	osElephant<<(countElephant);
+	osBishop<<(countBishop);
+	osPawn<<(countPawn);
+	
+	str = osRook.str() + "_" + osCannon.str() + "_" + osKnight.str() + "_" + osElephant.str() + "_" + osBishop.str() + "_" + osPawn.str();
+	//str = countRook + "_" + countCannon + '_' + countKnight + '_' + countElephant + '_' + countBishop + '_' + countPawn;
     
     return str;
 };

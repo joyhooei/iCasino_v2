@@ -7,8 +7,6 @@
 #include "LayerPlayGameChinessChess.h"
 #include "_Chat_.h"
 
-#include "LayerSMS.h"
-
 template<> SceneManager* SingLeton<SceneManager>::mSingleton = 0;
 SceneManager* SceneManager::getSingletonPtr(void)
 {
@@ -113,7 +111,6 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerLogin",   LayerLoginLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerNotification",   LayerNotificationLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameCoTuong",   LayerPlayGameChinessChessLoader::loader());
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerSMS",   LayerSMSLoader::loader());
 
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
