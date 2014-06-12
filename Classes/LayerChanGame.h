@@ -1,0 +1,219 @@
+//
+//  LayerChanGame.h
+//  iCasinov2
+//
+//  Created by DauA on 6/4/14.
+//
+//
+
+#ifndef __iCasinov2__LayerChanGame__
+#define __iCasinov2__LayerChanGame__
+
+#include "cocos2d.h"
+#include "cocos-ext.h"
+#include "GameServer.h"
+#include "AllData.h"
+#include "_Avatar_inGame_.h"
+#include "FrameBet.h"
+#include "CardChan.h"
+#define PI 3.141592653589
+using namespace cocos2d;
+using namespace cocos2d::ui;
+using namespace Sfs2X;
+
+enum{
+	CARD_ORIGINATION_CHIA_BAI = 0,
+	CARD_ORIGINATION_BOC_NOC,
+	CARD_ORIGINATION_AN_CUA_TREN,
+	CARD_ORIGINATION_AN_CUA_TRI,
+	CARD_ORIGINATION_CHIU,
+	CARD_ORIGINATION_TRA_CUA,
+	CARD_ORIGINATION_BY_DISCARD,
+	// discard
+	CARD_ORIGINATION_BY_DUOI,
+	// đánh đi cây bài vừa bốc nọc ở cửa trì
+	CARD_ORIGINATION_BY_AN_DUOI,
+	CARD_ORIGINATION_BY_TRANSFER_TREN_2_DUOI
+};
+
+enum{
+	ANBAO_REASON_NO_PROBLEM = 0,
+	ANBAO_REASON_AN_CA_DOI_CHO,
+	ANBAO_REASON_BO_AN_CUATREN_BUT_AN_CUATRI,
+	ANBAO_REASON_DISCARD_SAMEAS_CUATREN_CUATRI_DUOITAY,
+	ANBAO_REASON_ANCA_DANHCA,
+	ANBAO_TREOTRANH,
+	ANBAO_DANH_1_CA_CHI_DUOC_AN_CHAN,
+	ANBAO_REASON_BOCHAN_ANCA,
+	ANBAO_REASON_DANHBAI_GIONG_CHANCA_DA_AN,
+	ANBAO_REASON_DOI_U_BACHTHUCHI,
+	ANBAO_REASON_BOCHAN_DANHCHAN,   // bỏ không ăn 1 quân làm chắn, sau lại đánh đi đúng cây đó.
+	ANBAO_REASON_BOCHAN_ANCHAN,
+	ANBAO_REASON_BOCA_ANCA,
+	ANBAO_REASON_DANHCA_ANCA,        // đánh đi 1 cạ sau đó lại ăn 1 cạ khác
+	ANBAO_REASON_XECA_ANCA,           // xé cạ ăn cạ
+	ANBAO_REASON_XECHAN_ANCA,        // xé chắn, ăn chắn
+	ANBAO_REASON_DANH_ROILAI_AN,
+	ANBAO_REASON_DANH_DI_DOI_CHAN,
+	ANBAO_REASON_AN_ROILAI_DANH,
+	ANBAO_REASON_ANCA_ROILAI_DANH_QUAN_CUNG_HANG,
+	ANBAO_REASON_CHIUDUOC_NHUNG_LAI_ANTHUONG,
+	ANBAO_REASON_AN_CHON_CA,
+	ANBAO_REASON_CO_CHAN_CAU_CA,     // có chắn cấu cạ: Lấy 1 quân trong chắn sẵn có để ăn cạ.
+};
+
+class LayerChanGame : public CCLayer,public PlayerCallBack{
+private:
+	//Recei
+	string EXT_EVENT_READY_REQ;
+	string EXT_EVENT_REQ_DISCARD;
+	string EXT_EVENT_REQ_DRAW_CARD;
+	string EXT_EVENT_REQ_TAKE_CARD;
+	string EXT_EVENT_REQ_DUOI_CARD;
+
+	//send
+	string EXT_SRVNTF_GAME_MASTER_INFO;
+	string EXT_SRVNTF_PLAYER_LIST;
+	string EXT_SRVNTF_USER_READY;
+	string EXT_EVENT_START;
+	string EXT_EVENT_END;
+	string EXT_EVENT_LISTCARD_NTF;
+	string EXT_SRVNTF_ONHAND_DETAILS;
+	string EXT_SRVNTF_CURRENT_PLAYING_USER;
+	string EXT_SRVNTF_NOC_COUNT;
+	string EXT_SRVNTF_CARD_ORIGINATION;
+	string EXT_EVENT_RES_DRAW_CARD;
+	string EXT_EVENT_RES_DUOI_CARD;
+	string EXT_EVENT_RES_TAKE_CARD;
+	string EXT_SRVNTF_ANBAO;
+	string EXT_EVENT_RES_DISCARD;
+	string EXT_EVENT_GAME_RESULT;
+	string EXT_SRVNTF_ONE_EXPECTING_U;
+
+	string _list_user;
+	string mylistCard;
+	bool gameStarted;
+	bool flagChiaBai;
+
+	int countDiscard;
+
+	float w_cardhand;
+	float h_cardhand;
+	float w_card;
+	float h_card;
+	float goc;
+	int _coutZorder;
+
+	//Vi tri cac la bai cua tri
+	float left_chi_left;
+	float left_chi_right;
+	float left_chi_me;
+	float left_chi_top;
+
+	float bottom_chi_left;
+	float bottom_chi_right;
+	float bottom_chi_me;
+	float bottom_chi_top;
+
+	float left_d_me;
+	float left_d_top;
+	float left_d_left;
+	float left_d_right;
+
+	float bottom_d_me;
+	float bottom_d_left;
+	float bottom_d_right;
+	float bottom_d_top;
+
+	LayerAvatarInGame *layerAvatars;
+
+	UILayer *uLayer;
+	UIButton *btnReady;
+	UIButton *btnTake;
+	UIButton *btnBoc;
+	UIButton *btnEate;
+	UIButton *btnDuoi;
+	UILabel *lblDetail;
+
+
+	CCArray *CARD_ME;
+
+	CCArray *CARD_C_ME;
+	CCArray *CARD_C_LEFT;
+	CCArray *CARD_C_RIGHT;
+	CCArray *CARD_C_TOP;
+
+	CCArray *CARD_D_ME_top;
+	CCArray *CARD_D_LEFT_top;
+	CCArray *CARD_D_RIGHT_top;
+	CCArray *CARD_D_TOP_top;
+
+	CCArray *CARD_D_ME_bottom;
+	CCArray *CARD_D_LEFT_bottom;
+	CCArray *CARD_D_RIGHT_bottom;
+	CCArray *CARD_D_TOP_bottom;
+
+public:
+	LayerChanGame();
+	~LayerChanGame();
+
+	void createButtons();
+	void createAvatars();
+	void sendRequestJoinGame(float dt);
+
+	vector<string> Dsplit(string &S,const char &str);
+	int getPosUserByName(string uid,string _list_user);
+	void updateUser(string list);
+
+	void setMyListCards(string listCards);
+	void rotateListCards();
+	void sortMyListCards(string listCards);
+	string findTypeCard(string number,string suite);
+	string getNameCard(int number, int suite);
+	void whenUserTakeCards(long rscode);
+	void setCurrentPlayer(string uid,int _count);
+	void setUserReady(string uid);
+	void error_AnBao(long rscode);
+	void setEndGame();
+	void whenConguoi_ChoU(string uid);
+	void deleteAllCardFromArray(CCArray *P);
+
+	void takeCards(string f_user, string t_user, string cardnu, string cardsu, int crdorg);
+	void action_BocNoc(string t_user,string cardnu, string cardsu);
+	void action_AnCuaTren(string f_user, string t_user, string cardnu, string cardsu);
+	void action_AnCuaTri(string f_user, string t_user, string cardnu, string cardsu);
+	void action_ChiuBai(string f_user, string t_user, string cardnu, string cardsu);
+	void action_TraCua(string f_user, string t_user, string cardnu, string cardsu);
+
+	void action_DanhBai(string f_user, string cardnu, string cardsu);
+	void action_DanhBai_ME(string cardnu,string cardsu);
+	void action_DanhBai_NOTME(int pos,string cardnu,string cardsu);
+
+	void action_ChuyenBai(string f_user, string t_user, string cardnu, string cardsu);
+	void action_ChuyenBai_ME(int pos, string cardnu, string cardsu);
+	void action_ChuyenBai_NOTME(int pos, string cardnu, string cardsu);
+
+	void action_An_U(string f_user, string t_user, string cardnu, string cardsu);
+
+	CardChan* getCardFromPos_take(int pos);
+
+	void refreshListCard();
+
+
+	void btn_ready_click(CCObject *sender, TouchEventType type);
+	void btn_take_click(CCObject *sender, TouchEventType type);
+	void btn_boc_click(CCObject *sender, TouchEventType type);
+	void btn_eate_click(CCObject *sender, TouchEventType type);
+	void btn_Duoi_click(CCObject *sender, TouchEventType type);
+
+	void CardTouch(CCObject *pSender,TouchEventType type);
+
+	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+
+};
+
+#endif /* defined(__iCasinov2__LayerChanGame__) */

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>frames</key>
+	<dict>
+		<key>Chan/cycle.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{49, 852}, {64, 64}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {64, 64}}</string>
+			<key>sourceSize</key>
+			<string>{64, 64}</string>
+		</dict>
+		<key>Chan/flag.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 1}, {195, 480}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {195, 480}}</string>
+			<key>sourceSize</key>
+			<string>{195, 480}</string>
+		</dict>
+		<key>Chan/row_select.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 852}, {145, 46}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {145, 46}}</string>
+			<key>sourceSize</key>
+			<string>{145, 46}</string>
+		</dict>
+		<key>Chan/xuong.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 483}, {264, 367}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {264, 367}}</string>
+			<key>sourceSize</key>
+			<string>{264, 367}</string>
+		</dict>
+		<key>Chan/xuong_press.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{198, 1}, {264, 367}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {264, 367}}</string>
+			<key>sourceSize</key>
+			<string>{264, 367}</string>
+		</dict>
+	</dict>
+	<key>metadata</key>
+	<dict>
+		<key>format</key>
+		<integer>2</integer>
+		<key>size</key>
+		<string>{1024, 1024}</string>
+		<key>textureFileName</key>
+		<string>Chan.png</string>
+	</dict>
+</dict>
+</plist>

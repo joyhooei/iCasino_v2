@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>frames</key>
+	<dict>
+		<key>CardsBig/card_10_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{285, 1513}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_10_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{946, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_10_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 568}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_10_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 757}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_1_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1513, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_1_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 946}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_1_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{285, 379}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_1_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 1513}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_2_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1702, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_2_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{379, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_2_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{285, 568}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_2_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 1702}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_3_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1891, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_3_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{190, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_3_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{285, 757}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_3_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{190, 1891}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_4_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 190}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_4_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 1513}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_4_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1135, 285}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_4_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{379, 143}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_5_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 379}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_5_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 1702}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_5_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{285, 1135}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_5_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{568, 143}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_6_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 568}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_6_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 1891}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_6_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{285, 1324}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_6_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{757, 143}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_7_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 757}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_7_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1324, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_7_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{568, 285}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_7_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{946, 143}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_8_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 946}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_8_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1135, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_8_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{285, 1702}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_8_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1135, 143}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_9_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 1135}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_9_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{757, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_9_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{379, 1891}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_9_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1324, 143}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_back.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{143, 1324}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_j_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{757, 285}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_j_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1513, 143}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_j_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 1135}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_j_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_k_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{285, 946}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_k_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1702, 143}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_k_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 1324}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_k_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 190}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_q_c.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{946, 285}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_q_d.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1891, 190}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_q_h.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{568, 1}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/card_q_s.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 379}, {140, 187}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {140, 187}}</string>
+			<key>sourceSize</key>
+			<string>{140, 187}</string>
+		</dict>
+		<key>CardsBig/left_hand.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{427, 285}, {99, 136}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {99, 136}}</string>
+			<key>sourceSize</key>
+			<string>{99, 137}</string>
+		</dict>
+		<key>CardsBig/right_hand.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{427, 386}, {106, 95}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {106, 95}}</string>
+			<key>sourceSize</key>
+			<string>{106, 95}</string>
+		</dict>
+	</dict>
+	<key>metadata</key>
+	<dict>
+		<key>format</key>
+		<integer>2</integer>
+		<key>size</key>
+		<string>{2048, 2048}</string>
+		<key>textureFileName</key>
+		<string>CardsBig.png</string>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{76A39BB2-9B84-4C65-98A5-654D86B86F2A}</ProjectGuid>
+    <RootNamespace>test_win32</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '10.0'">v100</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0'">v110</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v110_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0'">v120</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v120_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '10.0'">v100</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0'">v110</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v110_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0'">v120</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v120_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration).win32\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration).win32\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\cocos2dx;$(ProjectDir)..\..\..\cocos2dx\include;$(ProjectDir)..\..\..\cocos2dx\kazmath\include;$(ProjectDir)..\..\..\cocos2dx\platform\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32\OGLES;$(ProjectDir)..\..\..\external;$(ProjectDir)..\..\..\external\chipmunk\include\chipmunk;$(ProjectDir)..\..\..\CocosDenshion\include;$(ProjectDir)..\..\..\extensions;..\Classes;..;$(ProjectDir)..\..\..\libs\smartfox;$(ProjectDir)..\..\..\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libExtensions.lib;libcocos2d.lib;libCocosDenshion.lib;opengl32.lib;glew32.lib;libBox2d.lib;libchipmunk.lib;libcurl_imp.lib;pthreadVCE2.lib;websockets.lib;SmartFoxClientApi.lib;libboost_system-vc100-mt-gd-1_52.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir);$(ProjectDir)..\..\..\libs;$(ProjectDir)..\..\..\libs\boost_lib_win32;$(ProjectDir)..\..\..\libs\smartfox_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutDir)"</Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\cocos2dx;$(ProjectDir)..\..\..\cocos2dx\include;$(ProjectDir)..\..\..\cocos2dx\kazmath\include;$(ProjectDir)..\..\..\cocos2dx\platform\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32\OGLES;$(ProjectDir)..\..\..\external;$(ProjectDir)..\..\..\external\chipmunk\include\chipmunk;$(ProjectDir)..\..\..\CocosDenshion\include;$(ProjectDir)..\..\..\extensions;..\Classes;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libExtensions.lib;libcocos2d.lib;libCocosDenshion.lib;opengl32.lib;glew32.lib;libBox2d.lib;libchipmunk.lib;libcurl_imp.lib;pthreadVCE2.lib;websockets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutDir)"</Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Classes\AllData.cpp" />
+    <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\BaCayChuong.cpp" />
+    <ClCompile Include="..\Classes\BaCayNormal.cpp" />
+    <ClCompile Include="..\Classes\Card.cpp" />
+    <ClCompile Include="..\Classes\CardChan.cpp" />
+    <ClCompile Include="..\Classes\CustomTableViewCell.cpp" />
+    <ClCompile Include="..\Classes\FrameBet.cpp" />
+    <ClCompile Include="..\Classes\GameServer.cpp" />
+    <ClCompile Include="..\Classes\LayerAction.cpp" />
+    <ClCompile Include="..\Classes\LayerAvatarXiTo.cpp" />
+    <ClCompile Include="..\Classes\LayerBet_BaCayChuong.cpp" />
+    <ClCompile Include="..\Classes\LayerBet_Lieng.cpp" />
+    <ClCompile Include="..\Classes\LayerBorrowMoney.cpp" />
+    <ClCompile Include="..\Classes\LayerBuyAvatar.cpp" />
+    <ClCompile Include="..\Classes\LayerChanGame.cpp" />
+    <ClCompile Include="..\Classes\LayerChangeAvatar.cpp" />
+    <ClCompile Include="..\Classes\LayerChangePassword.cpp" />
+    <ClCompile Include="..\Classes\LayerChargeMoney.cpp" />
+    <ClCompile Include="..\Classes\LayerChatRoom.cpp" />
+    <ClCompile Include="..\Classes\LayerChonBanChoi.cpp" />
+    <ClCompile Include="..\Classes\LayerChooseGame.cpp" />
+    <ClCompile Include="..\Classes\LayerCreateAccount.cpp" />
+    <ClCompile Include="..\Classes\LayerCreateRoom.cpp" />
+    <ClCompile Include="..\Classes\LayerCurrencyExchange.cpp" />
+    <ClCompile Include="..\Classes\LayerForgotPassword.cpp" />
+    <ClCompile Include="..\Classes\LayerFriend.cpp" />
+    <ClCompile Include="..\Classes\LayerFriendDetails.cpp" />
+    <ClCompile Include="..\Classes\LayerGameChan_XuongU.cpp" />
+    <ClCompile Include="..\Classes\LayerInbox.cpp" />
+    <ClCompile Include="..\Classes\LayerLichSuGiaoDich.cpp" />
+    <ClCompile Include="..\Classes\LayerLogin.cpp" />
+    <ClCompile Include="..\Classes\LayerMain.cpp" />
+    <ClCompile Include="..\Classes\LayerMoiChoi.cpp" />
+    <ClCompile Include="..\Classes\LayerMoney.cpp" />
+    <ClCompile Include="..\Classes\LayerNotification.cpp" />
+    <ClCompile Include="..\Classes\LayerOpenCard_Xito.cpp" />
+    <ClCompile Include="..\Classes\LayerPasswordRoom.cpp" />
+    <ClCompile Include="..\Classes\LayerPlayerInfo.cpp" />
+    <ClCompile Include="..\Classes\LayerPlayGame.cpp" />
+    <ClCompile Include="..\Classes\LayerPlayGameChinessChess.cpp" />
+    <ClCompile Include="..\Classes\LayerPlayGamePhom.cpp" />
+    <ClCompile Include="..\Classes\LayerPlayGameTLMB.cpp" />
+    <ClCompile Include="..\Classes\LayerPlayGameTLMN.cpp" />
+    <ClCompile Include="..\Classes\LayerServices.cpp" />
+    <ClCompile Include="..\Classes\LayerSettings.cpp" />
+    <ClCompile Include="..\Classes\LayerSMS.cpp" />
+    <ClCompile Include="..\Classes\LayerTransferMoney.cpp" />
+    <ClCompile Include="..\Classes\LayerTyGia.cpp" />
+    <ClCompile Include="..\Classes\LayerUpdateInfo.cpp" />
+    <ClCompile Include="..\Classes\LayerUserInfo.cpp" />
+    <ClCompile Include="..\Classes\LayerUserInfo_Details.cpp" />
+    <ClCompile Include="..\Classes\Lieng.cpp" />
+    <ClCompile Include="..\Classes\LogicInChess.cpp" />
+    <ClCompile Include="..\Classes\Nan3Cay.cpp" />
+    <ClCompile Include="..\Classes\SceneManager.cpp" />
+    <ClCompile Include="..\Classes\XiTo.cpp" />
+    <ClCompile Include="..\Classes\_Avatar_.cpp" />
+    <ClCompile Include="..\Classes\_Avatar_inGame_.cpp" />
+    <ClCompile Include="..\Classes\_Background_inGame_.cpp" />
+    <ClCompile Include="..\Classes\_Button_.cpp" />
+    <ClCompile Include="..\Classes\_Button_inGame_.cpp" />
+    <ClCompile Include="..\Classes\_Button_inMain_.cpp" />
+    <ClCompile Include="..\Classes\_Card_.cpp" />
+    <ClCompile Include="..\Classes\_Card_inGame_.cpp" />
+    <ClCompile Include="..\Classes\_Chat_.cpp" />
+    <ClCompile Include="..\Classes\_Chat_inGame_.cpp" />
+    <ClCompile Include="..\Classes\_Chess_.cpp" />
+    <ClCompile Include="..\Classes\_Number_.cpp" />
+    <ClCompile Include="..\Classes\_Number_inGame_.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Classes\AllData.h" />
+    <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\AppMacros.h" />
+    <ClInclude Include="..\Classes\BaCayChuong.h" />
+    <ClInclude Include="..\Classes\BaCayNormal.h" />
+    <ClInclude Include="..\Classes\Card.h" />
+    <ClInclude Include="..\Classes\CardChan.h" />
+    <ClInclude Include="..\Classes\CustomTableViewCell.h" />
+    <ClInclude Include="..\Classes\FrameBet.h" />
+    <ClInclude Include="..\Classes\GameServer.h" />
+    <ClInclude Include="..\Classes\LayerAction.h" />
+    <ClInclude Include="..\Classes\LayerAvatarXiTo.h" />
+    <ClInclude Include="..\Classes\LayerBet_BaCayChuong.h" />
+    <ClInclude Include="..\Classes\LayerBet_Lieng.h" />
+    <ClInclude Include="..\Classes\LayerBorrowMoney.h" />
+    <ClInclude Include="..\Classes\LayerBuyAvatar.h" />
+    <ClInclude Include="..\Classes\LayerChanGame.h" />
+    <ClInclude Include="..\Classes\LayerChangeAvatar.h" />
+    <ClInclude Include="..\Classes\LayerChangePassword.h" />
+    <ClInclude Include="..\Classes\LayerChargeMoney.h" />
+    <ClInclude Include="..\Classes\LayerChatRoom.h" />
+    <ClInclude Include="..\Classes\LayerChonBanChoi.h" />
+    <ClInclude Include="..\Classes\LayerChooseGame.h" />
+    <ClInclude Include="..\Classes\LayerCreateAccount.h" />
+    <ClInclude Include="..\Classes\LayerCreateRoom.h" />
+    <ClInclude Include="..\Classes\LayerCurrencyExchange.h" />
+    <ClInclude Include="..\Classes\LayerForgotPassword.h" />
+    <ClInclude Include="..\Classes\LayerFriend.h" />
+    <ClInclude Include="..\Classes\LayerFriendDetails.h" />
+    <ClInclude Include="..\Classes\LayerGameChan_XuongU.h" />
+    <ClInclude Include="..\Classes\LayerInbox.h" />
+    <ClInclude Include="..\Classes\LayerLichSuGiaoDich.h" />
+    <ClInclude Include="..\Classes\LayerLogin.h" />
+    <ClInclude Include="..\Classes\LayerMain.h" />
+    <ClInclude Include="..\Classes\LayerMoiChoi.h" />
+    <ClInclude Include="..\Classes\LayerMoney.h" />
+    <ClInclude Include="..\Classes\LayerNotification.h" />
+    <ClInclude Include="..\Classes\LayerOpenCard_Xito.h" />
+    <ClInclude Include="..\Classes\LayerPasswordRoom.h" />
+    <ClInclude Include="..\Classes\LayerPlayerInfo.h" />
+    <ClInclude Include="..\Classes\LayerPlayGame.h" />
+    <ClInclude Include="..\Classes\LayerPlayGameChinessChess.h" />
+    <ClInclude Include="..\Classes\LayerPlayGamePhom.h" />
+    <ClInclude Include="..\Classes\LayerPlayGameTLMB.h" />
+    <ClInclude Include="..\Classes\LayerPlayGameTLMN.h" />
+    <ClInclude Include="..\Classes\LayerServices.h" />
+    <ClInclude Include="..\Classes\LayerSettings.h" />
+    <ClInclude Include="..\Classes\LayerSMS.h" />
+    <ClInclude Include="..\Classes\LayerTransferMoney.h" />
+    <ClInclude Include="..\Classes\LayerTyGia.h" />
+    <ClInclude Include="..\Classes\LayerUpdateInfo.h" />
+    <ClInclude Include="..\Classes\LayerUserInfo.h" />
+    <ClInclude Include="..\Classes\LayerUserInfo_Details.h" />
+    <ClInclude Include="..\Classes\Lieng.h" />
+    <ClInclude Include="..\Classes\LoadingCustomLoader.h" />
+    <ClInclude Include="..\Classes\LogicInChess.h" />
+    <ClInclude Include="..\Classes\mUtils.h" />
+    <ClInclude Include="..\Classes\Nan3Cay.h" />
+    <ClInclude Include="..\Classes\NotificationCallBack.h" />
+    <ClInclude Include="..\Classes\SceneManager.h" />
+    <ClInclude Include="..\Classes\SingLeton.h" />
+    <ClInclude Include="..\Classes\SliderCustomLoader.h" />
+    <ClInclude Include="..\Classes\StructHistory.h" />
+    <ClInclude Include="..\Classes\TableViewCustomLoader.h" />
+    <ClInclude Include="..\Classes\TextFieldCustomLoader.h" />
+    <ClInclude Include="..\Classes\TextFieldCustomPopUpLoader.h" />
+    <ClInclude Include="..\Classes\XiTo.h" />
+    <ClInclude Include="..\Classes\_Avatar_.h" />
+    <ClInclude Include="..\Classes\_Avatar_inGame_.h" />
+    <ClInclude Include="..\Classes\_Background_inGame_.h" />
+    <ClInclude Include="..\Classes\_Button_.h" />
+    <ClInclude Include="..\Classes\_Button_inGame_.h" />
+    <ClInclude Include="..\Classes\_Button_inMain_.h" />
+    <ClInclude Include="..\Classes\_Card_.h" />
+    <ClInclude Include="..\Classes\_Card_inGame_.h" />
+    <ClInclude Include="..\Classes\_Chat_.h" />
+    <ClInclude Include="..\Classes\_Chess_.h" />
+    <ClInclude Include="..\Classes\_Number_.h" />
+    <ClInclude Include="..\Classes\_Number_inGame_.h" />
+    <ClInclude Include="main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\cocos2dx\proj.win32\cocos2d.vcxproj">
+      <Project>{98a51ba8-fc3a-415b-ac8f-8c7bd464e93e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\CocosDenshion\proj.win32\CocosDenshion.vcxproj">
+      <Project>{f8edd7fa-9a51-4e80-baeb-860825d2eac6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\extensions\proj.win32\libExtensions.vcxproj">
+      <Project>{21b2c324-891f-48ea-ad1a-5ae13de12e28}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\external\Box2D\proj.win32\Box2D.vcxproj">
+      <Project>{929480e7-23c0-4df6-8456-096d71547116}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\external\chipmunk\proj.win32\chipmunk.vcxproj">
+      <Project>{207bc7a9-ccf1-4f2f-a04d-45f72242ae25}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

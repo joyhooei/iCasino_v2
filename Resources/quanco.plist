@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>frames</key>
+	<dict>
+		<key>quanco/Ma.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 148}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Ma2.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 50}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Ma2_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 344}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Ma_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{246, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Phao.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 344}, {46, 46}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {46, 46}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Phao2.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 99}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Phao2_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 295}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Phao_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 246}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Q_tuong.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 439}, {44, 44}}</string>
+			<key>offset</key>
+			<string>{1, -1}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{2, 2}, {44, 44}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Q_tuong2.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 392}, {45, 45}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{1, 1}, {45, 45}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Q_tuong2_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 393}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Q_tuong_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 246}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Si.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{99, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Si2.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 50}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Si2_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 442}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Si_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Tot.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 197}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Tot2.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 148}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Tot2_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Tot_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{295, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Tuong.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 197}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Tuong2.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{197, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Tuong2_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{148, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Tuong_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 99}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Xe.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{50, 295}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Xe2.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{344, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Xe2_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{393, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+		<key>quanco/Xe_hover.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{442, 1}, {47, 47}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {47, 47}}</string>
+			<key>sourceSize</key>
+			<string>{47, 47}</string>
+		</dict>
+	</dict>
+	<key>metadata</key>
+	<dict>
+		<key>format</key>
+		<integer>2</integer>
+		<key>size</key>
+		<string>{512, 512}</string>
+		<key>textureFileName</key>
+		<string>quanco.png</string>
+	</dict>
+</dict>
+</plist>

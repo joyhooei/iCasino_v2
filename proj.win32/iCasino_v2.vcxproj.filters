@@ -1,0 +1,486 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Children">
+      <UniqueIdentifier>{f80a531c-5122-48db-9f6f-31760de5eafc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\GameLayers">
+      <UniqueIdentifier>{370c968b-bbff-47db-81b9-96750d6dbf46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\MenuLayers">
+      <UniqueIdentifier>{9dd48405-f21d-4a39-94ac-744140b01e9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Loader">
+      <UniqueIdentifier>{e3d8377d-aab5-4768-a6cf-a6a513e400b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Logic">
+      <UniqueIdentifier>{34776d73-9a6f-42ec-8d8d-53bc08932a9c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AllData.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameServer.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerLogin.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerMain.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerServices.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SceneManager.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Avatar_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Avatar_inGame_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Background_inGame_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Button_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Button_inGame_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Button_inMain_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Card_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Card_inGame_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Chat_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Chat_inGame_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Number_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Number_inGame_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BaCayChuong.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BaCayNormal.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Card.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CardChan.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CustomTableViewCell.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\FrameBet.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerAvatarXiTo.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerBet_BaCayChuong.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerBet_Lieng.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerBorrowMoney.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerBuyAvatar.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChangeAvatar.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChangePassword.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChargeMoney.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChatRoom.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChonBanChoi.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChooseGame.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerCreateAccount.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerCreateRoom.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerCurrencyExchange.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerForgotPassword.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerFriend.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerFriendDetails.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerInbox.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerLichSuGiaoDich.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerAction.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerMoney.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerNotification.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerOpenCard_Xito.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerPlayGame.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerPlayGameChinessChess.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerPlayGamePhom.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerPlayGameTLMB.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerPlayGameTLMN.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerSettings.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerSMS.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerTransferMoney.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerTyGia.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerUpdateInfo.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerUserInfo.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerUserInfo_Details.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Lieng.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XiTo.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Chess_.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LogicInChess.cpp">
+      <Filter>Classes\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChanGame.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Nan3Cay.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerPasswordRoom.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerPlayerInfo.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerMoiChoi.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerGameChan_XuongU.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AllData.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppMacros.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameServer.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerLogin.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerMain.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerServices.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\mUtils.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SceneManager.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SingLeton.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\StructHistory.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Number_inGame_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Avatar_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Avatar_inGame_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Background_inGame_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Button_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Button_inGame_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Button_inMain_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Card_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Card_inGame_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Chat_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Number_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BaCayNormal.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BaCayChuong.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Card.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CardChan.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CustomTableViewCell.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\FrameBet.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerAction.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerLichSuGiaoDich.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerAvatarXiTo.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerBet_BaCayChuong.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerBet_Lieng.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerBorrowMoney.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerBuyAvatar.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChangeAvatar.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChangePassword.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChargeMoney.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChatRoom.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChonBanChoi.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChooseGame.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerCreateAccount.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerCreateRoom.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerCurrencyExchange.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerForgotPassword.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerFriend.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerFriendDetails.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerInbox.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerMoney.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerNotification.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerOpenCard_Xito.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerPlayGameTLMN.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerPlayGame.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerPlayGameChinessChess.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerPlayGamePhom.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerPlayGameTLMB.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TextFieldCustomLoader.h">
+      <Filter>Classes\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TableViewCustomLoader.h">
+      <Filter>Classes\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SliderCustomLoader.h">
+      <Filter>Classes\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TextFieldCustomPopUpLoader.h">
+      <Filter>Classes\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerSettings.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerSMS.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerTransferMoney.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerTyGia.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerUpdateInfo.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerUserInfo.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerUserInfo_Details.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LoadingCustomLoader.h">
+      <Filter>Classes\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Lieng.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\XiTo.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Chess_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LogicInChess.h">
+      <Filter>Classes\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChanGame.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Nan3Cay.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NotificationCallBack.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerPasswordRoom.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerPlayerInfo.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerMoiChoi.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerGameChan_XuongU.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+</Project>
