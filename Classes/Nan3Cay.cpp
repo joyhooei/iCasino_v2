@@ -1,4 +1,5 @@
 ﻿#include "Nan3Cay.h"
+#include <algorithm>
 
 Nan3Cay::Nan3Cay():m_callback(NULL)
 	,m_callbackListener(NULL)
