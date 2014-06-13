@@ -31,13 +31,6 @@ LayerChargeMoney::LayerChargeMoney()
     currState = tag_viettel;
     //
     GameServer::getSingleton().addListeners(this);
-    //
-    ccbReader = NULL;
-    ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-//    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, SliderCustom);
-//    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, TextFieldCustom);
-    // register loaders
-    ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
 
 }
 
@@ -125,6 +118,8 @@ void LayerChargeMoney::onButtonOKClick(CCObject* pSender){
 void LayerChargeMoney::onButtonSMSClick(CCObject* pSender){
     CCLOG("onButtonSMSClick");
     //
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     ccNodeLoaderLibrary->unregisterCCNodeLoader("LayerSMS");
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerSMS",   LayerSMSLoader::loader());
     ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
@@ -139,6 +134,8 @@ void LayerChargeMoney::onButtonSMSClick(CCObject* pSender){
 void LayerChargeMoney::onButtonTyGiaClick(CCObject* pSender){
     CCLOG("onButtonTyGiaClick");
     //
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     ccNodeLoaderLibrary->unregisterCCNodeLoader("LayerSMS");
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerSMS",   LayerTyGiaLoader::loader());
     ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);

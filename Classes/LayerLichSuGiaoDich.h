@@ -17,21 +17,6 @@ using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
 
-struct StructHistory{
-    string transID;
-    string accId;
-    string ip;
-    string accId2;
-    string transType;
-    string amount;
-    string transErr;
-    string transErrDetail;
-    string status;
-    string cardSerial;
-    string cardPin;
-    string lastUpdateTime;
-};
-
 class LayerLichSuGiaoDich
 : public cocos2d::CCLayer
 , public cocos2d::extension::CCBSelectorResolver
@@ -45,12 +30,27 @@ class LayerLichSuGiaoDich
 private:
     CCNode* nodeHistory;
     CCTableView* tblHistory;
-    vector<StructHistory> lstHistory;
     enum {
         tag_cellTime,
         tag_cellAmount,
         tag_cellDetails
-    };
+	};
+
+	struct StructHistory{
+		string transID;
+		string accId;
+		string ip;
+		string accId2;
+		string transType;
+		string amount;
+		string transErr;
+		string transErrDetail;
+		string status;
+		string cardSerial;
+		string cardPin;
+		string lastUpdateTime;
+	};
+	vector<StructHistory> lstHistory;
 public:
     LayerLichSuGiaoDich();
     virtual ~LayerLichSuGiaoDich();

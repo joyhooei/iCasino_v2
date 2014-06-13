@@ -37,12 +37,6 @@ LayerUserInfo_Details::LayerUserInfo_Details()
         historys[i].numOfLose = 0;
     }
     //
-    ccbReader = NULL;
-    ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-    // register loaders
-    ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerUpdateInfo",   LayerUpdateInfoLoader::loader());
-    //
     GameServer::getSingleton().addListeners(this);
 }
 
@@ -97,7 +91,8 @@ SEL_MenuHandler LayerUserInfo_Details::onResolveCCBCCMenuItemSelector(cocos2d::C
 
 void LayerUserInfo_Details::onButtonUpdate(CCObject* pSender)
 {
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerUpdateInfo* mLayer;
     if (ccbReader)
     {

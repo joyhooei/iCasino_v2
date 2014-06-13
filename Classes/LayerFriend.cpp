@@ -13,6 +13,8 @@
 #include "SliderCustomLoader.h"
 #include "mUtils.h"
 
+#include "SceneManager.h"
+
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
@@ -33,14 +35,6 @@ LayerFriend::LayerFriend()
     currNodeView = NULL;
     nodeChild = NULL;
     //
-    ccbReader = NULL;
-    ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, SliderCustom);
-    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, TextFieldCustom);
-    // register loaders
-    ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerFriendDetails",   LayerFriendDetailsLoader::loader());
-//    ccNodeLoaderLibrary->registerCCNodeLoader("LayerCurrencyExchange",   LayerCurrencyExchangeLoader::loader());
 }
 
 LayerFriend::~LayerFriend()
@@ -56,7 +50,8 @@ void LayerFriend::removeOldView(){
 
 void LayerFriend::gotoFriendDetails(){
     removeOldView();
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerFriendDetails* mLayer;
     if (ccbReader)
     {

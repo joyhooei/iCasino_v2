@@ -15,6 +15,8 @@
 #include "LayerBuyAvatar.h"
 #include "LayerChangePassword.h"
 #include "LayerAction.h"
+
+#include "SceneManager.h"
 //#include "LayerAc
 
 using namespace cocos2d;
@@ -36,18 +38,6 @@ LayerUserInfo::LayerUserInfo()
     
     currNodeView = NULL;
     nodeChild = NULL;
-    
-    ccbReader = NULL;
-    ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-//    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, SliderCustom);
-//    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, TextFieldCustom);
-    // register loaders
-    ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerUserInfo_Details",   LayerUserInfo_DetailsLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerChangeAvatar",   LayerChangeAvatarLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerBuyAvatar",   LayerBuyAvatarLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerChangePassword",   LayerChangePasswordLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerAction",   LayerActionLoader::loader());
 }
 
 LayerUserInfo::~LayerUserInfo()
@@ -55,8 +45,9 @@ LayerUserInfo::~LayerUserInfo()
 }
 
 void LayerUserInfo::gotoUserInfo(){
-    removeOldView();
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	removeOldView();
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerUserInfo_Details* mLayer;
     if (ccbReader)
     {
@@ -69,8 +60,9 @@ void LayerUserInfo::gotoUserInfo(){
 }
 
 void LayerUserInfo::gotoAction(){
-    removeOldView();
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	removeOldView();
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerAction* mLayer;
     if (ccbReader)
     {

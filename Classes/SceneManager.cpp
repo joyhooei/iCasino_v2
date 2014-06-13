@@ -6,7 +6,23 @@
 #include "TextFieldCustomPopUpLoader.h"
 #include "LayerPlayGameChinessChess.h"
 #include "LayerPlayerInfo.h"
+#include "LayerCreateRoom.h"
+#include "LayerFriendDetails.h"
+
+#include "LayerChargeMoney.h"
+#include "LayerLichSuGiaoDich.h"
+#include "LayerTransferMoney.h"
+#include "LayerCurrencyExchange.h"
+#include "LayerBorrowMoney.h"
+
+#include "LayerUserInfo_Details.h"
+#include "LayerChangeAvatar.h"
+#include "LayerBuyAvatar.h"
+#include "LayerChangePassword.h"
+#include "LayerAction.h"
 #include "_Chat_.h"
+
+#include "LayerUpdateInfo.h"
 
 #include "LayerCreateAccount.h"
 
@@ -116,6 +132,19 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameCoTuong",   LayerPlayGameChinessChessLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerCreateAccount",   LayerCreateAccountLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPlayerInfo",   LayerPlayerInfoLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerCreateRoom",   LayerCreateRoomLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerFriendDetails",   LayerFriendDetailsLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerTransferMoney",   LayerTransferMoneyLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerCurrencyExchange",   LayerCurrencyExchangeLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerBorrowMoney",   LayerBorrowMoneyLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerLichSuGiaoDich",   LayerLichSuGiaoDichLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChargeMoney",   LayerChargeMoneyLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUserInfo_Details",   LayerUserInfo_DetailsLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChangeAvatar",   LayerChangeAvatarLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerBuyAvatar",   LayerBuyAvatarLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChangePassword",   LayerChangePasswordLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerAction",   LayerActionLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUpdateInfo",   LayerUpdateInfoLoader::loader());
 
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);

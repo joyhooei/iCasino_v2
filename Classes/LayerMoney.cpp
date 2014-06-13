@@ -7,14 +7,15 @@
 //
 
 #include "LayerMoney.h"
+
+#include "LayerChargeMoney.h"
 #include "LayerLichSuGiaoDich.h"
 #include "LayerTransferMoney.h"
 #include "LayerCurrencyExchange.h"
 #include "LayerBorrowMoney.h"
-#include "SliderCustomLoader.h"
-#include "TextFieldCustomLoader.h"
-#include "LayerChargeMoney.h"
 #include "mUtils.h"
+
+#include "SceneManager.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -50,18 +51,7 @@ LayerMoney::LayerMoney()
     
     nodeChild = NULL;
     currNodeView = NULL;
-    
-    ccbReader = NULL;
-    ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, SliderCustom);
-    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, TextFieldCustom);
-    // register loaders
-    ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerTransferMoney",   LayerTransferMoneyLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerCurrencyExchange",   LayerCurrencyExchangeLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerBorrowMoney",   LayerBorrowMoneyLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerLichSuGiaoDich",   LayerLichSuGiaoDichLoader::loader());
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerChargeMoney",   LayerChargeMoneyLoader::loader());
+
 }
 
 LayerMoney::~LayerMoney()
@@ -180,8 +170,9 @@ void LayerMoney::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 }
 
 void LayerMoney::gotoChargeMoney(){
-    removeOldView();
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	removeOldView();
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerChargeMoney* mLayer;
     if (ccbReader)
     {
@@ -192,8 +183,9 @@ void LayerMoney::gotoChargeMoney(){
     currNodeView = mLayer;
 }
 void LayerMoney::gotoHistory(){
-    removeOldView();
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	removeOldView();
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerLichSuGiaoDich* mLayer;
     if (ccbReader)
     {
@@ -205,8 +197,9 @@ void LayerMoney::gotoHistory(){
     currNodeView = mLayer;
 }
 void LayerMoney::gotoTransfer(){
-    removeOldView();
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	removeOldView();
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerTransferMoney* mLayer;
     if (ccbReader)
     {
@@ -217,8 +210,9 @@ void LayerMoney::gotoTransfer(){
     currNodeView = mLayer;
 }
 void LayerMoney::gotoBorrow(){
-    removeOldView();
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	removeOldView();
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerBorrowMoney* mLayer;
     if (ccbReader)
     {
@@ -230,8 +224,9 @@ void LayerMoney::gotoBorrow(){
     currNodeView = mLayer;
 }
 void LayerMoney::gotoExchange(){
-    removeOldView();
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	removeOldView();
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerCurrencyExchange* mLayer;
     if (ccbReader)
     {

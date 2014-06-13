@@ -53,9 +53,6 @@ private:
     CCTableView* tblListRooms;
     
     int m_gID;
-    
-    CCBReader * ccbReader;
-    CCNodeLoaderLibrary * ccNodeLoaderLibrary;
 
 	int mRoomID4Invite;
 public:

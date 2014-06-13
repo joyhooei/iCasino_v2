@@ -63,9 +63,6 @@ private:
     
     tag_SpriteClick currTag;
     
-    CCBReader * ccbReader;
-    CCNodeLoaderLibrary * ccNodeLoaderLibrary;
-    
     CCNode* currNodeView;
 public:
     LayerMoney();

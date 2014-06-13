@@ -46,9 +46,6 @@ private:
     CCTableView* tblHistory;
     
     StructHistory historys[11];
-    
-    CCBReader * ccbReader;
-    CCNodeLoaderLibrary * ccNodeLoaderLibrary;
 public:
     LayerUserInfo_Details();
     virtual ~LayerUserInfo_Details();

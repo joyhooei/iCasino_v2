@@ -44,8 +44,6 @@ private:
     CCNode* nodeChild;
     CCNode* currNodeView;
     
-    CCBReader * ccbReader;
-    CCNodeLoaderLibrary * ccNodeLoaderLibrary;
 public:
     LayerUserInfo();
     virtual ~LayerUserInfo();

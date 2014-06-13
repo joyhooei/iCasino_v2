@@ -29,12 +29,6 @@ LayerChatRoom::LayerChatRoom()
     tblListRooms = NULL;
     
     lblTitle = NULL;
-    
-    ccbReader = NULL;
-    ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-    // register loaders
-    ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerCreateRoom",   LayerCreateRoomLoader::loader());
     //
     GameServer::getSingleton().addListeners(this);
 }

@@ -43,9 +43,6 @@ private:
     tagButtonState currState;
     
     CCSprite* arrow_left;
-    
-    CCBReader * ccbReader;
-    CCNodeLoaderLibrary * ccNodeLoaderLibrary;
 public:
     LayerChargeMoney();
     virtual ~LayerChargeMoney();

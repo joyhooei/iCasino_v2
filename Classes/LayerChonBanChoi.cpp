@@ -37,14 +37,6 @@ LayerChonBanChoi::LayerChonBanChoi()
     tblListRooms = NULL;
     
     lblTitle = NULL;
-    
-    ccbReader = NULL;
-    ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, SliderCustom);
-    V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, TextFieldCustom);
-    // register loaders
-    ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
-    ccNodeLoaderLibrary->registerCCNodeLoader("LayerCreateRoom",   LayerCreateRoomLoader::loader());
     //
 	GameServer::getSingleton().addListeners(this);
 
@@ -95,8 +87,8 @@ void LayerChonBanChoi::onButtonCreate(CCObject* pSender)
         return;
     }
     
-    //
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerCreateRoom* mLayer;
     if (ccbReader)
     {

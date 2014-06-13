@@ -1,4 +1,4 @@
-//
+﻿//
 //  LayerFriend.h
 //  demo
 //
@@ -40,9 +40,6 @@ private:
     CCMenuItem* btnInvite_enable;
     
     tag_SpriteClick currTag;
-    
-    CCBReader * ccbReader;
-    CCNodeLoaderLibrary * ccNodeLoaderLibrary;
     
     CCNode * nodeChild;
     

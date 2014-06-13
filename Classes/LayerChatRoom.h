@@ -1,4 +1,4 @@
-//
+﻿//
 //  LayerChatRoom.h
 //  iCasinov2
 //
@@ -46,9 +46,6 @@ private:
     CCTableView* tblListContents;
     
     int m_gID;
-    
-    CCBReader * ccbReader;
-    CCNodeLoaderLibrary * ccNodeLoaderLibrary;
 public:
     LayerChatRoom();
     virtual ~LayerChatRoom();
