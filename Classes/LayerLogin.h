@@ -40,6 +40,8 @@ private:
 	bool isRegistPopupShown;
 	int mRoomID;
 	int mGameID;
+
+	string LSK;
 public:
     LayerLogin();
     virtual ~LayerLogin();

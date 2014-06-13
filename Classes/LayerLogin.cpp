@@ -25,6 +25,8 @@ LayerLogin::LayerLogin()
 
 	chkSaveInfo = NULL;
 
+	LSK = "";
+
 	isRegistPopupShown = false;
     //
     GameServer::getSingleton().addListeners(this);
@@ -59,7 +61,7 @@ void LayerLogin::doLogin(){
     boost::shared_ptr<ISFSObject> parameters (new SFSObject());
 	//add the params
 	parameters->PutUtfString("LT", "normal");
-	parameters->PutUtfString("LSK", "");
+	parameters->PutUtfString("LSK", LSK.c_str());
 	boost::shared_ptr<IRequest> request (new LoginRequest(txtUsername->getText(), txtPassword->getText(), "GameZone1", parameters));
 	GameServer::getSingleton().getSmartFox()->Send(request);
 }
@@ -170,7 +172,6 @@ void LayerLogin::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 	lblSaveInfo->setAnchorPoint(ccp(0,0.5));
 	lblSaveInfo->setPosition(ccp( 275, 27 ));
 	this->addChild(lblSaveInfo);
-
     //
 	readInfo();
 	//
@@ -214,21 +215,19 @@ void LayerLogin::OnSmartFoxLogin(unsigned long long ptrContext, boost::shared_pt
 	boost::shared_ptr<void> ptrEventParamValueDatas = (*ptrEventParams)["data"];
 	boost::shared_ptr<ISFSObject> datas = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueDatas)));
 	boost::shared_ptr<string> ast = datas->GetUtfString("aSt");
+	LSK = *datas->GetUtfString("LSK");
+	SceneManager::getSingleton().gotoMain();
 	//
 	if( ast==NULL ){
-		SceneManager::getSingleton().gotoMain();
 		return;
 	}
 	//
 	vector<string> lstDatas = mUtils::splitString(*ast, ',');
-	if( lstDatas.size()==0 )
-		SceneManager::getSingleton().gotoMain();
-	else{
+	if( lstDatas.size()!=0 ){
 		mRoomID = atoi( lstDatas.at(2).c_str() );
 		mGameID = atoi( lstDatas.at(5).c_str() );
 		//Check room is existed
 		if( GameServer::getSingleton().getSmartFox()->GetRoomById(mRoomID)==NULL ){
-			SceneManager::getSingleton().gotoMain();
 			return;
 		}
 		LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
@@ -272,7 +271,6 @@ void LayerLogin::notificationCallBack( bool isOK, int tag )
 {
 	switch(tag){
 	case tagConfirmReJoinGame:
-		SceneManager::getSingleton().gotoMain();
 		if( isOK ){
 			LayerMain::getSingleton().autoJoinGameWithID(mGameID, mRoomID);
 		}
