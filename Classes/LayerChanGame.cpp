@@ -275,7 +275,9 @@ void LayerChanGame::createButtons(){
 }
 void LayerChanGame::createAvatars(){
 	layerAvatars = LayerAvatarInGame::create();
+	layerAvatars->resetAll();
 	layerAvatars->getUserByPos(kUserMe)->setVisible(false);
+	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
 	this->addChild(layerAvatars);
 }
 
@@ -536,6 +538,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		boost::shared_ptr<string> rg = param->GetUtfString("rg");
 		if( rg != NULL){
 			CCLOG("Resuilt game: %s",rg->c_str());
+			layerAvatars->stopAllTimer();
 		}
 		CCLOG("EXT_EVENT_GAME_RESULT");
 	}

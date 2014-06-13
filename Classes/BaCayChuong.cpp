@@ -239,9 +239,32 @@ bool BaCayChuong::init(){
 void BaCayChuong::createBackgrounds(){
     BackgroundInGame *bg = BackgroundInGame::create();
     this->addChild(bg);
+	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
+	boost::shared_ptr<string> param = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
+	string paramString = param->c_str();
+	vector<string> arrInfo = Dsplit(paramString, '@');
+	string money = arrInfo.at(0);
+
+	mUtils mu;
+	//string name = mu.getGameNameByID(id);
+	string name = "Ba Cây Chương";
+	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
+
+	string result = "";
+	if (name.length() > 0 && moneyConvert.length() > 0)
+	{
+		result = name + " - cược:" + moneyConvert;
+	}
+	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	nameGame->setPosition(ccp(400-5, 213+10));
+	nameGame->setColor(ccWHITE);
+	nameGame->setOpacity(150);
+	bg->addChild(nameGame);
 }
 void BaCayChuong::createAvatars(){
     layerAvatars = LayerAvatarInGame::create();
+	layerAvatars->resetAll();
+	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
     this->addChild(layerAvatars);
 }
 void BaCayChuong::createButtons(){

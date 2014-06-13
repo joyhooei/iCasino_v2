@@ -13,6 +13,9 @@
 #include "SliderCustomLoader.h"
 #include "_Number_.h"
 #include "Requests/ExtensionRequest.h"
+#include "_Chat_.h"
+#include "mUtils.h"
+
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
 XiTo::XiTo():luotChia(0),chiathem(0){
@@ -287,6 +290,27 @@ void XiTo::createAvatar(){
 void XiTo::createBackground(){
     BackgroundInGame *bg = BackgroundInGame::create();
     this->addChild(bg);
+	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
+	boost::shared_ptr<string> param = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
+	string paramString = param->c_str();
+	vector<string> arrInfo = Dsplit(paramString, '@');
+	string money = arrInfo.at(0);
+
+	mUtils mu;
+	//string name = mu.getGameNameByID(id);
+	string name = "Xì Tố";
+	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
+
+	string result = "";
+	if (name.length() > 0 && moneyConvert.length() > 0)
+	{
+		result = name + " - cược:" + moneyConvert;
+	}
+	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	nameGame->setPosition(ccp(400-5, 213+10));
+	nameGame->setColor(ccWHITE);
+	nameGame->setOpacity(150);
+	bg->addChild(nameGame);
 }
 void XiTo::createButton(){
     LayerButtonInGame *button_ingame = LayerButtonInGame::create();
@@ -403,11 +427,11 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     // Bet total when Endgame
     else if (strcmp("sfstntf", cmd->c_str())==0){
         boost::shared_ptr<long> bettt = param->GetInt("bettt");
-        string _bettt = "0";
+        int _bettt = 0;
         if(bettt != NULL){
-            _bettt = boost::to_string(*bettt);
+            _bettt = (int)(*bettt);
         }
-        labelBetTotal->setText(("Tổng: "+_bettt+"$").c_str());
+        labelBetTotal->setText(("Tổng: "+mUtils::convertMoneyEx(_bettt)+" $").c_str());
         frameBetTotal->setVisible(true);
     }
     
@@ -483,6 +507,20 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
         }
         setDeal = true;
     }
+
+	//Error ready
+	else if (strcmp("rdres",cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<long> rslt = param->GetInt("rslt");
+		if (rslt != NULL)
+		{
+			if (*rslt == 7)
+			{
+				Chat *toast = new Chat("Đợi người chơi khác sẵn sàng",-1);
+				this->addChild(toast);
+			}
+		}
+	}
     
     //Bet info of user
     else if(strcmp("rsntf", cmd->c_str())==0){
@@ -884,7 +922,9 @@ void XiTo::when_userReady(string uid){
 // Khi nhan được 1 người Bet
 void XiTo::when_playerBet(string uid, long bet, long betValue, long betTotal){
     if(bet != 0 && bet != 2){
-        labelBetTotal->setText(("Tổng: "+boost::to_string(betTotal)+"$").c_str());
+		string t = mUtils::convertMoneyEx(betTotal);
+		CCLOG("TTTTT = %s",t.c_str());
+        labelBetTotal->setText(("Tổng: "+t+" $").c_str());
         frameBetTotal->setVisible(true);
     }
     if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
@@ -931,7 +971,7 @@ void XiTo::setPlayerBet(long bet, long betValue, int _pos){
                 frameBet_Left_Bottom->setVisible(false);
             }
             else{
-                frameBet_Left_Bottom->setValueBet((boost::to_string(betValue)+" $").c_str());
+                frameBet_Left_Bottom->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
                 frameBet_Left_Bottom->setVisible(true);
             }
             break;
@@ -945,7 +985,7 @@ void XiTo::setPlayerBet(long bet, long betValue, int _pos){
                 frameBet_Left_Top->setVisible(false);
             }
             else{
-                frameBet_Left_Top->setValueBet((boost::to_string(betValue)+" $").c_str());
+                frameBet_Left_Top->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
                 frameBet_Left_Top->setVisible(true);
             }
             break;
@@ -959,7 +999,7 @@ void XiTo::setPlayerBet(long bet, long betValue, int _pos){
                 frameBet_Right_Top->setVisible(false);
             }
             else{
-                frameBet_Right_Top->setValueBet((boost::to_string(betValue)+" $").c_str());
+                frameBet_Right_Top->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
                 frameBet_Right_Top->setVisible(true);
             }
             break;
@@ -973,7 +1013,7 @@ void XiTo::setPlayerBet(long bet, long betValue, int _pos){
                 frameBet_Right_Bottom->setVisible(false);
             }
             else{
-                frameBet_Right_Bottom->setValueBet((boost::to_string(betValue)+" $").c_str());
+                frameBet_Right_Bottom->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
                 frameBet_Right_Bottom->setVisible(true);
             }
             break;
@@ -1320,7 +1360,7 @@ void XiTo::moveDealCard(CardChan *c,float _left, float _bottom){
 }
 void XiTo::moveDealCard_Me(string _lc){
     CCLOG("trước khi mở: ");
-	if (CARD_ME->count() == 0)
+	if (CARD_ME->count() != 2)
 	{
 		return;
 	}
