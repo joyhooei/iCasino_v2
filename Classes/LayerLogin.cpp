@@ -10,6 +10,7 @@
 #include "LayerCreateAccount.h"
 #include "LayerForgotPassword.h"
 #include "Requests/LoginRequest.h"
+#include "Requests/LogoutRequest.h"
 #include "SceneManager.h"
 #include "_Chat_.h"
 #include "mUtils.h"
@@ -259,6 +260,13 @@ void LayerLogin::OnSmartFoxLoginError(unsigned long long ptrContext, boost::shar
 void LayerLogin::popupCallback(  )
 {
 	isRegistPopupShown = false;
+	////
+	if( GameServer::getSingleton().getSmartFox() == NULL) 
+		return;
+	if( GameServer::getSingleton().getSmartFox()->MySelf()==NULL )
+		return;
+	boost::shared_ptr<IRequest> request (new LogoutRequest());
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 void LayerLogin::setUserAndPassInfo( const char* username, const char* password )

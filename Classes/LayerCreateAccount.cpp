@@ -33,17 +33,12 @@ LayerCreateAccount::LayerCreateAccount()
 
 LayerCreateAccount::~LayerCreateAccount()
 {
+	//
+	GameServer::getSingleton().removeListeners(this);
 	//CallBack
 	if (m_callback && m_callbackListener){
 		(m_callbackListener->*m_callback)();
 	}
-	//
-	boost::shared_ptr<IRequest> request (new LogoutRequest());
-	GameServer::getSingleton().getSmartFox()->Send(request);
-	//
-	if( GameServer::getSingleton().getSmartFox() == NULL) 
-		return;
-	GameServer::getSingleton().removeListeners(this);
 }
 
 void LayerCreateAccount::notificationCallBack(bool isOK, int tag){
@@ -180,21 +175,26 @@ void LayerCreateAccount::OnExtensionResponse(unsigned long long ptrContext, boos
 	if(strcmp("rg", cmd->c_str())==0){
 		int rc = *param->GetInt("rc");
 		if( rc==0 ){//OK
-			LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
-			if( !SceneManager::getSingleton().showNotification() ){
-				CCLOG("NTF Dialog already open!");
-				return;
-			}
-			CCLOG("lbfree OK");
+// 			LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+// 			if( !SceneManager::getSingleton().showNotification() ){
+// 				CCLOG("NTF Dialog already open!");
+// 				return;
+// 			}
+// 			CCLOG("lbfree OK");
 			//CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 			LayerLogin* layerLogin = SceneManager::getSingleton().getLayerLogin();
 			layerLogin->setUserAndPassInfo(txtUsername->getText(), txtPassword->getText());
 			//
-			layer->setNotificationOptions("ĐĂNG KÝ THÀNH CÔNG", 
-				CCString::createWithFormat("Bạn đã đăng ký tài khoản: %s\n thành công!\n Bạn có muốn đăng nhập ngay?", txtUsername->getText())->getCString()
-				, true , "Có", 1, this );
+			Chat *toast = new Chat("ĐĂNG KÝ THÀNH CÔNG", -1);
+			// 				this->removeFromParentAndCleanup(true);
+			this->addChild(toast);
+			//this->removeFromParentAndCleanup(true);
+			//
+// 			layer->setNotificationOptions("ĐĂNG KÝ THÀNH CÔNG", 
+// 				CCString::createWithFormat("Bạn đã đăng ký tài khoản: %s\n thành công!\n Bạn có muốn đăng nhập ngay?", txtUsername->getText())->getCString()
+// 				, true , "Có", 1, NULL );
 		}else{//Not OK
-			Chat *toast = new Chat(CCString::createWithFormat("ĐĂNG KÝ THẤt BẠI\n%s", param->GetUtfString("rd")->c_str())->getCString(), -1);
+			Chat *toast = new Chat(CCString::createWithFormat("ĐĂNG KÝ THẤt BAI \n%s", param->GetUtfString("rd")->c_str())->getCString(), -1);
 // 				this->removeFromParentAndCleanup(true);
  			this->addChild(toast);
 //				layer->setNotificationOptions("ĐĂNG KÝ THẤt BẠI", 

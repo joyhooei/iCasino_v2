@@ -5,6 +5,7 @@
 #include "TextFieldCustomLoader.h"
 #include "TextFieldCustomPopUpLoader.h"
 #include "LayerPlayGameChinessChess.h"
+#include "LayerPlayerInfo.h"
 #include "_Chat_.h"
 
 #include "LayerCreateAccount.h"
@@ -114,6 +115,7 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerNotification",   LayerNotificationLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameCoTuong",   LayerPlayGameChinessChessLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerCreateAccount",   LayerCreateAccountLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPlayerInfo",   LayerPlayerInfoLoader::loader());
 
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
