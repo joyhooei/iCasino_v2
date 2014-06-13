@@ -363,10 +363,12 @@ void LayerAvatarInGame::updateUsers() {
 		if (!isGuess){
 			getUserByPos(kUserBot)->setVisible(false); 
 			getUserByPos(kUserBot)->setTouchEnabled(false);
+			getUserByPos(kUserBot)->setPositionY(-200);
 		}
 		else {
 			getUserByPos(kUserBot)->setVisible(true);
 			getUserByPos(kUserBot)->setTouchEnabled(true);
+			getUserByPos(kUserBot)->setPositionY(10);
 		}
 		{
 			Avatar *user = getUserByPos(pos);

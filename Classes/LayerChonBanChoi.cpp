@@ -469,7 +469,7 @@ void LayerChonBanChoi::notificationCallBack( bool isOK, int tag )
 	switch(tag){
 	case tagComfirmInvite:
 		//Send request
-		boost::shared_ptr<IRequest> request (new JoinRoomRequest(12345,""));
+		boost::shared_ptr<IRequest> request (new JoinRoomRequest(mRoomID4Invite,""));
 		GameServer::getSingleton().getSmartFox()->Send(request);
 		break;
 	}
