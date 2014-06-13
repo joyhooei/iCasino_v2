@@ -477,3 +477,12 @@ void LayerMain::onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pRespon
     //
     nodeAvatar->addChild(pSprite);
 }
+
+void LayerMain::autoJoinGameWithID( int gID, int rID )
+{
+	gotoChonBanChoi(gID);
+	if( currViewTag==tag_ChonBanChoi ){
+		LayerChonBanChoi* cLayer = (LayerChonBanChoi*)currNodeView;
+		cLayer->joinRoomByID(rID);
+	}
+}

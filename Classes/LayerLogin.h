@@ -13,6 +13,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "GameServer.h"
+#include "NotificationCallback.h"
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
@@ -23,8 +24,12 @@ class LayerLogin
 , public cocos2d::extension::CCBMemberVariableAssigner
 , public cocos2d::extension::CCNodeLoaderListener
 , public PlayerCallBack
+, public NotificationCallBack
 {
 private:
+	enum tagNotification{
+		tagConfirmReJoinGame = 100
+	};
     //CCLabelTTF* lblCuPhap;
     CCLabelTTF* lblDauSo;
     CCEditBox* txtUsername;
@@ -33,11 +38,14 @@ private:
 	UICheckBox* chkSaveInfo;
 
 	bool isRegistPopupShown;
+	int mRoomID;
+	int mGameID;
 public:
     LayerLogin();
     virtual ~LayerLogin();
     
-	void selectedStateEvent(CCObject* pSender, CheckBoxEventType type);    
+	void selectedStateEvent(CCObject* pSender, CheckBoxEventType type);   
+	void notificationCallBack(bool, int tag); 
     
     void doLogin();
     void initTextField(CCEditBox* txt, const char* hintText);

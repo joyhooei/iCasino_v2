@@ -64,6 +64,8 @@ public:
     
 	CREATE_FUNC(LayerChonBanChoi);
 
+	void joinRoomByID(int rID);
+
 	void notificationCallBack(bool isOK, int tag);
     
     void setGameID(int gID);

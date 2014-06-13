@@ -211,9 +211,10 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 		}
 		boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
         vector<string> rParams = mUtils::splitString( *ro->GetVariable("params")->GetStringValue(), '@' );
-		if( atol(rParams.at(0).c_str())> atol( myself->GetVariable("amf")->GetStringValue()->c_str() ) ){
+		if( atof(rParams.at(0).c_str()) > *myself->GetVariable("amf")->GetDoubleValue() ){
 			Chat *toast = new Chat("Bạn không đủ tiền vào phòng!", -1);
 			this->addChild(toast);
+			return;
 		}
 
         boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro,""));
@@ -480,4 +481,10 @@ void LayerChonBanChoi::notificationCallBack( bool isOK, int tag )
 		GameServer::getSingleton().getSmartFox()->Send(request);
 		break;
 	}
+}
+
+void LayerChonBanChoi::joinRoomByID( int rID )
+{
+	boost::shared_ptr<IRequest> request (new JoinRoomRequest(rID,""));
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }

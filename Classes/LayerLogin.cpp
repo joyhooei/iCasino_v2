@@ -12,6 +12,7 @@
 #include "Requests/LoginRequest.h"
 #include "SceneManager.h"
 #include "_Chat_.h"
+#include "mUtils.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -204,7 +205,42 @@ void LayerLogin::OnSmartFoxLogin(unsigned long long ptrContext, boost::shared_pt
     if( chkSaveInfo->getSelectedState() ){//save info
 		saveInfo();
 	}
-    SceneManager::getSingleton().gotoMain();
+	//Read param, check already play game, if true, gotoGame
+	/*
+	* Check aSt: . If not playing game, value = "null"
+	* account_id,zone_id,room_id,status,updated_time,game_id
+	*/
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueDatas = (*ptrEventParams)["data"];
+	boost::shared_ptr<ISFSObject> datas = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueDatas)));
+	boost::shared_ptr<string> ast = datas->GetUtfString("aSt");
+	//
+	if( ast==NULL ){
+		SceneManager::getSingleton().gotoMain();
+		return;
+	}
+	//
+	vector<string> lstDatas = mUtils::splitString(*ast, ',');
+	if( lstDatas.size()==0 )
+		SceneManager::getSingleton().gotoMain();
+	else{
+		mRoomID = atoi( lstDatas.at(2).c_str() );
+		mGameID = atoi( lstDatas.at(5).c_str() );
+		//Check room is existed
+		if( GameServer::getSingleton().getSmartFox()->GetRoomById(mRoomID)==NULL ){
+			SceneManager::getSingleton().gotoMain();
+			return;
+		}
+		LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+		if( !SceneManager::getSingleton().showNotification() ){
+			CCLOG("NTF Dialog already open!");
+			return;
+		}
+		//if true
+		layer->setNotificationOptions("VÀO LẠI BÀN CHƠI", 
+			CCString::createWithFormat("Bạn đang chơi %s!\n Bạn có muốn vào lại phòng?", mUtils::getGameNameByID(mGameID)->getCString())->getCString()
+			, true , "ĐỒNG Ý", tagConfirmReJoinGame, this );
+	}
 }
 void LayerLogin::OnSmartFoxLoginError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 	if( isRegistPopupShown ) 
@@ -230,4 +266,16 @@ void LayerLogin::setUserAndPassInfo( const char* username, const char* password 
 {
 	txtUsername->setText(username);
 	txtPassword->setText(password);
+}
+
+void LayerLogin::notificationCallBack( bool isOK, int tag )
+{
+	switch(tag){
+	case tagConfirmReJoinGame:
+		SceneManager::getSingleton().gotoMain();
+		if( isOK ){
+			LayerMain::getSingleton().autoJoinGameWithID(mGameID, mRoomID);
+		}
+		break;
+	}
 }

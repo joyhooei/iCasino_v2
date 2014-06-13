@@ -82,6 +82,8 @@ public:
     void gotoRank();
     
     void logoutAndExit();
+
+	void autoJoinGameWithID(int gID, int rID);
     
     CREATE_FUNC(LayerMain);
     
