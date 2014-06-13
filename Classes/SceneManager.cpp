@@ -387,6 +387,7 @@ void SceneManager::disconnectFromServer()
 	hideNotification();
 	gotoLogin();
 	layerMain->removeOldView();
+	layerMain->setCurrentViewTagDefault();
 	//
 	Chat *toast = new Chat("Mất kết nối!", -1);
 	layerLogin->addChild(toast);

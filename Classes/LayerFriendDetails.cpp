@@ -132,7 +132,7 @@ CCSize LayerFriendDetails::tableCellSizeForIndex(cocos2d::extension::CCTableView
 CCTableViewCell* LayerFriendDetails::createCell4History(CCTableView *table, int idx){
     CCTableViewCell *cell = table->dequeueCell();
     if (!cell) {
-        CCLOG("createCell4History");
+        //CCLOG("createCell4History");
         cell = new CCTableViewCell();
         cell->autorelease();
         //Name game

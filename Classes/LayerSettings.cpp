@@ -72,7 +72,7 @@ void LayerSettings::onButtonClose(CCObject* pSender)
 // CCBMemberVariableAssigner interface
 bool LayerSettings::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemberVariableName, cocos2d::CCNode *pNode)
 {
-    //CCLOG("Imhere onAssignCCBMemberVariable: %s", pMemberVariableName);
+    CCLOG("Imhere onAssignCCBMemberVariable: %s", pMemberVariableName);
     return true;
 }
 
@@ -103,4 +103,20 @@ void LayerSettings::onEnter()
 void LayerSettings::onExit()
 {
 	CCLayer::onExit();
+}
+
+void LayerSettings::saveInfo()
+{
+// 	CCUserDefault *def=CCUserDefault::sharedUserDefault();
+// 	def->setStringForKey("username", txtUsername->getText());
+// 	def->setStringForKey("password", txtPassword->getText());
+
+//	def->flush();
+}
+
+void LayerSettings::getInfo()
+{
+	CCUserDefault *def=CCUserDefault::sharedUserDefault();
+	bool isSoundOn = def->getBoolForKey("sound", true);
+	bool isVibrateOn = def->getBoolForKey("vibrate", true);
 }

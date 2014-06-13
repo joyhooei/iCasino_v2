@@ -42,6 +42,9 @@ LayerUserInfo::LayerUserInfo()
 
 LayerUserInfo::~LayerUserInfo()
 {
+	CCLOG("LayerUserInfo::~LayerUserInfo()");
+	if( currNodeView )
+		currNodeView->removeFromParentAndCleanup(true);
 }
 
 void LayerUserInfo::gotoUserInfo(){

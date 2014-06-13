@@ -86,7 +86,7 @@ void LayerLogin::onButtonLogin(CCObject* pSender){
 //    SceneManager::getSingleton().gotoMain();
 //    return;
     if( !GameServer::getSingleton().getSmartFox()->IsConnected() )
-        GameServer::getSingleton().connectToServer("bestteam.no-ip.biz", "9933");
+        GameServer::getSingleton().connectToServer("127.0.0.1", "9933");
     else{
         doLogin();
     }
@@ -215,9 +215,11 @@ void LayerLogin::OnSmartFoxLogin(unsigned long long ptrContext, boost::shared_pt
 	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueDatas = (*ptrEventParams)["data"];
 	boost::shared_ptr<ISFSObject> datas = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueDatas)));
+	SceneManager::getSingleton().gotoMain();
+	if( datas==NULL )
+		return;
 	boost::shared_ptr<string> ast = datas->GetUtfString("aSt");
 	LSK = *datas->GetUtfString("LSK");
-	SceneManager::getSingleton().gotoMain();
 	//
 	if( ast==NULL ){
 		return;

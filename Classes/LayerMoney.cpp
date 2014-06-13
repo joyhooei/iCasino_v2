@@ -56,6 +56,7 @@ LayerMoney::LayerMoney()
 
 LayerMoney::~LayerMoney()
 {
+	currNodeView->removeFromParentAndCleanup(true);
 }
 
 // CCBSelectorResolver interface

@@ -63,7 +63,7 @@ LayerMain::LayerMain()
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerChonBanChoi",   LayerChonBanChoiLoader::loader());
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerInbox",   LayerInboxLoader::loader());
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerChatRoom",   LayerChatRoomLoader::loader());
-
+	CCLOG("LayerMain::LayerMain()");
     //
     GameServer::getSingleton().addListeners(this);
     //
@@ -290,7 +290,7 @@ void LayerMain::logoutAndExit(){
 void LayerMain::removeOldView(){
     if( currNodeView==NULL )
         return;
-    this->removeChild(currNodeView);
+    currNodeView->removeFromParentAndCleanup(true);
 //    try{
 //        currNodeView->release()();
 //    }catch(...){

@@ -35,6 +35,9 @@ public:
 	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual void onEnter();
 	virtual void onExit();
+
+	void saveInfo();
+	void getInfo();
     
     CREATE_FUNC(LayerSettings);
     

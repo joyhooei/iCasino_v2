@@ -29,6 +29,7 @@ class LayerMain
 {
 private:
     enum tag_CurrentView{
+		tag_LayerDefault = -1,
         tag_UserInfo=0,
         tag_Money=1,
         tag_Mail=2,
@@ -63,7 +64,9 @@ public:
     static LayerMain& getSingleton(void);
 	static LayerMain* getSingletonPtr(void);
     
-    
+	void setCurrentViewTagDefault(){
+		currViewTag = tag_LayerDefault;
+	}
     void loadAllMyDatas();
     
     void closeOldView();

@@ -34,7 +34,7 @@ GameServer& GameServer::getSingleton(void)
 
 GameServer::GameServer(  )
 {
-	mSmartFox   = boost::shared_ptr<Sfs2X::SmartFox>();
+	mSmartFox = boost::shared_ptr<Sfs2X::SmartFox>();
 	mCallBack.clear();
 	mCallBackIndex = 0;
 }
@@ -58,14 +58,15 @@ void GameServer::addListeners( PlayerCallBack * callBack )
 void GameServer::removeListeners( PlayerCallBack * callBack ){
     if ( callBack == NULL )
 		return;
-    
+	CCLOG("GameServer::removeListeners() - BEGIN");
 	PlayerCallBackMapIter iTer = mCallBack.begin();
     
 	for ( ; iTer != mCallBack.end() ; iTer ++ )
 	{
 		//if callback already exist, return
 		if ( iTer->second == callBack ){
-            mCallBack.erase(iTer);
+			mCallBack.erase(iTer);
+			CCLOG("GameServer::removeListeners() - EXECUTE");
 			return;
         }
 	}
@@ -129,6 +130,11 @@ void GameServer::connectToServer( const char * strIP, const char * strPort )
 {
     CCLOG("connectToServer");
 	double port = atof(strPort);
+	if( mSmartFox ){
+		mSmartFox->RemoveAllEventListeners();
+		mSmartFox.reset();
+	}
+	initServer();
 	mSmartFox->Connect(strIP,(long int)port);
 }
 

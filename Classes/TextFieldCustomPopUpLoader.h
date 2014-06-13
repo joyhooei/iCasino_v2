@@ -15,7 +15,8 @@ public:
 protected:
     virtual CCEditBox * createCCNode(cocos2d::CCNode * pParent, cocos2d::extension::CCBReader * pCCBReader) {
         //Get child
-        CCEditBox *pRet = CCEditBox::create(CCSizeMake(280, 48), CCScale9Sprite::create("input.png"));
+		CCEditBox *pRet = CCEditBox::create(CCSizeMake(280, 48), CCScale9Sprite::create("input.png"));
+		pRet->setInputMode(kEditBoxInputModeAny);
         return pRet;
     }
 };

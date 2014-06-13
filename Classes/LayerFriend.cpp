@@ -39,6 +39,7 @@ LayerFriend::LayerFriend()
 
 LayerFriend::~LayerFriend()
 {
+	removeOldView();
 }
 
 void LayerFriend::removeOldView(){
