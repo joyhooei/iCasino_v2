@@ -16,6 +16,7 @@
 #include <cmath>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 //#include <boost/date_time/gregorian/gregorian.hpp>
 #include <locale>
 #include <ctime>

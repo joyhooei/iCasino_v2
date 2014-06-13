@@ -54,7 +54,7 @@ void LayerChonBanChoi::setGameID(int gID){
     lblTitle->setString( CCString::createWithFormat("CHỌN BÀN - %s", mUtils::getGameNameUpperCaseByID(gID)->getCString())->getCString() );
     tblListRooms->reloadData();
 	//
-	boost::shared_ptr<vector<boost::shared_ptr<UserVariable>>> collectionUserVariable (new vector<boost::shared_ptr<UserVariable>>());
+	boost::shared_ptr<vector<boost::shared_ptr<UserVariable> > > collectionUserVariable (new vector<boost::shared_ptr<UserVariable> >());
 	boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("cvg", boost::make_shared<int>(gID), VARIABLETYPE_INT));
 	collectionUserVariable->push_back(variable);	//
 	boost::shared_ptr<IRequest> request (new SetUserVariablesRequest(collectionUserVariable)); 
@@ -172,7 +172,7 @@ void LayerChonBanChoi::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader
     nodeTableRooms->addChild(tblRooms);
     tblRooms->reloadData();
     //
-	boost::shared_ptr<vector<boost::shared_ptr<UserVariable>>> collectionUserVariable (new vector<boost::shared_ptr<UserVariable>>());
+	boost::shared_ptr<vector<boost::shared_ptr<UserVariable> > > collectionUserVariable (new vector<boost::shared_ptr<UserVariable> >());
  	boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("pai", boost::make_shared<int>(1), VARIABLETYPE_INT));
  	collectionUserVariable->push_back(variable);	//
 	boost::shared_ptr<IRequest> request (new SetUserVariablesRequest(collectionUserVariable)); 
@@ -390,7 +390,7 @@ void LayerChonBanChoi::OnSmartFoxRoomJoin(unsigned long long ptrContext, boost::
     CCLOG("Join Room");
     SceneManager::getSingleton().gotoGameByTag(m_gID);
 	//Update, khong chap nhan loi moi nua
-	boost::shared_ptr<vector<boost::shared_ptr<UserVariable>>> collectionUserVariable (new vector<boost::shared_ptr<UserVariable>>());
+	boost::shared_ptr<vector<boost::shared_ptr<UserVariable> > > collectionUserVariable (new vector<boost::shared_ptr<UserVariable> >());
 	boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("pai", boost::make_shared<int>(0), VARIABLETYPE_INT));
 	collectionUserVariable->push_back(variable);	//
 	boost::shared_ptr<IRequest> request (new SetUserVariablesRequest(collectionUserVariable)); 
@@ -399,7 +399,7 @@ void LayerChonBanChoi::OnSmartFoxRoomJoin(unsigned long long ptrContext, boost::
 
 void LayerChonBanChoi::OnSmartFoxRoomJoinError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("Join Room Error");
-	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueErrorMessage = (*ptrEventParams)["errorMessage"];
 	boost::shared_ptr<string> ptrErrorMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueErrorMessage);
 	boost::shared_ptr<string> message (new string("Join Room Failure: " +  *ptrErrorMessage));
@@ -410,7 +410,7 @@ void LayerChonBanChoi::OnSmartFoxRoomJoinError(unsigned long long ptrContext, bo
 
 void LayerChonBanChoi::OnSmartFoxRoomCreationError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("Create Room Error");
-	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueErrorMessage = (*ptrEventParams)["errorMessage"];
 	boost::shared_ptr<string> ptrErrorMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueErrorMessage);
 	boost::shared_ptr<string> message (new string("Room Create Failure: " +  *ptrErrorMessage));
@@ -429,7 +429,7 @@ void LayerChonBanChoi::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boo
 	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEvetnParams)["user"];
 	boost::shared_ptr<User> user = ((boost::static_pointer_cast<User>(ptrEventParamValueUser)));
 	if( user->IsItMe() ){
-		boost::shared_ptr<vector<boost::shared_ptr<UserVariable>>> collectionUserVariable (new vector<boost::shared_ptr<UserVariable>>());
+		boost::shared_ptr<vector<boost::shared_ptr<UserVariable> > > collectionUserVariable (new vector<boost::shared_ptr<UserVariable> >());
 		boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("pai", boost::make_shared<int>(1), VARIABLETYPE_INT));
 		collectionUserVariable->push_back(variable);	//
 		boost::shared_ptr<IRequest> request (new SetUserVariablesRequest(collectionUserVariable)); 
