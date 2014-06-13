@@ -305,7 +305,7 @@ void SceneManager::releaseCurrentLayerGame() {
 	else {
 		// this->removeChildByTag(tag_LayerGaming, true);
 		child->removeFromParentAndCleanup(true);
-		//CC_SAFE_RELEASE(child);
+		CC_SAFE_RELEASE(child);
 		CCLog("You played the Game!");
 	}
 }
