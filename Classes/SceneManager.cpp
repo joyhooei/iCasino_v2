@@ -58,9 +58,13 @@ CCScene* SceneManager::createScene()
 
 	// 'layer' is an autorelease object
 	SceneManager *layer = SceneManager::create();
-
-	// add layer as a child to scene
 	scene->addChild(layer);
+
+	// VERSION
+	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.0", "", 16);
+	nameVersion->setColor(ccWHITE);
+	nameVersion->setPosition(ccp(10 + nameVersion->getContentSize().width / 2, 20));
+	scene->addChild(nameVersion);
 
 	// return the scene
 	return scene;
