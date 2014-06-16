@@ -1,4 +1,4 @@
-//
+﻿//
 //  LayerBet_BaCayChuong.cpp
 //  demo
 //
@@ -9,6 +9,7 @@
 #include "LayerBet_BaCayChuong.h"
 #include "GameServer.h"
 #include "Requests/ExtensionRequest.h"
+#include "mUtils.h"
 
 using namespace Sfs2X;
 using namespace cocos2d;
@@ -100,4 +101,30 @@ void LayerBet_BaCayChuong::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLo
 	sliderMoney->setMinimumValue(minBet);
 	sliderMoney->setMaximumValue(max);
 	sliderMoney->setValue(1000);
+
+	sliderMoney->setTouchPriority(-128);
+
+	this->setTouchEnabled(true);
+}
+
+void LayerBet_BaCayChuong::registerWithTouchDispatcher( void )
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -128, true);
+}
+
+bool LayerBet_BaCayChuong::ccTouchBegan( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )
+{
+	return true;
+}
+
+void LayerBet_BaCayChuong::onEnter()
+{
+	CCLayer::onEnter();
+	//
+	this->runAction(mUtils::getActionOpenPopup());
+}
+
+void LayerBet_BaCayChuong::onExit()
+{
+	CCLayer::onExit();
 }

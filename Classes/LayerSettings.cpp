@@ -40,27 +40,37 @@ void LayerSettings::onButtonSound(CCObject* pSender)
     CCLOG("onButtonSound");
     CCMenuItemImage* btn = (CCMenuItemImage*)pSender;
     CCLOG("onButtonSound x:%f", btn->getPositionX());
+	bool bVal = false;
     if( btn->getPositionX()==211 ){
         //disabling, switch to enable
         btn->setPosition(ccp(270, btn->getPositionY()));
+		bVal = true;
     }else{
         //else
         btn->setPosition(ccp(211, btn->getPositionY()));
     }
+	//
+	CCUserDefault *def=CCUserDefault::sharedUserDefault();
+	def->setBoolForKey("sound", bVal);
 }
 
 void LayerSettings::onButtonVibrate(CCObject* pSender)
 {
-    CCLOG("onButtonVibrate");
+	CCLOG("onButtonVibrate");
+	bool bVal = false;
     CCMenuItemImage* btn = (CCMenuItemImage*)pSender;
     CCLOG("onButtonSound x:%f", btn->getPositionX());
     if( btn->getPositionX()==211 ){
         //disabling, switch to enable
+		bVal = true;
         btn->setPosition(ccp(270, btn->getPositionY()));
     }else{
         //else
         btn->setPosition(ccp(211, btn->getPositionY()));
-    }
+	}
+	//
+	CCUserDefault *def=CCUserDefault::sharedUserDefault();
+	def->setBoolForKey("vibrate", bVal);
 }
 
 void LayerSettings::onButtonClose(CCObject* pSender)
@@ -108,8 +118,8 @@ void LayerSettings::onExit()
 void LayerSettings::saveInfo()
 {
 // 	CCUserDefault *def=CCUserDefault::sharedUserDefault();
-// 	def->setStringForKey("username", txtUsername->getText());
-// 	def->setStringForKey("password", txtPassword->getText());
+// 	def->setStringForKey("sound", txtUsername->getText());
+// 	def->setStringForKey("vibrate", txtPassword->getText());
 
 //	def->flush();
 }

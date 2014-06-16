@@ -33,7 +33,11 @@ private:
 
 public:
     LayerBet_Lieng();
-    virtual ~LayerBet_Lieng();
+	virtual ~LayerBet_Lieng();
+	virtual void registerWithTouchDispatcher(void);
+	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void onEnter();
+	virtual void onExit();
     
     CREATE_FUNC(LayerBet_Lieng);
     

@@ -34,6 +34,10 @@ private:
 public:
 	LayerOpenCard_Xito();
 	virtual ~LayerOpenCard_Xito();
+	virtual void registerWithTouchDispatcher(void);
+	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void onEnter();
+	virtual void onExit();
 
 	CREATE_FUNC(LayerOpenCard_Xito);
 

@@ -41,6 +41,7 @@ private:
         tag_avatar,
         tag_NameFriend,
         tag_OnlineState,
+		tag_OnlineStateImage
     };
     enum tag_SpriteClick{
         tag_friendInfoDisable=0,
@@ -64,12 +65,16 @@ private:
     
     int rowsHistoryCount;
     int rowsFriendsCount;
+
+	string currFriendID;
 public:
     LayerFriendDetails();
     virtual ~LayerFriendDetails();
     
     void initTextField(CCEditBox* txt, const char* hintText);
     CCSprite* loadDefaultImage(CCSize s, CCPoint p);
+
+	void loadFirstCell();
     
     CCTableViewCell* createCell4History(CCTableView *table, int idx);
     CCTableViewCell* createCell4Friends(CCTableView *table, int idx);
@@ -91,7 +96,9 @@ public:
     virtual void tableCellTouched(cocos2d::extension::CCTableView* table, cocos2d::extension::CCTableViewCell* cell);
     virtual cocos2d::CCSize tableCellSizeForIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
     virtual cocos2d::extension::CCTableViewCell* tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
-    virtual unsigned int numberOfCellsInTableView(cocos2d::extension::CCTableView *table);
+	virtual unsigned int numberOfCellsInTableView(cocos2d::extension::CCTableView *table);
+	//Server
+	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 };
 
 class LayerFriendDetailsLoader : public cocos2d::extension::CCLayerLoader

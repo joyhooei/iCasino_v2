@@ -29,6 +29,10 @@ private:
 public:
 	LayerBet_BaCayChuong();
 	virtual ~LayerBet_BaCayChuong();
+	virtual void registerWithTouchDispatcher(void);
+	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void onEnter();
+	virtual void onExit();
 
 	CREATE_FUNC(LayerBet_BaCayChuong);
 

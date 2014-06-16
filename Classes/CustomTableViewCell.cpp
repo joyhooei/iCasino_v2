@@ -48,3 +48,13 @@ bool CustomTableViewCell::getSelectedState()
 {
 	return isSelected;
 }
+
+void CustomTableViewCell::setStringObject( string val )
+{
+	sValue = val;
+}
+
+string CustomTableViewCell::getStringObject()
+{
+	return sValue;
+}

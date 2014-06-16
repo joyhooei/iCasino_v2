@@ -9,6 +9,7 @@
 #include "LayerOpenCard_Xito.h"
 #include "Requests/ExtensionRequest.h"
 #include "XiTo.h"
+#include "mUtils.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -68,6 +69,8 @@ void LayerOpenCard_Xito::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoad
 	btnCard1->setOpacity(0);
 	btnCard2->setOpacity(0);
 	CCLOG("%f %f",btnCard2->getContentSize().width,btnCard2->getContentSize().height);
+
+	this->setTouchEnabled(true);
 	return;
 }
 
@@ -166,4 +169,26 @@ vector<string> LayerOpenCard_Xito::Dsplit(string &S,const char &str){
 		t=t2+1;
 	}
 	return arrStr;
+}
+
+void LayerOpenCard_Xito::registerWithTouchDispatcher( void )
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -128, true);
+}
+
+bool LayerOpenCard_Xito::ccTouchBegan( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )
+{
+	return true;
+}
+
+void LayerOpenCard_Xito::onEnter()
+{
+	CCLayer::onEnter();
+	//
+	this->runAction(mUtils::getActionOpenPopup());
+}
+
+void LayerOpenCard_Xito::onExit()
+{
+	CCLayer::onExit();
 }

@@ -266,6 +266,7 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
     = GameServer::getSingleton().getSmartFox()->GetRoomListFromGroup(CCString::createWithFormat("%d", m_gID)->getCString());
     
     boost::shared_ptr<RoomVariable> rv = rooms->at(idx)->GetVariable("params");
+	vector<string> lstBet = mUtils::splitString( *rv->GetStringValue(), '@' );
     
     if(!cell){
         cell = new CustomTableViewCell(CCSizeMake(nodeTableListRooms->getContentSize().width, 40));
@@ -280,7 +281,7 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
         
         cell->addChild(createLabel4Cell(tag_Players, songuoi->getCString(), CCSizeMake(100, 40), ccp(101, 0)));
         
-        cell->addChild(createLabel4Cell(tag_Bet, rv->GetStringValue()->c_str(), CCSizeMake(100, 40), ccp(202, 0)));
+        cell->addChild(createLabel4Cell(tag_Bet, mUtils::convertMoneyEx( atoi( lstBet.at(0).c_str() ) ).c_str(), CCSizeMake(100, 40), ccp(202, 0)));
         
         cell->addChild(createLabel4Cell(-1, "Nhà chẳng có gì, có mỗi điều kiện", CCSizeMake(271, 40), ccp(302, 0)));
         
@@ -302,8 +303,9 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
         }
         
         CCLabelTTF *label3 = getLabelFromTagID(cell, tag_Bet);
-        if( label3!=NULL )
-            label3->setString(rv->GetStringValue()->c_str());
+        if( label3!=NULL ){
+            label3->setString( mUtils::convertMoneyEx( atoi( lstBet.at(0).c_str() ) ).c_str() );
+		}
     }
     return cell;
 }

@@ -9,6 +9,7 @@
 #include "LayerBet_Lieng.h"
 #include "Requests/ExtensionRequest.h"
 #include "GameServer.h"
+#include "mUtils.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -93,6 +94,9 @@ bool LayerBet_Lieng::onAssignCCBMemberVariable(CCObject *pTarget, const char *pM
 void LayerBet_Lieng::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
     CCLOG("Imhere onNodeLoaded");
+	sliderMoney->setTouchPriority(-128);
+
+	this->setTouchEnabled(true);
     //sliderMoney
     return;
 }
@@ -111,4 +115,26 @@ void LayerBet_Lieng::setInfoBet(int _minBet,int _myBet){
 	sliderMoney->setMinimumValue(_minBet);
 	sliderMoney->setMaximumValue(max);
 	sliderMoney->setValue(1000);
+}
+
+void LayerBet_Lieng::registerWithTouchDispatcher( void )
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -128, true);
+}
+
+bool LayerBet_Lieng::ccTouchBegan( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )
+{
+	return true;
+}
+
+void LayerBet_Lieng::onEnter()
+{
+	CCLayer::onEnter();
+	//
+	this->runAction(mUtils::getActionOpenPopup());
+}
+
+void LayerBet_Lieng::onExit()
+{
+	CCLayer::onExit();
 }

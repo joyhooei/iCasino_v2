@@ -80,6 +80,8 @@ void LayerMain::loadAllMyDatas(){
     boost::shared_ptr<double> am, amf;
     boost::shared_ptr<string> aal;
     boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	if( myself==NULL )
+		return;
     if( myself==NULL || myself->GetVariable("am")==NULL || myself->GetVariable("amf")==NULL ){
         CCLOG("myself %s= NULL | myself->GetVariable(am) %s= NULL | myself->GetVariable(amf)%s=NULL",
               myself==NULL?"=":"!", myself->GetVariable("am")==NULL?"=":"!", myself->GetVariable("amf")==NULL?"=":"!");

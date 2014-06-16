@@ -15,10 +15,12 @@
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
+using namespace std;
 
 class CustomTableViewCell : public cocos2d::extension::CCTableViewCell{
 private:
     long roomID;
+	string sValue;
 	enum{
 		tag_NodeColor = 11212
 	};
@@ -29,6 +31,9 @@ public:
     virtual void draw();
     void setRoomId(long idx);
     long getRoomId();
+
+	void setStringObject(string val);
+	string getStringObject();
 
 	void setSelectedState(bool isSelected);
 	bool getSelectedState();

@@ -8,6 +8,9 @@
 
 #include "LayerFriendDetails.h"
 #include "mUtils.h"
+#include "Requests/ExtensionRequest.h"
+#include "CustomTableViewCell.h"
+#include "_Chat_.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -51,9 +54,6 @@ void LayerFriendDetails::onButtonSMS(CCObject* pSender)
 {
     CCLOG("onButtonSMS");
     
-    lblOnline->setString("Offline");
-    //spriteOnline->initWithFile("assets/ratio_disable.png");
-    //btnOnline->setEnabled(false);
 }
 
 void LayerFriendDetails::onButtonTransferMoney(CCObject* pSender)
@@ -65,7 +65,10 @@ void LayerFriendDetails::onButtonTransferMoney(CCObject* pSender)
 void LayerFriendDetails::onButtonUnInvite(CCObject* pSender)
 {
     CCLOG("onButtonUnInvite");
-    
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("aI", currFriendID.c_str());
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("rarf", params));
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 // CCBMemberVariableAssigner interface
@@ -115,10 +118,43 @@ void LayerFriendDetails::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoad
     nodeFriends->addChild(tblFriends);
     //
     tblFriends->reloadData();
+	//
+	loadFirstCell();
 }
 // hàm khi click vào 1 hành của table view
 void LayerFriendDetails::tableCellTouched(cocos2d::extension::CCTableView *table, cocos2d::extension::CCTableViewCell *cell){
     CCLOG("Roomid: %d of %s", cell->getObjectID(), table->getTag()==tag_Friends?"Friends":"Historys");
+	if( table->getTag()==tag_Friends ){
+		CustomTableViewCell* cc = (CustomTableViewCell*)cell;
+		int fid = cc->getObjectID();
+		string fname = cc->getStringObject();
+		//getFriend
+		boost::shared_ptr<vector<boost::shared_ptr<Buddy> > > lstBuddys = GameServer::getSingleton().getSmartFox()->BuddyManager()->BuddyList();
+		boost::shared_ptr<Sfs2X::Entities::Buddy> buddy = GameServer::getSingleton().getSmartFox()->BuddyManager()->GetBuddyByName(fname);
+		if( buddy==NULL )
+			return;
+		lblOnline->setString( buddy->IsOnline()?"Online":"Offline" );
+		//Uncheck other cells
+		for( int i = 0; i<lstBuddys->size(); i++ ){
+			CustomTableViewCell* cc = (CustomTableViewCell*)table->cellAtIndex(i);
+			if( cc==NULL )
+				continue;
+			cc->setSelectedState(false);
+		}
+		//check
+		CustomTableViewCell*c = (CustomTableViewCell*)cell;
+		c->setSelectedState(true);
+		//Get all info
+		boost::shared_ptr<ISFSObject> params (new SFSObject());
+		params->PutUtfString("aI", buddy->Name()->c_str());
+		boost::shared_ptr<IRequest> request (new ExtensionRequest("rgif", params));
+		GameServer::getSingleton().getSmartFox()->Send(request);
+		//Get history
+		boost::shared_ptr<IRequest> request1 (new ExtensionRequest("rghba", params));
+		GameServer::getSingleton().getSmartFox()->Send(request1);
+
+		currFriendID = fname;
+	}
 }
 
 // Hàm set giá trị width height cho 1 cell table view
@@ -178,13 +214,13 @@ CCTableViewCell* LayerFriendDetails::createCell4History(CCTableView *table, int 
 }
 
 CCTableViewCell* LayerFriendDetails::createCell4Friends(CCTableView *table, int idx){
-    CCTableViewCell *cell = table->dequeueCell();
+    CustomTableViewCell* cell = (CustomTableViewCell*)table->dequeueCell();
     boost::shared_ptr<vector<boost::shared_ptr<Buddy> > > buddys = GameServer::getSingleton().getSmartFox()->BuddyManager()->BuddyList();
     if( buddys->at(idx) == NULL )
         return cell;
     if (!cell) {
-        CCLOG("createCell4Friends");
-        cell = new CCTableViewCell();
+        //CCLOG("createCell4Friends");
+        cell = new CustomTableViewCell( CCSizeMake(nodeFriends->getContentSize().width, 60) );
         cell->autorelease();
         //Avatar
         cell->addChild( loadDefaultImage(CCSizeMake(48, 48), ccp(10, 60/2)) );
@@ -201,10 +237,10 @@ CCTableViewCell* LayerFriendDetails::createCell4Friends(CCTableView *table, int 
         labelOnlineState->setTag(tag_OnlineState);
         cell->addChild(labelOnlineState);
         //Sprite Online
-        CCSprite* sOnline = CCSprite::createWithSpriteFrameName("assest/ratio_disable.png");
+        CCSprite* sOnline = CCSprite::createWithSpriteFrameName(buddys->at(idx)->IsOnline()?"assest/ratio_active.png":"assest/ratio_disable.png");
 		sOnline->setAnchorPoint(ccp(0, 0));
         sOnline->setPosition(ccp(80, 12));
-        //sOnline->setScaleX(nodeFriends->getContentSize().width/sOnline->getContentSize().width);
+		sOnline->setTag(tag_OnlineStateImage);
         cell->addChild(sOnline);
         //Sprite
         CCSprite* line = CCSprite::createWithSpriteFrameName("assest/background_cell.png");
@@ -212,6 +248,9 @@ CCTableViewCell* LayerFriendDetails::createCell4Friends(CCTableView *table, int 
         line->cocos2d::CCNode::setScale(nodeFriends->getContentSize().width/line->getContentSize().width, 60/line->getContentSize().height);
         line->setAnchorPoint(ccp(0.5,0));
         cell->addChild(line);
+		//set id
+		cell->setObjectID( buddys->at(idx)->Id() );
+		cell->setStringObject( *buddys->at(idx)->Name() );
     }
     else
     {
@@ -221,7 +260,16 @@ CCTableViewCell* LayerFriendDetails::createCell4Friends(CCTableView *table, int 
         //
         CCLabelTTF *labelLevel = (CCLabelTTF*)cell->getChildByTag(tag_OnlineState);
         if(labelLevel)
-            labelLevel->setString(buddys->at(idx)->IsOnline()?"Online":"Offline");
+			labelLevel->setString(buddys->at(idx)->IsOnline()?"Online":"Offline");
+		cell->setObjectID( buddys->at(idx)->Id() );
+		//
+		cell->removeChildByTag(tag_OnlineStateImage, true);
+		CCSprite* sOnline = CCSprite::createWithSpriteFrameName(buddys->at(idx)->IsOnline()?"assest/ratio_active.png":"assest/ratio_disable.png");
+		sOnline->setAnchorPoint(ccp(0, 0));
+		sOnline->setPosition(ccp(80, 12));
+		sOnline->setTag(tag_OnlineStateImage);
+		cell->addChild(sOnline);
+		cell->setStringObject( *buddys->at(idx)->Name() );
         //
 //        CCLabelTTF *labelWin = (CCLabelTTF*)cell->getChildByTag(tag_WinLose);
 //        labelWin->setString(CCString::createWithFormat("Thắng %d/Thua %d", historys[idx].numOfWin, historys[idx].numOfLose)->getCString());
@@ -257,4 +305,92 @@ CCSprite* LayerFriendDetails::loadDefaultImage(CCSize s, CCPoint p){
     pSprite->cocos2d::CCNode::setScale(s.width/pSprite->getContentSize().width, s.height/pSprite->getContentSize().height);
     pSprite->setPosition(p);
     return pSprite;
+}
+
+void LayerFriendDetails::OnExtensionResponse( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];
+	boost::shared_ptr<string> cmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
+
+	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
+	if( strcmp( cmd->c_str(), "rgif" )==0 ){ //Friend info
+		lblName->setString( param->GetUtfString("aN")->c_str() );
+		lblSex->setString( CCString::createWithFormat("Giới tính: %s", param->GetInt("aS")==0?"Nữ": "Nam")->getCString() );
+		lblXu->setString( CCString::createWithFormat("Xu: %s", mUtils::convertMoneyEx( *param->GetDouble("amf") ).c_str() )->getCString() );
+	}else if( strcmp( cmd->c_str(), "rghba" )==0 ){ //History
+		vector<string> lstHis;
+		lstHis = mUtils::splitString(*param->GetUtfString("rghba"), '|');
+		for( int i = 0; i<mUtils::numOfGame; i++ ){
+			bool check = false;
+			for( int j = 0; j<lstHis.size(); j++ ){
+				vector<string> his = mUtils::splitString(lstHis.at(j), ',');
+				if( atoi(his.at(0).c_str())==(i+100) ){
+					//                    CCLOG("Imhere: gid: %s", his.at(0).c_str());
+					historys[i].numOfLevel = atoi(his.at(1).c_str());
+					historys[i].numOfWin = atoi(his.at(2).c_str());
+					historys[i].numOfLose = atoi(his.at(3).c_str());
+					check = true; break;
+				}
+			}
+			if( !check ){
+				historys[i].numOfLevel = 0;
+				historys[i].numOfWin = 0;
+				historys[i].numOfLose = 0;
+			}
+		}
+		//OK, reload datas now
+		tblHistory->reloadData();
+	}else if(strcmp( cmd->c_str(), "arfc" )==0){ //Ti.App.REMOVE_FRIEND_CMD = "arfc";
+		Chat *toast = new Chat("Đã hủy kết bạn!", -1);
+		this->addChild(toast);
+		//
+		tblFriends->reloadData();
+		loadFirstCell();
+	}
+}
+
+void LayerFriendDetails::loadFirstCell()
+{
+	boost::shared_ptr<vector<boost::shared_ptr<Buddy> > > lstBuddys = GameServer::getSingleton().getSmartFox()->BuddyManager()->BuddyList();
+	if( lstBuddys == NULL || lstBuddys->size()==0 ){
+		lblName->setString("-");
+		lblOnline->setString("-");
+		lblSex->setString("-");
+		lblXu->setString("-");
+		//
+		for( int i = 0 ; i<mUtils::numOfGame; i++ ){
+			historys[i].ID = mUtils::numBeginGameID+i;
+			//historys[i].name = mUtils::getGameNameByID(mUtils::numBeginGameID+i);
+			historys[i].numOfLevel = 0;
+			historys[i].numOfWin = 0;
+			historys[i].numOfLose = 0;
+		}
+		return;
+	}
+	boost::shared_ptr<Sfs2X::Entities::Buddy> buddy = lstBuddys->at(0);
+	if( buddy==NULL )
+		return;
+	lblOnline->setString( buddy->IsOnline()?"Online":"Offline" );
+	//Uncheck other cells
+	for( int i = 0; i<lstBuddys->size(); i++ ){
+		CustomTableViewCell* cc = (CustomTableViewCell*)tblFriends->cellAtIndex(i);
+		if( cc==NULL )
+			continue;
+		cc->setSelectedState(false);
+	}
+	//check
+	CustomTableViewCell*c = (CustomTableViewCell*)tblFriends->cellAtIndex(0);
+	c->setSelectedState(true);
+	//Get all info
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("aI", buddy->Name()->c_str());
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("rgif", params));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+	//Get history
+	boost::shared_ptr<IRequest> request1 (new ExtensionRequest("rghba", params));
+	GameServer::getSingleton().getSmartFox()->Send(request1);
+
+	currFriendID = *buddy->Name();
 }
