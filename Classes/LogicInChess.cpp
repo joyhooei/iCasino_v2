@@ -392,8 +392,9 @@ bool ChessLogic::IsKingSafe(int xside2) {
     do {
         // System.out.println("side "+xside+ " i"+ i);
         pos = kingpalace[xside2 - 1][i];
-        
+		//CCLog("ChessLogic::IsKingSafe pos=%d", pos);
         i++;
+		if (pos < 0 || pos >= 90) return true;
     } while (piece[pos] != KING);
     if (Attack(pos, xside2)) {
         // System.out.println("chieu");

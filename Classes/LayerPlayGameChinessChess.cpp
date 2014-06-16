@@ -997,7 +997,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_MOVE_NTF(){
         
         // nếu mình được đi trước thì phải nhận id ngược (vì các id hiện đang bị ngược so với sv)
         // nếu mình đi sau thì ko cần convert gì
-        if (isIamTheFirst) {
+        if (isRedChess) {
             moveChess(convertID(moveFrom), convertID(moveTo));
         }
         else {

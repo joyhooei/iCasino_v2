@@ -1103,7 +1103,7 @@ void LayerPlayGamePhom::event_EXT_EVENT_RES_HANDOFF_PHOM() {
 		this->actionLast = HA_PHOM;
     }
 	else {
-		layerChats->showChatByPos(-1, "Phỏm không hợp lệ");
+		//layerChats->showChatByPos(-1, "Phỏm không hợp lệ");
 	}
 }
 
