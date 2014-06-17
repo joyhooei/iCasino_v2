@@ -16,6 +16,7 @@
 #include "_Chat_inGame_.h"
 #include "mUtils.h"
 #include "_Chat_.h"
+#include "SceneManager.h"
 
 BaCayNormal::BaCayNormal():CARD_RIGHT(NULL),CARD_ME(NULL),CARD_TOP(NULL),CARD_LEFT(NULL){
     
@@ -141,6 +142,7 @@ BaCayNormal::BaCayNormal():CARD_RIGHT(NULL),CARD_ME(NULL),CARD_TOP(NULL),CARD_LE
     CARD_RIGHT = new CCArray();
     CARD_TOP = new CCArray();
 
+	SceneManager::getSingleton().hideLoading();
 }
 
 BaCayNormal::~BaCayNormal(){

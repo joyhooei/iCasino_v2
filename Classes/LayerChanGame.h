@@ -17,6 +17,7 @@
 #include "FrameBet.h"
 #include "CardChan.h"
 #include "NotificationCallback.h"
+
 #define PI 3.141592653589
 using namespace cocos2d;
 using namespace cocos2d::ui;

@@ -17,6 +17,8 @@
 #include "Nan3Cay.h"
 #include "_Chat_.h"
 #include "mUtils.h"
+#include "SceneManager.h"
+
 //#include "mUtils.h"
 
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
@@ -210,6 +212,7 @@ frameBet_Me(NULL){
     this->addChild(frameBet_Left);
 //    btn_btn_Latat();
     
+	SceneManager::getSingleton().hideLoading();
 }
 
 BaCayChuong::~BaCayChuong(){

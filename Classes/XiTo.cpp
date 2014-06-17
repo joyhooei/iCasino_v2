@@ -15,6 +15,7 @@
 #include "Requests/ExtensionRequest.h"
 #include "_Chat_.h"
 #include "mUtils.h"
+#include "SceneManager.h"
 
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
@@ -264,6 +265,8 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     CARD_LEFT_TOP->retain();
     CARD_RIGHT_BOTTOM->retain();
     CARD_RIGHT_TOP->retain();
+
+	SceneManager::getSingleton().hideLoading();
 }
 
 XiTo::~XiTo(){

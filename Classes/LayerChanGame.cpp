@@ -231,6 +231,8 @@ LayerChanGame::LayerChanGame(){
 	CARD_D_LEFT_bottom->retain();
 	CARD_D_RIGHT_bottom->retain();
 	CARD_D_TOP_bottom->retain();
+
+	SceneManager::getSingleton().hideLoading();
 }
 
 LayerChanGame::~LayerChanGame(){

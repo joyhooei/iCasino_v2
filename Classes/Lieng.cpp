@@ -17,6 +17,7 @@
 #include "SliderCustomLoader.h"
 #include "mUtils.h"
 #include "_Chat_.h"
+#include "SceneManager.h"
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
 
@@ -201,6 +202,8 @@ Lieng::Lieng():btnNanBai(NULL),btnReady(NULL),btnUnReady(NULL),btnXemBai(NULL),b
 	CARD_LEFT->retain();
 	CARD_RIGHT->retain();
 	CARD_TOP->retain();
+
+	SceneManager::getSingleton().hideLoading();
 }
 
 Lieng::~Lieng(){
@@ -1227,14 +1230,14 @@ void Lieng::btn_Up_click(CCObject *sender, TouchEventType type){
 }
 void Lieng::btn_Theo_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
-        try {
+      /*  try {*/
             boost::shared_ptr<ISFSObject> params (new SFSObject());
             boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
             params->PutInt("bet", 3);
             boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_GAME_BET_REQ,params,lastRoom));
             GameServer::getSingleton().getSmartFox()->Send(request);
-        } catch (exception &e) {
-            CCLOG("Không bet được, Lỗi: %s",e.what());
-        }
+//         } catch (exception &e) {
+//             CCLOG("Không bet được, Lỗi: %s",e.what());
+//         }
     }
 }
