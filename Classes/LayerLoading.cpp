@@ -51,10 +51,11 @@ bool LayerLoading::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEve
 	return true;
 }
 
+/*
 LayerLoading* LayerLoading::create(const char *backgroundImage){
 	LayerLoading* ml = LayerLoading::create();
 	return ml;
-}
+}*/
 
 void LayerLoading::setTitle(const char *title, int fontsize){
 	CCLabelTTF* ltfTitle = CCLabelTTF::create(title, "", fontsize);

@@ -170,6 +170,8 @@ LayerPlayGamePhom::LayerPlayGamePhom() {
     GameServer::getSingleton().addListeners(this);
     //
     this->scheduleOnce(schedule_selector(LayerPlayGamePhom::sendRequestJoinGame), 1.0f);
+
+	SceneManager::getSingleton().hideLoading();
 }
 
 LayerPlayGamePhom::~LayerPlayGamePhom() {

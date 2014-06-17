@@ -26,7 +26,7 @@ public:
 	virtual void registerWithTouchDispatcher(void);
 	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 
-	static LayerLoading* create(const char* backgroundImage);
+	//static LayerLoading* create(const char* backgroundImage);
 
 	void setTitle(const char* title, int fontsize = 20);
 	void setContentText(const char* text, int fontsize = 20, int padding = 50, int paddintTop = 100);

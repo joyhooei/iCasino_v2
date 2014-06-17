@@ -223,14 +223,16 @@ bool SceneManager::hideNotification(){
 }
 
 void SceneManager::showLoading() {
-	LayerLoading *loading = LayerLoading::create("");
-	this->addChild(loading, zorder_layerLoading);
+	LayerLoading *loading = LayerLoading::create();
+	this->addChild(loading, zorder_layerLoading, tag_LayerLoading);
+	//layerLoading = LayerLoading::create();
+	//this->addChild(layerLoading, zorder_layerLoading, tag_LayerLoading);
 }
 void SceneManager::hideLoading() {
-	CCNode *loading = this->getChildByTag(zorder_layerLoading);
+	CCNode *loading = this->getChildByTag(tag_LayerLoading);
 	if (loading != NULL)
 	{
-		this->removeChildByTag(zorder_layerLoading, true);
+		this->removeChildByTag(tag_LayerLoading, true);
 	}
 	else {
 		CCLog("No found LayerLoading to CLEAR!!!");
@@ -256,6 +258,7 @@ void SceneManager::gotoMain() {
 void SceneManager::gotoGameByTag(int typeGame) {
 	CCLOG("typeGame: %d", typeGame);
 	showLoading();
+	
 	switch (typeGame) {
 	case kGameTienLenMienNam:
 
@@ -276,7 +279,7 @@ void SceneManager::gotoGameByTag(int typeGame) {
 		mGamePhom = new LayerPlayGamePhom();
 		this->addChild(mGamePhom, zorder_LayerGaming, tag_LayerGaming);
 		showLayer(mGamePhom);
-		hideLoading();
+		//hideLoading();
 
 		break;
 	case kGameBaCay:

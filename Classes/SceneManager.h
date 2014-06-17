@@ -47,7 +47,8 @@ enum eLayerTags
 	tag_LayerLogin,
 	tag_LayerMain,
 	tag_LayerGaming,
-	tag_LayerNotification
+	tag_LayerNotification,
+	tag_LayerLoading
 };
 
 enum eLayerZOrders
@@ -77,6 +78,7 @@ private:
 	LayerLogin *layerLogin;
 	LayerMain *layerMain;
 	LayerNotification* layerNotification;
+	LayerLoading *layerLoading;
 
 	LayerPlayGameTLMN *mGameTLMN;
 	LayerPlayGameTLMB *mGameTLMB;
