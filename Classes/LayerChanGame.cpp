@@ -14,7 +14,7 @@
 #include "_Chat_.h"
 #include "LayerGameChan_XuongU.h"
 #include "SliderCustomLoader.h"
-
+#include "SceneManager.h"
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
 LayerChanGame::LayerChanGame(){
@@ -46,7 +46,8 @@ LayerChanGame::LayerChanGame(){
 	EXT_EVENT_RES_U = "rsU";
 	EXT_EVENT_REQ_U = "rqU";
 	EXT_EVENT_REQ_CHIU_CARD = "rqchiuc";
-
+	EXT_EVENT_REQ_NOC_DETAIL = "rqnocdtl";
+	EXT_EVENT_REQ_TRENTAY_DETAIL = "rqttdtl"; 
 	_list_user = "";
 	mylistCard = "";
 	currentPlayer = "";
@@ -285,6 +286,8 @@ void LayerChanGame::createAvatars(){
 	layerAvatars->resetAll();
 	layerAvatars->getUserByPos(kUserMe)->setVisible(false);
 	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
+	layerAvatars->getUserByPos(kUserLeft)->setPositionY(layerAvatars->getUserByPos(kUserLeft)->getPositionY() + 30);
+	layerAvatars->getUserByPos(kUserRight)->setPositionY(layerAvatars->getUserByPos(kUserRight)->getPositionY() + 30);
 	this->addChild(layerAvatars);
 }
 
@@ -721,7 +724,7 @@ void LayerChanGame::setMyListCards(string listCards){
 				pCard->setPosition(ccp(400,80));
 				pCard->setRotation(-(250/list_size)*((list_size)/2));
 				pCard->setTouchEnabled(true);
-				pCard->setZOrder(150+i);
+				pCard->setZOrder(-1);
 				pCard->addTouchEventListener(this, toucheventselector(LayerChanGame::CardTouch));
 				CARD_ME->addObject(pCard);
 				uLayer->addWidget(pCard);
@@ -795,14 +798,14 @@ void LayerChanGame::resortCard_CuaTri_Alluser(int pos){
 		if (CARD_C_RIGHT->count() > 8)
 		{
 			kc_right = (w_card * 8) / (CARD_C_RIGHT->count());
-			animateCards(CARD_C_RIGHT, left_chi_right, bottom_chi_right, kc_right);
+ 			animateCards(CARD_C_RIGHT, left_chi_right, bottom_chi_right, -kc_right);
 		}
 		break;
 	case kUserTop:
 		if (CARD_C_TOP->count() > 8)
 		{
 			kc_top = (w_card * 8) / (CARD_C_TOP->count());
-			animateCards(CARD_C_TOP, left_chi_top, bottom_chi_top, kc_top);
+ 			animateCards(CARD_C_TOP, left_chi_top, bottom_chi_top,  -kc_top);
 		}
 		break;
 	}
@@ -815,10 +818,13 @@ void LayerChanGame::animateCards(CCArray *P, float _left, float _bottom, float _
 	}
 	CCObject *t;
 	int dem = 0;
+	CCLOG("P.lenght %d",P->count());
 	CCARRAY_FOREACH(P, t){
 		CardChan *card = dynamic_cast<CardChan*>(t);
-		CCActionInterval *moveBy = CCMoveBy::create(0.5,ccp(-(_kc * dem),0));
- 		card->runAction(moveBy);
+		CCActionInterval *moveTo = CCMoveTo::create(0.5,ccp((_left + _kc * dem),_bottom));
+		//card->setZOrder(dem);
+		card->getParent()->reorderChild(card,dem+1);
+ 		card->runAction(moveTo);
 		dem++;
 	}
 }
@@ -862,10 +868,11 @@ void LayerChanGame::action_BocNoc(string t_user,string cardnu, string cardsu){
 	CCLOG("Bốc Nọc %s",t_user.c_str());
 	CardChan *pCard = CardChan::create();
 	pCard->loadTexture(findTypeCard(cardnu, cardsu).c_str());
+	pCard->setNumber(atoi(cardnu.c_str()));
+	pCard->setSuite(atoi(cardsu.c_str()));
 	pCard->setSizeCard(w_card, h_card);
 	pCard->setPosition(ccp(WIDTH_DESIGN/2 - w_card/2, HEIGHT_DESIGN/2 - h_card/2));
-	pCard->setZOrder(_coutZorder);
-	_coutZorder++;
+	pCard->setZOrder(-1);
 	uLayer->addChild(pCard);
 
 	float toX = -1;
@@ -874,25 +881,24 @@ void LayerChanGame::action_BocNoc(string t_user,string cardnu, string cardsu){
 	int pos = getPosUserByName(t_user, _list_user);
 	if(strcmp(t_user.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
 		CCLOG("Me Draw");
-		toX = left_chi_me + (float)CARD_C_ME->count() * w_card;
+		toX = left_chi_me + (float)CARD_C_ME->count() * kc_me;
 		toY = bottom_chi_me;
 		f = kUserMe;
 	}
 	else{
 		switch (pos) {
 		case kUserLeft:
-			CCLOG("Left Draw");
-			toX = left_chi_left + (float)CARD_C_LEFT->count() * w_card;
+			toX = left_chi_left + (float)CARD_C_LEFT->count() * kc_left;
 			toY = bottom_chi_left;
 			f = kUserLeft;
 			break;
 		case kUserRight:
-			toX = left_chi_right - (float)CARD_C_RIGHT->count() * w_card;
+			toX = left_chi_right - (float)CARD_C_RIGHT->count() * kc_right;
 			toY = bottom_chi_right;
 			f = kUserRight;
 			break;
 		case kUserTop:
-			toX = left_chi_top + (float)CARD_C_TOP->count() * w_card;
+			toX = left_chi_top - (float)CARD_C_TOP->count() * kc_top;
 			toY = bottom_chi_top;
 			f = kUserTop;
 			break;
@@ -902,11 +908,24 @@ void LayerChanGame::action_BocNoc(string t_user,string cardnu, string cardsu){
 	}
 
 	//Animation
-	CCActionInterval *moveTo = CCMoveTo::create(0.4, ccp(toX,toY));
-	pCard->runAction(moveTo);
-	switch (f) {
+	CCMoveTo *moveTo = CCMoveTo::create(0.3, ccp(toX,toY));
+	int *value = new int(f);
+	CCCallFuncND *callfun = CCCallFuncND::create(this, callfuncND_selector(LayerChanGame::addCard_toCuaTri),(void*)value);
+	CCDelayTime *delay = CCDelayTime::create(0.3);
+	pCard->runAction(CCSequence::create(delay,moveTo,callfun,NULL));
+}
+
+void LayerChanGame::addCard_toCuaTri(CCNode* sender, void* data){
+	CCLOG("sau 0.3 s nhay vao day: he he he he he he he he");
+	int *f = (int*) data; 
+	CCLOG("*value = %d", *f);
+	CardChan *pCard = (CardChan*) sender;
+	CCLOG("in callback: number %d, suite %d",pCard->getNumber(),pCard->getSuite());
+	switch(*f)
+	{
 	case kUserMe:
 		CARD_C_ME->addObject(pCard);
+		CCLOG("card me length: %d",CARD_C_ME->count());
 		resortCard_CuaTri_Alluser(kUserMe);
 		break;
 	case kUserLeft:
@@ -997,7 +1016,7 @@ void LayerChanGame::action_AnCuaTri(string f_user, string t_user, string cardnu,
 }
 
 void LayerChanGame::action_ChiuBai(string f_user, string t_user, string cardnu, string cardsu){
-	CCLOG("Chíu bài");
+	
 }
 
 void LayerChanGame::action_TraCua(string f_user, string t_user, string cardnu, string cardsu){
@@ -1160,15 +1179,18 @@ void LayerChanGame::action_DanhBai_ME(string cardnu,string cardsu){
 		CardChan *pCard =  dynamic_cast<CardChan*>(t);
 		if (pCard->getFlag() && pCard->getNumber() == atoi(cardnu.c_str()) && pCard->getSuite() == atoi(cardsu.c_str())) {
 			float rotate = -(pCard->getRotation());
-			CCActionInterval *moveTo = CCMoveTo::create(0.4, ccp((float)CARD_C_ME->count()*w_card+left_chi_me, bottom_chi_me));
-			CCActionInterval *rotateTo = CCRotateBy::create(0.4, rotate);
-			CCActionInterval *scaleBy = CCScaleBy::create(0.4, w_card/w_cardhand,h_card/h_cardhand);
-			pCard->runAction(moveTo);
+			CCActionInterval *rotateTo = CCRotateBy::create(0.3, rotate);
+			CCActionInterval *scaleBy = CCScaleBy::create(0.3, w_card/w_cardhand,h_card/h_cardhand);
 			pCard->runAction(rotateTo);
 			pCard->runAction(scaleBy);
 			CARD_ME->removeObject(pCard);
-			CARD_C_ME->addObject(pCard);
-			resortCard_CuaTri_Alluser(kUserMe);
+			pCard->getParent()->reorderChild(pCard,CARD_C_ME->count());
+			//Animation
+			CCMoveTo *moveTo = CCMoveTo::create(0.3, ccp((float)CARD_C_ME->count() * kc_me + left_chi_me, bottom_chi_me));
+			int *value = new int(kUserMe);
+			CCCallFuncND *callfun = CCCallFuncND::create(this, callfuncND_selector(LayerChanGame::addCard_toCuaTri),(void*)value);
+			CCDelayTime *delay = CCDelayTime::create(0.3);
+			pCard->runAction(CCSequence::create(delay,moveTo,callfun,NULL));
 			this->refreshListCard();
 		}
 	}
@@ -1179,6 +1201,7 @@ void LayerChanGame::action_DanhBai_NOTME(int pos,string cardnu,string cardsu){
 	CardChan* pCard = CardChan::create();
 	pCard->loadTexture(findTypeCard(cardnu, cardsu).c_str());
 	pCard->setSizeCard(w_card, h_card);
+	pCard->setZOrder(-1);
 	pCard->setTouchEnabled(false);
 
 	float toX = -1;
@@ -1186,20 +1209,20 @@ void LayerChanGame::action_DanhBai_NOTME(int pos,string cardnu,string cardsu){
 	int f = -1;
 	switch (pos) {
 	case kUserLeft:
-		pCard->setPosition(ccp(33, 171));
-		toX = (float)CARD_C_LEFT->count() * w_card + left_chi_left;
+		pCard->setPosition(ccp(33, layerAvatars->getUserByPos(kUserLeft)->getPositionY()));
+		toX = (float)CARD_C_LEFT->count() * kc_left + left_chi_left;
 		toY = bottom_chi_left;
 		f = kUserLeft;
 		break;
 	case kUserRight:
-		pCard->setPosition(ccp(732, 171));
-		toX =left_chi_right - (float)CARD_C_RIGHT->count() * w_card;
+		pCard->setPosition(ccp(732, layerAvatars->getUserByPos(kUserRight)->getPositionY()));
+		toX = left_chi_right - (float)CARD_C_RIGHT->count() * kc_right;
 		toY = bottom_chi_right;
 		f = kUserRight;
 		break;
 	case kUserTop:
-		pCard->setPosition(ccp(33, 171));
-		toX = (float)CARD_C_TOP->count() * w_card + left_chi_top;
+		pCard->setPosition(ccp(240, layerAvatars->getUserByPos(kUserTop)->getPositionY()));
+		toX = left_chi_top - (float)CARD_C_TOP->count() * kc_top;
 		toY = bottom_chi_top;
 		f = kUserRight;
 		break;
@@ -1207,24 +1230,14 @@ void LayerChanGame::action_DanhBai_NOTME(int pos,string cardnu,string cardsu){
 		break;
 	}
 	uLayer->addChild(pCard);
-	CCActionInterval *moveTo = CCMoveTo::create(0.4, ccp(toX,toY));
-	pCard->runAction(moveTo);
-	switch (f) {
-	case kUserLeft:
-		CARD_C_LEFT->addObject(pCard);
-		resortCard_CuaTri_Alluser(kUserLeft);
-		break;
-	case kUserRight:
-		CARD_C_RIGHT->addObject(pCard);
-		resortCard_CuaTri_Alluser(kUserRight);
-		break;
-	case kUserTop:
-		CARD_C_TOP->addObject(pCard);
-		resortCard_CuaTri_Alluser(kUserTop);
-		break;
-	default:
-		break;
-	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//Animation
+	CCMoveTo *moveTo = CCMoveTo::create(0.3, ccp(toX,toY));
+	int *value = new int(f);
+	CCCallFuncND *callfun = CCCallFuncND::create(this, callfuncND_selector(LayerChanGame::addCard_toCuaTri),(void*)value);
+	CCDelayTime *delay = CCDelayTime::create(0.3);
+	pCard->runAction(CCSequence::create(delay,moveTo,callfun,NULL));
 }
 
 //Chuyển bài từ trên tay xuống dưới tay
@@ -1264,7 +1277,7 @@ void LayerChanGame::action_ChuyenBai_ME(int pos, string cardnu, string cardsu){
 void LayerChanGame::action_ChuyenBai_NOTME(int pos, string cardnu, string cardsu){
 	CardChan *pCard = CardChan::create();
 	pCard->loadTexture(findTypeCard(cardnu, cardsu).c_str());
-	pCard->setZOrder(_coutZorder);
+	pCard->setZOrder(-1);
 	_coutZorder++;
 	pCard->setSizeCard(w_card, h_card);
 
@@ -1531,76 +1544,106 @@ void LayerChanGame::setUserReady(string uid){
 //Display loi an bao
 void LayerChanGame::error_AnBao(long rscode){
 	int t = (int)rscode;
+	string str = "";
 	switch(t){
 	case ANBAO_REASON_NO_PROBLEM:
 		break;
 	case ANBAO_REASON_AN_CA_DOI_CHO:
 		CCLOG("Lỗi ăn báo: Ăn cạ đổi chờ");
+		str = "Lỗi ăn báo: Ăn cạ đổi chờ";
 		break;
 	case ANBAO_REASON_BO_AN_CUATREN_BUT_AN_CUATRI:
 		CCLOG("Lỗi ăn báo: không ăn cửa trên nhưng lại ăn cửa trì");
+		str = "Lỗi ăn báo: không ăn cửa trên nhưng lại ăn cửa trì";
 		break;
 	case ANBAO_REASON_DISCARD_SAMEAS_CUATREN_CUATRI_DUOITAY:
 		CCLOG("Lỗi ăn báo: Đánh đi 1 con đã có ở cửa trên, cửa trì hoặc dưới tay");
+		str = "Lỗi ăn báo: Đánh đi 1 con đã có ở cửa trên, cửa trì hoặc dưới tay";
 		break;
 	case ANBAO_REASON_ANCA_DANHCA:
 		CCLOG("Lỗi ăn báo: Ăn cạ đánh cạ");
+		str = "Lỗi ăn báo: Ăn cạ đánh cạ";
 		break;
 	case ANBAO_TREOTRANH:
 		CCLOG("Lỗi ăn báo: Treo tranh");
+		str = "Lỗi ăn báo: Treo tranh";
 		break;
 	case ANBAO_DANH_1_CA_CHI_DUOC_AN_CHAN:
 		CCLOG("Lỗi ăn báo: Đã đánh cạ đi thì chỉ được Ăn chắn");
+		str = "Lỗi ăn báo: Đã đánh cạ đi thì chỉ được Ăn chắn";
 		break;
 	case ANBAO_REASON_BOCHAN_ANCA:
 		CCLOG("Lỗi ăn báo: Bỏ Chắn ăn cạ");
+		str = "Lỗi ăn báo: Bỏ Chắn ăn cạ";
 		break;
 	case ANBAO_REASON_DANHBAI_GIONG_CHANCA_DA_AN:
 		CCLOG("Lỗi ăn báo: Đánh đi lá bài giống chắn hoặc Cạ đã ăn");
+		str = "Lỗi ăn báo: Đánh đi lá bài giống chắn hoặc Cạ đã ăn";
 		break;
 	case ANBAO_REASON_DOI_U_BACHTHUCHI:
 		CCLOG("Lỗi ăn báo: Đợi Ăn Ù Bạch thủ Chi");
+		str = "Lỗi ăn báo: Đợi Ăn Ù Bạch thủ Chi";
 		break;
 	case ANBAO_REASON_BOCHAN_DANHCHAN:
 		CCLOG("Lỗi ăn báo: Bỏ Chắn đánh chắn");
+		str = "Lỗi ăn báo: Bỏ Chắn đánh chắn";
 		break;
 	case ANBAO_REASON_BOCHAN_ANCHAN:
 		CCLOG("Lỗi ăn báo: Bỏ Chắn Ăn Chắn");
+		str = "Lỗi ăn báo: Bỏ Chắn Ăn Chắn";
 		break;
 	case ANBAO_REASON_BOCA_ANCA:
 		CCLOG("Lỗi ăn báo: Bỏ Chắn Ăn Cạ");
+		str = "Lỗi ăn báo: Bỏ Chắn Ăn Cạ";
 		break;
 	case ANBAO_REASON_DANHCA_ANCA:
 		CCLOG("Lỗi ăn báo: Đánh Cạ Ăn Cạ");
+		str = "Lỗi ăn báo: Đánh Cạ Ăn Cạ";
 		break;
 	case ANBAO_REASON_XECA_ANCA:
 		CCLOG("Lỗi ăn báo: Xé cạ Ăn Cạ");
+		str = "Lỗi ăn báo: Xé cạ Ăn Cạ";
 		break;
 	case ANBAO_REASON_XECHAN_ANCA:
 		CCLOG("Lỗi ăn báo: Xé Chắn Ăn Cạ");
+		str = "Lỗi ăn báo: Xé Chắn Ăn Cạ";
 		break;
 	case ANBAO_REASON_DANH_ROILAI_AN:
 		CCLOG("Lỗi ăn báo: Đánh đi 1 con sau lại ăn đúng con đó");
+		str = "Lỗi ăn báo: Đánh đi 1 con sau lại ăn đúng con đó";
 		break;
 	case ANBAO_REASON_DANH_DI_DOI_CHAN:
 		CCLOG("Lỗi ăn báo: Đánh đi cả đôi Chắn");
+		str = "Lỗi ăn báo: Đánh đi cả đôi Chắn";
 		break;
 	case ANBAO_REASON_AN_ROILAI_DANH:
 		CCLOG("Lỗi ăn báo: Ăn một con rồi lại đánh đi con đó");
+		str = "Lỗi ăn báo: Ăn một con rồi lại đánh đi con đó";
 		break;
 	case ANBAO_REASON_ANCA_ROILAI_DANH_QUAN_CUNG_HANG:
 		CCLOG("Lỗi ăn báo: Ăn cạ rồi lại đánh 1 con cùng hàng");
+		str = "Lỗi ăn báo: Ăn cạ rồi lại đánh 1 con cùng hàng";
 		break;
 	case ANBAO_REASON_CHIUDUOC_NHUNG_LAI_ANTHUONG:
 		CCLOG("Lỗi ăn báo: Chíu được nhưng lại ăn thường");
+		str = "Lỗi ăn báo: Chíu được nhưng lại ăn thường";
 		break;
 	case ANBAO_REASON_AN_CHON_CA:
 		CCLOG("Lỗi ăn báo: Ăn cạ Chọn Cạ");
+		str = "Lỗi ăn báo: Ăn cạ Chọn Cạ";
 		break;
 	case ANBAO_REASON_CO_CHAN_CAU_CA:
 		CCLOG("Lỗi ăn báo: có Chắn Cấu Cạ");
+		str = "ăn báo: có Chắn Cấu Cạ";
 		break;
 	}
+
+	LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+	if( !SceneManager::getSingleton().showNotification() ){
+		CCLOG("NTF Dialog already open!");
+		return;
+	}
+	layer->setNotificationOptions("Lỗi", (str+ ",\n không thể báo ù ván này !").c_str(), false , "", 1, this );
 }
 
 //Khi co nguoi cho U
@@ -1680,16 +1723,22 @@ void LayerChanGame::XuongU(){
 	{
 		popUp = (LayerGameChan_XuongU *)ccbReader->readNodeGraphFromFile( "LayerGameChan_XuongU.ccbi" );
 		popUp->setPosition(ccp(10,10));
-		popUp->setZOrder(_coutZorder+2);
+		popUp->setZOrder(100);
 		uLayer->addChild(popUp);
 		ccbReader->release();
 	}
+}
+
+void LayerChanGame::notificationCallBack(bool isOK, int tag){
+	CCLOG("callbackNtf****");
 }
 
 //set End Game
 void LayerChanGame::setEndGame(){
 	currentPlayer = "";
 	mylistCard = "";
+
+	kc_top = kc_right = kc_me = kc_left = w_card;
 
 	flagChiaBai = false;
 	countDiscard = 0;

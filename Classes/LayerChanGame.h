@@ -16,6 +16,7 @@
 #include "_Avatar_inGame_.h"
 #include "FrameBet.h"
 #include "CardChan.h"
+#include "NotificationCallback.h"
 #define PI 3.141592653589
 using namespace cocos2d;
 using namespace cocos2d::ui;
@@ -62,7 +63,7 @@ enum{
 	ANBAO_REASON_CO_CHAN_CAU_CA,     // có chắn cấu cạ: Lấy 1 quân trong chắn sẵn có để ăn cạ.
 };
 
-class LayerChanGame : public CCLayer,public PlayerCallBack{
+class LayerChanGame : public CCLayer,public PlayerCallBack, public NotificationCallBack{
 private:
 	//Recei
 	string EXT_EVENT_READY_REQ;
@@ -93,6 +94,10 @@ private:
 	string EXT_EVENT_RES_U;
 	string EXT_EVENT_REQ_U;
 	string EXT_EVENT_REQ_CHIU_CARD;
+	//xem noc
+	string EXT_EVENT_REQ_NOC_DETAIL;
+	//xem bai tren tay
+	string EXT_EVENT_REQ_TRENTAY_DETAIL; 
 
 	string _list_user;
 	string mylistCard;
@@ -176,6 +181,8 @@ public:
 	void createAvatars();
 	void sendRequestJoinGame(float dt);
 
+	void notificationCallBack(bool isOK, int tag);
+
 	vector<string> Dsplit(string &S,const char &str);
 	int getPosUserByName(string uid,string _list_user);
 	void updateUser(string list);
@@ -220,6 +227,7 @@ public:
 	CardChan* getCardFromPos_take(int pos);
 
 	void refreshListCard();
+	void addCard_toCuaTri(CCNode* sender, void* data);
 
 
 	void btn_ready_click(CCObject *sender, TouchEventType type);
