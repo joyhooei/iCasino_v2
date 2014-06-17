@@ -110,6 +110,13 @@ private:
 	float goc;
 	int _coutZorder;
 
+	//Khoảng cách các lá bài cửa trì khi đã bốc đủ 8 lá
+	//Ban đầu khoảng cách là w_card
+	float kc_me;
+	float kc_left;
+	float kc_right;
+	float kc_top;
+
 	//Vi tri cac la bai cua tri
 	float left_chi_left;
 	float left_chi_right;
@@ -176,6 +183,8 @@ public:
 	void setMyListCards(string listCards);
 	void rotateListCards();
 	void sortMyListCards(string listCards);
+	void resortCard_CuaTri_Alluser(int pos);
+	void animateCards(CCArray *P, float _left, float _bottom, float _kc);
 	string findTypeCard(string number,string suite);
 	string getNameCard(int number, int suite);
 	void whenUserTakeCards(long rscode);
@@ -185,6 +194,7 @@ public:
 	void setEndGame();
 	void whenConguoi_ChoU(string uid);
 	void whenConguoi_Chiu(string uid);
+	void XuongU();
 
 	void deleteAllCardFromArray(CCArray *P);
 

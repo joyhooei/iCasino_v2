@@ -9,6 +9,7 @@
 #include "LayerGameChan_XuongU.h"
 #include "mUtils.h"
 #include "CustomTableViewCell.h"
+#include "Requests/ExtensionRequest.h"
 
 #include "SceneManager.h"
 
@@ -21,6 +22,32 @@ LayerGameChan_XuongU::LayerGameChan_XuongU()
 	tblListXuongSelected = NULL;
 	tblXuong = NULL;
 	lblTime = NULL;
+	cuoc[0] = "Xuông";
+	cuoc[1] = "Thông";
+	cuoc[2] = "Chì";
+	cuoc[3] = "Thiên Ù";
+	cuoc[4] = "Địa Ù";
+	cuoc[5] = "Tôm";
+	cuoc[6] = "Lèo";
+	cuoc[7] = "Bạch Định";
+	cuoc[8] = "Tám Đỏ";
+	cuoc[9] = "Kính Tứ Chi";
+	cuoc[10] = "Thập Thành";
+	cuoc[11] = "Có Thiên Khai";
+	cuoc[12] = "Ăn Bòn";
+	cuoc[13] = "Ù Bòn";
+	cuoc[14] = "Có Chíu";
+	cuoc[15] = "Chíu Ù";
+	cuoc[16] = "Bạch Thủ";
+	cuoc[17] = "Hoa rơi cửa phật";
+	cuoc[18] = "Nhà lầu xe hơi, hoa rơi cửa phật";
+	cuoc[19] = "Cá lội sân đình";
+	cuoc[20] = "Cá nhảy đầu thuyền";
+	cuoc[21] = "Chùa đổ nát hoa";
+	cuoc[22] = "Đôi Lèo";
+	cuoc[23] = "Đôi Tám đỏ";
+	cuoc[24] = "Đôi Tôm";
+	cuoc[25] = "Bạch Thủ Chi";
     //
     GameServer::getSingleton().addListeners(this);
 }
@@ -28,6 +55,7 @@ LayerGameChan_XuongU::LayerGameChan_XuongU()
 LayerGameChan_XuongU::~LayerGameChan_XuongU()
 {
     GameServer::getSingleton().removeListeners(this);
+	CCLOG("Jump to Deconstructor LayerGameChan_XuongU");
 }
 
 // CCBSelectorResolver interface
@@ -41,6 +69,12 @@ SEL_MenuHandler LayerGameChan_XuongU::onResolveCCBCCMenuItemSelector(cocos2d::CC
 
 void LayerGameChan_XuongU::onButtonXuong(CCObject* pSender)
 {
+	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("ucsac","0");
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("rquanou",params,lastRoom));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+	this->removeFromParentAndCleanup(true);
     CCLOG("onButtonXuong ");
 }
 // CCBMemberVariableAssigner interface
@@ -101,11 +135,11 @@ CCTableViewCell* LayerGameChan_XuongU::process4ListXuong(cocos2d::extension::CCT
     if(!cell){
 //         cell = new CustomTableViewCell(CCSizeMake(nodeTableListXuongSelected->getContentSize().width, 40));
 //         cell->autorelease();
-//         cell->setObjectID(rooms->at(idx)->Id());
-//         cell->setTag(rooms->at(idx)->Id());
-//         // Mã phòng
-//         cell->addChild(createLabel4Cell(tag_RoomID, boost::to_string(rooms->at(idx)->Id()).c_str(), CCSizeMake(100, 40), ccp(0, 0)));
-//         
+// 		cell->setObjectID(1);
+//         cell->setObjectID(idx);
+//         cell->setTag(idx);
+//         cell->addChild(createLabel4Cell(tag_RoomID, cuoc[idx].c_str(), CCSizeMake(100, 40), ccp(0, 0)));
+        
 //         //người chơi
 //         CCString *songuoi = CCString::createWithFormat("%s/%s",boost::to_string(rooms->at(idx)->UserCount()).c_str(),boost::to_string(rooms->at(idx)->MaxUsers()).c_str());
 //         
@@ -124,7 +158,7 @@ CCTableViewCell* LayerGameChan_XuongU::process4ListXuong(cocos2d::extension::CCT
     else{
 //         CCLabelTTF *label1 = getLabelFromTagID(cell, tag_RoomID);
 //         if( label1!=NULL )
-//             label1->setString(boost::to_string(rooms->at(idx)->Id()).c_str());
+//             label1->setString(boost::to_string(cuoc[idx].c_str());
 //         
 //         CCLabelTTF *label2 = getLabelFromTagID(cell, tag_Players);
 //         if( label2!=NULL ){
@@ -181,7 +215,7 @@ unsigned int LayerGameChan_XuongU::numberOfCellsInTableView(cocos2d::extension::
        return 0;
     }
     if(table->getTag()==tagListXuong){
-        return 0;
+        return (int)cuoc->size();
     }
     return 0;
 }
@@ -193,5 +227,9 @@ void LayerGameChan_XuongU::OnExtensionResponse(unsigned long long ptrContext, bo
     
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
 
-    CCLOG("cmd = %s",ptrNotifiedCmd->c_str());
+    CCLOG("cmd (in xuong u) = %s",ptrNotifiedCmd->c_str());
+	if (strcmp("rsuanou",ptrNotifiedCmd->c_str()) == 0)
+	{
+		CCLOG("nhan duoc respond");
+	}
 }

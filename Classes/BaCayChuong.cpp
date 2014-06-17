@@ -215,13 +215,13 @@ frameBet_Me(NULL){
 BaCayChuong::~BaCayChuong(){
     GameServer::getSingleton().removeListeners(this);
     CARD_ME->removeAllObjects();
-    CARD_ME = NULL;
+    CC_SAFE_DELETE_ARRAY(CARD_ME);
     CARD_LEFT->removeAllObjects();
-    CARD_LEFT = NULL;
+    CC_SAFE_DELETE_ARRAY(CARD_LEFT);
     CARD_RIGHT->removeAllObjects();
-    CARD_RIGHT = NULL;
+    CC_SAFE_DELETE_ARRAY(CARD_RIGHT);
     CARD_TOP->removeAllObjects();
-    CARD_TOP = NULL;
+    CC_SAFE_DELETE_ARRAY(CARD_TOP);
     this->removeAllChildrenWithCleanup(true);
     this->removeAllComponents();
     CCLOG("Deconstructor 3 Cay Chuong --- Jump Here !");

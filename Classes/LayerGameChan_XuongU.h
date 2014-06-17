@@ -39,6 +39,8 @@ private:
         tagListXuongSelected=1
     };
 
+	string cuoc[26];
+
 	CCLabelTTF* lblTime;
     
     CCNode* nodeTableXuong;
