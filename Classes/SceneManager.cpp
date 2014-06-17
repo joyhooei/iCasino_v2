@@ -44,7 +44,8 @@ SceneManager::SceneManager()
 	, mGameTLMN(NULL)
 	, mGamePhom(NULL)
 	, layerNotification(NULL)
-{}
+{
+}
 
 CCScene* SceneManager::createScene()
 {
@@ -110,6 +111,8 @@ bool SceneManager::init() {
 	background->setAnchorPoint(ccp(0.5, 0.5));
 	background->setPosition(ccp(0, 0));
 	this->addChild(background);
+
+	
 
 	background_Chan = NULL;
 
@@ -219,6 +222,21 @@ bool SceneManager::hideNotification(){
 	return true;
 }
 
+void SceneManager::showLoading() {
+	LayerLoading *loading = LayerLoading::create("");
+	this->addChild(loading, zorder_layerLoading);
+}
+void SceneManager::hideLoading() {
+	CCNode *loading = this->getChildByTag(zorder_layerLoading);
+	if (loading != NULL)
+	{
+		this->removeChildByTag(zorder_layerLoading, true);
+	}
+	else {
+		CCLog("No found LayerLoading to CLEAR!!!");
+	}
+}
+
 // Đến màn hình login
 void SceneManager::gotoLogin() {
 	showLayer(layerLogin);
@@ -237,6 +255,7 @@ void SceneManager::gotoMain() {
 // Go to Game
 void SceneManager::gotoGameByTag(int typeGame) {
 	CCLOG("typeGame: %d", typeGame);
+	showLoading();
 	switch (typeGame) {
 	case kGameTienLenMienNam:
 
@@ -257,6 +276,8 @@ void SceneManager::gotoGameByTag(int typeGame) {
 		mGamePhom = new LayerPlayGamePhom();
 		this->addChild(mGamePhom, zorder_LayerGaming, tag_LayerGaming);
 		showLayer(mGamePhom);
+		hideLoading();
+
 		break;
 	case kGameBaCay:
 		CCLOG("Ba Cây Thường");

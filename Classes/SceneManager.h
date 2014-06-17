@@ -34,6 +34,7 @@
 #include "LayerChanGame.h"
 
 #include "LayerNotification.h"
+#include "LayerLoading.h"
 
 //----------------
 using namespace Sfs2X;
@@ -54,6 +55,7 @@ enum eLayerZOrders
 	zorder_LayerLogin=0,
 	zorder_LayerMain,
 	zorder_LayerGaming,
+	zorder_layerLoading,
 	zorder_LayerNotification = 1000
 };
 
@@ -119,6 +121,9 @@ public:
 
 	bool showNotification();
 	bool hideNotification();
+
+	void showLoading();
+	void hideLoading();
 
 	void disconnectFromServer();
 	// switch layers
