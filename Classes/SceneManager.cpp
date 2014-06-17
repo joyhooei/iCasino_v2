@@ -15,6 +15,8 @@
 #include "LayerCurrencyExchange.h"
 #include "LayerBorrowMoney.h"
 
+#include "LayerPasswordRoom.h"
+
 #include "LayerUserInfo_Details.h"
 #include "LayerChangeAvatar.h"
 #include "LayerBuyAvatar.h"
@@ -149,6 +151,7 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChangePassword",   LayerChangePasswordLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerAction",   LayerActionLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUpdateInfo",   LayerUpdateInfoLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPasswordRoom",   LayerPasswordRoomLoader::loader());
 
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);

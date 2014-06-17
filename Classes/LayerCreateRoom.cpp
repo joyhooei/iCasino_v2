@@ -57,7 +57,8 @@ void LayerCreateRoom::onButtonCreate(CCObject* pSender)
 	roomConfig->PutUtfString("rpass", "");
 	//HoangDD comment
     roomConfig->PutUtfString("params", CCString::createWithFormat("%.0f@", 1000*floor(sliderMoney->getValue()))->getCString());
-    roomConfig->PutUtfString("gid", CCString::createWithFormat("%d", m_gameID)->getCString());
+	roomConfig->PutUtfString("gid", CCString::createWithFormat("%d", m_gameID)->getCString());
+	roomConfig->PutUtfString("rpass", txtPassword->getText());
     //sendRequest
     boost::shared_ptr<IRequest> request (new ExtensionRequest("rcroom",roomConfig));
     GameServer::getSingleton().getSmartFox()->Send(request);

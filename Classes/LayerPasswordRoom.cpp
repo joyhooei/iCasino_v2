@@ -8,6 +8,8 @@
 
 #include "LayerPasswordRoom.h"
 #include "mUtils.h"
+#include "Requests/JoinRoomRequest.h"
+#include "GameServer.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -33,12 +35,18 @@ SEL_MenuHandler LayerPasswordRoom::onResolveCCBCCMenuItemSelector(cocos2d::CCObj
 void LayerPasswordRoom::onButtonConfirm(CCObject* pSender)
 {
     CCLOG("onButtonConfirm");
+
+	boost::shared_ptr<IRequest> request (new JoinRoomRequest(roomID, txtPassword->getText()));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+
+	this->removeFromParentAndCleanup(true);
 }
 
 
 void LayerPasswordRoom::onButtonClose(CCObject* pSender)
 {
-    CCLOG("onButtonClose");
+	CCLOG("onButtonClose");
+	this->removeFromParentAndCleanup(true);
 }
 
 // CCBMemberVariableAssigner interface
@@ -54,8 +62,8 @@ void LayerPasswordRoom::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoade
 {
 	CCLOG("Imhere onNodeLoaded");
 	//
+	initTextField(txtPassword, "Mat khau");
 	this->setTouchEnabled(true);
-// 	initTextField(txtPassword, "Mật khẩu");
 // 	txtPassword->setInputFlag(kEditBoxInputFlagSensitive    
 	return;
 }

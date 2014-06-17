@@ -28,6 +28,9 @@ private:
     CCControlSlider* sliderMoney;
     cocos2d::extension::CCEditBox* txtPassword;
     CCSprite* spriteMoney;
+
+	CCMenuItem* btnVibrate;
+	CCMenuItem* btnSound;
 public:
     LayerSettings();
 	virtual ~LayerSettings();

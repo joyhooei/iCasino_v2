@@ -151,7 +151,8 @@ CCTableViewCell* LayerMoiChoi::tableCellAtIndex(cocos2d::extension::CCTableView 
         cell = new CCTableViewCell();
         cell->autorelease();
         //Time
-        CCLabelTTF *labelName = CCLabelTTF::create(CCString::createWithFormat("%s - %s", sms.aN.c_str(), (sms.amf.c_str()) )->getCString()
+        CCLabelTTF *labelName = CCLabelTTF::create(CCString::createWithFormat("%s - %s xu"
+			, sms.aN.c_str(), mUtils::convertMoneyEx( atof(sms.amf.c_str() ) ).c_str() )->getCString()
 			, "Helvetica", 16.0);
 // 		CCLabelTTF *labelName = CCLabelTTF::create(sms.aN.c_str(), "Helvetica", 16.0);
         labelName->setPosition(ccp(nodeTable->getContentSize().width/2, 20));
@@ -172,7 +173,7 @@ CCTableViewCell* LayerMoiChoi::tableCellAtIndex(cocos2d::extension::CCTableView 
     {
 		CCLabelTTF *label1 = (CCLabelTTF *)cell->getChildByTag(1);
 		if( label1!=NULL )
-			label1->setString( CCString::createWithFormat("%s - %s", sms.aN.c_str(), mUtils::format_money( atol(sms.amf.c_str()) )->getCString() )->getCString());
+			label1->setString( CCString::createWithFormat("%s - %s xu", sms.aN.c_str(), mUtils::convertMoneyEx( atof(sms.amf.c_str()) ).c_str() )->getCString());
         //        CCLabelTTF *label1 = getLabelFromTagID(cell, tag_cellTime);
         //        if( label1!=NULL )
         //            label1->setString(his.lastUpdateTime.c_str());

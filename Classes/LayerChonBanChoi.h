@@ -34,7 +34,8 @@ private:
         tag_RoomID=0,
         tag_Players=1,
         tag_Bet=2,
-        tag_Details=3
+        tag_Details=3,
+		tag_Lock = 4
     };
     enum tagFriends{
         tagListRoom=0,

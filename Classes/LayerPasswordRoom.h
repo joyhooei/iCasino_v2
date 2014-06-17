@@ -25,6 +25,8 @@ class LayerPasswordRoom
 {
 private:
     CCEditBox* txtPassword;
+
+	int roomID;
 public:
     LayerPasswordRoom();
 	virtual ~LayerPasswordRoom();
@@ -32,6 +34,10 @@ public:
 	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual void onEnter();
 	virtual void onExit();
+
+	void setRoomID(int rID){
+		roomID = rID;
+	}
     
     void initTextField(CCEditBox* txt, const char* hintText);
     

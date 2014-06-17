@@ -12,6 +12,7 @@
 #include "LayerCreateRoom.h"
 #include "mUtils.h"
 #include "CustomTableViewCell.h"
+#include "LayerPasswordRoom.h"
 
 #include "Requests/JoinRoomRequest.h"
 #include "Requests/SetUserVariablesRequest.h"
@@ -199,6 +200,8 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 			CCLOG("Roomid: %d NOT FOUND",cell->getObjectID());
 			Chat *toast = new Chat("Phòng không tồn tại!!", -1);
 			this->addChild(toast);
+			//reload 
+			tblListRooms->reloadData();
             return;
 		}
 		boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
@@ -208,7 +211,21 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 			this->addChild(toast);
 			return;
 		}
+		if( ro->IsPasswordProtected() ){
+			//load popup password
+			CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+			CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+			LayerPasswordRoom* mLayer;
+			if (ccbReader)
+			{
+				mLayer = (LayerPasswordRoom *)ccbReader->readNodeGraphFromFile( "LayerPasswordRoom.ccbi" );
+				this->addChild(mLayer, 1, 1);
+				ccbReader->release();
+			}
 
+			mLayer->setRoomID( ro->Id() );
+			return;
+		}
         boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro,""));
         GameServer::getSingleton().getSmartFox()->Send(request);
     }else{
@@ -275,7 +292,15 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
         cell->setTag(rooms->at(idx)->Id());
         // Mã phòng
         cell->addChild(createLabel4Cell(tag_RoomID, boost::to_string(rooms->at(idx)->Id()).c_str(), CCSizeMake(100, 40), ccp(0, 0)));
-        
+        //Lock
+        if( rooms->at(idx)->IsPasswordProtected() ){
+			CCSprite* sLock = CCSprite::create("lock.png");
+			sLock->setTag( tag_Lock );
+			sLock->setPosition(ccp(5, 20));
+			sLock->setAnchorPoint(ccp(0, 0.5));
+			sLock->setScale(0.7);
+			cell->addChild(sLock);
+		}
         //người chơi
         CCString *songuoi = CCString::createWithFormat("%s/%s",boost::to_string(rooms->at(idx)->UserCount()).c_str(),boost::to_string(rooms->at(idx)->MaxUsers()).c_str());
         
@@ -305,6 +330,18 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
         CCLabelTTF *label3 = getLabelFromTagID(cell, tag_Bet);
         if( label3!=NULL ){
             label3->setString( mUtils::convertMoneyEx( atoi( lstBet.at(0).c_str() ) ).c_str() );
+		}
+		//Lock
+		if( rooms->at(idx)->IsPasswordProtected() ){
+			if( cell->getChildByTag( tag_Lock ) ==NULL ){
+				CCSprite* sLock = CCSprite::create("lockk.png");
+				sLock->setTag( tag_Lock );
+				sLock->setPosition(ccp(0, 0));
+				sLock->setAnchorPoint(ccp(0, 0));
+				cell->addChild(sLock);
+			}
+		}else{
+			cell->removeChildByTag(tag_Lock, true);
 		}
     }
     return cell;

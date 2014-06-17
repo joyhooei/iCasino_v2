@@ -19,6 +19,9 @@ LayerSettings::LayerSettings()
     sliderMoney=NULL;
     txtPassword=NULL;
     spriteMoney=NULL;
+
+	btnSound = NULL;
+	btnVibrate = NULL;
 }
 
 LayerSettings::~LayerSettings()
@@ -82,7 +85,9 @@ void LayerSettings::onButtonClose(CCObject* pSender)
 // CCBMemberVariableAssigner interface
 bool LayerSettings::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemberVariableName, cocos2d::CCNode *pNode)
 {
-    CCLOG("Imhere onAssignCCBMemberVariable: %s", pMemberVariableName);
+   // CCLOG("Imhere onAssignCCBMemberVariable: %s", pMemberVariableName);
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnVibrate", CCMenuItem*, btnVibrate);
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnSound", CCMenuItem*, btnSound);
     return true;
 }
 
@@ -90,6 +95,7 @@ void LayerSettings::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
 	//
 	this->setTouchEnabled(true);
+	getInfo();
     return;
 }
 
@@ -129,4 +135,7 @@ void LayerSettings::getInfo()
 	CCUserDefault *def=CCUserDefault::sharedUserDefault();
 	bool isSoundOn = def->getBoolForKey("sound", true);
 	bool isVibrateOn = def->getBoolForKey("vibrate", true);
+
+	btnSound->setPositionX( !isSoundOn?270:211);
+	btnVibrate->setPositionX( !isVibrateOn?270:211);
 }
