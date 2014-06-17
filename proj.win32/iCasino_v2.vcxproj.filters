@@ -237,6 +237,9 @@
     <ClCompile Include="..\Classes\LayerGameChan_XuongU.cpp">
       <Filter>Classes\Children</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LayerLoading.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -477,6 +480,9 @@
       <Filter>Classes\MenuLayers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LayerGameChan_XuongU.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerLoading.h">
       <Filter>Classes\Children</Filter>
     </ClInclude>
   </ItemGroup>

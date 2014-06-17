@@ -130,7 +130,8 @@ LayerPlayGameChinessChess::LayerPlayGameChinessChess()
     btnUnReady=NULL;
     //
     GameServer::getSingleton().addListeners(this);
-    
+    SceneManager::getSingleton().hideLoading();
+
     // @thanhhv
     addButtons();
     

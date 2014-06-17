@@ -64,7 +64,7 @@ CCScene* SceneManager::createScene()
 	scene->addChild(layer);
 
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.0", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.1", "", 16);
 	nameVersion->setColor(ccWHITE);
 	nameVersion->setPosition(ccp(10 + nameVersion->getContentSize().width / 2, 20));
 	scene->addChild(nameVersion);

@@ -132,6 +132,7 @@ LayerPlayGameTLMN::LayerPlayGameTLMN() {
     createChats();
     
     GameServer::getSingleton().addListeners(this);
+	SceneManager::getSingleton().hideLoading();
 }
 
 LayerPlayGameTLMN::~LayerPlayGameTLMN() {
