@@ -48,22 +48,15 @@ void LayerChatRoom::setGameID(int gID){
 // CCBSelectorResolver interface
 SEL_MenuHandler LayerChatRoom::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, const char *pSelectorName)
 {
-//    CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnCreateRoom", LayerChatRoom::onButtonCreate);
+    CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnChat", LayerChatRoom::onButtonChat);
 //    CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnRefresh", LayerChatRoom::onButtonRefresh);
 //    CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnChoiNgay", LayerChatRoom::onButtonChoiNgay);
     return NULL;
 }
 
-void LayerChatRoom::onButtonCreate(CCObject* pSender)
+void LayerChatRoom::onButtonChat(CCObject* pSender)
 {
-}
-
-void LayerChatRoom::onButtonRefresh(CCObject* pSender)
-{
-}
-
-void LayerChatRoom::onButtonChoiNgay(CCObject* pSender)
-{
+	CCLOG("onButtonChat");
 }
 
 // CCBMemberVariableAssigner interface

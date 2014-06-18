@@ -43,6 +43,19 @@
 			<key>sourceSize</key>
 			<string>{145, 46}</string>
 		</dict>
+		<key>Chan/thong_bao.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{464, 1}, {317, 304}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {317, 304}}</string>
+			<key>sourceSize</key>
+			<string>{317, 304}</string>
+		</dict>
 		<key>Chan/xuong.png</key>
 		<dict>
 			<key>frame</key>

@@ -4,27 +4,14 @@
 <dict>
 	<key>frames</key>
 	<dict>
-		<key>assest/1.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{794, 1}, {791, 343}}</string>
-			<key>offset</key>
-			<string>{0, 0}</string>
-			<key>rotated</key>
-			<false/>
-			<key>sourceColorRect</key>
-			<string>{{0, 0}, {791, 343}}</string>
-			<key>sourceSize</key>
-			<string>{791, 343}</string>
-		</dict>
 		<key>assest/am.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{757, 891}, {29, 22}}</string>
+			<string>{{621, 1118}, {29, 22}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {29, 22}}</string>
 			<key>sourceSize</key>
@@ -33,11 +20,11 @@
 		<key>assest/amf.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{758, 665}, {31, 22}}</string>
+			<string>{{193, 1119}, {31, 22}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {31, 22}}</string>
 			<key>sourceSize</key>
@@ -46,7 +33,7 @@
 		<key>assest/arrow_left.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1052, 937}, {23, 42}}</string>
+			<string>{{730, 1115}, {23, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -85,7 +72,7 @@
 		<key>assest/back copy.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{979, 895}, {66, 71}}</string>
+			<string>{{574, 1980}, {66, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -98,7 +85,7 @@
 		<key>assest/back.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{676, 1097}, {66, 71}}</string>
+			<string>{{647, 1980}, {66, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -111,11 +98,11 @@
 		<key>assest/back_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1462, 996}, {66, 71}}</string>
+			<string>{{915, 1887}, {66, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {66, 71}}</string>
 			<key>sourceSize</key>
@@ -137,11 +124,11 @@
 		<key>assest/backgroundSetting.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1151, 478}, {328, 229}}</string>
+			<string>{{246, 1510}, {328, 229}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 1}, {328, 229}}</string>
 			<key>sourceSize</key>
@@ -150,11 +137,11 @@
 		<key>assest/background_blue.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{463, 346}, {330, 292}}</string>
+			<string>{{193, 787}, {330, 292}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {330, 292}}</string>
 			<key>sourceSize</key>
@@ -163,7 +150,7 @@
 		<key>assest/background_brown.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{246, 1580}, {356, 216}}</string>
+			<string>{{133, 1152}, {356, 216}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -176,11 +163,11 @@
 		<key>assest/background_cell.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1747, 774}, {159, 42}}</string>
+			<string>{{960, 346}, {159, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {159, 42}}</string>
 			<key>sourceSize</key>
@@ -189,11 +176,11 @@
 		<key>assest/background_content.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1, 787}, {791, 343}}</string>
+			<string>{{794, 1}, {791, 343}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {791, 343}}</string>
 			<key>sourceSize</key>
@@ -228,7 +215,7 @@
 		<key>assest/boxNamNu.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1530, 1038}, {124, 44}}</string>
+			<string>{{882, 948}, {124, 44}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -241,7 +228,7 @@
 		<key>assest/boxSetting.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1534, 912}, {124, 44}}</string>
+			<string>{{867, 1111}, {124, 44}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -254,11 +241,11 @@
 		<key>assest/btn_blue copy.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 787}, {146, 42}}</string>
+			<string>{{548, 1353}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -267,11 +254,11 @@
 		<key>assest/btn_blue.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 1007}, {146, 42}}</string>
+			<string>{{574, 1832}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -280,11 +267,11 @@
 		<key>assest/btn_blue_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1327, 869}, {146, 42}}</string>
+			<string>{{696, 1663}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -293,11 +280,11 @@
 		<key>assest/btn_grey.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{494, 870}, {201, 68}}</string>
+			<string>{{421, 1151}, {201, 68}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {201, 68}}</string>
 			<key>sourceSize</key>
@@ -306,11 +293,11 @@
 		<key>assest/btn_grey_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{494, 800}, {201, 68}}</string>
+			<string>{{351, 1151}, {201, 68}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {201, 68}}</string>
 			<key>sourceSize</key>
@@ -319,7 +306,7 @@
 		<key>assest/buttonSetting.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1537, 346}, {68, 48}}</string>
+			<string>{{979, 1955}, {68, 48}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -332,11 +319,11 @@
 		<key>assest/button_bet.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1874, 935}, {132, 57}}</string>
+			<string>{{750, 1786}, {132, 57}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 57}}</string>
 			<key>sourceSize</key>
@@ -345,7 +332,7 @@
 		<key>assest/button_bet_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{696, 963}, {132, 57}}</string>
+			<string>{{751, 1499}, {132, 57}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -358,11 +345,11 @@
 		<key>assest/button_buy_avatar.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 963}, {146, 42}}</string>
+			<string>{{1004, 346}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -371,11 +358,11 @@
 		<key>assest/button_buy_avatar_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 831}, {146, 42}}</string>
+			<string>{{592, 1353}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -384,11 +371,11 @@
 		<key>assest/button_change_avatar.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 875}, {146, 42}}</string>
+			<string>{{636, 1351}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -397,11 +384,11 @@
 		<key>assest/button_change_avatar_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 1051}, {146, 42}}</string>
+			<string>{{618, 1832}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -410,11 +397,11 @@
 		<key>assest/button_change_password.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 1139}, {146, 42}}</string>
+			<string>{{707, 1499}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -423,11 +410,11 @@
 		<key>assest/button_change_password_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1327, 825}, {146, 42}}</string>
+			<string>{{662, 1811}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -436,11 +423,11 @@
 		<key>assest/button_choingay.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 1095}, {146, 42}}</string>
+			<string>{{652, 1663}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -449,11 +436,11 @@
 		<key>assest/button_choingay_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 919}, {146, 42}}</string>
+			<string>{{680, 1351}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -462,7 +449,7 @@
 		<key>assest/button_close.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1662, 1195}, {40, 40}}</string>
+			<string>{{981, 626}, {40, 40}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -475,7 +462,7 @@
 		<key>assest/button_close_blue press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1276, 1140}, {40, 40}}</string>
+			<string>{{1067, 502}, {40, 40}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -488,7 +475,7 @@
 		<key>assest/button_close_blue.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1318, 1140}, {40, 40}}</string>
+			<string>{{1067, 544}, {40, 40}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -501,11 +488,11 @@
 		<key>assest/button_confirm.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1724, 978}, {132, 57}}</string>
+			<string>{{795, 1633}, {132, 57}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 57}}</string>
 			<key>sourceSize</key>
@@ -514,11 +501,11 @@
 		<key>assest/button_confirm_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1858, 994}, {132, 57}}</string>
+			<string>{{827, 1350}, {132, 57}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 57}}</string>
 			<key>sourceSize</key>
@@ -527,11 +514,11 @@
 		<key>assest/button_confirm_yellow.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1550, 1195}, {110, 36}}</string>
+			<string>{{959, 1066}, {110, 36}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {110, 36}}</string>
 			<key>sourceSize</key>
@@ -540,11 +527,11 @@
 		<key>assest/button_confirm_yellow_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1928, 1255}, {110, 36}}</string>
+			<string>{{977, 787}, {110, 36}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {110, 36}}</string>
 			<key>sourceSize</key>
@@ -553,11 +540,11 @@
 		<key>assest/button_createAcc.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1747, 716}, {159, 56}}</string>
+			<string>{{902, 346}, {159, 56}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {159, 56}}</string>
 			<key>sourceSize</key>
@@ -566,11 +553,11 @@
 		<key>assest/button_createAcc_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{494, 1136}, {159, 56}}</string>
+			<string>{{923, 626}, {159, 56}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {159, 56}}</string>
 			<key>sourceSize</key>
@@ -579,11 +566,11 @@
 		<key>assest/button_create_mail.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1576, 1151}, {132, 42}}</string>
+			<string>{{823, 1111}, {132, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 42}}</string>
 			<key>sourceSize</key>
@@ -592,11 +579,11 @@
 		<key>assest/button_create_mail_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1576, 1107}, {132, 42}}</string>
+			<string>{{886, 1350}, {132, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 42}}</string>
 			<key>sourceSize</key>
@@ -605,11 +592,11 @@
 		<key>assest/button_datcuoc.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1576, 1048}, {132, 57}}</string>
+			<string>{{854, 1619}, {132, 57}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 57}}</string>
 			<key>sourceSize</key>
@@ -618,11 +605,11 @@
 		<key>assest/button_datcuoc_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1714, 1037}, {132, 57}}</string>
+			<string>{{809, 1767}, {132, 57}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 57}}</string>
 			<key>sourceSize</key>
@@ -631,11 +618,11 @@
 		<key>assest/button_dongy.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{494, 940}, {200, 50}}</string>
+			<string>{{491, 1151}, {200, 50}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {200, 50}}</string>
 			<key>sourceSize</key>
@@ -644,11 +631,11 @@
 		<key>assest/button_dongy_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{790, 776}, {200, 50}}</string>
+			<string>{{543, 1151}, {200, 50}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {200, 50}}</string>
 			<key>sourceSize</key>
@@ -657,11 +644,11 @@
 		<key>assest/button_game_back.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1908, 716}, {51, 53}}</string>
+			<string>{{942, 1237}, {51, 53}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {51, 53}}</string>
 			<key>sourceSize</key>
@@ -670,11 +657,11 @@
 		<key>assest/button_game_back_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1481, 756}, {51, 53}}</string>
+			<string>{{862, 1901}, {51, 53}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {51, 53}}</string>
 			<key>sourceSize</key>
@@ -683,11 +670,11 @@
 		<key>assest/button_game_chat.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1992, 1047}, {52, 50}}</string>
+			<string>{{1029, 727}, {52, 50}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {52, 50}}</string>
 			<key>sourceSize</key>
@@ -696,11 +683,11 @@
 		<key>assest/button_game_chat_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1442, 1121}, {52, 50}}</string>
+			<string>{{1023, 602}, {52, 50}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {52, 50}}</string>
 			<key>sourceSize</key>
@@ -709,11 +696,11 @@
 		<key>assest/button_game_money.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1496, 1164}, {52, 50}}</string>
+			<string>{{1048, 346}, {52, 50}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {52, 50}}</string>
 			<key>sourceSize</key>
@@ -722,11 +709,11 @@
 		<key>assest/button_game_money_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1442, 1069}, {52, 50}}</string>
+			<string>{{1015, 548}, {52, 50}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {52, 50}}</string>
 			<key>sourceSize</key>
@@ -735,11 +722,11 @@
 		<key>assest/button_game_setting.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1222, 1105}, {52, 50}}</string>
+			<string>{{1048, 400}, {52, 50}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {52, 50}}</string>
 			<key>sourceSize</key>
@@ -748,11 +735,11 @@
 		<key>assest/button_game_setting_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1969, 1165}, {52, 50}}</string>
+			<string>{{1015, 494}, {52, 50}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {52, 50}}</string>
 			<key>sourceSize</key>
@@ -761,20 +748,7 @@
 		<key>assest/button_huyketban.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1704, 1222}, {110, 36}}</string>
-			<key>offset</key>
-			<string>{0, 0}</string>
-			<key>rotated</key>
-			<false/>
-			<key>sourceColorRect</key>
-			<string>{{0, 0}, {110, 36}}</string>
-			<key>sourceSize</key>
-			<string>{110, 36}</string>
-		</dict>
-		<key>assest/button_huyketban_press.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{2008, 935}, {110, 36}}</string>
+			<string>{{997, 1066}, {110, 36}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -784,10 +758,23 @@
 			<key>sourceSize</key>
 			<string>{110, 36}</string>
 		</dict>
+		<key>assest/button_huyketban_press.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{595, 1313}, {110, 36}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {110, 36}}</string>
+			<key>sourceSize</key>
+			<string>{110, 36}</string>
+		</dict>
 		<key>assest/button_ketban.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1710, 1184}, {110, 36}}</string>
+			<string>{{707, 1313}, {110, 36}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -800,7 +787,7 @@
 		<key>assest/button_ketban_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1822, 1187}, {110, 36}}</string>
+			<string>{{750, 1920}, {110, 36}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -813,11 +800,11 @@
 		<key>assest/button_kick.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1816, 1225}, {110, 36}}</string>
+			<string>{{939, 787}, {110, 36}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {110, 36}}</string>
 			<key>sourceSize</key>
@@ -826,7 +813,7 @@
 		<key>assest/button_kick_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1934, 1217}, {110, 36}}</string>
+			<string>{{913, 1199}, {110, 36}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -852,11 +839,11 @@
 		<key>assest/button_loginFb.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{755, 1086}, {159, 56}}</string>
+			<string>{{881, 787}, {159, 56}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {159, 56}}</string>
 			<key>sourceSize</key>
@@ -865,11 +852,11 @@
 		<key>assest/button_loginFb_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{949, 1077}, {159, 56}}</string>
+			<string>{{865, 626}, {159, 56}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {159, 56}}</string>
 			<key>sourceSize</key>
@@ -891,11 +878,11 @@
 		<key>assest/button_notification.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1110, 1105}, {110, 36}}</string>
+			<string>{{1015, 787}, {110, 36}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {110, 36}}</string>
 			<key>sourceSize</key>
@@ -904,7 +891,7 @@
 		<key>assest/button_refresh.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1536, 570}, {49, 47}}</string>
+			<string>{{939, 899}, {49, 47}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -917,7 +904,7 @@
 		<key>assest/button_refresh_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1536, 619}, {49, 47}}</string>
+			<string>{{990, 899}, {49, 47}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -930,7 +917,7 @@
 		<key>assest/button_scroll.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1534, 864}, {46, 46}}</string>
+			<string>{{1067, 454}, {46, 46}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -943,7 +930,7 @@
 		<key>assest/button_sms.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{398, 1938}, {96, 46}}</string>
+			<string>{{798, 528}, {96, 46}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -956,7 +943,7 @@
 		<key>assest/button_sms_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1536, 766}, {96, 46}}</string>
+			<string>{{981, 672}, {96, 46}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -969,11 +956,11 @@
 		<key>assest/button_taoban.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{346, 1183}, {146, 42}}</string>
+			<string>{{724, 1351}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -982,11 +969,11 @@
 		<key>assest/button_taoban_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1584, 832}, {146, 42}}</string>
+			<string>{{706, 1811}, {146, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {146, 42}}</string>
 			<key>sourceSize</key>
@@ -995,11 +982,11 @@
 		<key>assest/button_thoat.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1766, 672}, {180, 42}}</string>
+			<string>{{858, 346}, {180, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {180, 42}}</string>
 			<key>sourceSize</key>
@@ -1008,11 +995,11 @@
 		<key>assest/button_thoat_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1584, 672}, {180, 42}}</string>
+			<string>{{814, 346}, {180, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {180, 42}}</string>
 			<key>sourceSize</key>
@@ -1021,7 +1008,7 @@
 		<key>assest/button_tygia.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{446, 1938}, {96, 46}}</string>
+			<string>{{846, 528}, {96, 46}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1034,7 +1021,7 @@
 		<key>assest/button_tygia_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1536, 668}, {96, 46}}</string>
+			<string>{{894, 528}, {96, 46}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1047,11 +1034,11 @@
 		<key>assest/button_updare.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{494, 1092}, {180, 42}}</string>
+			<string>{{770, 346}, {180, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {180, 42}}</string>
 			<key>sourceSize</key>
@@ -1060,7 +1047,7 @@
 		<key>assest/button_updare_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{494, 1048}, {180, 42}}</string>
+			<string>{{683, 628}, {180, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1073,11 +1060,11 @@
 		<key>assest/close.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1908, 769}, {51, 53}}</string>
+			<string>{{1029, 672}, {51, 53}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {51, 53}}</string>
 			<key>sourceSize</key>
@@ -1086,11 +1073,11 @@
 		<key>assest/close_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1481, 809}, {51, 53}}</string>
+			<string>{{823, 1245}, {51, 53}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {51, 53}}</string>
 			<key>sourceSize</key>
@@ -1099,11 +1086,11 @@
 		<key>assest/create_account.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1138, 821}, {187, 54}}</string>
+			<string>{{655, 787}, {187, 54}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {187, 54}}</string>
 			<key>sourceSize</key>
@@ -1112,11 +1099,11 @@
 		<key>assest/create_account_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{790, 860}, {187, 54}}</string>
+			<string>{{487, 787}, {187, 54}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {187, 54}}</string>
 			<key>sourceSize</key>
@@ -1125,11 +1112,11 @@
 		<key>assest/create_room.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1580, 989}, {132, 57}}</string>
+			<string>{{810, 1485}, {132, 57}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 57}}</string>
 			<key>sourceSize</key>
@@ -1138,7 +1125,7 @@
 		<key>assest/create_room_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1475, 862}, {132, 57}}</string>
+			<string>{{768, 1351}, {132, 57}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1151,11 +1138,11 @@
 		<key>assest/cycle.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{769, 640}, {23, 24}}</string>
+			<string>{{705, 1118}, {23, 24}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {23, 24}}</string>
 			<key>sourceSize</key>
@@ -1164,11 +1151,11 @@
 		<key>assest/find_password.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1150, 765}, {187, 54}}</string>
+			<string>{{599, 787}, {187, 54}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {187, 54}}</string>
 			<key>sourceSize</key>
@@ -1177,11 +1164,11 @@
 		<key>assest/find_password_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{787, 916}, {187, 54}}</string>
+			<string>{{711, 787}, {187, 54}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {187, 54}}</string>
 			<key>sourceSize</key>
@@ -1190,7 +1177,7 @@
 		<key>assest/frame_info_friend.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{494, 663}, {135, 262}}</string>
+			<string>{{372, 650}, {135, 262}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1216,11 +1203,11 @@
 		<key>assest/friend.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{992, 776}, {117, 71}}</string>
+			<string>{{720, 1959}, {117, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {117, 71}}</string>
 			<key>sourceSize</key>
@@ -1229,7 +1216,7 @@
 		<key>assest/friend_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1077, 678}, {117, 71}}</string>
+			<string>{{942, 507}, {117, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1242,11 +1229,11 @@
 		<key>assest/huy_ket_ban.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1710, 1096}, {132, 42}}</string>
+			<string>{{869, 1484}, {132, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 42}}</string>
 			<key>sourceSize</key>
@@ -1255,11 +1242,11 @@
 		<key>assest/huy_ket_ban_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1844, 1097}, {132, 42}}</string>
+			<string>{{868, 1753}, {132, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 42}}</string>
 			<key>sourceSize</key>
@@ -1268,11 +1255,11 @@
 		<key>assest/iconService_Chat.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1300, 1027}, {140, 111}}</string>
+			<string>{{600, 976}, {140, 111}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {140, 111}}</string>
 			<key>sourceSize</key>
@@ -1281,11 +1268,11 @@
 		<key>assest/iconService_Game.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1732, 865}, {140, 111}}</string>
+			<string>{{230, 1903}, {140, 111}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {140, 111}}</string>
 			<key>sourceSize</key>
@@ -1294,11 +1281,11 @@
 		<key>assest/iconService_Guide.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1906, 822}, {140, 111}}</string>
+			<string>{{117, 1903}, {140, 111}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {140, 111}}</string>
 			<key>sourceSize</key>
@@ -1307,11 +1294,11 @@
 		<key>assest/iconService_Rank.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1339, 709}, {140, 114}}</string>
+			<string>{{1, 1903}, {140, 114}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {140, 114}}</string>
 			<key>sourceSize</key>
@@ -1320,11 +1307,11 @@
 		<key>assest/iconService_Shop.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1582, 876}, {140, 111}}</string>
+			<string>{{487, 976}, {140, 111}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {140, 111}}</string>
 			<key>sourceSize</key>
@@ -1333,11 +1320,11 @@
 		<key>assest/icon_bacaychuong.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{325, 672}, {160, 113}}</string>
+			<string>{{537, 1670}, {160, 113}}</string>
 			<key>offset</key>
 			<string>{1, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{1, 1}, {160, 113}}</string>
 			<key>sourceSize</key>
@@ -1346,7 +1333,7 @@
 		<key>assest/icon_bacaythuong.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1, 672}, {160, 113}}</string>
+			<string>{{210, 672}, {160, 113}}</string>
 			<key>offset</key>
 			<string>{1, 0}</string>
 			<key>rotated</key>
@@ -1359,11 +1346,11 @@
 		<key>assest/icon_chan.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{787, 972}, {160, 112}}</string>
+			<string>{{768, 949}, {160, 112}}</string>
 			<key>offset</key>
 			<string>{1, -1}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{1, 2}, {160, 112}}</string>
 			<key>sourceSize</key>
@@ -1372,7 +1359,7 @@
 		<key>assest/icon_cotuong.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{163, 672}, {160, 113}}</string>
+			<string>{{683, 672}, {160, 113}}</string>
 			<key>offset</key>
 			<string>{1, 0}</string>
 			<key>rotated</key>
@@ -1385,7 +1372,7 @@
 		<key>assest/icon_create_acc.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{757, 945}, {28, 28}}</string>
+			<string>{{675, 1118}, {28, 28}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1398,7 +1385,7 @@
 		<key>assest/icon_default.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1978, 1099}, {64, 64}}</string>
+			<string>{{876, 1237}, {64, 64}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1411,7 +1398,7 @@
 		<key>assest/icon_facebook.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{757, 915}, {28, 28}}</string>
+			<string>{{645, 1118}, {28, 28}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1424,11 +1411,11 @@
 		<key>assest/icon_lieng.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{280, 1938}, {116, 108}}</string>
+			<string>{{928, 948}, {116, 108}}</string>
 			<key>offset</key>
 			<string>{0, -3}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{22, 6}, {116, 108}}</string>
 			<key>sourceSize</key>
@@ -1437,11 +1424,11 @@
 		<key>assest/icon_phom.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{976, 963}, {160, 112}}</string>
+			<string>{{595, 1151}, {160, 112}}</string>
 			<key>offset</key>
 			<string>{1, -1}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{1, 2}, {160, 112}}</string>
 			<key>sourceSize</key>
@@ -1450,11 +1437,11 @@
 		<key>assest/icon_tcc.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1138, 991}, {160, 112}}</string>
+			<string>{{767, 787}, {160, 112}}</string>
 			<key>offset</key>
 			<string>{1, -1}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{1, 2}, {160, 112}}</string>
 			<key>sourceSize</key>
@@ -1463,11 +1450,11 @@
 		<key>assest/icon_tlmb.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1138, 877}, {160, 112}}</string>
+			<string>{{593, 1501}, {160, 112}}</string>
 			<key>offset</key>
 			<string>{1, -1}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{1, 2}, {160, 112}}</string>
 			<key>sourceSize</key>
@@ -1476,11 +1463,11 @@
 		<key>assest/icon_tlmn.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1584, 716}, {161, 114}}</string>
+			<string>{{477, 1507}, {161, 114}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {161, 114}}</string>
 			<key>sourceSize</key>
@@ -1489,11 +1476,11 @@
 		<key>assest/icon_xito.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1300, 913}, {160, 112}}</string>
+			<string>{{709, 1144}, {160, 112}}</string>
 			<key>offset</key>
 			<string>{1, -1}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{1, 2}, {160, 112}}</string>
 			<key>sourceSize</key>
@@ -1502,11 +1489,11 @@
 		<key>assest/images_intro.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{795, 525}, {280, 249}}</string>
+			<string>{{463, 346}, {280, 249}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {280, 249}}</string>
 			<key>sourceSize</key>
@@ -1515,24 +1502,63 @@
 		<key>assest/input.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{795, 478}, {354, 45}}</string>
+			<string>{{146, 787}, {354, 45}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {354, 45}}</string>
 			<key>sourceSize</key>
 			<string>{354, 45}</string>
 		</dict>
-		<key>assest/light_scroll.png</key>
+		<key>assest/invite_friend_facebook.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{404, 650}, {363, 11}}</string>
+			<string>{{343, 1840}, {113, 207}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
 			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {113, 207}}</string>
+			<key>sourceSize</key>
+			<string>{113, 207}</string>
+		</dict>
+		<key>assest/invite_friend_gmail.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1, 672}, {113, 207}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {113, 207}}</string>
+			<key>sourceSize</key>
+			<string>{113, 207}</string>
+		</dict>
+		<key>assest/invite_friend_sms.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{458, 1840}, {114, 205}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {114, 205}}</string>
+			<key>sourceSize</key>
+			<string>{114, 205}</string>
+		</dict>
+		<key>assest/light_scroll.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{133, 787}, {363, 11}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {363, 11}}</string>
 			<key>sourceSize</key>
@@ -1580,7 +1606,7 @@
 		<key>assest/logo.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{697, 800}, {161, 58}}</string>
+			<string>{{477, 1670}, {161, 58}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1593,7 +1619,7 @@
 		<key>assest/logo_mobifone.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{43, 1954}, {90, 40}}</string>
+			<string>{{714, 535}, {90, 40}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1606,7 +1632,7 @@
 		<key>assest/logo_viettel.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{85, 1954}, {90, 40}}</string>
+			<string>{{756, 535}, {90, 40}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1619,11 +1645,11 @@
 		<key>assest/logo_vinaphone.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1, 1954}, {90, 40}}</string>
+			<string>{{246, 1840}, {90, 40}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {90, 40}}</string>
 			<key>sourceSize</key>
@@ -1632,7 +1658,7 @@
 		<key>assest/mail.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1077, 525}, {151, 71}}</string>
+			<string>{{475, 1354}, {151, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1645,11 +1671,11 @@
 		<key>assest/mail_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{127, 1954}, {151, 71}}</string>
+			<string>{{402, 1354}, {151, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {151, 71}}</string>
 			<key>sourceSize</key>
@@ -1684,11 +1710,11 @@
 		<key>assest/nhan_tin.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1710, 1140}, {132, 42}}</string>
+			<string>{{912, 1753}, {132, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {132, 42}}</string>
 			<key>sourceSize</key>
@@ -1697,7 +1723,7 @@
 		<key>assest/nhan_tin_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1848, 1053}, {132, 42}}</string>
+			<string>{{819, 1306}, {132, 42}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1710,7 +1736,7 @@
 		<key>assest/notification.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1, 1580}, {372, 243}}</string>
+			<string>{{1, 1529}, {372, 243}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1736,7 +1762,7 @@
 		<key>assest/ratio_active.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{388, 650}, {14, 14}}</string>
+			<string>{{149, 1510}, {14, 14}}</string>
 			<key>offset</key>
 			<string>{0, -1}</string>
 			<key>rotated</key>
@@ -1749,7 +1775,7 @@
 		<key>assest/ratio_disable.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{372, 650}, {14, 14}}</string>
+			<string>{{133, 1510}, {14, 14}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1762,11 +1788,11 @@
 		<key>assest/setting.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1065, 867}, {68, 71}}</string>
+			<string>{{909, 1956}, {68, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {68, 71}}</string>
 			<key>sourceSize</key>
@@ -1775,11 +1801,11 @@
 		<key>assest/setting_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1065, 797}, {68, 71}}</string>
+			<string>{{839, 1958}, {68, 71}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {68, 71}}</string>
 			<key>sourceSize</key>
@@ -1788,7 +1814,7 @@
 		<key>assest/tab_disable.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1536, 416}, {152, 49}}</string>
+			<string>{{351, 1354}, {152, 49}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1801,11 +1827,11 @@
 		<key>assest/tab_enable.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1747, 818}, {157, 45}}</string>
+			<string>{{636, 628}, {157, 45}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {157, 45}}</string>
 			<key>sourceSize</key>
@@ -1814,11 +1840,11 @@
 		<key>assest/title.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{758, 689}, {200, 30}}</string>
+			<string>{{217, 1119}, {200, 30}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {200, 30}}</string>
 			<key>sourceSize</key>
@@ -1827,7 +1853,7 @@
 		<key>assest/title_all.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{790, 828}, {200, 30}}</string>
+			<string>{{419, 1119}, {200, 30}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1840,11 +1866,11 @@
 		<key>assest/title_chatroom.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{795, 446}, {739, 30}}</string>
+			<string>{{101, 787}, {739, 30}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {739, 30}}</string>
 			<key>sourceSize</key>
@@ -1853,11 +1879,11 @@
 		<key>assest/title_chonbanchoi.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{795, 380}, {739, 32}}</string>
+			<string>{{35, 787}, {739, 32}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {739, 32}}</string>
 			<key>sourceSize</key>
@@ -1866,11 +1892,11 @@
 		<key>assest/title_inbox.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{795, 346}, {740, 32}}</string>
+			<string>{{1, 787}, {740, 32}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {740, 32}}</string>
 			<key>sourceSize</key>
@@ -1879,11 +1905,11 @@
 		<key>assest/title_lichsugiaodich.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{795, 414}, {739, 30}}</string>
+			<string>{{69, 787}, {739, 30}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {739, 30}}</string>
 			<key>sourceSize</key>
@@ -1892,11 +1918,11 @@
 		<key>assest/tooltip.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1844, 1141}, {123, 44}}</string>
+			<string>{{913, 1074}, {123, 44}}</string>
 			<key>offset</key>
 			<string>{1, -1}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{2, 2}, {123, 44}}</string>
 			<key>sourceSize</key>
@@ -1905,7 +1931,7 @@
 		<key>assest/transfer_money.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1481, 478}, {137, 53}}</string>
+			<string>{{713, 976}, {137, 53}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1918,7 +1944,7 @@
 		<key>assest/transfer_money_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1481, 617}, {137, 53}}</string>
+			<string>{{740, 1647}, {137, 53}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
@@ -1931,11 +1957,11 @@
 		<key>assest/update.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{494, 992}, {187, 54}}</string>
+			<string>{{714, 346}, {187, 54}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {187, 54}}</string>
 			<key>sourceSize</key>
@@ -1944,11 +1970,11 @@
 		<key>assest/update_press.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1150, 709}, {187, 54}}</string>
+			<string>{{543, 787}, {187, 54}}</string>
 			<key>offset</key>
 			<string>{0, 0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0, 0}, {187, 54}}</string>
 			<key>sourceSize</key>

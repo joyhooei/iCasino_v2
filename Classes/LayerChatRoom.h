@@ -36,7 +36,6 @@ private:
         tagListContent=1
     };
 
-    
     cocos2d::CCLabelTTF *lblTitle;
     
     CCNode* nodeListRooms;
@@ -67,10 +66,8 @@ public:
     virtual void onNodeLoaded(cocos2d::CCNode * pNode, cocos2d::extension::CCNodeLoader * pNodeLoader);
     virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, const char* pSelectorName){return NULL;};
     // selector callbacks
-    void onButtonCreate(CCObject* pSender);
-    void onButtonRefresh(CCObject* pSender);
-    void onButtonChoiNgay(CCObject* pSender);
-    
+    void onButtonChat(CCObject* pSender);
+  
     void valueChanged(CCObject *sender, CCControlEvent controlEvent);
     //TABLE VIEW
     void tableCellHighlight(CCTableView* table, CCTableViewCell* cell);
