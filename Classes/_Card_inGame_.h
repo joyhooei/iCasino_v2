@@ -22,6 +22,7 @@ class LayerCardInGame : public CCLayer
 {
 public:
 	~LayerCardInGame();
+	void onExit();
     bool init();
     CREATE_FUNC(LayerCardInGame);
     
@@ -135,8 +136,6 @@ public:
 	void showCardOnHandByPos_List(int kUser, string lc);
 
 private:
-    DoTogether doTogether;
-    
 	// lưu các ID-Card để cuối ván hiển thị
 	vector<int> arrIDCardOnHandLeft;
 	vector<int> arrIDCardOnHandRight;
@@ -151,7 +150,6 @@ private:
     CCSize sizeScreen;
     CCSize disTouchBegan;
     CCSize sizeCard;
-    
     CCPoint pointTouchBegan;
     
     // [Can changes]
@@ -181,8 +179,6 @@ private:
     int ZORDER_TAKE;
     int ZORDER_HAND;
     
-    // --
-    
     CCArray *arrAllCard;
     CCArray *arrCardOnHand;
     
@@ -197,10 +193,6 @@ private:
     bool requestRecommendHaPhom;  // =true thì sẽ gợi ý hạ phỏm
     
     string lcRecommendHaPhom;
-    
-    CCSprite *tag;
-    CCSprite *tag1;
-    CCSprite *tag2;
     
     // số bài trên tay
     CCSprite *cardBackLeft, *cardBackRight, *cardBackTop;

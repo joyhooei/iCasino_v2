@@ -8,6 +8,11 @@
 
 #include "_Number_inGame_.h"
 
+LayerNumberInGame::~LayerNumberInGame() {
+	CCLOG("~~~~LayerNumberInGame");
+	arrPos.clear();
+	arrNumberString.clear();
+}
 bool LayerNumberInGame::init() {
     if (!CCLayer::init()) return false;
     
@@ -69,7 +74,8 @@ void LayerNumberInGame::runAction(float dt) {
 	arrPos.clear();
 	arrNumberString.clear();
 
-	this->scheduleOnce(schedule_selector(LayerNumberInGame::callbackShowNumber), 3);
+	this->isRunning = false;
+	//this->scheduleOnce(schedule_selector(LayerNumberInGame::callbackShowNumber), 3);
 }
 
 void LayerNumberInGame::callbackShowNumber(float dt) {

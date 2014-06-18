@@ -25,8 +25,6 @@ bool Chat::init() {
     }
     
     this->setAnchorPoint(ccp(0, 0));
-    //
-    
     formatMes();
     
     // text
@@ -43,8 +41,6 @@ bool Chat::init() {
     
     CCSize size = CCSizeMake(label->getContentSize().width + 10, label->getContentSize().height + 5);
     blocks ->setContentSize(size);
-//    blocks ->setAnchorPoint(label->getAnchorPoint());
-//    blocks ->setPosition(label->getPosition());
     blocks->setAnchorPoint(ccp(0.5, 0.5));
     blocks->setPosition(ccp(label->getPositionX() + label->getContentSize().width / 2, label->getPositionY() + label->getContentSize().height / 2));
     
@@ -56,15 +52,12 @@ bool Chat::init() {
     switch (this->posUser) {
         case kUserMe: case kUserTop: case kUserBot: // me, bottom, top
             bgB->setPositionX(size.width / 2 - 7);
-            CCLog("Center");
             break;
         case kUserLeft: // left
             bgB->setPositionX(size.width / 4);
-            CCLog("Left");
             break;
         case kUserRight:
             bgB->setPositionX(size.width / 4 * 3 - 10);
-            CCLog("Right");
             break;
             
         default:
@@ -72,10 +65,7 @@ bool Chat::init() {
             bgB->setVisible(false);
             blocks->setColor(ccc3(84, 81, 69));
             blocks->setOpacity(200);
-            
             this->setPosition(ccp((WIDTH_DESIGN - size.width) / 2, 100));
-            
-            CCLog("NO DIRECTION");
             break;
     }
     
@@ -137,7 +127,6 @@ void Chat::formatMes() {
         this->mes = newMes;
     } else {
         this->mes = "  " + this->mes + "  ";
-        //this->mes += "\n";
     }
     
 }

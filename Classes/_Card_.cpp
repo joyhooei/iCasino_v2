@@ -11,7 +11,6 @@
 
 Card::Card(const char *filename) {
     this->initWithFile(filename);
-    
     initialize();
 }
 

@@ -29,7 +29,6 @@ private:
     float scaleY;
     
 public:
-    
     Card(const char *fileName);
     void initialize();
     

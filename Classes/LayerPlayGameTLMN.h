@@ -31,17 +31,15 @@ using namespace cocos2d::ui;
 class LayerPlayGameTLMN : public CCLayer, public PlayerCallBack
 {
 private:
-    DoTogether *doTogether;
+	DoTogether *doTogether;
     boost::shared_ptr<ISFSObject> param;
     
     string myName;
     string currentPlaying;
     
-    // mảng lưu các tên và thông tin tương ứng để hiển thị
     vector<string> arrName;
     vector<int> arrMoney;
-    // luu cac id quan bai trong luot dang choi
-    vector<int>    arrIDTurn;
+    vector<int> arrIDTurn;
     
     LayerAvatarInGame   *layerAvatars;
     LayerCardInGame     *layerCards;
@@ -52,7 +50,8 @@ private:
 public:
     LayerPlayGameTLMN();
     ~LayerPlayGameTLMN();
-    
+    void onExit();
+
     void createBackgrounds();
     void createAvatars();
     void createButtons();

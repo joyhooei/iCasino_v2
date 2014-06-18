@@ -14,7 +14,16 @@
 
 USING_NS_CC;
 
-Avatar::Avatar(bool isMe) {
+Avatar::Avatar(bool isMe):
+timer(NULL)
+,layerWidget(NULL)
+,layerInvite(NULL)
+,bg(NULL)
+,icon(NULL)
+,flag(NULL)
+,name(NULL)
+,money(NULL)
+{
 	meIsBoss = false;
 	// khoi tao
 	this->isMe = isMe;
@@ -129,12 +138,57 @@ Avatar::Avatar(bool isMe) {
 	}
 }
 
+Avatar::~Avatar() {
+	if (timer)
+	{
+		timer->release();
+		timer=NULL;
+	}
+	if (layerWidget)
+	{
+		layerWidget->release();
+		layerWidget=NULL;
+	}
+	if (layerInvite)
+	{
+		layerInvite->release();
+		layerInvite=NULL;
+	}
+	if (icon)
+	{
+		icon->release();
+		icon=NULL;
+	}
+	if (flag)
+	{
+		flag->release();
+		flag=NULL;
+	}
+	if (name)
+	{
+		name->release();
+		name=NULL;
+	}
+	if (money)
+	{
+		money->release();
+		money=NULL;
+	}
+	if (layerPlayerInfo) {
+		layerPlayerInfo->release();
+		layerPlayerInfo=NULL;
+	}
+	/*if (layerMoiChoi) {
+		layerMoiChoi->release();
+		layerMoiChoi=NULL;
+	}*/
+}
+
 CCSize Avatar::getSizeThis() {
 	return sizeThis;
 }
 
 void Avatar::onTouch(CCObject *pObject, TouchEventType pType) {
-
 	if (pType == TOUCH_EVENT_ENDED) {	
 		if( this->isMe )
 			return;

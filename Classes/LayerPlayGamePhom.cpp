@@ -170,12 +170,49 @@ LayerPlayGamePhom::LayerPlayGamePhom() {
     GameServer::getSingleton().addListeners(this);
     //
     this->scheduleOnce(schedule_selector(LayerPlayGamePhom::sendRequestJoinGame), 1.0f);
-
 	SceneManager::getSingleton().hideLoading();
 }
 
 LayerPlayGamePhom::~LayerPlayGamePhom() {
-    GameServer::getSingleton().removeListeners(this);
+	CCLOG("~~~~LayerPlayGamePhom");
+}
+
+void LayerPlayGamePhom::onExit() {
+	CCLOG("onExit: clean LayerPlayGamePhom");
+
+	GameServer::getSingleton().removeListeners(this);
+
+	arrName.clear();
+	arrMoney.clear();
+
+	//layerAvatars->removeFromParentAndCleanup(true);
+	/*
+	if (layerAvatars)
+	{
+		layerAvatars->release();
+		layerAvatars=NULL;
+	}
+	if (layerCards)
+	{
+		layerCards->release();
+		layerCards=NULL;
+	}
+	if (layerButtons)
+	{
+		layerButtons->release();
+		layerButtons=NULL;
+	}
+	if (layerNumbers)
+	{
+		layerNumbers->release();
+		layerNumbers=NULL;
+	}
+	if (layerChats)
+	{
+		layerChats->release();
+		layerChats=NULL;
+	}
+	*/
 }
 
 void LayerPlayGamePhom::createBackgrounds() {
@@ -301,7 +338,9 @@ void LayerPlayGamePhom::initGame() {
     for (int i = 0; i < arrName.size(); i++) {
         layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoney[i]);
     }
-    
+    arrName.clear();
+	arrMoney.clear();
+
     // unready all
     layerAvatars->setUnReadyAllUser();
 }
@@ -646,12 +685,12 @@ void LayerPlayGamePhom::OnSmartFoxUserVariableUpdate(unsigned long long ptrConte
     int    money = (int) (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
 	string name = boost::to_string(*ptrNotifiedUser->Name());
 	
-	CCLOG("Update User Variables");
+	CCLOG("Update User Variables size of arrName=%d", arrName.size());
     CCLOG("name=%s, money=%d", name.c_str(), money);
-    
-	if (arrName.size() >= 4) {
-		arrName.clear();
-		arrMoney.clear();
+   
+	if (arrName.size() > 4) {
+		//arrName.clear();
+		//arrMoney.clear();
 	}
     arrName.push_back(name);
     arrMoney.push_back(money);

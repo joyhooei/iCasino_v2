@@ -111,6 +111,7 @@ private:
 public:
     LayerPlayGamePhom();
     ~LayerPlayGamePhom();
+	virtual void onExit();
     
     void createBackgrounds();
     void createAvatars();

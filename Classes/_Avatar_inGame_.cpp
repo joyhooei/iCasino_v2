@@ -36,7 +36,24 @@ vector<string> getArrSplit(string &S, const char &str){
         t=t2+1; // chuyển sang vị trí sau
     }
     return arrStr;
-    
+}
+
+LayerAvatarInGame::~LayerAvatarInGame(){
+	
+}
+
+void LayerAvatarInGame::onExit() {
+	CCLOG("onExit: clean LayerAvatarInGame");
+
+	arrName.clear();
+	arrFlag.clear();
+	arrURL.clear();
+	arrAI.clear();
+	arrMoney.clear();
+	if (chuong) {
+		chuong->release();
+		chuong=NULL;
+	}
 }
 
 bool LayerAvatarInGame::init() {
@@ -53,6 +70,12 @@ bool LayerAvatarInGame::init() {
     Avatar *right = new Avatar(false);
     Avatar *top = new Avatar(false);
 	Avatar *bottom = new Avatar(false);
+
+	me->autorelease();
+	left->autorelease();
+	right->autorelease();
+	top->autorelease();
+	bottom->autorelease();
     
     me->setPosition(ccp(10, HEIGHT_DESIGN - 10 - me->getSizeThis().height));
     left->setPosition(ccp(10, HEIGHT_DESIGN / 2 - left->getSizeThis().height / 2));
@@ -80,6 +103,9 @@ bool LayerAvatarInGame::init() {
     chuong->setPosition(ccp(0,0));
     this->addChild(chuong);
     
+	
+
+
     return true;
 }
 
@@ -160,6 +186,7 @@ void LayerAvatarInGame::formatAndStore(const char &c1, const char &c2) {
     arrFlag.clear();
     arrURL.clear();
     arrAI.clear();
+	arrMoney.clear();
 
     for (int i = 0; i < arrUsers.size(); i++) {
         vector<string> arr = getArrSplit(arrUsers[i], c2);
@@ -184,6 +211,12 @@ void LayerAvatarInGame::formatAndStore(const char &c1, const char &c2) {
 		}
 		boost::shared_ptr<string> url = userInfo->GetVariable("aal")->GetStringValue();
         arrURL.push_back(url->c_str());
+
+		// Money
+		boost::shared_ptr<double> amf = userInfo->GetVariable("amf")->GetDoubleValue();
+		CCLog("--------money: %d", (int)(*amf));
+		arrMoney.push_back(((int)(*amf)));
+
 		//boost::shared_ptr<string> aI = userInfo->GetVariable("aI")->GetStringValue();
 		//arrAI.push_back(aI->c_str());
 		arrAI.push_back("aI");
@@ -205,11 +238,6 @@ int LayerAvatarInGame::getIndexInArrByName(string name) {
 }
 
 int LayerAvatarInGame::getPosByName(string pName) {
-	/*CCLog("pName= %s", pName.c_str());
-	for(int i = 0;i < arrName.size(); i++) {
-		CCLog("name[%d]= %s", i, arrName.at(i).c_str());
-	}*/
-
     int pos = getIndexInArrByName(this->myName);
     
 	if (pos == -1)
@@ -225,15 +253,11 @@ int LayerAvatarInGame::getPosByName(string pName) {
             if (arrName[i] == pName) {
                 if (i == pos) {
                     return kUserMe;
-					CCLog("-----Turn ME!");
                 } else if (i == (pos + 1) % countUser) {
-					CCLog("-----Turn RIGHT!");
                     return kUserRight;
                 } else if (i == (pos + 2) % countUser) {
-					CCLog("-----Turn TOP!");
                     return kUserTop;
                 } else if (i == (pos + 3) % countUser) {
-					CCLog("-----Turn LEFT!");
                     return kUserLeft;
                 }
                 
@@ -248,7 +272,6 @@ int LayerAvatarInGame::getPosByName(string pName) {
 string LayerAvatarInGame::getNameByPos(int pPos) {
     int pos = getIndexInArrByName(this->myName);
     
-    // tra lai vi tri
 	if (pos == -1) {
 		this->isGuess = true;
 		if (pPos < arrName.size() && pPos >= 0) return arrName.at(pPos);
@@ -356,6 +379,7 @@ void LayerAvatarInGame::updateUsers() {
         string flag = arrFlag[i];
         string url  = arrURL[i];
         string aI = arrAI[i];
+		int money = arrMoney[i];
 
         int pos = getPosByName(name);
         if (pos < 0)
@@ -370,12 +394,12 @@ void LayerAvatarInGame::updateUsers() {
 			getUserByPos(kUserBot)->setTouchEnabled(true);
 			getUserByPos(kUserBot)->setPositionY(10);
 		}
-		{
 			Avatar *user = getUserByPos(pos);
 			user->setName(name);
 			user->setFlag(atoi(flag.c_str()) == 1);
 			user->setIcon(url);
 			user->setAI(aI);
+			user->setMoney(money);
 
 			if (pos == kUserMe)
 			{
@@ -386,12 +410,6 @@ void LayerAvatarInGame::updateUsers() {
 			else {
 				user->setVisibleLayerInvite(false);
 			}
-		}
-		//else 
-		{
-			// nếu mình là khách
-
-		}
     }
 }
 

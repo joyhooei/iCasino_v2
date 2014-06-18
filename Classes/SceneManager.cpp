@@ -64,7 +64,7 @@ CCScene* SceneManager::createScene()
 	scene->addChild(layer);
 
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.1", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.2", "", 16);
 	nameVersion->setColor(ccWHITE);
 	nameVersion->setPosition(ccp(10 + nameVersion->getContentSize().width / 2, 20));
 	scene->addChild(nameVersion);
@@ -257,8 +257,6 @@ void SceneManager::gotoMain() {
 // Go to Game
 void SceneManager::gotoGameByTag(int typeGame) {
 	CCLOG("typeGame: %d", typeGame);
-	showLoading();
-	
 	switch (typeGame) {
 	case kGameTienLenMienNam:
 
@@ -334,9 +332,9 @@ void SceneManager::releaseCurrentLayerGame() {
 		CCLog("You did not play the Game!");
 	}
 	else {
-		// this->removeChildByTag(tag_LayerGaming, true);
 		child->removeFromParentAndCleanup(true);
-		//CC_SAFE_RELEASE(child);
+		child=NULL;
+
 		CCLog("You played the Game!");
 	}
 }

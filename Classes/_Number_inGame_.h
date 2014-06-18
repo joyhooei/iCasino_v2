@@ -26,6 +26,7 @@ private:
 	bool isRunning;
     
 public:
+	~LayerNumberInGame();
     bool init();
     CREATE_FUNC(LayerNumberInGame);
     

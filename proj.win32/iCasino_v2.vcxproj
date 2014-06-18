@@ -282,6 +282,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\_Card_.h" />
     <ClInclude Include="..\Classes\_Card_inGame_.h" />
     <ClInclude Include="..\Classes\_Chat_.h" />
+    <ClInclude Include="..\Classes\_Chat_inGame_.h" />
     <ClInclude Include="..\Classes\_Chess_.h" />
     <ClInclude Include="..\Classes\_Number_.h" />
     <ClInclude Include="..\Classes\_Number_inGame_.h" />

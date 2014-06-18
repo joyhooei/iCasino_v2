@@ -485,6 +485,9 @@
     <ClInclude Include="..\Classes\LayerLoading.h">
       <Filter>Classes\Children</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\_Chat_inGame_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

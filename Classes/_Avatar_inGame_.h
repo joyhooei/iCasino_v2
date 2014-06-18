@@ -23,6 +23,8 @@ using namespace cocos2d;
 class LayerAvatarInGame : public CCLayer
 {
 public:
+	~LayerAvatarInGame();
+	virtual void onExit();
     virtual bool init();
     CREATE_FUNC(LayerAvatarInGame);
     
@@ -74,6 +76,7 @@ private:
     vector<string> arrFlag;
     vector<string> arrURL;
 	vector<string> arrAI;
+	vector<int> arrMoney;
     UIImageView *chuong;
 };
 

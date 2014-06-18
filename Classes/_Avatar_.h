@@ -27,6 +27,7 @@ class Avatar : public CCLayer
 {
 public:
     Avatar(bool isMe);
+	~Avatar();
     
     CCSize getSizeThis();
     
@@ -70,7 +71,6 @@ private:
     CCSize sizeIcon;
     
     CCProgressTimer *timer;
-    
     UILayer   *layerWidget;
     UILayer   *layerInvite;
     ImageView *bg;

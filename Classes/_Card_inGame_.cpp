@@ -43,11 +43,35 @@ vector<string> LayerCardInGame::split(string &S, const char &str) {
 }
 
 LayerCardInGame::~LayerCardInGame() {
-	CC_SAFE_DELETE_ARRAY(arrCardOnHand);
-	CC_SAFE_DELETE_ARRAY(arrAllCard);
-	CCLog("~LayerCardInGame()-----");
+	CCLOG("~~~~LayerCardInGame");
 }
 
+void LayerCardInGame::onExit() {
+	CCLOG("onExit: clean LayerCardInGame");
+
+	CC_SAFE_DELETE_ARRAY(arrCardOnHand);
+	CC_SAFE_DELETE_ARRAY(arrAllCard);
+
+	arrIDCardOnHandLeft.clear();
+	arrIDCardOnHandRight.clear();
+	arrIDCardOnHandTop.clear();
+
+	if (cardBackLeft)
+	{
+		cardBackLeft->release();
+		cardBackLeft=NULL;
+	}
+	if (cardBackRight)
+	{
+		cardBackRight->release();
+		cardBackRight=NULL;
+	}
+	if (cardBackTop)
+	{
+		cardBackTop->release();
+		cardBackTop=NULL;
+	}
+}
 
 // mang co dang id:xx:xx:xx:xx;id:xx:xx:xx:xx;id:xx:xx:xx:xx ta chi can tach ra va lay cac id
 vector<int> LayerCardInGame::getIDFromString(string pList) {
@@ -110,22 +134,6 @@ bool LayerCardInGame::init(){
 	cardBackRight = NULL;
 	cardBackTop = NULL;
 
-//     CCSprite *tagCenter = CCSprite::create("tag_phom_3.png");
-//     tagCenter->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2));
-//    this->addChild(tagCenter);
-    
-//     tag = CCSprite::create("tag_phom_2.png");
-// //    this->addChild(tag, 100);
-//     
-//     tag1 = CCSprite::create("tag_phom_1.png");
-// //    this->addChild(tag1, 99);
-//     
-//     tag2 = CCSprite::create("tag_phom_1.png");
-// //    this->addChild(tag2, 99);
-    
-    // ---- TouchEvent End!
-    
-    
     this->setAnchorPoint(ccp(0, 0));
     this->setPosition(ccp(0, 0));
     this->setTouchEnabled(true);
@@ -177,10 +185,7 @@ void LayerCardInGame::ccTouchesMoved(cocos2d::CCSet *pTouches, cocos2d::CCEvent 
         Card *cardTarget;
         
         iterator = pTouches->begin();
-        
-        //for (iterator = pTouches->begin(); iterator != pTouches->end(); iterator++) {}
         touch = (CCTouch*)(*iterator);
-        
         tap = convertPoint(touch->getLocation());
         
         if (disTouchBegan.width > 0) {
@@ -192,33 +197,12 @@ void LayerCardInGame::ccTouchesMoved(cocos2d::CCSet *pTouches, cocos2d::CCEvent 
                 
                 if (card != cardTarget){
                     if ((iT < length - 1 && isTouchedCard_notTail(cardTarget, tap)) || (iT == length - 1 && isTouchedCard_Tail(cardTarget, tap))){
-                        // da tim dc index chua quan bai di qua
                         indexCardTarget = iT;
-                        
-                        //                        cardTarget->stopAllActions();
-                        //                        cardTarget->runAction(CCMoveTo::create(0.2, ccp(cardTarget->getPositionX(), topCard + 30)));
-                        
                         break;
                     }
                 }
             }
-            
-            /***
-             if (indexCardTarget >= 0) {
-             for (int i = 0; i < length; i++) {
-             if (i == indexCardTarget) {
-             Card *card = (Card*) arrCardOnHand->objectAtIndex(i);
-             setCardClick(card);
-             }
-             else
-             if (i != indexCardCurrent) {
-             Card *card = (Card*) arrCardOnHand->objectAtIndex(i);
-             setCardClick(card);
-             }
-             }
-             }
-             ***/
-            
+           
             tap.x -= disTouchBegan.width;
             tap.y -= disTouchBegan.height;
             
@@ -235,8 +219,6 @@ void LayerCardInGame::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent 
     if (indexCardCurrent >= 0) {
         Card *card = (Card*) arrCardOnHand->objectAtIndex(indexCardCurrent);
         
-        //        card->runAction(CCSequence::create(CCScaleTo::create(0.3, 1.1), CCScaleTo::create(0.2, 1.0), NULL));
-        
         CCSetIterator iterator = pTouches->begin();
         CCTouch *touch;
         touch = (CCTouch*)(*iterator);
@@ -244,7 +226,6 @@ void LayerCardInGame::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent 
         tap = convertPoint(touch->getLocation());
         
         // clicked
-        // if (isClickCard || indexCardTarget == -1) {
         if (getDisPoint(tap, pointTouchBegan) < 10) {
             card->setZOrder(indexCardCurrent);
             setCardClick(card);
@@ -317,7 +298,6 @@ CCPoint LayerCardInGame::convertPoint(CCPoint pPoint) {
     
     // "điểm cần convert" = A
     // Bởi vì A và Tap nằm ở cùng 1 phía so với Center nên nếu xTap < xCenter thì xA < xCenter và ngược lại
-    
     if ((xTap < xCenter && x1 < xCenter) || (xTap > xCenter && x1 > xCenter)) {
         x1 -= startLeft;
         y1 -= startTop;
@@ -333,11 +313,7 @@ CCPoint LayerCardInGame::convertPoint(CCPoint pPoint) {
     } else {
         CCLog("No define POINT CONVERT");
     }
-    
-//    tag->setPosition(pPoint);
-    // tag1->setPosition(ccp(x1, y1));
-    // tag2->setPosition(ccp(x2, y2));
-    
+ 
     return pPoint;
 }
 
@@ -358,7 +334,6 @@ bool LayerCardInGame::isTouchedCard_notTail(Card *card, CCPoint tap) {
 }
 
 void LayerCardInGame::refreshCardOnHand() {
-    CCLog("refreshCardOnHand");
     float leftTheFirst = (WIDTH_DESIGN - (arrCardOnHand->count() - 1) * disCards - sizeCard.width) / 2;
     float top = topCard;
     
@@ -368,7 +343,7 @@ void LayerCardInGame::refreshCardOnHand() {
         card->stopAllActions();
         card->setClicked(false);
 
-        CCMoveTo *actionMove =CCMoveTo::create(0.5, ccp(leftTheFirst + i * disCards, top));
+        CCMoveTo *actionMove = CCMoveTo::create(0.5, ccp(leftTheFirst + i * disCards, top));
         if (i == arrCardOnHand->count() - 1) {
             // nếu cần gợi ý hạ phỏm
             card->runAction(CCSequence::create(actionMove,
@@ -381,7 +356,6 @@ void LayerCardInGame::refreshCardOnHand() {
 }
 
 void LayerCardInGame::refreshCardOnHand(bool isRefreshTop) {
-    CCLog("refreshCardOnHand isRefreshTop");
     float leftTheFirst = (WIDTH_DESIGN - (arrCardOnHand->count() - 1) * disCards - sizeCard.width) / 2;
     float top;
     
@@ -401,8 +375,6 @@ void LayerCardInGame::refreshCardOnHand(bool isRefreshTop) {
 }
 
 void LayerCardInGame::refreshCardOnHand(float delay) {
-    CCLog("refreshCardOnHand delay");
-    
     float leftTheFirst = (WIDTH_DESIGN - (arrCardOnHand->count() - 1) * disCards - sizeCard.width) / 2;
     float top = topCard;
     

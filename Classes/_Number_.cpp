@@ -10,7 +10,6 @@
 
 Number::Number(string pNumberString) {
     this->numberString = pNumberString;
-
     init();
 }
 

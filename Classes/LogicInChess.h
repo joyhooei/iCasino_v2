@@ -38,9 +38,6 @@ public:
     bool moveSave(int from, int dest);
     bool IsKingFace(int pos);
     
-    
-    
-    
 private:
     
 };
