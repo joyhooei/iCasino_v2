@@ -246,7 +246,7 @@ void LayerPlayGameTLMN::initGame() {
     
     // thông tin tiền hiện tại của Users
     for (int i = 0; i < arrName.size(); i++) {
-        //layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoney[i]);
+        layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoney[i]);
     }
     arrName.clear();
 	arrMoney.clear();
@@ -448,7 +448,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_USER_JOIN_NOTIF(){
         
         // thông tin tiền hiện tại của Users
         for (int i = 0; i < arrName.size(); i++) {
-            //layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoney[i]);
+            layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoney[i]);
         }
     }
 }
@@ -546,6 +546,8 @@ void LayerPlayGameTLMN::event_EXT_EVENT_END_GAME_NOTIF(){
     
     getButtonByTag(kTagButtonReady)->setTitleText("Sẵn sàng");
     getButtonByTag(kTagButtonReady)->setEnabled(true);
+
+	arrIDTurn.clear();
 }
 
 void LayerPlayGameTLMN::event_EXT_EVENT_AMF_TEST_NOTIF(){
