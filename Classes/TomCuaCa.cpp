@@ -1,4 +1,5 @@
 #include "TomCuaCa.h"
+
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace ui;
@@ -30,6 +31,7 @@ bool TomCuaCa::init()
     
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
+	_count = 100;
 
 	UILayer* ul = UILayer::create();
 	ul->addWidget(GUIReader::shareReader()->widgetFromJsonFile("TomCuaCa/TomCuaCa_1_1.json"));
@@ -45,6 +47,11 @@ bool TomCuaCa::init()
     
 	UIButton* btnThoat = dynamic_cast<UIButton*>(ul->getWidgetByName("button_back"));
 	btnThoat->addTouchEventListener(this,(SEL_TouchEvent)&TomCuaCa::click);
+
+	loadingBar = dynamic_cast<UILoadingBar*>(ul->getWidgetByName("ProgressBar_loading"));
+	
+	loadingBar->setPercent(_count);
+	scheduleUpdate();
     return true;
 }
 
@@ -54,4 +61,11 @@ void TomCuaCa::click(CCObject* pSender, TouchEventType type)
 	if(type == TOUCH_EVENT_ENDED)
 	CCLog("OUt");
 
+}
+void TomCuaCa::update(float dt)
+{
+	_count--;
+	if(_count <0)
+		_count = 100;
+	loadingBar->setPercent(_count);
 }
