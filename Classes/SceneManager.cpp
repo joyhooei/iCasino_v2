@@ -107,11 +107,12 @@ bool SceneManager::init() {
 	this->setPosition(ccp(SIZE_SCREEN.width / 2, SIZE_SCREEN.height / 2));
 
 	// add background
-	background = CCSprite::create("background.png");
+
+	background= CCSprite::create("background.png");
 	background->setAnchorPoint(ccp(0.5, 0.5));
 	background->setPosition(ccp(0, 0));
 	this->addChild(background);
-
+	
 	
 
 	background_Chan = NULL;
@@ -320,7 +321,15 @@ void SceneManager::gotoGameByTag(int typeGame) {
 		this->addChild(mGameChan,zorder_LayerGaming, tag_LayerGaming);
 		showLayer(mGameChan);
 		break;
+	case kGameTomCuaCa:
+		mGameTomCuaCa = TomCuaCa::create();
+		mGameTomCuaCa->setPosition(ccp(WIDTH_DESIGN/2,HEIGHT_DESIGN/2));
+		this->addChild(mGameTomCuaCa,zorder_LayerGaming, tag_LayerGaming);
+		showLayer(mGameTomCuaCa);
+		CCLog("TCC");
+		break;
 	}
+	
 
 	hideLayer(layerMain);
 }

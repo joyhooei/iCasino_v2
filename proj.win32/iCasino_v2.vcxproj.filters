@@ -240,6 +240,9 @@
     <ClCompile Include="..\Classes\LayerLoading.cpp">
       <Filter>Classes\Children</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\TomCuaCa.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -487,6 +490,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\_Chat_inGame_.h">
       <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TomCuaCa.h">
+      <Filter>Classes\GameLayers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

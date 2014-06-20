@@ -35,6 +35,7 @@
 
 #include "LayerNotification.h"
 #include "LayerLoading.h"
+#include "TomCuaCa.h"
 
 //----------------
 using namespace Sfs2X;
@@ -89,6 +90,7 @@ private:
 	XiTo *mGameXiTo;
 	LayerChanGame *mGameChan;
 
+	CCLayer *mGameTomCuaCa;
 
 	CCSize SIZE_SCREEN;
 
@@ -98,6 +100,7 @@ private:
 	CCSprite *background;
 	CCSprite *background_Chan;
 public:
+	
 	SceneManager();
 	virtual ~SceneManager(){};
 
