@@ -99,6 +99,8 @@ private:
 	string EXT_EVENT_REQ_NOC_DETAIL;
 	//xem bai tren tay
 	string EXT_EVENT_REQ_TRENTAY_DETAIL; 
+	//chiu thanh cong
+	string EXT_EVENT_RES_CHIU_CARD;
 
 	string _list_user;
 	string mylistCard;
@@ -144,6 +146,11 @@ private:
 	float bottom_d_right;
 	float bottom_d_top;
 
+	int count_chiu_me;
+	int count_chiu_left;
+	int count_chiu_right;
+	int count_chiu_top;
+
 	LayerAvatarInGame *layerAvatars;
 
 	UILayer *uLayer;
@@ -174,10 +181,14 @@ private:
 	CCArray *CARD_D_RIGHT_bottom;
 	CCArray *CARD_D_TOP_bottom;
 
+	CCArray *ALL_CARDS;
+
 public:
 	LayerChanGame();
 	~LayerChanGame();
-
+	void onExit();
+	void createAllCards();
+	void resetAllCards();
 	void createButtons();
 	void createAvatars();
 	void sendRequestJoinGame(float dt);
@@ -222,6 +233,7 @@ public:
 	void action_ChuyenBai(string f_user, string t_user, string cardnu, string cardsu);
 	void action_ChuyenBai_ME(int pos, string cardnu, string cardsu);
 	void action_ChuyenBai_NOTME(int pos, string cardnu, string cardsu);
+	void action_ChuyenBai_Chiu(int pos, string cardnu, string cardsu);
 
 	void action_An_U(string f_user, string t_user, string cardnu, string cardsu);
 
@@ -229,7 +241,8 @@ public:
 
 	void refreshListCard();
 	void addCard_toCuaTri(CCNode* sender, void* data);
-
+	void addCard_toDuoiTay_top(CCNode *sender, void *data);
+	void swapZorder(CCArray* P1, CCArray* P2, int _count, bool _state);
 
 	void btn_ready_click(CCObject *sender, TouchEventType type);
 	void btn_take_click(CCObject *sender, TouchEventType type);

@@ -216,20 +216,35 @@ frameBet_Me(NULL){
 }
 
 BaCayChuong::~BaCayChuong(){
-    GameServer::getSingleton().removeListeners(this);
-    CARD_ME->removeAllObjects();
-    CC_SAFE_DELETE_ARRAY(CARD_ME);
-    CARD_LEFT->removeAllObjects();
-    CC_SAFE_DELETE_ARRAY(CARD_LEFT);
-    CARD_RIGHT->removeAllObjects();
-    CC_SAFE_DELETE_ARRAY(CARD_RIGHT);
-    CARD_TOP->removeAllObjects();
-    CC_SAFE_DELETE_ARRAY(CARD_TOP);
-    this->removeAllChildrenWithCleanup(true);
-    this->removeAllComponents();
-    CCLOG("Deconstructor 3 Cay Chuong --- Jump Here !");
+	GameServer::getSingleton().removeListeners(this);
+	CARD_ME->removeAllObjects();
+	CARD_ME->release();
+	CARD_LEFT->removeAllObjects();
+	CARD_LEFT->release();
+	CARD_RIGHT->removeAllObjects();
+	CARD_RIGHT->release();
+	CARD_TOP->removeAllObjects();
+	CARD_TOP->release();
+	this->removeAllChildrenWithCleanup(true);
+	this->removeAllComponents();
+	CCLOG("Deconstructor 3 Cay Chuong --- Jump Here !");
 }
 
+void BaCayChuong::onExit()
+{
+	GameServer::getSingleton().removeListeners(this);
+	CARD_ME->removeAllObjects();
+	CARD_ME->release();
+	CARD_LEFT->removeAllObjects();
+	CARD_LEFT->release();
+	CARD_RIGHT->removeAllObjects();
+	CARD_RIGHT->release();
+	CARD_TOP->removeAllObjects();
+	CARD_TOP->release();
+	this->removeAllChildrenWithCleanup(true);
+	this->removeAllComponents();
+	CCLOG("Deconstructor 3 Cay Chuong --- Jump Here !");
+}
 //* init bàn chơi
 bool BaCayChuong::init(){
     if(!CCLayer::init()){

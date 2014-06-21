@@ -94,6 +94,7 @@ private:
 public:
 	BaCayChuong();
 	~BaCayChuong();
+	void onExit();
 	CREATE_FUNC(BaCayChuong);
 	bool init();
 
