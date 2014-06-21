@@ -86,7 +86,7 @@ LayerChanGame::LayerChanGame(){
 	bottom_d_me = 85;
 	bottom_d_left = 360;
 	bottom_d_right = 360;
-	bottom_d_top = HEIGHT_DESIGN - 10 - h_card + 25;
+	bottom_d_top = 400;
 
 	//đếm số chíu của từng người chơi
 	count_chiu_me = 0;
@@ -988,7 +988,6 @@ void LayerChanGame::takeCards(string f_user, string t_user, string cardnu, strin
 
 void LayerChanGame::action_BocNoc(string t_user,string cardnu, string cardsu){
 	CCLOG("Bốc Nọc %s",t_user.c_str());
-	//CardChan *pCard = CardChan::create();
 	CardChan *pCard = (CardChan *)ALL_CARDS->objectAtIndex(_coutZorder);
 	_coutZorder++;
 	pCard->loadTexture(findTypeCard(cardnu, cardsu).c_str());
@@ -1348,10 +1347,10 @@ void LayerChanGame::action_DanhBai_NOTME(int pos,string cardnu,string cardsu){
 		f = kUserRight;
 		break;
 	case kUserTop:
-		pCard->setPosition(ccp(240, layerAvatars->getUserByPos(kUserTop)->getPositionY()));
+		pCard->setPosition(ccp(400, layerAvatars->getUserByPos(kUserTop)->getPositionY()));
 		toX = left_chi_top - (float)CARD_C_TOP->count() * kc_top;
 		toY = bottom_chi_top;
-		f = kUserRight;
+		f = kUserTop;
 		break;
 	default:
 		break;
@@ -1487,11 +1486,13 @@ void LayerChanGame::action_ChuyenBai_Chiu(int pos, string cardnu, string cardsu)
 			CCLOG("cardnu = %s, cardsu = %s",cardnu.c_str(),cardsu.c_str());
 			if (cards->getNumber() == atoi(cardnu.c_str()) && pCard->getSuite() == atoi(cardsu.c_str()))
 			{
+				CCLOG("Jump here");
 				cards->setTouchEnabled(false);
 				cards->setVisible(false);
 				pCard = (CardChan *)CARD_ME->objectAtIndex(i);
 				CARD_ME->removeObjectAtIndex(i);
 				CCLOG("Jump here");
+				break;
 			}
 		}
 		refreshListCard();
@@ -1510,25 +1511,24 @@ void LayerChanGame::action_ChuyenBai_Chiu(int pos, string cardnu, string cardsu)
 
 		switch(pos){
 		case kUserLeft:
+			count_chiu_left++;
 			pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserLeft)->getPosition().x, layerAvatars->getUserByPos(kUserLeft)->getPosition().y));
-
 			toX = (float)(CARD_D_LEFT_bottom->count() - count_chiu_left) * w_card + left_d_left;
 			toY = (bottom_d_left) - (25 /2) * count_chiu_left;
-			count_chiu_left++;
 			f = kUserLeft;
 			break;
 		case kUserRight:
+			count_chiu_right++;
 			pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserRight)->getPosition().x, layerAvatars->getUserByPos(kUserRight)->getPosition().y));
 			toX = left_d_right - (float)(CARD_D_RIGHT_bottom->count() - count_chiu_right) * w_card;
 			toY = bottom_d_right - (25 / 2) * count_chiu_right;
-			count_chiu_right++;
 			f = kUserRight;
 			break;
 		case kUserTop:
+			count_chiu_top++;
 			pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserTop)->getPosition().x, layerAvatars->getUserByPos(kUserTop)->getPosition().y));
 			toX = (float)(CARD_D_TOP_bottom->count() - count_chiu_top) * w_card + left_d_top;
 			toY = bottom_d_top - (25 / 2) * count_chiu_top;
-			count_chiu_top++;
 			f = kUserTop;
 			break;
 		default:
@@ -1590,18 +1590,22 @@ void LayerChanGame::addCard_toCuaTri(CCNode* sender, void* data){
 	{
 	case kUserMe:
 		CARD_C_ME->addObject(pCard);
+		CCLOG("Add them 1 card cua chi user me, CARD_C_ME %d",CARD_C_ME->count());
 		resortCard_CuaTri_Alluser(kUserMe);
 		break;
 	case kUserLeft:
 		CARD_C_LEFT->addObject(pCard);
+		CCLOG("Add them 1 card cua chi user left, CARD_C_LEFT %d",CARD_C_LEFT->count());
 		resortCard_CuaTri_Alluser(kUserLeft);
 		break;
 	case kUserRight:
 		CARD_C_RIGHT->addObject(pCard);
+		CCLOG("Add them 1 card cua chi user right, CARD_C_RIGHT %d",CARD_C_RIGHT->count());
 		resortCard_CuaTri_Alluser(kUserRight);
 		break;
 	case kUserTop:
 		CARD_C_TOP->addObject(pCard);
+		CCLOG("Add them 1 card cua chi user top, CARD_C_TOP %d",CARD_C_TOP->count());
 		resortCard_CuaTri_Alluser(kUserTop);
 		break;
 	default:
@@ -1691,20 +1695,20 @@ CardChan* LayerChanGame::getCardFromPos_take(int pos){
 	CardChan* fcard = NULL;
 	switch (pos) {
 	case kUserMe:
-		fcard = (CardChan*)CARD_C_ME->objectAtIndex(CARD_C_ME->count()-1);
-		CARD_C_ME->removeObjectAtIndex(CARD_C_ME->count()-1);
+		fcard = (CardChan*)CARD_C_ME->lastObject();
+		CARD_C_ME->removeLastObject();
 		break;
 	case kUserLeft:
-		fcard = (CardChan*)CARD_C_LEFT->objectAtIndex(CARD_C_LEFT->count()-1);
-		CARD_C_LEFT->removeObjectAtIndex(CARD_C_LEFT->count()-1);
+		fcard = (CardChan*)CARD_C_LEFT->lastObject();
+		CARD_C_LEFT->removeLastObject();
 		break;
 	case kUserRight:
-		fcard = (CardChan*)CARD_C_RIGHT->objectAtIndex(CARD_C_RIGHT->count()-1);
-		CARD_C_RIGHT->removeObjectAtIndex(CARD_C_RIGHT->count()-1);
+		fcard = (CardChan*)CARD_C_RIGHT->lastObject();
+		CARD_C_RIGHT->removeLastObject();
 		break;
 	case kUserTop:
-		fcard = (CardChan*)CARD_C_TOP->objectAtIndex(CARD_C_TOP->count()-1);
-		CARD_C_TOP->removeObjectAtIndex(CARD_C_TOP->count()-1);
+		fcard = (CardChan*)CARD_C_TOP->lastObject();
+		CARD_C_TOP->removeLastObject();
 		break;
 	default:
 		break;
