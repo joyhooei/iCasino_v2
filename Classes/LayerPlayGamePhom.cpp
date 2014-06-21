@@ -357,7 +357,7 @@ void LayerPlayGamePhom::resetGame() {
     this->currentPlaying = "";
 }
 
-void LayerPlayGameTLMN::playeSound( string soundPath )
+void LayerPlayGamePhom::playSound( string soundPath )
 {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
 }
@@ -445,7 +445,7 @@ void LayerPlayGamePhom::actionHitCards(CCObject *pSender, TouchEventType pType) 
 
 void LayerPlayGamePhom::actionGiveCards(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN){
-        
+
         boost::shared_ptr<ISFSObject> params (new SFSObject());
         boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
         boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_DRAW_CARD), params, lastRoom));
@@ -456,6 +456,7 @@ void LayerPlayGamePhom::actionGiveCards(CCObject *pSender, TouchEventType pType)
 
 void LayerPlayGamePhom::actionEatCards(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN){
+
         boost::shared_ptr<ISFSObject> params (new SFSObject());
         params->PutByte("cardidx", layerCards->getIdCardCanEat());
         boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
@@ -499,17 +500,26 @@ void LayerPlayGamePhom::callbackHaPhom(float dt) {
 	vector<string> arrListID = layerCards->getID_HaPhom();
 
 	for (int i = 0; i < arrListID.size(); i++) {
-		string listID = arrListID[i];
+		listID_HaPhom = arrListID[i];
 
-		boost::shared_ptr<ISFSObject> params (new SFSObject());
-		params->PutUtfString("lc", listID);
-
-		boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-		boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_HANDOFF_PHOM), params, lastRoom));
-
-		GameServer::getSingleton().getSmartFox()->Send(request);
+		this->scheduleOnce(schedule_selector(LayerPlayGamePhom::callbackHaPhom_stepByStep), 0.3 * i);
 	}
 }
+
+void LayerPlayGamePhom::callbackHaPhom_stepByStep(float dt){
+	if (listID_HaPhom.length() < 2) return;
+
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("lc", listID_HaPhom);
+
+	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_HANDOFF_PHOM), params, lastRoom));
+
+	GameServer::getSingleton().getSmartFox()->Send(request);
+
+	listID_HaPhom = "";
+}
+
 
 void LayerPlayGamePhom::actionPush(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN) {
@@ -770,6 +780,7 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_PLAYER_LIST() {
 	if (list != NULL)
 	{
 		layerChats->showChatByPos(-1, "Cập nhật người chơi");
+		playSound("ring_ring.mp3");
 		layerAvatars->setListUserByPhom(list->c_str());
 		//layerCards->resetGame();
 		//this->resetGame();
@@ -810,13 +821,15 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_RECOMMENDED_CARDSETS() {
 
 void LayerPlayGamePhom::event_EXT_EVENT_START() {
     CCLog("EXT_EVENT_START");
-    
+    playSound("start_game.mp3");
+
     this->resetGame();
     this->initGame();
 }
 
 void LayerPlayGamePhom::event_EXT_EVENT_END() {
     CCLog("EXT_EVENT_END");
+	playSound("end_game.mp3");
     
     levelGame++;
     
@@ -1052,7 +1065,6 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_CARD_ORIGINATION() {
         case  CARD_ORIGINATION_BY_TRANSFERED:
             // chuyển bài
             layerCards -> actionTransferedCard(layerAvatars->getPosByName(fname->c_str()), layerAvatars->getPosByName(tname->c_str()), *(cardid.get()));
-            
             break;
             
         case  CARD_ORIGINATION_BY_DEALT:
@@ -1060,7 +1072,6 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_CARD_ORIGINATION() {
             
         case  CARD_ORIGINATION_BY_HANDOFF:
             CCLog("CARD_ORIGINATION_BY_HANDOFF %d.", *(tuid.get()));
-            
             // tuid = -1
             if (*(tuid.get()) == 255){
                 // đánh bài
@@ -1082,7 +1093,6 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_CARD_ORIGINATION() {
         case  CARD_ORIGINATION_BY_PUSHED:
             // gửi bài
             layerCards -> actionPushCard(layerAvatars->getPosByName(fname->c_str()), layerAvatars->getPosByName(tname->c_str()), *(cardid.get()));
-            
             break;
             
     }
@@ -1093,7 +1103,6 @@ void LayerPlayGamePhom::event_EXT_EVENT_RES_DRAW_CARD() {
     CCLog("EXT_EVENT_RES_DRAW_CARD rscode = %d", *(localChar.get()));
     
     if (*localChar.get() == 0) {
-
         // bốc bài thành công
         getButtonByTag(kTagButtonGive)->setEnabled(false);
         getButtonByTag(kTagButtonEat)->setEnabled(false);

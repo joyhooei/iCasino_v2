@@ -12,6 +12,7 @@
 #include <iostream>
 #include "cocos2d.h"
 #include "AllData.h"
+#include "SimpleAudioEngine.h"
 
 #include "_Card_.h"
 
@@ -35,6 +36,7 @@ public:
     
     void initGame();
     void resetGame();
+	void playSound(string pathSound);
     
     //
     void initCardByPhom();
@@ -89,7 +91,8 @@ public:
     
     void refreshCardOnHand();
     void refreshCardOnHand(bool isRefreshTop);
-    void refreshCardOnHand(float delayPerAction);
+    void refreshCardOnHand(float delay);
+	void callbackRefreshCardOnHand();
     void setCardClick(Card* card);
     bool isTouchedCard_Tail(Card *card, CCPoint tap);
     bool isTouchedCard_notTail(Card *card, CCPoint tap);

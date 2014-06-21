@@ -1,0 +1,13 @@
+- update sound in Phom:
+
+0. tiếng Touch (click button, ...)
+1. chia bài
+2. đánh bài
+3. bốc bài
+4. ăn bài
+5. hạ phỏm
+6. kết thúc ván
+7. xếp bài (ko có)
+
+
+

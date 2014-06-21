@@ -69,7 +69,7 @@ CCScene* SceneManager::createScene()
 	float sTop  = (sizeScreen.height - scaleMin * HEIGHT_DESIGN) / 2;
 
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("v-1.0.4", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("v-1.0.5", "", 16);
 	nameVersion->setColor(ccWHITE);
 	//nameVersion->setPosition(ccp(sLeft + 10 + nameVersion->getContentSize().width / 2, sTop + 20));
 	nameVersion->setPosition(ccp(-WIDTH_DESIGN/2 + 10 + nameVersion->getContentSize().width / 2, -HEIGHT_DESIGN/2 - sTop + 20));
@@ -100,6 +100,9 @@ bool SceneManager::init() {
 	searchPaths.push_back("card_Chan");
 	searchPaths.push_back("Nan3Cay");
 	searchPaths.push_back("sounds");
+	searchPaths.push_back("sounds/game");
+	searchPaths.push_back("sounds/game_phom");
+	searchPaths.push_back("sounds/game_tienlen");
 	CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
 
 	SIZE_SCREEN = CCDirector::sharedDirector()->getVisibleSize();
@@ -331,11 +334,13 @@ void SceneManager::gotoGameByTag(int typeGame) {
 		showLayer(mGameChan);
 		break;
 	case kGameTomCuaCa:
+		/*
 		mGameTomCuaCa = TomCuaCa::create();
 		mGameTomCuaCa->setPosition(ccp(WIDTH_DESIGN/2,HEIGHT_DESIGN/2));
 		this->addChild(mGameTomCuaCa,zorder_LayerGaming, tag_LayerGaming);
 		showLayer(mGameTomCuaCa);
 		CCLog("TCC");
+		*/
 		break;
 	}
 	
