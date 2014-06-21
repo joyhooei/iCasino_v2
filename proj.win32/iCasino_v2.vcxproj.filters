@@ -246,6 +246,10 @@
     <ClCompile Include="..\Classes\LayerGameChan_KetQua.cpp">
       <Filter>Classes\GameLayers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\_Layer_CardChan_.cpp" />
+    <ClCompile Include="..\Classes\LayerInviteFriends.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -499,6 +503,10 @@
     </ClInclude>
     <ClInclude Include="..\Classes\LayerGameChan_KetQua.h">
       <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
+    <ClInclude Include="..\Classes\LayerInviteFriends.h">
+      <Filter>Classes\MenuLayers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

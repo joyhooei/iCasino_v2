@@ -162,6 +162,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LayerGameChan_KetQua.cpp" />
     <ClCompile Include="..\Classes\LayerGameChan_XuongU.cpp" />
     <ClCompile Include="..\Classes\LayerInbox.cpp" />
+    <ClCompile Include="..\Classes\LayerInviteFriends.cpp" />
     <ClCompile Include="..\Classes\LayerLichSuGiaoDich.cpp" />
     <ClCompile Include="..\Classes\LayerLoading.cpp" />
     <ClCompile Include="..\Classes\LayerLogin.cpp" />
@@ -240,6 +241,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\LayerGameChan_KetQua.h" />
     <ClInclude Include="..\Classes\LayerGameChan_XuongU.h" />
     <ClInclude Include="..\Classes\LayerInbox.h" />
+    <ClInclude Include="..\Classes\LayerInviteFriends.h" />
     <ClInclude Include="..\Classes\LayerLichSuGiaoDich.h" />
     <ClInclude Include="..\Classes\LayerLoading.h" />
     <ClInclude Include="..\Classes\LayerLogin.h" />
