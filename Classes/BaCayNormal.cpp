@@ -163,7 +163,6 @@ BaCayNormal::~BaCayNormal(){
 	CARD_RIGHT->release();
 	CARD_TOP->removeAllObjects();
 	CARD_TOP->release();
-	this->removeAllChildrenWithCleanup(true);
 	this->removeAllComponents();
 	CCLOG("Deconstructor 3 Cay Normal --- Jump Here !");
 }
@@ -180,7 +179,6 @@ void BaCayNormal::onExit()
 	CARD_RIGHT->release();
 	CARD_TOP->removeAllObjects();
 	CARD_TOP->release();
-	this->removeAllChildrenWithCleanup(true);
 	this->removeAllComponents();
 	CCLOG("Deconstructor 3 Cay Normal --- Jump Here !");
 }

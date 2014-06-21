@@ -207,12 +207,18 @@ Lieng::Lieng():btnNanBai(NULL),btnReady(NULL),btnUnReady(NULL),btnXemBai(NULL),b
 }
 
 Lieng::~Lieng(){
-    GameServer::getSingleton().removeListeners(this);
+	GameServer::getSingleton().removeListeners(this);
 	CARD_TOP->removeAllObjects();
+	CARD_TOP->release();
 	CARD_ME->removeAllObjects();
+	CARD_ME->release();
 	CARD_LEFT->removeAllObjects();
+	CARD_LEFT->release();
 	CARD_RIGHT->removeAllObjects();
-    CCLOG("Deconstructor Lieng ------ JumpHere");
+	CARD_RIGHT->release();
+	//this->removeAllChildrenWithCleanup(true);
+	this->removeAllComponents();
+	CCLOG("Deconstructor Lieng ------ JumpHere");
 }
 
 void Lieng::onExit()
@@ -226,7 +232,7 @@ void Lieng::onExit()
 	CARD_LEFT->release();
 	CARD_RIGHT->removeAllObjects();
 	CARD_RIGHT->release();
-	this->removeAllChildrenWithCleanup(true);
+	//this->removeAllChildrenWithCleanup(true);
 	this->removeAllComponents();
 	CCLOG("Deconstructor Lieng ------ JumpHere");
 }

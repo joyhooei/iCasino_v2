@@ -286,7 +286,6 @@ XiTo::~XiTo(){
     CARD_LEFT_BOTTOM->removeAllObjects();
     CARD_LEFT_BOTTOM = NULL;
 	CARD_LEFT_BOTTOM->release();
-    this->removeAllChildrenWithCleanup(true);
     this->removeAllComponents();
     CCLOG("Deconstructor----- Jump Here");
 }
@@ -304,7 +303,6 @@ void XiTo::onExit()
 	CARD_LEFT_TOP->release();
 	CARD_LEFT_BOTTOM->removeAllObjects();
 	CARD_LEFT_BOTTOM->release();
-	this->removeAllChildrenWithCleanup(true);
 	this->removeAllComponents();
 	CCLOG("Deconstructor----- Jump Here");
 }

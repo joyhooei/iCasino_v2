@@ -225,7 +225,7 @@ BaCayChuong::~BaCayChuong(){
 	CARD_RIGHT->release();
 	CARD_TOP->removeAllObjects();
 	CARD_TOP->release();
-	this->removeAllChildrenWithCleanup(true);
+	//this->removeAllChildrenWithCleanup(true);
 	this->removeAllComponents();
 	CCLOG("Deconstructor 3 Cay Chuong --- Jump Here !");
 }
@@ -241,7 +241,7 @@ void BaCayChuong::onExit()
 	CARD_RIGHT->release();
 	CARD_TOP->removeAllObjects();
 	CARD_TOP->release();
-	this->removeAllChildrenWithCleanup(true);
+	//this->removeAllChildrenWithCleanup(true);
 	this->removeAllComponents();
 	CCLOG("Deconstructor 3 Cay Chuong --- Jump Here !");
 }
