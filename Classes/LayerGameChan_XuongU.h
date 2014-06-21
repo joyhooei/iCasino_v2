@@ -39,7 +39,8 @@ private:
         tagListXuongSelected=1
     };
 
-	string cuoc[26];
+	vector<string> cuoc;
+	CCArray *chooseXuong;
 
 	CCLabelTTF* lblTime;
     
@@ -71,7 +72,10 @@ public:
     virtual cocos2d::CCSize tableCellSizeForIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
     virtual cocos2d::extension::CCTableViewCell* tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
     virtual unsigned int numberOfCellsInTableView(cocos2d::extension::CCTableView *table);
-    //
+    
+	CCNode* createLabel4Cell(int tag, const char* text, CCSize size, CCPoint point);
+	CCLabelTTF* getLabelFromTagID(CCTableViewCell *cell, int tag);
+	//
     void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 };
 

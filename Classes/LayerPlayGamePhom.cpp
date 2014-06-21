@@ -357,7 +357,7 @@ void LayerPlayGamePhom::resetGame() {
     this->currentPlaying = "";
 }
 
-void LayerPlayGameTLMN::playeSound( string soundPath )
+void LayerPlayGamePhom::playeSound( string soundPath )
 {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
 }
