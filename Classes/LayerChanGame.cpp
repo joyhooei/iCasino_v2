@@ -611,6 +611,8 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			{
 				btnChiu->setTouchEnabled(false);
 				btnChiu->setVisible(false);
+				btnTake->setVisible(true);
+				btnTake->setTouchEnabled(true);
 			}
 		}
 	}
@@ -1278,14 +1280,6 @@ void LayerChanGame::action_TraCua_NOTME(int fpos, int tpos, string cardnu, strin
 	pCard->runAction(moveTo);
 	CCDelayTime *delay = CCDelayTime::create(0.3);
 	pCard->runAction(CCSequence::create(delay,moveTo,callfun,NULL));
-
-	//Hien nut Duoi neu nguoi duoc tra cua la minh
-	int isMe = getPosUserByName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(),_list_user);
-	if (isMe == tpos)
-	{
-		//btnDuoi
-		//btnAn
-	}
 }
 
 //** Đánh bài ***//
@@ -1480,13 +1474,12 @@ void LayerChanGame::action_ChuyenBai_Chiu(int pos, string cardnu, string cardsu)
 	if (pos == myPos)
 	{
 		CCLOG("Chuyen bai khi minh chiu");
+		CCLOG("cardnu = %d, cardsu = %d", atoi(cardnu.c_str()), atoi(cardsu.c_str()));
 		for(int i = 0; i < CARD_ME->count(); i++)
 		{
 			CardChan *cards = (CardChan *)CARD_ME->objectAtIndex(i);
-			CCLOG("cardnu = %s, cardsu = %s",cardnu.c_str(),cardsu.c_str());
-			if (cards->getNumber() == atoi(cardnu.c_str()) && pCard->getSuite() == atoi(cardsu.c_str()))
+			if (cards->getNumber() == atoi(cardnu.c_str()) && cards->getSuite() == atoi(cardsu.c_str()))
 			{
-				CCLOG("Jump here");
 				cards->setTouchEnabled(false);
 				cards->setVisible(false);
 				pCard = (CardChan *)CARD_ME->objectAtIndex(i);
@@ -1511,46 +1504,43 @@ void LayerChanGame::action_ChuyenBai_Chiu(int pos, string cardnu, string cardsu)
 
 		switch(pos){
 		case kUserLeft:
-			count_chiu_left++;
 			pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserLeft)->getPosition().x, layerAvatars->getUserByPos(kUserLeft)->getPosition().y));
 			toX = (float)(CARD_D_LEFT_bottom->count() - count_chiu_left) * w_card + left_d_left;
-			toY = (bottom_d_left) - (25 /2) * count_chiu_left;
-			f = kUserLeft;
+			toY = (bottom_d_left) - (25 /2) * (count_chiu_left + 1);
+			count_chiu_left++;
+			f = kUserLeft;
 			break;
 		case kUserRight:
-			count_chiu_right++;
 			pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserRight)->getPosition().x, layerAvatars->getUserByPos(kUserRight)->getPosition().y));
 			toX = left_d_right - (float)(CARD_D_RIGHT_bottom->count() - count_chiu_right) * w_card;
-			toY = bottom_d_right - (25 / 2) * count_chiu_right;
+			toY = bottom_d_right - (25 / 2) * (count_chiu_right + 1);
+			count_chiu_right++;
 			f = kUserRight;
 			break;
 		case kUserTop:
-			count_chiu_top++;
 			pCard->setPosition(ccp(layerAvatars->getUserByPos(kUserTop)->getPosition().x, layerAvatars->getUserByPos(kUserTop)->getPosition().y));
 			toX = (float)(CARD_D_TOP_bottom->count() - count_chiu_top) * w_card + left_d_top;
-			toY = bottom_d_top - (25 / 2) * count_chiu_top;
+			toY = bottom_d_top - (25 / 2) * (count_chiu_top + 1);
+			count_chiu_top++;
 			f = kUserTop;
 			break;
 		default:
 			break;
 		}
-
-
 	}
 	
 	pCard->setVisible(true);
-
+	float _rotate = -(pCard->getRotation());
+	CCLOG("rotate: %f",pCard->getRotation());
 	float scaleX = (f == kUserMe) ? w_card / w_cardhand : 1;
 	float scaleY = (f == kUserMe) ? h_card / h_cardhand : 1;
-	float rotate = -(pCard->getRotation());
 
 	CCActionInterval *moveto = CCMoveTo::create(0.3, ccp(toX, toY));
-	CCActionInterval *rotateTo = CCRotateBy::create(0.3, rotate);
 	CCActionInterval *scaleBy = CCScaleBy::create(0.3, scaleX, scaleY);
-
+	CCActionInterval *rotateBy = CCRotateBy::create(0.3,_rotate);
 	pCard->runAction(moveto);
-	pCard->runAction(rotateTo);
 	pCard->runAction(scaleBy);
+	pCard->runAction(rotateBy);
 
 	switch(f)
 	{
@@ -1592,6 +1582,15 @@ void LayerChanGame::addCard_toCuaTri(CCNode* sender, void* data){
 		CARD_C_ME->addObject(pCard);
 		CCLOG("Add them 1 card cua chi user me, CARD_C_ME %d",CARD_C_ME->count());
 		resortCard_CuaTri_Alluser(kUserMe);
+		//Hien Button an,vs button dưới
+		if (strcmp(currentPlayer.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
+		{
+			btnBoc->setTouchEnabled(false);
+			btnBoc->setVisible(false);
+			btnEate->setPosition(btnBoc->getPosition());
+			btnDuoi->setVisible(true);
+			btnDuoi->setTouchEnabled(true);
+		}
 		break;
 	case kUserLeft:
 		CARD_C_LEFT->addObject(pCard);
