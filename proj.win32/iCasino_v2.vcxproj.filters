@@ -180,9 +180,6 @@
     <ClCompile Include="..\Classes\LayerPlayGamePhom.cpp">
       <Filter>Classes\GameLayers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\LayerPlayGameTLMB.cpp">
-      <Filter>Classes\GameLayers</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\LayerPlayGameTLMN.cpp">
       <Filter>Classes\GameLayers</Filter>
     </ClCompile>
@@ -418,9 +415,6 @@
       <Filter>Classes\GameLayers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LayerPlayGamePhom.h">
-      <Filter>Classes\GameLayers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\LayerPlayGameTLMB.h">
       <Filter>Classes\GameLayers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\TextFieldCustomLoader.h">

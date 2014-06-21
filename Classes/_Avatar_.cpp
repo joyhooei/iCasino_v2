@@ -98,7 +98,7 @@ timer(NULL)
 		bg->addTouchEventListener(this, toucheventselector(Avatar::onTouch));
 
 		// icon
-		this->sizeIcon.setSize(85, 90);
+		this->sizeIcon.setSize(90, 85);
 		icon = ImageView::create();
 		icon->loadTexture("icon_default.png");
 

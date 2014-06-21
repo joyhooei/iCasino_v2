@@ -65,11 +65,15 @@ CCScene* SceneManager::createScene()
 	SceneManager *layer = SceneManager::create();
 	scene->addChild(layer);
 
+	float sLeft = (sizeScreen.width - scaleMin * WIDTH_DESIGN) / 2;
+	float sTop  = (sizeScreen.height - scaleMin * HEIGHT_DESIGN) / 2;
+
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.3", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("v-1.0.4", "", 16);
 	nameVersion->setColor(ccWHITE);
-	nameVersion->setPosition(ccp(10 + nameVersion->getContentSize().width / 2, 20));
-	scene->addChild(nameVersion);
+	//nameVersion->setPosition(ccp(sLeft + 10 + nameVersion->getContentSize().width / 2, sTop + 20));
+	nameVersion->setPosition(ccp(-WIDTH_DESIGN/2 + 10 + nameVersion->getContentSize().width / 2, -HEIGHT_DESIGN/2 - sTop + 20));
+	layer->addChild(nameVersion, 1001);
 
 	// return the scene
 	return scene;
@@ -95,6 +99,7 @@ bool SceneManager::init() {
 	searchPaths.push_back("fonts");
 	searchPaths.push_back("card_Chan");
 	searchPaths.push_back("Nan3Cay");
+	searchPaths.push_back("sounds");
 	CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
 
 	SIZE_SCREEN = CCDirector::sharedDirector()->getVisibleSize();
@@ -347,8 +352,6 @@ void SceneManager::releaseCurrentLayerGame() {
 	else {
 		child->removeFromParentAndCleanup(true);
 		child=NULL;
-
-		CCLog("You played the Game!");
 	}
 }
 

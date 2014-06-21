@@ -9,9 +9,9 @@
 #ifndef __iCasino_v2__LayerPlayGamePhom__
 #define __iCasino_v2__LayerPlayGamePhom__
 
-#include <iostream>
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "SimpleAudioEngine.h"
 
 #include "AllData.h"
 #include "GameServer.h"
@@ -89,7 +89,9 @@ private:
 		AN_BAI,
 		XEP_BAI,
 		HA_PHOM,
-		SAN_SANG
+		SAN_SANG,
+		START_GAME,
+		END_GAME
 	};
 
     int actionLast;
@@ -122,6 +124,7 @@ public:
     
     void initGame();
     void resetGame();
+	void playeSound(string soundPath);
     
     int    convertResponseToInt(string inString);
     string convertResponseToString(int inInt);

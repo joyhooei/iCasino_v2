@@ -357,6 +357,11 @@ void LayerPlayGamePhom::resetGame() {
     this->currentPlaying = "";
 }
 
+void LayerPlayGameTLMN::playeSound( string soundPath )
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
+}
+
 Button* LayerPlayGamePhom::createButtonWithTitle_Position(const char *title, CCPoint pPoint) {
     // Create the button
     Button* button = Button::create();
@@ -799,6 +804,7 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_RECOMMENDED_CARDSETS() {
     boost::shared_ptr<string> listcard = param->GetUtfString("crdss");
     CCLog("EXT_SRVNTF_RECOMMENDED_CARDSETS listcard= %s", listcard->c_str());
     
+	layerChats->showChatByPos(-1, "Hãy hạ phỏm trước khi đánh!");
     layerCards->event_EXT_SRVNTF_RECOMMENDED_CARDSETS(listcard->c_str());
 }
 
@@ -1087,6 +1093,7 @@ void LayerPlayGamePhom::event_EXT_EVENT_RES_DRAW_CARD() {
     CCLog("EXT_EVENT_RES_DRAW_CARD rscode = %d", *(localChar.get()));
     
     if (*localChar.get() == 0) {
+
         // bốc bài thành công
         getButtonByTag(kTagButtonGive)->setEnabled(false);
         getButtonByTag(kTagButtonEat)->setEnabled(false);
