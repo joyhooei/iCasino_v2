@@ -14,6 +14,7 @@
 #include "LayerTransferMoney.h"
 #include "LayerCurrencyExchange.h"
 #include "LayerBorrowMoney.h"
+#include "LayerGameChan_KetQua.h"
 
 #include "LayerPasswordRoom.h"
 
@@ -156,6 +157,7 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerAction",   LayerActionLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUpdateInfo",   LayerUpdateInfoLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPasswordRoom",   LayerPasswordRoomLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
 
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);

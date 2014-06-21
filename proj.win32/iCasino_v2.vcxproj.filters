@@ -243,6 +243,9 @@
     <ClCompile Include="..\Classes\TomCuaCa.cpp">
       <Filter>Classes\GameLayers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LayerGameChan_KetQua.cpp">
+      <Filter>Classes\GameLayers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -492,6 +495,9 @@
       <Filter>Classes\Children</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\TomCuaCa.h">
+      <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerGameChan_KetQua.h">
       <Filter>Classes\GameLayers</Filter>
     </ClInclude>
   </ItemGroup>
