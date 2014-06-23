@@ -40,6 +40,8 @@ void CustomTableViewCell::setSelectedState( bool isSelected )
 		node->setZOrder(-1);
 		this->addChild(node);
 	}else{
+		if( this->getChildByTag(tag_NodeColor)==NULL )
+			return;
 		this->removeChildByTag(tag_NodeColor, true);
 	}
 }
