@@ -397,7 +397,8 @@ bool LayerMain::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMember
 
 void LayerMain::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
-    CCLOG("LayerMain - onNodeLoaded");
+	CCLOG("LayerMain - onNodeLoaded");
+	this->setKeypadEnabled(true);
     return;
 }
 
@@ -487,4 +488,12 @@ void LayerMain::autoJoinGameWithID( int gID, int rID )
 		LayerChonBanChoi* cLayer = (LayerChonBanChoi*)currNodeView;
 		cLayer->joinRoomByID(rID);
 	}
+}
+
+void LayerMain::keyBackClicked()
+{
+	if( SceneManager::getSingleton().getCurrentLayerTag() != tag_LayerMain )
+		return;
+	CCLOG("LayerMain::keyBackClicked()");
+	closeOldView();
 }

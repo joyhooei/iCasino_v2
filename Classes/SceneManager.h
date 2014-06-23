@@ -99,6 +99,8 @@ private:
 
 	CCSprite *background;
 	CCSprite *background_Chan;
+
+	eLayerTags mCurrentLayerTag;
 public:
 	
 	SceneManager();
@@ -113,6 +115,10 @@ public:
 
 	LayerLogin* getLayerLogin(){
 		return layerLogin;
+	}
+
+	eLayerTags getCurrentLayerTag(){
+		return mCurrentLayerTag;
 	}
 
 	virtual bool init();

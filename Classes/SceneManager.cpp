@@ -122,8 +122,6 @@ bool SceneManager::init() {
 	background->setAnchorPoint(ccp(0.5, 0.5));
 	background->setPosition(ccp(0, 0));
 	this->addChild(background);
-	
-	
 
 	background_Chan = NULL;
 
@@ -225,6 +223,7 @@ bool SceneManager::showNotification(){
 	layerNotification->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
 	//layerNotification->setPosition(ccp(SIZE_SCREEN.width/2, SIZE_SCREEN.width/2));
 	layerNotification->setVisible(true);
+	layerNotification->runAction(mUtils::getActionOpenPopup());
 	return true;
 }
 
@@ -254,12 +253,14 @@ void SceneManager::hideLoading() {
 
 // Đến màn hình login
 void SceneManager::gotoLogin() {
+	mCurrentLayerTag = tag_LayerLogin;
 	showLayer(layerLogin);
 	hideLayer(layerMain);
 }
 
 // Đến Main
 void SceneManager::gotoMain() {
+	mCurrentLayerTag = tag_LayerMain;
 	releaseCurrentLayerGame();
 	showLayer(layerMain);
 	layerMain->gotoServices();
@@ -270,6 +271,7 @@ void SceneManager::gotoMain() {
 // Go to Game
 void SceneManager::gotoGameByTag(int typeGame) {
 	CCLOG("typeGame: %d", typeGame);
+	mCurrentLayerTag = tag_LayerGaming;
 	switch (typeGame) {
 	case kGameTienLenMienNam:
 

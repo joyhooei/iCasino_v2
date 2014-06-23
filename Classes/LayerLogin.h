@@ -28,7 +28,8 @@ class LayerLogin
 {
 private:
 	enum tagNotification{
-		tagConfirmReJoinGame = 100
+		tagConfirmReJoinGame = 100,
+		tagCloseApp
 	};
     //CCLabelTTF* lblCuPhap;
     CCLabelTTF* lblDauSo;
@@ -45,6 +46,8 @@ private:
 public:
     LayerLogin();
     virtual ~LayerLogin();
+
+	void keyBackClicked();
     
 	void selectedStateEvent(CCObject* pSender, CheckBoxEventType type);   
 	void notificationCallBack(bool, int tag); 
