@@ -322,7 +322,7 @@ void SceneManager::gotoGameByTag(int typeGame) {
 		showLayer(mGameChan);
 		break;
 	case kGameTomCuaCa:
-		mGameTomCuaCa = TomCuaCa::create();
+		mGameTomCuaCa = new TomCuaCa();
 		mGameTomCuaCa->setPosition(ccp(WIDTH_DESIGN/2,HEIGHT_DESIGN/2));
 		this->addChild(mGameTomCuaCa,zorder_LayerGaming, tag_LayerGaming);
 		showLayer(mGameTomCuaCa);

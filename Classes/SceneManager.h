@@ -90,7 +90,7 @@ private:
 	XiTo *mGameXiTo;
 	LayerChanGame *mGameChan;
 
-	CCLayer *mGameTomCuaCa;
+	TomCuaCa *mGameTomCuaCa;
 
 	CCSize SIZE_SCREEN;
 

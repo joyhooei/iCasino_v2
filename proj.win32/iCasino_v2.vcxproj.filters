@@ -243,6 +243,9 @@
     <ClCompile Include="..\Classes\TomCuaCa.cpp">
       <Filter>Classes\GameLayers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\_Avatar_inTomCuaCa.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -493,6 +496,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\TomCuaCa.h">
       <Filter>Classes\GameLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Avatar_inTomCuaCa.h">
+      <Filter>Classes\Children</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
