@@ -15,6 +15,9 @@
 #include "_Chat_.h"
 #include "mUtils.h"
 
+#include "LayerGameChan_KetQua.h"
+#define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
+
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
@@ -86,29 +89,26 @@ void LayerLogin::onButtonLogin(CCObject* pSender){
 //    SceneManager::getSingleton().gotoMain();
 //    return;
     if( !GameServer::getSingleton().getSmartFox()->IsConnected() )
-        GameServer::getSingleton().connectToServer("117.0.198.24", "9933");
+        GameServer::getSingleton().connectToServer("192.168.1.88", "9933");
+	//117.0.198.24
     else{
         doLogin();
     }
 }
 
 void LayerLogin::onButtonLoginWithFacebook(CCObject* pSender){
-//    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-//    * mLayer;
-//    if (ccbReader)
-//    {
-//        mLayer = (LayerChooseGame *)ccbReader->readNodeGraphFromFile( "LayerChooseGame.ccbi" );
-//        this->addChild(mLayer, 1, 1);
-//        ccbReader->release();
-//    }
-//     ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-//     LayerGameChan_XuongU* mLayer;
-//     if (ccbReader)
-//     {
-//         mLayer = (LayerGameChan_XuongU *)ccbReader->readNodeGraphFromFile( "LayerGameChan_XuongU.ccbi" );
-//         this->addChild(mLayer, 1, 1);
-//         ccbReader->release();
-//     }
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
+	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	LayerGameChan_KetQua* mLayer;
+	if (ccbReader)
+	{
+		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
+		this->addChild(mLayer, 1, 1);
+		//        SceneManager::getSingleton().showLayer(mLayer);
+		ccbReader->release();
+	}
 }
 void LayerLogin::onButtonCreateAccount(CCObject* pSender){
 	CCNodeLoaderLibrary * ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();

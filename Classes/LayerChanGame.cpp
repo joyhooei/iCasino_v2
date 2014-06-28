@@ -15,6 +15,7 @@
 #include "LayerGameChan_XuongU.h"
 #include "SliderCustomLoader.h"
 #include "SceneManager.h"
+#include "LayerGameChan_KetQua.h"
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
 LayerChanGame::LayerChanGame(){
@@ -24,6 +25,7 @@ LayerChanGame::LayerChanGame(){
 	EXT_EVENT_REQ_DRAW_CARD = "rqdrwc";
 	EXT_EVENT_REQ_TAKE_CARD = "rqtkc";
 	EXT_EVENT_REQ_DUOI_CARD = "rqduoic";
+	EXT_EVENT_REQ_TRENTAY_DETAIL = "rqttdtl";
 
 	EXT_SRVNTF_GAME_MASTER_INFO = "ntfgminfo";
 	EXT_SRVNTF_PLAYER_LIST = "ntfpllst";
@@ -46,8 +48,7 @@ LayerChanGame::LayerChanGame(){
 	EXT_EVENT_RES_U = "rsU";
 	EXT_EVENT_REQ_U = "rqU";
 	EXT_EVENT_REQ_CHIU_CARD = "rqchiuc";
-	EXT_EVENT_REQ_NOC_DETAIL = "rqnocdtl";
-	EXT_EVENT_REQ_TRENTAY_DETAIL = "rqttdtl"; 
+	EXT_EVENT_REQ_NOC_DETAIL = "rqnocdtl"; 
 	EXT_EVENT_RES_CHIU_CARD = "rschiuc";
 
 	_list_user = "";
@@ -208,43 +209,47 @@ LayerChanGame::LayerChanGame(){
 
 	//INIT ARRAY CARD ALL USER
 
-	ALL_CARDS = new CCArray();
+	ALL_CARDS = CCArray::create();
 	ALL_CARDS->retain();
 	createAllCards();
 
-	CARD_ME = new CCArray();
-	CARD_C_ME = new CCArray();
-	CARD_C_LEFT = new CCArray();
-	CARD_C_RIGHT = new CCArray();
-	CARD_C_TOP = new CCArray();
-
-	CARD_D_ME_top = new CCArray();
-	CARD_D_LEFT_top = new CCArray();
-	CARD_D_RIGHT_top = new CCArray();
-	CARD_D_TOP_top = new CCArray();
-
-	CARD_D_ME_bottom = new CCArray();
-	CARD_D_LEFT_bottom = new CCArray();
-	CARD_D_RIGHT_bottom = new CCArray();
-	CARD_D_TOP_bottom = new CCArray();
-
-	
-
+	CARD_ME = CCArray::create();
 	CARD_ME->retain();
 
+	CARD_C_ME = CCArray::create();
 	CARD_C_ME->retain();
+
+	CARD_C_LEFT = CCArray::create();
 	CARD_C_LEFT->retain();
+
+	CARD_C_RIGHT = CCArray::create();
 	CARD_C_RIGHT->retain();
+
+	CARD_C_TOP = CCArray::create();
 	CARD_C_TOP->retain();
 
+	CARD_D_ME_top = CCArray::create();
 	CARD_D_ME_top->retain();
+
+	CARD_D_LEFT_top = CCArray::create();
 	CARD_D_LEFT_top->retain();
+
+	CARD_D_RIGHT_top = CCArray::create();
 	CARD_D_RIGHT_top->retain();
+
+	CARD_D_TOP_top = CCArray::create();
 	CARD_D_TOP_top->retain();
 
+	CARD_D_ME_bottom = CCArray::create();
 	CARD_D_ME_bottom->retain();
+
+	CARD_D_LEFT_bottom = CCArray::create();
 	CARD_D_LEFT_bottom->retain();
+
+	CARD_D_RIGHT_bottom = CCArray::create();
 	CARD_D_RIGHT_bottom->retain();
+
+	CARD_D_TOP_bottom = CCArray::create();
 	CARD_D_TOP_bottom->retain();
 
 	SceneManager::getSingleton().hideLoading();
@@ -660,6 +665,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if( rg != NULL){
 			CCLOG("Resuilt game: %s",rg->c_str());
 			layerAvatars->stopAllTimer();
+			resuiltGame(rg->c_str());
 		}
 		CCLOG("EXT_EVENT_GAME_RESULT");
 	}
@@ -1483,6 +1489,7 @@ void LayerChanGame::action_ChuyenBai_Chiu(int pos, string cardnu, string cardsu)
 				cards->setTouchEnabled(false);
 				cards->setVisible(false);
 				pCard = (CardChan *)CARD_ME->objectAtIndex(i);
+				pCard->setRotation(0);
 				CARD_ME->removeObjectAtIndex(i);
 				CCLOG("Jump here");
 				break;
@@ -2061,6 +2068,23 @@ void LayerChanGame::XuongU(){
 		popUp->setPosition(ccp(10,10));
 		popUp->setZOrder(_coutZorder+1);
 		uLayer->addChild(popUp);
+		ccbReader->release();
+	}
+}
+
+
+void LayerChanGame::resuiltGame(string resuilt)
+{
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
+	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	LayerGameChan_KetQua* mLayer;
+	if (ccbReader)
+	{
+		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
+		this->addChild(mLayer, 1, 1);
+		//        SceneManager::getSingleton().showLayer(mLayer);
 		ccbReader->release();
 	}
 }
