@@ -366,7 +366,12 @@ void LayerCardInGame::refreshCardOnHand(bool isRefreshTop) {
             top = topCard;
             card->setClicked(false);
         }
-        else top = card->getPositionY();
+        else{
+			// nếu quân bài đang được click thì top giữ nguyên
+			// ngược lại top cần được đặt lại vị trí khởi tạo topCard
+			if (card->getClicked()) top = card->getPositionY();
+			else top = topCard;
+		}
         
         card->setZOrder(i);
         card->stopAllActions();
