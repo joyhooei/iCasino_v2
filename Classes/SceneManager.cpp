@@ -14,8 +14,6 @@
 #include "LayerTransferMoney.h"
 #include "LayerCurrencyExchange.h"
 #include "LayerBorrowMoney.h"
-#include "LayerGameChan_KetQua.h"
-#include "LayerInviteFriends.h"
 
 #include "LayerPasswordRoom.h"
 
@@ -65,15 +63,11 @@ CCScene* SceneManager::createScene()
 	SceneManager *layer = SceneManager::create();
 	scene->addChild(layer);
 
-	float sLeft = (sizeScreen.width - scaleMin * WIDTH_DESIGN) / 2;
-	float sTop  = (sizeScreen.height - scaleMin * HEIGHT_DESIGN) / 2;
-
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("v-1.0.5", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.3", "", 16);
 	nameVersion->setColor(ccWHITE);
-	//nameVersion->setPosition(ccp(sLeft + 10 + nameVersion->getContentSize().width / 2, sTop + 20));
-	nameVersion->setPosition(ccp(-WIDTH_DESIGN/2 + 10 + nameVersion->getContentSize().width / 2, -HEIGHT_DESIGN/2 - sTop + 20));
-	layer->addChild(nameVersion, 1001);
+	nameVersion->setPosition(ccp(10 + nameVersion->getContentSize().width / 2, 20));
+	scene->addChild(nameVersion);
 
 	// return the scene
 	return scene;
@@ -99,13 +93,12 @@ bool SceneManager::init() {
 	searchPaths.push_back("fonts");
 	searchPaths.push_back("card_Chan");
 	searchPaths.push_back("Nan3Cay");
-	searchPaths.push_back("sounds");
-	searchPaths.push_back("sounds/game");
-	searchPaths.push_back("sounds/game_phom");
-	searchPaths.push_back("sounds/game_tienlen");
+	searchPaths.push_back("chats");
 	CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
 
 	SIZE_SCREEN = CCDirector::sharedDirector()->getVisibleSize();
+
+	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo( "onion1.ExportJson" );
 
 	// Add updateEvent for this class - Important
 	this->schedule(schedule_selector(SceneManager::updateEvent));
@@ -122,6 +115,8 @@ bool SceneManager::init() {
 	background->setAnchorPoint(ccp(0.5, 0.5));
 	background->setPosition(ccp(0, 0));
 	this->addChild(background);
+	
+	
 
 	background_Chan = NULL;
 
@@ -164,8 +159,6 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerAction",   LayerActionLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUpdateInfo",   LayerUpdateInfoLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPasswordRoom",   LayerPasswordRoomLoader::loader());
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerInviteFriends",   LayerInviteFriendsLoader::loader());
 
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
@@ -193,8 +186,12 @@ bool SceneManager::init() {
 	this->addChild(layerMain, zorder_LayerMain, tag_LayerMain);
 	this->addChild(layerNotification, zorder_LayerNotification, tag_LayerNotification);
 
+	mLayerChatWindow = LayerChatWindow::create();
+	this->addChild(mLayerChatWindow, zorder_LayerNotification, tag_LayerNotification);
+
 	// Layer Đầu tiên: Login
 	hideNotification();
+	hideLayerChatWindow();
 	gotoLogin();
 
 	return true;
@@ -223,7 +220,6 @@ bool SceneManager::showNotification(){
 	layerNotification->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
 	//layerNotification->setPosition(ccp(SIZE_SCREEN.width/2, SIZE_SCREEN.width/2));
 	layerNotification->setVisible(true);
-	layerNotification->runAction(mUtils::getActionOpenPopup());
 	return true;
 }
 
@@ -253,14 +249,12 @@ void SceneManager::hideLoading() {
 
 // Đến màn hình login
 void SceneManager::gotoLogin() {
-	mCurrentLayerTag = tag_LayerLogin;
 	showLayer(layerLogin);
 	hideLayer(layerMain);
 }
 
 // Đến Main
 void SceneManager::gotoMain() {
-	mCurrentLayerTag = tag_LayerMain;
 	releaseCurrentLayerGame();
 	showLayer(layerMain);
 	layerMain->gotoServices();
@@ -271,7 +265,6 @@ void SceneManager::gotoMain() {
 // Go to Game
 void SceneManager::gotoGameByTag(int typeGame) {
 	CCLOG("typeGame: %d", typeGame);
-	mCurrentLayerTag = tag_LayerGaming;
 	switch (typeGame) {
 	case kGameTienLenMienNam:
 
@@ -336,13 +329,11 @@ void SceneManager::gotoGameByTag(int typeGame) {
 		showLayer(mGameChan);
 		break;
 	case kGameTomCuaCa:
-		/*
-		mGameTomCuaCa = TomCuaCa::create();
+		mGameTomCuaCa = new TomCuaCa();
 		mGameTomCuaCa->setPosition(ccp(WIDTH_DESIGN/2,HEIGHT_DESIGN/2));
 		this->addChild(mGameTomCuaCa,zorder_LayerGaming, tag_LayerGaming);
 		showLayer(mGameTomCuaCa);
 		CCLog("TCC");
-		*/
 		break;
 	}
 	
@@ -359,6 +350,8 @@ void SceneManager::releaseCurrentLayerGame() {
 	else {
 		child->removeFromParentAndCleanup(true);
 		child=NULL;
+
+		CCLog("You played the Game!");
 	}
 }
 
@@ -443,4 +436,25 @@ void SceneManager::disconnectFromServer()
 	//
 	Chat *toast = new Chat("Mất kết nối!", -1);
 	layerLogin->addChild(toast);
+}
+
+bool SceneManager::showLayerChatWindow()
+{
+	if( mLayerChatWindow->isVisible() )
+		return false;
+	mLayerChatWindow->setAnchorPoint(ccp(0, 0));
+	mLayerChatWindow->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
+	//layerNotification->setPosition(ccp(SIZE_SCREEN.width/2, SIZE_SCREEN.width/2));
+	mLayerChatWindow->setVisible(true);
+	mLayerChatWindow->setTouchEnabled(true);
+	return true;
+}
+
+bool SceneManager::hideLayerChatWindow()
+{
+	mLayerChatWindow->setPosition(ccp(SIZE_SCREEN.width, mLayerChatWindow->getPositionY()));
+	mLayerChatWindow->setVisible(false);
+	mLayerChatWindow->setTouchEnabled(false);
+
+	return true;
 }

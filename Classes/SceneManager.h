@@ -37,6 +37,7 @@
 #include "LayerLoading.h"
 #include "TomCuaCa.h"
 
+#include "LayerChatWindow.h"
 //----------------
 using namespace Sfs2X;
 using namespace std;
@@ -90,7 +91,9 @@ private:
 	XiTo *mGameXiTo;
 	LayerChanGame *mGameChan;
 
-	CCLayer *mGameTomCuaCa;
+	LayerChatWindow* mLayerChatWindow;
+
+	TomCuaCa *mGameTomCuaCa;
 
 	CCSize SIZE_SCREEN;
 
@@ -121,6 +124,12 @@ public:
 		return mCurrentLayerTag;
 	}
 
+	LayerChatWindow* getLayerChatWindow(){
+		return mLayerChatWindow;
+	}
+	bool showLayerChatWindow();
+	bool hideLayerChatWindow();
+
 	virtual bool init();
 	static cocos2d::CCScene* scene();
 	CREATE_FUNC(SceneManager);
@@ -132,6 +141,7 @@ public:
 
 	bool showNotification();
 	bool hideNotification();
+
 
 	void showLoading();
 	void hideLoading();

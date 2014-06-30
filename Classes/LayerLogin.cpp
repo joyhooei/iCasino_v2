@@ -15,9 +15,6 @@
 #include "_Chat_.h"
 #include "mUtils.h"
 
-#include "LayerGameChan_KetQua.h"
-#define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
-
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
@@ -89,26 +86,47 @@ void LayerLogin::onButtonLogin(CCObject* pSender){
 //    SceneManager::getSingleton().gotoMain();
 //    return;
     if( !GameServer::getSingleton().getSmartFox()->IsConnected() )
-        GameServer::getSingleton().connectToServer("192.168.1.88", "9933");
-	//117.0.198.24
+        GameServer::getSingleton().connectToServer("bestteam.no-ip.biz", "9933");
     else{
         doLogin();
     }
 }
 
 void LayerLogin::onButtonLoginWithFacebook(CCObject* pSender){
-	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
-	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
-	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	LayerGameChan_KetQua* mLayer;
-	if (ccbReader)
-	{
-		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
-		this->addChild(mLayer, 1, 1);
-		//        SceneManager::getSingleton().showLayer(mLayer);
-		ccbReader->release();
+// 	std::string str ("There are two needles in this haystack with needles.");
+// 	std::string str2 ("needle");
+// 	std::size_t found = str.find(str2);
+// 	if (found!=std::string::npos)
+// 		CCLOG("Found  it %d", found);
+// 	else
+// 		CCLOG("Cannot found!");
+	vector<string> lstRegx ;
+	for( int i = 1; i<=16; i++ ){
+		char buff[10];
+		sprintf(buff, "(%d)", i);
+		lstRegx.push_back(buff);
 	}
+	string S = "(1)abc xyz(2)(15)he he";
+	vector<string> lst = mUtils::splitStringByListRegex(S, lstRegx);
+	for( int i = 0; i<lst.size(); i++ ){
+		CCLOG("***%d*** %s", i, lst.at(i).c_str());
+	}
+//    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+//    * mLayer;
+//    if (ccbReader)
+//    {
+//        mLayer = (LayerChooseGame *)ccbReader->readNodeGraphFromFile( "LayerChooseGame.ccbi" );
+//        this->addChild(mLayer, 1, 1);
+//        ccbReader->release();
+//    }
+//     ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+//     LayerGameChan_XuongU* mLayer;
+//     if (ccbReader)
+//     {
+//         mLayer = (LayerGameChan_XuongU *)ccbReader->readNodeGraphFromFile( "LayerGameChan_XuongU.ccbi" );
+//         this->addChild(mLayer, 1, 1);
+//         ccbReader->release();
+//     }
 }
 void LayerLogin::onButtonCreateAccount(CCObject* pSender){
 	CCNodeLoaderLibrary * ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();

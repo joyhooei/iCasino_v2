@@ -69,7 +69,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\cocos2dx;$(ProjectDir)..\..\..\cocos2dx\include;$(ProjectDir)..\..\..\cocos2dx\kazmath\include;$(ProjectDir)..\..\..\cocos2dx\platform\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32\OGLES;$(ProjectDir)..\..\..\external;$(ProjectDir)..\..\..\external\chipmunk\include\chipmunk;$(ProjectDir)..\..\..\CocosDenshion\include;$(ProjectDir)..\..\..\extensions;..\Classes;..;$(ProjectDir)..\..\..\libs\smartfox;$(ProjectDir)..\..\..\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\cocos2dx;$(ProjectDir)..\..\..\cocos2dx\include;$(ProjectDir)..\..\..\cocos2dx\kazmath\include;$(ProjectDir)..\..\..\cocos2dx\platform\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32\OGLES;$(ProjectDir)..\..\..\external;$(ProjectDir)..\..\..\external\chipmunk\include\chipmunk;$(ProjectDir)..\..\..\CocosDenshion\include;$(ProjectDir)..\..\..\extensions;$(ProjectDir)..\..\..\libs\smartfox;$(ProjectDir)..\..\..\libs;..\Classes;$(ProjectDir)..\..\..\libs\smartfox_lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -83,7 +83,7 @@
     <Link>
       <AdditionalDependencies>libExtensions.lib;libcocos2d.lib;libCocosDenshion.lib;opengl32.lib;glew32.lib;libBox2d.lib;libchipmunk.lib;libcurl_imp.lib;pthreadVCE2.lib;websockets.lib;SmartFoxClientApi.lib;libboost_system-vc100-mt-gd-1_52.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir);$(ProjectDir)..\..\..\libs;$(ProjectDir)..\..\..\libs\boost_lib_win32;$(ProjectDir)..\..\..\libs\smartfox_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);$(ProjectDir)..\..\..\libs;$(ProjectDir)..\..\..\libs\boost_lib_win32;$(ProjectDir)..\..\..\libs\smartfox;$(ProjectDir)..\..\..\libs\smartfox_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -145,6 +145,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LayerAvatar_BaCay.cpp" />
     <ClCompile Include="..\Classes\LayerBet_BaCayChuong.cpp" />
     <ClCompile Include="..\Classes\LayerBet_Lieng.cpp" />
+    <ClCompile Include="..\Classes\LayerBet_TomCuaCa.cpp" />
     <ClCompile Include="..\Classes\LayerBorrowMoney.cpp" />
     <ClCompile Include="..\Classes\LayerBuyAvatar.cpp" />
     <ClCompile Include="..\Classes\LayerChanGame.cpp" />
@@ -152,6 +153,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LayerChangePassword.cpp" />
     <ClCompile Include="..\Classes\LayerChargeMoney.cpp" />
     <ClCompile Include="..\Classes\LayerChatRoom.cpp" />
+    <ClCompile Include="..\Classes\LayerChatWindow.cpp" />
     <ClCompile Include="..\Classes\LayerChonBanChoi.cpp" />
     <ClCompile Include="..\Classes\LayerChooseGame.cpp" />
     <ClCompile Include="..\Classes\LayerCreateAccount.cpp" />
@@ -164,6 +166,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LayerGameChan_XuongU.cpp" />
     <ClCompile Include="..\Classes\LayerInbox.cpp" />
     <ClCompile Include="..\Classes\LayerInviteFriends.cpp" />
+    <ClCompile Include="..\Classes\LayerInviteFriendsFacebook.cpp" />
     <ClCompile Include="..\Classes\LayerLichSuGiaoDich.cpp" />
     <ClCompile Include="..\Classes\LayerLoading.cpp" />
     <ClCompile Include="..\Classes\LayerLogin.cpp" />
@@ -194,6 +197,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\XiTo.cpp" />
     <ClCompile Include="..\Classes\_Avatar_.cpp" />
     <ClCompile Include="..\Classes\_Avatar_inGame_.cpp" />
+    <ClCompile Include="..\Classes\_Avatar_inTomCuaCa.cpp" />
     <ClCompile Include="..\Classes\_Background_inGame_.cpp" />
     <ClCompile Include="..\Classes\_Button_.cpp" />
     <ClCompile Include="..\Classes\_Button_inGame_.cpp" />
@@ -208,6 +212,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\_Layer_CardChan_.cpp" />
     <ClCompile Include="..\Classes\_Number_.cpp" />
     <ClCompile Include="..\Classes\_Number_inGame_.cpp" />
+    <ClCompile Include="..\Classes\_Number_inTomCuaCa.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +231,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\LayerAvatar_BaCay.h" />
     <ClInclude Include="..\Classes\LayerBet_BaCayChuong.h" />
     <ClInclude Include="..\Classes\LayerBet_Lieng.h" />
+    <ClInclude Include="..\Classes\LayerBet_TomCuaCa.h" />
     <ClInclude Include="..\Classes\LayerBorrowMoney.h" />
     <ClInclude Include="..\Classes\LayerBuyAvatar.h" />
     <ClInclude Include="..\Classes\LayerChanGame.h" />
@@ -233,6 +239,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\LayerChangePassword.h" />
     <ClInclude Include="..\Classes\LayerChargeMoney.h" />
     <ClInclude Include="..\Classes\LayerChatRoom.h" />
+    <ClInclude Include="..\Classes\LayerChatWindow.h" />
     <ClInclude Include="..\Classes\LayerChonBanChoi.h" />
     <ClInclude Include="..\Classes\LayerChooseGame.h" />
     <ClInclude Include="..\Classes\LayerCreateAccount.h" />
@@ -245,6 +252,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\LayerGameChan_XuongU.h" />
     <ClInclude Include="..\Classes\LayerInbox.h" />
     <ClInclude Include="..\Classes\LayerInviteFriends.h" />
+    <ClInclude Include="..\Classes\LayerInviteFriendsFacebook.h" />
     <ClInclude Include="..\Classes\LayerLichSuGiaoDich.h" />
     <ClInclude Include="..\Classes\LayerLoading.h" />
     <ClInclude Include="..\Classes\LayerLogin.h" />
@@ -284,6 +292,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\XiTo.h" />
     <ClInclude Include="..\Classes\_Avatar_.h" />
     <ClInclude Include="..\Classes\_Avatar_inGame_.h" />
+    <ClInclude Include="..\Classes\_Avatar_inTomCuaCa.h" />
     <ClInclude Include="..\Classes\_Background_inGame_.h" />
     <ClInclude Include="..\Classes\_Button_.h" />
     <ClInclude Include="..\Classes\_Button_inGame_.h" />
@@ -298,6 +307,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
     <ClInclude Include="..\Classes\_Number_.h" />
     <ClInclude Include="..\Classes\_Number_inGame_.h" />
+    <ClInclude Include="..\Classes\_Number_inTomCuaCa.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

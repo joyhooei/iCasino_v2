@@ -240,22 +240,23 @@
     <ClCompile Include="..\Classes\TomCuaCa.cpp">
       <Filter>Classes\GameLayers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\LayerGameChan_KetQua.cpp">
-      <Filter>Classes\GameLayers</Filter>
+    <ClCompile Include="..\Classes\_Avatar_inTomCuaCa.cpp">
+      <Filter>Classes\Children</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LayerInviteFriendsFacebook.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChatWindow.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerAvatar_BaCay.cpp" />
+    <ClCompile Include="..\Classes\LayerBet_TomCuaCa.cpp" />
+    <ClCompile Include="..\Classes\LayerGameChan_KetQua.cpp" />
+    <ClCompile Include="..\Classes\LayerInviteFriends.cpp" />
+    <ClCompile Include="..\Classes\_CardBaCay_.cpp" />
+    <ClCompile Include="..\Classes\_LayerBet_.cpp" />
     <ClCompile Include="..\Classes\_Layer_CardChan_.cpp" />
-    <ClCompile Include="..\Classes\LayerInviteFriends.cpp">
-      <Filter>Classes\MenuLayers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\_CardBaCay_.cpp">
-      <Filter>Classes\Children</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\LayerAvatar_BaCay.cpp">
-      <Filter>Classes\MenuLayers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\_LayerBet_.cpp">
-      <Filter>Classes\Children</Filter>
-    </ClCompile>
+    <ClCompile Include="..\Classes\_Number_inTomCuaCa.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -504,22 +505,23 @@
     <ClInclude Include="..\Classes\TomCuaCa.h">
       <Filter>Classes\GameLayers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\LayerGameChan_KetQua.h">
-      <Filter>Classes\GameLayers</Filter>
+    <ClInclude Include="..\Classes\_Avatar_inTomCuaCa.h">
+      <Filter>Classes\Children</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\LayerInviteFriendsFacebook.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChatWindow.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerAvatar_BaCay.h" />
+    <ClInclude Include="..\Classes\LayerBet_TomCuaCa.h" />
+    <ClInclude Include="..\Classes\LayerGameChan_KetQua.h" />
+    <ClInclude Include="..\Classes\LayerInviteFriends.h" />
+    <ClInclude Include="..\Classes\_CardBaCay_.h" />
+    <ClInclude Include="..\Classes\_LayerBet_.h" />
     <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
-    <ClInclude Include="..\Classes\LayerInviteFriends.h">
-      <Filter>Classes\MenuLayers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\_CardBaCay_.h">
-      <Filter>Classes\Children</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\LayerAvatar_BaCay.h">
-      <Filter>Classes\MenuLayers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\_LayerBet_.h">
-      <Filter>Classes\Children</Filter>
-    </ClInclude>
+    <ClInclude Include="..\Classes\_Number_inTomCuaCa.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

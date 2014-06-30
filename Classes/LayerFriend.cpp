@@ -13,6 +13,7 @@
 #include "SliderCustomLoader.h"
 #include "mUtils.h"
 #include "LayerInviteFriends.h"
+#include "LayerInviteFriendsFacebook.h"
 
 #include "SceneManager.h"
 
@@ -65,16 +66,18 @@ void LayerFriend::gotoFriendDetails(){
 }
 
 void LayerFriend::gotoInviteFriends(){
-//    removeOldView();
-//    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-//    LayerChargeMoney* mLayer;
-//    if (ccbReader)
-//    {
-//        mLayer = (LayerChargeMoney *)ccbReader->readNodeGraphFromFile( "LayerChargeMoney.ccbi" );
-//        nodeChild->addChild(mLayer, 1, 1);
-//        ccbReader->release();
-//    }
-//    currNodeView = mLayer;
+    removeOldView();
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	LayerInviteFriendsFacebook* mLayer;
+	if (ccbReader)
+	{
+		mLayer = (LayerInviteFriendsFacebook *)ccbReader->readNodeGraphFromFile( "LayerInviteFriendsFacebook.ccbi" );
+		nodeChild->addChild(mLayer, 1, 1);
+		ccbReader->release();
+	}
+    currNodeView = mLayer;
 }
 
 // CCBSelectorResolver interface
@@ -111,20 +114,23 @@ void LayerFriend::onButtonClick(CCObject* pSender)
     switch (tag) {
         case tag_friendInfoDisable:
             currTag = tag_friendInfoEnable;
+			gotoFriendDetails();
             //
             break;
         case tag_inviteDisable:
-			CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
-			CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-			ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-			LayerInviteFriends* mLayer;
-			if (ccbReader)
-			{
-				mLayer = (LayerInviteFriends *)ccbReader->readNodeGraphFromFile( "LayerInviteFriends.ccbi" );
-				this->addChild(mLayer, 1, 1);
-				ccbReader->release();
-			}
-            return;
+// 			CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+// 			CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+// 			ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+// 			LayerInviteFriends* mLayer;
+// 			if (ccbReader)
+// 			{
+// 				mLayer = (LayerInviteFriends *)ccbReader->readNodeGraphFromFile( "LayerInviteFriends.ccbi" );
+// 				this->addChild(mLayer, 1, 1);
+// 				ccbReader->release();
+// 			}
+// 			
+			gotoInviteFriends();
+            //return;
             currTag = tag_inviteEnable;
             break;
     }
@@ -152,7 +158,7 @@ bool LayerFriend::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemb
 
 void LayerFriend::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
-    CCLOG("Imhere onNodeLoaded");
+    CCLOG("Imhere LayerFriend::onNodeLoaded");
     gotoFriendDetails();
     return;
 }

@@ -226,7 +226,7 @@ void LayerCreateAccount::OnSmartFoxLoginError( unsigned long long ptrContext, bo
 
 void LayerCreateAccount::connect2RegistZone()
 {
-	GameServer::getSingleton().connectToServer("bestteam.no-ip.biz", "9933");
+	GameServer::getSingleton().connectToServer("192.168.1.88", "9933");
 }
 
 void LayerCreateAccount::registerWithTouchDispatcher( void )

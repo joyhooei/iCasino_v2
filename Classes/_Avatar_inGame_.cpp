@@ -44,7 +44,7 @@ LayerAvatarInGame::~LayerAvatarInGame(){
 
 void LayerAvatarInGame::onExit() {
 	CCLOG("onExit: clean LayerAvatarInGame");
-
+	
 	arrName.clear();
 	arrFlag.clear();
 	arrURL.clear();
