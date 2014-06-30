@@ -19,7 +19,7 @@ CardBaCay::~CardBaCay()
 	this->removeAllChildren();
 	CCLOG("Deconstructor Layer Cards Ba Cay");
 }
-
+//Chân
 bool CardBaCay::init()
 {
 	if (!CCLayer::init())
