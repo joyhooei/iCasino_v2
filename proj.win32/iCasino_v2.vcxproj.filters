@@ -247,6 +247,12 @@
     <ClCompile Include="..\Classes\LayerInviteFriends.cpp">
       <Filter>Classes\MenuLayers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LayerInviteFriendsFacebook.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerChatWindow.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -500,6 +506,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
     <ClInclude Include="..\Classes\LayerInviteFriends.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerInviteFriendsFacebook.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChatWindow.h">
       <Filter>Classes\MenuLayers</Filter>
     </ClInclude>
   </ItemGroup>

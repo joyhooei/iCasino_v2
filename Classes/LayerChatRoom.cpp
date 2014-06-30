@@ -12,9 +12,12 @@
 #include "LayerCreateRoom.h"
 #include "mUtils.h"
 #include "CustomTableViewCell.h"
+#include "_Chat_.h"
 
 #include "Requests/JoinRoomRequest.h"
 #include "SceneManager.h"
+
+#include "LayerChatWindow.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -29,6 +32,12 @@ LayerChatRoom::LayerChatRoom()
     tblListRooms = NULL;
     
     lblTitle = NULL;
+
+	currRoomChatIndex = -1;
+	//
+	for( int i = 1; i<=16; i++ ){
+		lstRegex.push_back( CCString::createWithFormat("(%d)", i)->getCString() );
+	}
     //
     GameServer::getSingleton().addListeners(this);
 }
@@ -56,7 +65,12 @@ SEL_MenuHandler LayerChatRoom::onResolveCCBCCMenuItemSelector(cocos2d::CCObject 
 
 void LayerChatRoom::onButtonChat(CCObject* pSender)
 {
-	CCLOG("onButtonChat");
+// 	string line("test\ttest2\ttest3");
+// 	vector<string> strs;
+// 	boost::split(strs,line,boost::is_any_of("\t")	return;
+	LayerChatWindow* l = LayerChatWindow::create();
+	this->addChild(l);
+	l->setCallbackFunc(this,callfuncND_selector(LayerChatRoom::callbackFromChatWindow));
 }
 
 // CCBMemberVariableAssigner interface
@@ -70,6 +84,8 @@ bool LayerChatRoom::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMe
 
 void LayerChatRoom::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
+	currRoomChatIndex = 0;
+	currRoomID = -1;
     //Init for table List Room
     tblListRooms = CCTableView::create(this, nodeListRooms->getContentSize());
     tblListRooms->setDirection(kCCScrollViewDirectionVertical);
@@ -89,6 +105,13 @@ void LayerChatRoom::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
     tblListContents->setVerticalFillOrder(kCCTableViewFillTopDown);
     tblListContents->setTag(tagListContent);
     nodeListContents->addChild(tblListContents);    //
+	//Join first room chat
+	boost::shared_ptr<vector<boost::shared_ptr<Room> > > rooms
+		= GameServer::getSingleton().getSmartFox()->GetRoomListFromGroup("200");
+	if( rooms->size()==0 )
+		return;
+	boost::shared_ptr<IRequest> request (new JoinRoomRequest(rooms->at(0),""));
+	GameServer::getSingleton().getSmartFox()->Send(request);
     return;
 }
 
@@ -102,19 +125,18 @@ void LayerChatRoom::tableCellUnhighlight(CCTableView* table, CCTableViewCell* ce
 
 // hàm khi click vào 1 hành của table view
 void LayerChatRoom::tableCellTouched(cocos2d::extension::CCTableView *table, cocos2d::extension::CCTableViewCell *cell){
-    CCLOG("Roomid: %d", cell->getObjectID());
-//    if(table->getTag()==tagListPlay){
-//        CCLOG("Roomid: %d",cell->getObjectID());
-//        boost::shared_ptr<Room> ro = GameServer::getSingleton().getSmartFox()->GetRoomListFromGroup(CCString::createWithFormat("%d", m_gID)->getCString())->at(cell->getObjectID());
-//        //GetRoomById(cell->getTag());
+    CCLOG("Roomid: %d", cell->getTag());
+   if(table->getTag()==tagListRoom){
+       CCLOG("Roomid: %d",cell->getTag());
+	   if( currRoomID == cell->getTag() )
+		   return;
 //        if(ro==NULL){
-//            CCLOG("Roomid: %d NOT FOUND",cell->getObjectID());
+//            CCLOG("Roomid: %d NOT FOUND",cell->getTag());
 //            return;
 //        }
-//        
-//        boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro,""));
-//        GameServer::getSingleton().getSmartFox()->Send(request);
-//    }
+       boost::shared_ptr<IRequest> request (new JoinRoomRequest(cell->getTag(), ""));
+       GameServer::getSingleton().getSmartFox()->Send(request);
+   }
 }
 
 // Hàm set giá trị width height cho 1 cell table view
@@ -124,7 +146,7 @@ CCSize LayerChatRoom::tableCellSizeForIndex(cocos2d::extension::CCTableView *tab
     //Rooms
     //    if( idx==0 )
     //        return CCSizeMake(nodeListContents->getContentSize().width, 0);
-    return CCSizeMake(nodeListContents->getContentSize().width, 40);
+    return CCSizeMake(nodeListContents->getContentSize().width, 50);
 }
 
 CCNode* LayerChatRoom::createLabel4Cell(int tag, const char* text, CCSize size, CCPoint point){
@@ -152,6 +174,15 @@ CCLabelTTF* LayerChatRoom::getLabelFromTagID(CCTableViewCell *cell, int tag){
     return lbl;
 }
 
+RichText* LayerChatRoom::getRichTextFromTagID( CCTableViewCell *cell, int tag )
+{
+	CCNode* node = cell->getChildByTag(tag);
+	if( node == NULL )
+		return NULL;
+	RichText *rt = (RichText*)node->getChildByTag(tag);
+	return rt;
+}
+
 CCTableViewCell* LayerChatRoom::process4ListRooms(cocos2d::extension::CCTableView *table, unsigned int idx){
     CCTableViewCell *cell = table->dequeueCell();
     CCLOG("cell: %d", idx);
@@ -173,11 +204,16 @@ CCTableViewCell* LayerChatRoom::process4ListRooms(cocos2d::extension::CCTableVie
         line->setScaleX(tblListRooms->getContentSize().width/line->getContentSize().width);
         line->setAnchorPoint(ccp(0.5,0));
         cell->addChild(line);
+		//
+		if( idx == currRoomChatIndex ){
+			((CustomTableViewCell*)cell)->setSelectedState(true);
+		}
     }
     else{
         CCLabelTTF *label1 = getLabelFromTagID(cell, tag_Content);
         if( label1!=NULL )
             label1->setString(rooms->at(idx)->Name()->c_str());
+		((CustomTableViewCell*)cell)->setSelectedState(idx == currRoomChatIndex);
     }
     return cell;
 }
@@ -185,13 +221,14 @@ CCTableViewCell* LayerChatRoom::process4ListContents(cocos2d::extension::CCTable
     CCTableViewCell *cell = table->dequeueCell();
     CCLOG("cell: %lf %lf", tblListContents->getContentSize().width, tblListContents->getContentSize().height);
     CCString *soPhong = CCString::createWithFormat("Phòng %d", idx+1);
+	MessageInfo info = lstChatMessage.at(idx);
     if(!cell){
-        cell = new CustomTableViewCell(CCSizeMake(nodeListContents->getContentSize().width, 40));
+        cell = new CustomTableViewCell(CCSizeMake(nodeListContents->getContentSize().width, 50));
         cell->setObjectID(idx);
         cell->autorelease();
-        cell->setTag(idx);
-        
-        //
+		cell->setTag(idx);
+		//
+		cell->addChild(createLabel4CellContent(tag_Content, info.content.c_str(), info.user.c_str(), CCSizeMake(nodeListContents->getContentSize().width, 50), ccp(0, 0)));
         //
         CCSprite* line = CCSprite::createWithSpriteFrameName("assest/background_cell.png");
         line->setPosition(ccp(nodeListContents->getContentSize().width/2,0));
@@ -200,16 +237,20 @@ CCTableViewCell* LayerChatRoom::process4ListContents(cocos2d::extension::CCTable
         cell->addChild(line);
     }
     else{
-        CCLabelTTF *label1 = getLabelFromTagID(cell, tag_Content);
-        if( label1!=NULL )
-            label1->setString(soPhong->getCString());
+		RichText *rtContent = getRichTextFromTagID(cell, tag_Content);
+        if( rtContent!=NULL )
+			setContent2Richtext( rtContent, info.content.c_str() );
+		//
+		CCLabelTTF *labelUser = getLabelFromTagID(cell, tag_User);
+		if( labelUser!=NULL )
+			labelUser->setString(info.user.c_str());
     }
     return cell;
 }
 
 // Hàm này tạo 1 tableview Row để add vào table view
 CCTableViewCell* LayerChatRoom::tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx){
-    CCLOG("tabletag: %d", table->getTag());
+   // CCLOG("tabletag: %d", table->getTag());
     if(table->getTag()==tagListRoom){
         return process4ListRooms(table, idx);
     }
@@ -218,43 +259,16 @@ CCTableViewCell* LayerChatRoom::tableCellAtIndex(cocos2d::extension::CCTableView
 
 // Hàm gán giá trị số hàng của table view
 unsigned int LayerChatRoom::numberOfCellsInTableView(cocos2d::extension::CCTableView *table){
-    CCLOG("tabletag: %d", table->getTag());
+    //CCLOG("tabletag: %d", table->getTag());
     if(table->getTag()==tagListRoom){
         boost::shared_ptr<vector<boost::shared_ptr<Room> > > rooms
         = GameServer::getSingleton().getSmartFox()->GetRoomListFromGroup("200");
         return rooms->size();
     }
     if(table->getTag()==tagListContent){
-        return 0;
+        return lstChatMessage.size();
     }
     return 0;
-}
-
-
-void LayerChatRoom::OnSmartFoxInvitation(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    CCLOG("Invite Playe");
-}
-
-void LayerChatRoom::OnSmartFoxRoomJoin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    CCLOG("Join Room");
-    SceneManager::getSingleton().gotoGameByTag(m_gID);
-}
-
-void LayerChatRoom::OnSmartFoxRoomJoinError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    CCLOG("Join Room Error");
-}
-
-void LayerChatRoom::OnSmartFoxRoomCreationError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    CCLOG("Create Room Error");
-}
-
-void LayerChatRoom::OnSmartFoxRoomAdd(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    CCLOG("Room Add");
-}
-
-void LayerChatRoom::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    CCLOG("User Exit Room Ở chọn bàn chơi");
-    //SceneManager::getSingleton().gotoMain();
 }
 
 void LayerChatRoom::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -265,4 +279,124 @@ void LayerChatRoom::OnExtensionResponse(unsigned long long ptrContext, boost::sh
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
     
     CCLOG("cmd = %s",ptrNotifiedCmd->c_str());
+}
+
+void LayerChatRoom::callbackFromChatWindow( CCNode* n, void* data)
+{
+	CCLOG("callbackFromChatWindow %s", (char*)data);
+}
+
+void LayerChatRoom::OnSmartFoxPublicMessage( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
+	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueMessage);
+	//
+	CCLOG("ptrNotifiedMessage: %s", ptrNotifiedMessage->c_str());
+	MessageInfo info;
+	info.content = *ptrNotifiedMessage;
+	info.user = *ptrNotifiedUser->Name();
+	lstChatMessage.push_back(info);
+	if( lstChatMessage.size()>4 ){
+		lstChatMessage.erase( lstChatMessage.begin() );
+	}
+	tblListContents->reloadData();
+}
+
+void LayerChatRoom::OnSmartFoxRoomJoin( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	CCLOG("LayerChatRoom - Join Room");
+	// Room joined
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueRoom = (*ptrEventParams)["room"];
+	boost::shared_ptr<Room> ptrNotifiedRoom = ((boost::static_pointer_cast<Room>))(ptrEventParamValueRoom);
+	//
+	boost::shared_ptr<vector<boost::shared_ptr<Room> > > rooms
+		= GameServer::getSingleton().getSmartFox()->GetRoomListFromGroup("200");
+	currRoomID = ptrNotifiedRoom->Id();
+	lstChatMessage.clear();
+	for( int i = 0; i<rooms->size(); i++ ){
+		if( rooms->at(i)->Id() == ptrNotifiedRoom->Id() ){
+			lblTitle->setString( CCString::createWithFormat("PHÒNG TÁN GẪU - %s", rooms->at(i)->Name()->c_str())->getCString()  );
+			currRoomChatIndex = i;
+			tblListRooms->reloadData();
+			break;
+		}
+	}
+}
+
+void LayerChatRoom::OnSmartFoxRoomJoinError( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueErrorMessage = (*ptrEventParams)["errorMessage"];
+	boost::shared_ptr<string> ptrErrorMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueErrorMessage);
+	boost::shared_ptr<string> message (new string("Join Room Failure: " +  *ptrErrorMessage));
+	Chat *toast = new Chat(CCString::createWithFormat("Vào phòng thất bại!\n%s", message->c_str())->getCString(), -1);
+	this->addChild(toast);
+}
+
+CCNode* LayerChatRoom::createLabel4CellContent( int tag, const char* text, const char* user, CCSize size, CCPoint point )
+{
+	CCNode* node = CCNode::create();
+	node->setContentSize(size);
+	node->setAnchorPoint(CCPointZero);
+	node->setPosition(point);
+	node->setTag(tag);
+
+	UILayer* layer = UILayer::create();
+	layer->setContentSize(size);
+	node->addChild(layer);
+
+	RichText* _richText = RichText::create();
+	_richText->setContentSize( size );
+
+	setContent2Richtext(_richText, text);
+	_richText->setTag(tag);
+
+// 	CCLabelTTF *label = CCLabelTTF::create(text, "Helvetica", 14);
+// 	label->setAnchorPoint(ccp(0.5,0.5));
+// 	label->setPosition(ccp( size.width/2, size.height/2 ));
+// 	label->setTag(tag);
+
+	CCLabelTTF *labelUser = CCLabelTTF::create(user, "Helvetica", 14);
+	labelUser->setAnchorPoint(ccp(0, 1));
+	labelUser->setPosition(ccp( 2, size.height-5 ));
+	labelUser->setColor(ccc3(231, 252, 0));
+	labelUser->setTag(tag_User);
+
+	layer->addWidget(_richText);
+	node->addChild(labelUser);
+
+	return node;
+}
+
+void LayerChatRoom::setContent2Richtext( RichText* rt, const char* text )
+{
+	if( rt==NULL )
+		return;
+	rt->removeAllChildrenWithCleanup(true);
+	CCArmatureDataManager::sharedArmatureDataManager()->removeArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
+	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
+	//split content
+	vector<string> lstContents = mUtils::splitStringByListRegex(text, lstRegex);
+	for( int i=0; i<lstContents.size(); i++ ){
+		bool check = false;
+		int j=0;
+		for( j=0; j<lstRegex.size(); j++ )
+			if( lstRegex.at(j) == lstContents.at(i) ){
+				check = true;
+				break;
+			}
+		if( check ){
+			CCArmature *armature = CCArmature::create(CCString::createWithFormat("onion%d", 1)->getCString());
+			armature->getAnimation()->playByIndex(j);
+			RichElementCustomNode* recustom = RichElementCustomNode::create(1, ccWHITE, 255, armature);
+			rt->pushBackElement(recustom);
+		}else{
+			RichElementText* re1 = RichElementText::create(1, ccWHITE, 255, lstContents.at(i).c_str(), "Helvetica", 12);
+			rt->pushBackElement(re1);
+		}
+	}
 }

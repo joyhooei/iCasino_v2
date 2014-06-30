@@ -16,6 +16,8 @@
 #include "LayerBorrowMoney.h"
 #include "LayerGameChan_KetQua.h"
 #include "LayerInviteFriends.h"
+#include "LayerInviteFriendsFacebook.h"
+#include "LayerChatWindow.h"
 
 #include "LayerPasswordRoom.h"
 
@@ -88,6 +90,7 @@ bool SceneManager::init() {
 	searchPaths.push_back("backgrounds");
 	searchPaths.push_back("buttons");
 	searchPaths.push_back("cards");
+	searchPaths.push_back("chats");
 	searchPaths.push_back("numbers");
 	searchPaths.push_back("in_games");
 	searchPaths.push_back("Login");
@@ -166,6 +169,8 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPasswordRoom",   LayerPasswordRoomLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerInviteFriends",   LayerInviteFriendsLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerInviteFriendsFacebook",   LayerInviteFriendsFacebookLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChatWindow",   LayerChatWindowLoader::loader());
 
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);

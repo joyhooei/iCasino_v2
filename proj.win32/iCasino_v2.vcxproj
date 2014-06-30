@@ -151,6 +151,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LayerChangePassword.cpp" />
     <ClCompile Include="..\Classes\LayerChargeMoney.cpp" />
     <ClCompile Include="..\Classes\LayerChatRoom.cpp" />
+    <ClCompile Include="..\Classes\LayerChatWindow.cpp" />
     <ClCompile Include="..\Classes\LayerChonBanChoi.cpp" />
     <ClCompile Include="..\Classes\LayerChooseGame.cpp" />
     <ClCompile Include="..\Classes\LayerCreateAccount.cpp" />
@@ -163,6 +164,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LayerGameChan_XuongU.cpp" />
     <ClCompile Include="..\Classes\LayerInbox.cpp" />
     <ClCompile Include="..\Classes\LayerInviteFriends.cpp" />
+    <ClCompile Include="..\Classes\LayerInviteFriendsFacebook.cpp" />
     <ClCompile Include="..\Classes\LayerLichSuGiaoDich.cpp" />
     <ClCompile Include="..\Classes\LayerLoading.cpp" />
     <ClCompile Include="..\Classes\LayerLogin.cpp" />
@@ -229,6 +231,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\LayerChangePassword.h" />
     <ClInclude Include="..\Classes\LayerChargeMoney.h" />
     <ClInclude Include="..\Classes\LayerChatRoom.h" />
+    <ClInclude Include="..\Classes\LayerChatWindow.h" />
     <ClInclude Include="..\Classes\LayerChonBanChoi.h" />
     <ClInclude Include="..\Classes\LayerChooseGame.h" />
     <ClInclude Include="..\Classes\LayerCreateAccount.h" />
@@ -241,6 +244,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\LayerGameChan_XuongU.h" />
     <ClInclude Include="..\Classes\LayerInbox.h" />
     <ClInclude Include="..\Classes\LayerInviteFriends.h" />
+    <ClInclude Include="..\Classes\LayerInviteFriendsFacebook.h" />
     <ClInclude Include="..\Classes\LayerLichSuGiaoDich.h" />
     <ClInclude Include="..\Classes\LayerLoading.h" />
     <ClInclude Include="..\Classes\LayerLogin.h" />
