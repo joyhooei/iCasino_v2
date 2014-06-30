@@ -7,7 +7,7 @@
 //
 
 #include "_Chat_.h"
-
+#include "mUtils.h"
 enum{
     kTagLabel,
     kOrderLabel
@@ -22,15 +22,49 @@ Chat::Chat(string pMes, int posUser) {
 bool Chat::init() {
     if (!CCLayer::init()) {
         return false;
-    }
+	}
+	vector<string> lstRegex;
+	for( int i = 1; i<=16; i++ ){
+		lstRegex.push_back( CCString::createWithFormat("(%d)", i)->getCString() );
+	}
     
     this->setAnchorPoint(ccp(0, 0));
     formatMes();
     
-    // text
-    CCLabelTTF *label = CCLabelTTF::create(this->mes.c_str(), "Arial", 16);
+	// text
+	cocos2d::ui::RichText* label = cocos2d::ui::RichText::create();
     label->setAnchorPoint(ccp(0, 0));
     label->setPosition(ccp(0, 6));
+	vector<string> lstContents = mUtils::splitStringByListRegex(this->mes.c_str(), lstRegex);
+	int wLabel = 0, hLabel = 0;
+	for( int i=0; i<lstContents.size(); i++ ){
+		bool check = false;
+		int j=0;
+		for( j=0; j<lstRegex.size(); j++ )
+			if( lstRegex.at(j) == lstContents.at(i) ){
+				check = true;
+				break;
+			}
+			if( check ){
+				CCArmature *armature = CCArmature::create(CCString::createWithFormat("onion%d", 1)->getCString());
+				armature->getAnimation()->playByIndex(j);
+				cocos2d::ui::RichElementCustomNode* recustom = cocos2d::ui::RichElementCustomNode::create(1, ccWHITE, 255, armature);
+				label->pushBackElement(recustom);
+				wLabel+=50;
+				hLabel = 55;
+			}else{
+				CCLabelTTF *l = CCLabelTTF::create(lstContents.at(i).c_str(), "Arial", 16);
+				cocos2d::ui::RichElementText* re1 = cocos2d::ui::RichElementText::create(1, ccWHITE, 255, lstContents.at(i).c_str(), "Arial", 16);
+				label->pushBackElement(re1);
+				wLabel+=l->getContentSize().width;
+				CCLOG("labelw: %lf, rte: %lf", l->getContentSize().width, 1);
+				hLabel = hLabel>50?55:l->getContentSize().height;
+			}
+	}
+	this->addChild(label, kOrderLabel, kTagLabel);
+//     CCLabelTTF *label = CCLabelTTF::create(this->mes.c_str(), "Arial", 16);
+//     label->setAnchorPoint(ccp(0, 0));
+//     label->setPosition(ccp(0, 6));
     
     
     // background_a
@@ -39,10 +73,10 @@ bool Chat::init() {
     CCScale9Sprite *blocks = CCScale9Sprite::create();
     blocks ->updateWithBatchNode(batchNode , CCRect(0, 0, sizeDesign.width, sizeDesign.height), false, CCRect(10, 10, sizeDesign.width - 20, sizeDesign.height - 20));
     
-    CCSize size = CCSizeMake(label->getContentSize().width + 10, label->getContentSize().height + 5);
+    CCSize size = CCSizeMake(wLabel + 10, hLabel + 5);
     blocks ->setContentSize(size);
     blocks->setAnchorPoint(ccp(0.5, 0.5));
-    blocks->setPosition(ccp(label->getPositionX() + label->getContentSize().width / 2, label->getPositionY() + label->getContentSize().height / 2));
+    blocks->setPosition(ccp(label->getPositionX() + wLabel / 2, label->getPositionY() + hLabel / 2));
     
     // background_b
     CCSprite *bgB = CCSprite::create("chats/framechat_b.png");
@@ -71,7 +105,6 @@ bool Chat::init() {
     
     // add
     this->addChild(blocks);
-    this->addChild(label, kOrderLabel, kTagLabel);
     this->addChild(bgB);
     
     this->sizeThis = size;
@@ -89,12 +122,12 @@ void Chat::setStatusByServer(bool isServer) {
     if (label == NULL)
         return;
     
-    if (isServer) {
-        label->setColor(ccWHITE);
-    }
-    else {
-        label->setColor(ccWHITE);
-    }
+//     if (isServer) {
+//         label->setColor(ccWHITE);
+//     }
+//     else {
+//         label->setColor(ccWHITE);
+//     }
 }
 
 

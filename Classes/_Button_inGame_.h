@@ -36,6 +36,9 @@ public:
 	void eventTouchBtnChat(CCObject *pObject, TouchEventType pType);
 	void eventTouchBtnCoin(CCObject *pObject, TouchEventType pType);
 
+	//Callback
+	void callbackFromChatWindow(CCNode*, void*);
+
 };
 
 #endif /* defined(__iCasino_v2___Button_inGame___) */

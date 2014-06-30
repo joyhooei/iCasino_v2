@@ -9,6 +9,10 @@
 #include "SceneManager.h"
 #include "Requests/LeaveRoomRequest.h"
 #include "_Button_inGame_.h"
+#include "LayerChatWindow.h"
+#include "GameServer.h"
+
+#include "Requests/PublicMessageRequest.h"
 
 bool LayerButtonInGame::init() {
 	if (!UILayer::init()) return false;
@@ -117,6 +121,9 @@ void LayerButtonInGame::eventTouchBtnSetting(CCObject *pObject, TouchEventType p
 void LayerButtonInGame::eventTouchBtnChat(CCObject *pObject, TouchEventType pType){
 	if (pType == TOUCH_EVENT_ENDED){
 		CCLOG("Click Chat");
+		LayerChatWindow* l = SceneManager::getSingleton().getLayerChatWindow();
+		l->setCallbackFunc(this,callfuncND_selector(LayerButtonInGame::callbackFromChatWindow));
+		SceneManager::getSingleton().showLayerChatWindow();
 	}
 }
 
@@ -124,4 +131,13 @@ void LayerButtonInGame::eventTouchBtnCoin(CCObject *pObject, TouchEventType pTyp
 	if (pType == TOUCH_EVENT_ENDED){
 		CCLOG("Click Coin");
 	}
+}
+
+void LayerButtonInGame::callbackFromChatWindow( CCNode*, void* data )
+{
+	if( strlen((char*)data)==0 )
+		return;
+	boost::shared_ptr<ISFSObject> parameters(new SFSObject());
+	boost::shared_ptr<IRequest> request (new PublicMessageRequest((char*)data, parameters, GameServer::getSingleton().getSmartFox()->LastJoinedRoom())); 
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }

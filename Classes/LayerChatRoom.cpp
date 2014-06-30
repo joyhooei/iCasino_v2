@@ -16,6 +16,8 @@
 
 #include "Requests/JoinRoomRequest.h"
 #include "SceneManager.h"
+#include "Requests/LeaveRoomRequest.h"
+#include "Requests/PublicMessageRequest.h"
 
 #include "LayerChatWindow.h"
 
@@ -45,6 +47,9 @@ LayerChatRoom::LayerChatRoom()
 LayerChatRoom::~LayerChatRoom()
 {
     GameServer::getSingleton().removeListeners(this);
+	// leave room
+	boost::shared_ptr<IRequest> request (new LeaveRoomRequest());
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 void LayerChatRoom::setGameID(int gID){
@@ -68,9 +73,9 @@ void LayerChatRoom::onButtonChat(CCObject* pSender)
 // 	string line("test\ttest2\ttest3");
 // 	vector<string> strs;
 // 	boost::split(strs,line,boost::is_any_of("\t")	return;
-	LayerChatWindow* l = LayerChatWindow::create();
-	this->addChild(l);
+	LayerChatWindow* l = SceneManager::getSingleton().getLayerChatWindow();
 	l->setCallbackFunc(this,callfuncND_selector(LayerChatRoom::callbackFromChatWindow));
+	SceneManager::getSingleton().showLayerChatWindow();
 }
 
 // CCBMemberVariableAssigner interface
@@ -283,12 +288,23 @@ void LayerChatRoom::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 
 void LayerChatRoom::callbackFromChatWindow( CCNode* n, void* data)
 {
+	if( strlen( (char*)data )==0 )
+		return;
+	//Get room
+	boost::shared_ptr<Room>  room
+		= GameServer::getSingleton().getSmartFox()->GetRoomById(currRoomID);
+	if(room==NULL)
+		return;
+	//
 	CCLOG("callbackFromChatWindow %s", (char*)data);
+	boost::shared_ptr<ISFSObject> parameters(new SFSObject());
+	boost::shared_ptr<IRequest> request (new PublicMessageRequest((char*)data, parameters, room)); 
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 void LayerChatRoom::OnSmartFoxPublicMessage( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
 {
-	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
 	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
 	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
@@ -309,7 +325,7 @@ void LayerChatRoom::OnSmartFoxRoomJoin( unsigned long long ptrContext, boost::sh
 {
 	CCLOG("LayerChatRoom - Join Room");
 	// Room joined
-	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueRoom = (*ptrEventParams)["room"];
 	boost::shared_ptr<Room> ptrNotifiedRoom = ((boost::static_pointer_cast<Room>))(ptrEventParamValueRoom);
 	//
@@ -322,6 +338,8 @@ void LayerChatRoom::OnSmartFoxRoomJoin( unsigned long long ptrContext, boost::sh
 			lblTitle->setString( CCString::createWithFormat("PHÒNG TÁN GẪU - %s", rooms->at(i)->Name()->c_str())->getCString()  );
 			currRoomChatIndex = i;
 			tblListRooms->reloadData();
+			lstChatMessage.clear();
+			tblListContents->reloadData();
 			break;
 		}
 	}
@@ -329,7 +347,7 @@ void LayerChatRoom::OnSmartFoxRoomJoin( unsigned long long ptrContext, boost::sh
 
 void LayerChatRoom::OnSmartFoxRoomJoinError( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
 {
-	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueErrorMessage = (*ptrEventParams)["errorMessage"];
 	boost::shared_ptr<string> ptrErrorMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueErrorMessage);
 	boost::shared_ptr<string> message (new string("Join Room Failure: " +  *ptrErrorMessage));
@@ -350,7 +368,10 @@ CCNode* LayerChatRoom::createLabel4CellContent( int tag, const char* text, const
 	node->addChild(layer);
 
 	RichText* _richText = RichText::create();
-	_richText->setContentSize( size );
+	layer->addWidget(_richText);
+	_richText->setSize( size );
+	_richText->setPosition(ccp(0, 0));
+	_richText->setAnchorPoint(ccp(0, 0));
 
 	setContent2Richtext(_richText, text);
 	_richText->setTag(tag);
@@ -366,7 +387,6 @@ CCNode* LayerChatRoom::createLabel4CellContent( int tag, const char* text, const
 	labelUser->setColor(ccc3(231, 252, 0));
 	labelUser->setTag(tag_User);
 
-	layer->addWidget(_richText);
 	node->addChild(labelUser);
 
 	return node;
@@ -377,8 +397,8 @@ void LayerChatRoom::setContent2Richtext( RichText* rt, const char* text )
 	if( rt==NULL )
 		return;
 	rt->removeAllChildrenWithCleanup(true);
-	CCArmatureDataManager::sharedArmatureDataManager()->removeArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
-	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
+// 	CCArmatureDataManager::sharedArmatureDataManager()->removeArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
+// 	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
 	//split content
 	vector<string> lstContents = mUtils::splitStringByListRegex(text, lstRegex);
 	for( int i=0; i<lstContents.size(); i++ ){

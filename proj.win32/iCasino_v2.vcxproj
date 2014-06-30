@@ -83,7 +83,7 @@
     <Link>
       <AdditionalDependencies>libExtensions.lib;libcocos2d.lib;libCocosDenshion.lib;opengl32.lib;glew32.lib;libBox2d.lib;libchipmunk.lib;libcurl_imp.lib;pthreadVCE2.lib;websockets.lib;SmartFoxClientApi.lib;libboost_system-vc100-mt-gd-1_52.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir);$(ProjectDir)..\..\..\libs;$(ProjectDir)..\..\..\libs\boost_lib_win32;$(ProjectDir)..\..\..\libs\smartfox;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);$(ProjectDir)..\..\..\libs;$(ProjectDir)..\..\..\libs\boost_lib_win32;$(ProjectDir)..\..\..\libs\smartfox;$(ProjectDir)..\..\..\libs\smartfox_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>

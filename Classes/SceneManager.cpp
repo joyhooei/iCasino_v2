@@ -93,9 +93,12 @@ bool SceneManager::init() {
 	searchPaths.push_back("fonts");
 	searchPaths.push_back("card_Chan");
 	searchPaths.push_back("Nan3Cay");
+	searchPaths.push_back("chats");
 	CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
 
 	SIZE_SCREEN = CCDirector::sharedDirector()->getVisibleSize();
+
+	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo( "onion1.ExportJson" );
 
 	// Add updateEvent for this class - Important
 	this->schedule(schedule_selector(SceneManager::updateEvent));
@@ -183,8 +186,12 @@ bool SceneManager::init() {
 	this->addChild(layerMain, zorder_LayerMain, tag_LayerMain);
 	this->addChild(layerNotification, zorder_LayerNotification, tag_LayerNotification);
 
+	mLayerChatWindow = LayerChatWindow::create();
+	this->addChild(mLayerChatWindow, zorder_LayerNotification, tag_LayerNotification);
+
 	// Layer Đầu tiên: Login
 	hideNotification();
+	hideLayerChatWindow();
 	gotoLogin();
 
 	return true;
@@ -429,4 +436,25 @@ void SceneManager::disconnectFromServer()
 	//
 	Chat *toast = new Chat("Mất kết nối!", -1);
 	layerLogin->addChild(toast);
+}
+
+bool SceneManager::showLayerChatWindow()
+{
+	if( mLayerChatWindow->isVisible() )
+		return false;
+	mLayerChatWindow->setAnchorPoint(ccp(0, 0));
+	mLayerChatWindow->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
+	//layerNotification->setPosition(ccp(SIZE_SCREEN.width/2, SIZE_SCREEN.width/2));
+	mLayerChatWindow->setVisible(true);
+	mLayerChatWindow->setTouchEnabled(true);
+	return true;
+}
+
+bool SceneManager::hideLayerChatWindow()
+{
+	mLayerChatWindow->setPosition(ccp(SIZE_SCREEN.width, mLayerChatWindow->getPositionY()));
+	mLayerChatWindow->setVisible(false);
+	mLayerChatWindow->setTouchEnabled(false);
+
+	return true;
 }

@@ -1194,4 +1194,18 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_U_9() {
     getButtonByTag(kTagButtonU)->setEnabled(true);
 }
 
+void LayerPlayGamePhom::OnSmartFoxPublicMessage( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
+	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueMessage);
+	//
+	CCLOG("ptrNotifiedMessage: %s", ptrNotifiedMessage->c_str());
+	//
+	int vt = layerAvatars->getPosByName(ptrNotifiedUser->Name()->c_str());
+	layerChats->showChatByPos(vt, ptrNotifiedMessage->c_str());
+}
+
 

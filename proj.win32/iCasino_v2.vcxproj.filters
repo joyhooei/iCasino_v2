@@ -180,9 +180,6 @@
     <ClCompile Include="..\Classes\LayerPlayGamePhom.cpp">
       <Filter>Classes\GameLayers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\LayerPlayGameTLMB.cpp">
-      <Filter>Classes\GameLayers</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\LayerPlayGameTLMN.cpp">
       <Filter>Classes\GameLayers</Filter>
     </ClCompile>
@@ -252,6 +249,14 @@
     <ClCompile Include="..\Classes\LayerChatWindow.cpp">
       <Filter>Classes\MenuLayers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LayerAvatar_BaCay.cpp" />
+    <ClCompile Include="..\Classes\LayerBet_TomCuaCa.cpp" />
+    <ClCompile Include="..\Classes\LayerGameChan_KetQua.cpp" />
+    <ClCompile Include="..\Classes\LayerInviteFriends.cpp" />
+    <ClCompile Include="..\Classes\_CardBaCay_.cpp" />
+    <ClCompile Include="..\Classes\_LayerBet_.cpp" />
+    <ClCompile Include="..\Classes\_Layer_CardChan_.cpp" />
+    <ClCompile Include="..\Classes\_Number_inTomCuaCa.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -422,9 +427,6 @@
     <ClInclude Include="..\Classes\LayerPlayGamePhom.h">
       <Filter>Classes\GameLayers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\LayerPlayGameTLMB.h">
-      <Filter>Classes\GameLayers</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\TextFieldCustomLoader.h">
       <Filter>Classes\Loader</Filter>
     </ClInclude>
@@ -512,6 +514,14 @@
     <ClInclude Include="..\Classes\LayerChatWindow.h">
       <Filter>Classes\MenuLayers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\LayerAvatar_BaCay.h" />
+    <ClInclude Include="..\Classes\LayerBet_TomCuaCa.h" />
+    <ClInclude Include="..\Classes\LayerGameChan_KetQua.h" />
+    <ClInclude Include="..\Classes\LayerInviteFriends.h" />
+    <ClInclude Include="..\Classes\_CardBaCay_.h" />
+    <ClInclude Include="..\Classes\_LayerBet_.h" />
+    <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
+    <ClInclude Include="..\Classes\_Number_inTomCuaCa.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

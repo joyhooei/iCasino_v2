@@ -60,8 +60,8 @@ bool LayerChatWindow::init()
 	UIImageView* pImg = dynamic_cast<UIImageView*>(ul->getWidgetByName("Image_25_0"));
 	//Add all emo to this
 	int i = 1;
-	CCArmatureDataManager::sharedArmatureDataManager()->removeArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
-	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
+// 	CCArmatureDataManager::sharedArmatureDataManager()->removeArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
+// 	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
 	int row=-1, col = 1;
 	int widthOfPage = 580;
 	int numOfCols = 9;
@@ -106,22 +106,24 @@ bool LayerChatWindow::init()
 void LayerChatWindow::onButtonClose( CCObject* pSender, TouchEventType type )
 {
 	if(type == TOUCH_EVENT_ENDED){
-		if (m_callback && m_callbackListener)
-		{
-			(m_callback->*m_callbackListener)(this, "");
-		}
-		this->removeFromParentAndCleanup(true);
+// 		if (m_callback && m_callbackListener)
+// 		{
+// 			(m_callback->*m_callbackListener)(this, "");
+// 		}
+// 		SceneManager::getSingleton().hideLayerChatWindow();
+// 		txtChat->setText("");
 	}
 }
 
 void LayerChatWindow::onButtonSend( CCObject* pSender, TouchEventType type )
 {
 	if(type == TOUCH_EVENT_ENDED){
-		if (m_callback && m_callbackListener)
-		{
-			(m_callback->*m_callbackListener)(this, (void*)txtChat->getStringValue());
-		}
-		this->removeFromParentAndCleanup(true);
+// 		if (m_callback && m_callbackListener)
+// 		{
+// 			(m_callback->*m_callbackListener)(this, (void*)txtChat->getStringValue());
+// 		}
+// 		SceneManager::getSingleton().hideLayerChatWindow();
+// 		txtChat->setText("");
 	}
 }
 
@@ -137,7 +139,7 @@ void LayerChatWindow::onButtonChats( CCObject* pSender, TouchEventType type )
 
 void LayerChatWindow::registerWithTouchDispatcher( void )
 {
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -128, true);
+	//CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -128, true);
 }
 
 bool LayerChatWindow::ccTouchBegan( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )
@@ -159,11 +161,11 @@ void LayerChatWindow::onExit()
 
 void LayerChatWindow::OnEmoClick( CCObject* pSender, TouchEventType type )
 {
-	UIButton* btn = dynamic_cast<UIButton*>(pSender);
-	if( type == TouchEventType::TOUCH_EVENT_ENDED ){
-		CCLOG("OnEmoClick button tag: %d", btn->getTag());
-		txtChat->setText( CCString::createWithFormat("%s(%d)", txtChat->getStringValue(), btn->getTag())->getCString() );
-	}
+// 	UIButton* btn = dynamic_cast<UIButton*>(pSender);
+// 	if( type == TouchEventType::TOUCH_EVENT_ENDED ){
+// 		CCLOG("OnEmoClick button tag: %d", btn->getTag());
+// 		txtChat->setText( CCString::createWithFormat("%s(%d)", txtChat->getStringValue(), btn->getTag())->getCString() );
+// 	}
 }
 
 void LayerChatWindow::setCallbackFunc( CCObject* target, SEL_CallFuncND callfun )
