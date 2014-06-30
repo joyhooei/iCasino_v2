@@ -8,7 +8,6 @@
 
 #include "XiTo.h"
 #include "_Background_inGame_.h"
-#include "_Button_inGame_.h"
 #include "LayerOpenCard_Xito.h"
 #include "SliderCustomLoader.h"
 #include "_Number_.h"
@@ -23,7 +22,6 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     EXT_EVENT_SELECT_OPEN_CARD_REQ = "slstrq";
     EXT_EVENT_READY_REQ = "rr";
     EXT_EVENT_RAISE_REQ = "rsrq";
-    GameServer::getSingleton().addListeners(this);
     
     bt_card_me = 87;
     bt_card_bottom = 211;
@@ -39,12 +37,7 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     h_card_me = 87;
     w_card_notme = 48;
     h_card_notme = 62;
-    
-    left_FB_LT = 175;
-    left_FB_LB = 105;
-    bottom_TOP = 432;
-    bottom_BOTTOM = 282;
-    
+
     _list_user = "";
     my_DealCards = "";
     list_dealCards_allUser = "";
@@ -59,206 +52,22 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     uidTo = "";
     typeTo = "";
     
-    arrCardTypes[0] = "h";
-    arrCardTypes[1] = "s";
-    arrCardTypes[2] = "c";
-    arrCardTypes[3] = "d";
-    
-   // string arrCardTypes[4] = {"h","s","c","d"};
+	arrCardTypes.push_back("h");
+	arrCardTypes.push_back("s");
+	arrCardTypes.push_back("c");
+	arrCardTypes.push_back("d");
     
     createBackground();
-    createButton();
     createAvatar();
-    
-    B1 = new CCArray();
-    B2 = new CCArray();
-    B3 = new CCArray();
-    B1->retain();
-    B2->retain();
-    B3->retain();
-    
-    //*Khởi tạo các button trong game////
-    uLayer = UILayer::create();
-    uLayer->setAnchorPoint(ccp(0, 0));
-    uLayer->setPosition(ccp(0, 0));
-    this->addChild(uLayer);
-    
-    //Btn Ready
-    btnReady = UIButton::create();
-    btnReady->loadTextures("ready.png", "ready_selected.png", "");
-    btnReady->setTitleText("Sẵn Sàng");
-    btnReady->setAnchorPoint(ccp(0,0));
-    btnReady->setPosition(ccp(WIDTH_DESIGN-btnReady->getContentSize().width-20,10));
-    btnReady->setTouchEnabled(true);
-    btnReady->addTouchEventListener(this, toucheventselector(XiTo::btn_ready_click));
-    btnReady->setTitleFontSize(20);
-    btnReady->setTitleColor(ccRED);
-    btnReady->setVisible(true);
-    uLayer->addWidget(btnReady);
-    
-    //*****Btn Playe Game
-    //Btn Úp bài
-    btn_Up = UIButton::create();
-    btn_Up->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-    btn_Up->setTag(GAME_TABLE_STATUS_BET_FOLD);
-    btn_Up->setTitleText("Úp");
-    btn_Up->setAnchorPoint(ccp(0,0));
-    btn_Up->setPosition(ccp(WIDTH_DESIGN-btnReady->getContentSize().width-20,10));
-    btn_Up->setTouchEnabled(false);
-    btn_Up->addTouchEventListener(this, toucheventselector(XiTo::btn_Up_click));
-    btn_Up->setTitleFontSize(20);
-    btn_Up->setTitleColor(ccRED);
-    btn_Up->setVisible(false);
-    B1->addObject(btn_Up);
-    uLayer->addWidget(btn_Up);
-    
-    //Btn Nhường
-    btn_Nhuong = UIButton::create();
-    btn_Nhuong->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-    btn_Nhuong->setTag(GAME_TABLE_STATUS_BET_NONE);
-    btn_Nhuong->setTitleText("Nhường");
-    btn_Nhuong->setAnchorPoint(ccp(0,0));
-    btn_Nhuong->setPosition(ccp(WIDTH_DESIGN-btnReady->getContentSize().width*2-40,10));
-    btn_Nhuong->setTouchEnabled(false);
-    btn_Nhuong->addTouchEventListener(this, toucheventselector(XiTo::btn_Nhuong_click));
-    btn_Nhuong->setTitleFontSize(20);
-    btn_Nhuong->setTitleColor(ccRED);
-    btn_Nhuong->setVisible(false);
-    B1->addObject(btn_Nhuong);
-    uLayer->addWidget(btn_Nhuong);
-    
-    //Btn Tố
-    btn_To = UIButton::create();
-    btn_To->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-    btn_To->setTag(GAME_TABLE_STATUS_BET_RAISE);
-    btn_To->setTitleText("Tố");
-    btn_To->setAnchorPoint(ccp(0,0));
-    btn_To->setPosition(ccp(WIDTH_DESIGN-btn_To->getContentSize().width*3-60,10));
-    btn_To->setTouchEnabled(false);
-    btn_To->addTouchEventListener(this, toucheventselector(XiTo::btn_To_click));
-    btn_To->setTitleFontSize(20);
-    btn_To->setTitleColor(ccRED);
-    btn_To->setVisible(false);
-    B1->addObject(btn_To);
-    uLayer->addWidget(btn_To);
-    
-    //Btn Theo
-    btn_Theo = UIButton::create();
-    btn_Theo->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-    btn_Theo->setTag(GAME_TABLE_STATUS_BET_FOLLOW);
-    btn_Theo->setTitleText("Theo");
-    btn_Theo->setAnchorPoint(ccp(0,0));
-    btn_Theo->setPosition(ccp(WIDTH_DESIGN-btn_Theo->getContentSize().width*4-80,10));
-    btn_Theo->setTouchEnabled(false);
-    btn_Theo->addTouchEventListener(this, toucheventselector(XiTo::btn_Theo_click));
-    btn_Theo->setTitleFontSize(20);
-    btn_Theo->setTitleColor(ccRED);
-    btn_Theo->setVisible(false);
-    B1->addObject(btn_Theo);
-    uLayer->addWidget(btn_Theo);
-    
-    //Btn To 1/2
-    btn_To1_2 = UIButton::create();
-    btn_To1_2->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-    btn_To1_2->setTag(GAME_TABLE_STATUS_BET_HAFT);
-    btn_To1_2->setTitleText("Tố 1/2");
-    btn_To1_2->setAnchorPoint(ccp(0,0));
-    btn_To1_2->setPosition(ccp(WIDTH_DESIGN-btn_To1_2->getContentSize().width-20,btn_To1_2->getContentSize().height+20));
-    btn_To1_2->setTouchEnabled(false);
-    btn_To1_2->addTouchEventListener(this, toucheventselector(XiTo::btn_To1_2_click));
-    btn_To1_2->setTitleFontSize(20);
-    btn_To1_2->setTitleColor(ccRED);
-    btn_To1_2->setVisible(false);
-    B2->addObject(btn_To1_2);
-    uLayer->addWidget(btn_To1_2);
-    
-    //btn to 1/4
-    btn_To1_4 = UIButton::create();
-    btn_To1_4->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-    btn_To1_4->setTag(GAME_TABLE_STATUS_BET_QUATER);
-    btn_To1_4->setTitleText("Tố 1/4");
-    btn_To1_4->setAnchorPoint(ccp(0,0));
-    btn_To1_4->setPosition(ccp(WIDTH_DESIGN-btn_To1_4->getContentSize().width*2-40,btn_To1_4->getContentSize().height+20));
-    btn_To1_4->setTouchEnabled(false);
-    btn_To1_4->addTouchEventListener(this, toucheventselector(XiTo::btn_To1_4_click));
-    btn_To1_4->setTitleFontSize(20);
-    btn_To1_4->setTitleColor(ccRED);
-    btn_To1_4->setVisible(false);
-    B2->addObject(btn_To1_4);
-    uLayer->addWidget(btn_To1_4);
-    
-    //Btn To tat ca
-    btn_ToTatCa = UIButton::create();
-    btn_ToTatCa->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-    btn_ToTatCa->setTag(GAME_TABLE_STATUS_BET_ALL);
-    btn_ToTatCa->setTitleText("Tố tất cả");
-    btn_ToTatCa->setAnchorPoint(ccp(0,0));
-    btn_ToTatCa->setPosition(ccp(WIDTH_DESIGN-btn_ToTatCa->getContentSize().width-20,btn_ToTatCa->getContentSize().height*2+30));
-    btn_ToTatCa->setTouchEnabled(false);
-    btn_ToTatCa->addTouchEventListener(this, toucheventselector(XiTo::btn_To_All_click));
-    btn_ToTatCa->setTitleFontSize(20);
-    btn_ToTatCa->setTitleColor(ccRED);
-    btn_ToTatCa->setVisible(false);
-    B3->addObject(btn_ToTatCa);
-    uLayer->addWidget(btn_ToTatCa);
-    
-    //Btn To x2
-    btn_ToX2 = UIButton::create();
-    btn_ToX2->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-    btn_ToX2->setTag(GAME_TABLE_STATUS_BET_DOUBLE);
-    btn_ToX2->setTitleText("Tố X2");
-    btn_ToX2->setAnchorPoint(ccp(0,0));
-    btn_ToX2->setPosition(ccp(WIDTH_DESIGN-btn_ToX2->getContentSize().width*2-40,btn_ToX2->getContentSize().height*2+30));
-    btn_ToX2->setTouchEnabled(false);
-    btn_ToX2->addTouchEventListener(this, toucheventselector(XiTo::btn_To_X2_click));
-    btn_ToX2->setTitleFontSize(20);
-    btn_ToX2->setTitleColor(ccRED);
-    btn_ToX2->setVisible(false);
-    B3->addObject(btn_ToX2);
-    uLayer->addWidget(btn_ToX2);
-    
-    
-    //*** Khởi tạo các FrameBet Trong Game
-    //Frame Bet Total
-    frameBetTotal = UIImageView::create();
-    frameBetTotal->loadTexture("theo.png");
-    frameBetTotal->setAnchorPoint(ccp(0,0));
-    frameBetTotal->setPosition(ccp(WIDTH_DESIGN/2 - frameBetTotal->getContentSize().width/2,HEIGHT_DESIGN/2));
-    labelBetTotal = UILabel::create();
-    labelBetTotal->setFontSize(15);
-    labelBetTotal->setColor(ccWHITE);
-    labelBetTotal->setPosition(ccp(frameBetTotal->getContentSize().width/2, frameBetTotal->getContentSize().height/2));
-    frameBetTotal->addChild(labelBetTotal);
-    frameBetTotal->setVisible(false);
-    uLayer->addChild(frameBetTotal);
-    
-    //FrameBet từng Player
-    frameBet_Right_Top = FrameBet::create();
-    frameBet_Right_Bottom = FrameBet::create();
-    frameBet_Left_Top = FrameBet::create();
-    frameBet_Left_Bottom = FrameBet::create();
-    
-    frameBet_Left_Top->setPosition(ccp(left_FB_LT,bottom_TOP));
-    frameBet_Left_Bottom->setPosition(ccp(left_FB_LB, bottom_BOTTOM));
-    frameBet_Right_Bottom->setPosition(ccp(WIDTH_DESIGN-left_FB_LB-frameBet_Right_Bottom->getKc_width(),bottom_BOTTOM));
-    frameBet_Right_Top->setPosition(ccp(WIDTH_DESIGN-left_FB_LT-frameBet_Right_Top->getKc_width(), bottom_TOP));
-    
-    frameBet_Right_Bottom->setVisible(false);
-    frameBet_Right_Top->setVisible(false);
-    frameBet_Left_Top->setVisible(false);
-    frameBet_Left_Bottom->setVisible(false);
-    
-    uLayer->addChild(frameBet_Right_Bottom);
-    uLayer->addChild(frameBet_Right_Top);
-    uLayer->addChild(frameBet_Left_Top);
-    uLayer->addChild(frameBet_Left_Bottom);
-    
+    createButtons();
+	createFrameBets();
+
     //****** Khởi tạo mảng các lá bài
-    CARD_ME = new CCArray();
-    CARD_LEFT_BOTTOM = new CCArray();
-    CARD_LEFT_TOP = new CCArray();
-    CARD_RIGHT_BOTTOM = new CCArray();
-    CARD_RIGHT_TOP = new CCArray();
+    CARD_ME = CCArray::create();
+    CARD_LEFT_BOTTOM = CCArray::create();
+    CARD_LEFT_TOP = CCArray::create();
+    CARD_RIGHT_BOTTOM = CCArray::create();
+    CARD_RIGHT_TOP = CCArray::create();
     
     CARD_ME->retain();
     CARD_LEFT_BOTTOM->retain();
@@ -266,6 +75,7 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     CARD_RIGHT_BOTTOM->retain();
     CARD_RIGHT_TOP->retain();
 
+	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
 }
 
@@ -286,6 +96,10 @@ XiTo::~XiTo(){
     CARD_LEFT_BOTTOM->removeAllObjects();
     CARD_LEFT_BOTTOM = NULL;
 	CARD_LEFT_BOTTOM->release();
+	B1->release();
+	B2->release();
+	B3->release();
+
     this->removeAllComponents();
     CCLOG("Deconstructor----- Jump Here");
 }
@@ -303,6 +117,11 @@ void XiTo::onExit()
 	CARD_LEFT_TOP->release();
 	CARD_LEFT_BOTTOM->removeAllObjects();
 	CARD_LEFT_BOTTOM->release();
+
+	B1->release();
+	B2->release();
+	B3->release();
+
 	this->removeAllComponents();
 	CCLOG("Deconstructor----- Jump Here");
 }
@@ -311,13 +130,14 @@ void XiTo::createAvatar(){
     layerAvatar = LayerAvatarXiTo::create();
     this->addChild(layerAvatar);
 }
+
 void XiTo::createBackground(){
     BackgroundInGame *bg = BackgroundInGame::create();
     this->addChild(bg);
 	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
 	boost::shared_ptr<string> param = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
 	string paramString = param->c_str();
-	vector<string> arrInfo = Dsplit(paramString, '@');
+	vector<string> arrInfo = mUtils::splitString(paramString, '@');
 	string money = arrInfo.at(0);
 
 	mUtils mu;
@@ -336,35 +156,144 @@ void XiTo::createBackground(){
 	nameGame->setOpacity(150);
 	bg->addChild(nameGame);
 }
-void XiTo::createButton(){
-    LayerButtonInGame *button_ingame = LayerButtonInGame::create();
-    this->addChild(button_ingame);
+
+void XiTo::createButtons(){
+    layerButtons = LayerButtonInGame::create();
+    this->addChild(layerButtons);
+
+	B1 = CCArray::create();
+	B2 = CCArray::create();
+	B3 = CCArray::create();
+	B1->retain();
+	B2->retain();
+	B3->retain();
+
+	float w_Button = 90;
+	float h_Button = 44;
+
+	Button* btnReady = createButtonWithTitle_Pos("Sẵn Sàng",ccp(WIDTH_DESIGN - w_Button - 20, 10));
+	Button* btnFold = createButtonWithTitle_Pos("Úp", ccp(WIDTH_DESIGN - w_Button - 20, 10));
+	Button* btnGive = createButtonWithTitle_Pos("Nhường", ccp(WIDTH_DESIGN - w_Button * 2 - 40, 10));
+	Button* btnBet = createButtonWithTitle_Pos("Tố", ccp(WIDTH_DESIGN - w_Button * 3 - 60, 10));
+	Button* btnFollow = createButtonWithTitle_Pos("Theo", ccp(WIDTH_DESIGN - w_Button * 4 - 80, 10));
+	Button* btnHaft = createButtonWithTitle_Pos("Tố 1/2", ccp(WIDTH_DESIGN - w_Button - 20, h_Button + 20));
+	Button* btnQuater = createButtonWithTitle_Pos("Tố 1/4", ccp(WIDTH_DESIGN - w_Button * 2 - 40, h_Button + 20));
+	Button* btnAll = createButtonWithTitle_Pos("Tố tất cả", ccp(WIDTH_DESIGN - w_Button - 20, h_Button * 2 + 30));
+	Button* btnDouble = createButtonWithTitle_Pos("X2", ccp(WIDTH_DESIGN - w_Button*2 - 40, h_Button*2 + 30));
+
+	btnReady->addTouchEventListener(this, toucheventselector(XiTo::btn_ready_click));
+	btnFold->addTouchEventListener(this, toucheventselector(XiTo::btn_Up_click));
+	btnFollow->addTouchEventListener(this, toucheventselector(XiTo::btn_Theo_click));
+	btnGive->addTouchEventListener(this, toucheventselector(XiTo::btn_Nhuong_click));
+	btnBet->addTouchEventListener(this, toucheventselector(XiTo::btn_To_click));
+	btnHaft->addTouchEventListener(this, toucheventselector(XiTo::btn_To1_2_click));
+	btnQuater->addTouchEventListener(this, toucheventselector(XiTo::btn_To1_4_click));
+	btnAll->addTouchEventListener(this, toucheventselector(XiTo::btn_To_All_click));
+	btnDouble->addTouchEventListener(this, toucheventselector(XiTo::btn_To_X2_click));
+
+	btnReady->setTag(dTag_btnReady);
+	btnFold->setTag(dTag_btnFold);
+	btnFollow->setTag(dTag_btnFollow);
+	btnGive->setTag(dTag_btnGive);
+	btnBet->setTag(dTag_btnBet);
+	btnHaft->setTag(dTag_btnHaft);
+	btnQuater->setTag(dTag_btnQuatar);
+	btnAll->setTag(dTag_btnAll);
+	btnDouble->setTag(dTag_btnDouble);
+
+	B1->addObject(btnFold);
+	B1->addObject(btnGive);
+	B1->addObject(btnBet);
+	B1->addObject(btnFollow);
+
+	B2->addObject(btnHaft);
+	B2->addObject(btnQuater);
+
+	B3->addObject(btnAll);
+	B3->addObject(btnDouble);
+
+	btnReady->setEnabled(true);
+	btnFold->setEnabled(false);
+	btnFollow->setEnabled(false);
+	btnGive->setEnabled(false);
+	btnBet->setEnabled(false);
+	btnHaft->setEnabled(false);
+	btnQuater->setEnabled(false);
+	btnAll->setEnabled(false);
+	btnDouble->setEnabled(false);
+
+	layerButtons->addWidget(btnReady);
+	layerButtons->addWidget(btnFold);
+	layerButtons->addWidget(btnFollow);
+	layerButtons->addWidget(btnGive);
+	layerButtons->addWidget(btnBet);
+	layerButtons->addWidget(btnHaft);
+	layerButtons->addWidget(btnQuater);
+	layerButtons->addWidget(btnAll);
+	layerButtons->addWidget(btnDouble);
+
 }
 
-vector<string> XiTo::Dsplit(string &S,const char &str){
-    vector<string> arrStr;
-    string::iterator t,t2;
-    for(t=S.begin();t<S.end();){
-        t2=find(t, S.end(),str);
-        if(t!=t2)
-			arrStr.push_back(string(t,t2));
-		if(t2 == S.end())
-			break;
-        t=t2+1;
-    }
-    return arrStr;
+void XiTo::createFrameBets(){
+	float left_FB_LT = 175;
+	float left_FB_LB = 105;
+	float bottom_TOP = 432;
+	float bottom_BOTTOM = 282;
+
+	layerFrameBet = CCLayer::create();
+	layerFrameBet->setAnchorPoint(ccp(0, 0));
+	layerFrameBet->setPosition(ccp(0, 0));
+	layerFrameBet->setTouchEnabled(true);
+	this->addChild(layerFrameBet);
+
+	frameBetTotal = UIImageView::create();
+	frameBetTotal->loadTexture("theo.png");
+	frameBetTotal->setAnchorPoint(ccp(0,0));
+	frameBetTotal->setPosition(ccp(WIDTH_DESIGN/2 - frameBetTotal->getContentSize().width/2,HEIGHT_DESIGN/2));
+	labelBetTotal = UILabel::create();
+	labelBetTotal->setFontSize(15);
+	labelBetTotal->setColor(ccWHITE);
+	labelBetTotal->setPosition(ccp(frameBetTotal->getContentSize().width/2, frameBetTotal->getContentSize().height/2));
+	frameBetTotal->addChild(labelBetTotal);
+	frameBetTotal->setVisible(false);
+	layerFrameBet->addChild(frameBetTotal);
+
+	FrameBet* frameBet_Right_Top = FrameBet::create();
+	FrameBet* frameBet_Right_Bottom = FrameBet::create();
+	FrameBet* frameBet_Left_Top = FrameBet::create();
+	FrameBet* frameBet_Left_Bottom = FrameBet::create();
+
+	frameBet_Left_Top->setPosition(ccp(left_FB_LT,bottom_TOP));
+	frameBet_Left_Bottom->setPosition(ccp(left_FB_LB, bottom_BOTTOM));
+	frameBet_Right_Bottom->setPosition(ccp(WIDTH_DESIGN-left_FB_LB - frameBet_Right_Bottom->getKc_width(), bottom_BOTTOM));
+	frameBet_Right_Top->setPosition(ccp(WIDTH_DESIGN-left_FB_LT - frameBet_Right_Top->getKc_width(), bottom_TOP));
+
+	frameBet_Right_Bottom->setTag(user_rightBottom);
+	frameBet_Right_Top->setTag(user_rightTop);
+	frameBet_Left_Top->setTag(user_leftTop);
+	frameBet_Left_Bottom->setTag(user_leftBottom);
+
+	frameBet_Right_Bottom->setVisible(false);
+	frameBet_Right_Top->setVisible(false);
+	frameBet_Left_Top->setVisible(false);
+	frameBet_Left_Bottom->setVisible(false);
+
+	layerFrameBet->addChild(frameBet_Right_Bottom);
+	layerFrameBet->addChild(frameBet_Right_Top);
+	layerFrameBet->addChild(frameBet_Left_Top);
+	layerFrameBet->addChild(frameBet_Left_Bottom);
 }
 
 int XiTo::getPosUserByName(string uid, string _list_user){
     int vt = -1;
     vector<string> list;
     if(_list_user!=""){
-        list = Dsplit(_list_user, ';');
+        list = mUtils::splitString(_list_user, ';');
     }
     //Tìm vị trí của mình trong list user
     for(int i=0;i<list.size();i++){
-        string _id = Dsplit(list[i], '_')[1];
-        if(strcmp(_id.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+        string _id = mUtils::splitString(list[i], '_')[1];
+        if(strcmp(_id.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
             vt = i;
             break;
         }
@@ -376,7 +305,7 @@ int XiTo::getPosUserByName(string uid, string _list_user){
             continue;
         }
         string player = list[k];
-        vector<string> n = Dsplit(player, '_');
+        vector<string> n = mUtils::splitString(player, '_');
         if(strcmp(n[1].c_str(), uid.c_str())==0){
             if(k==vt){
                 return 0;
@@ -395,14 +324,7 @@ int XiTo::getPosUserByName(string uid, string _list_user){
             }
         }
     }
-    return 0;
-}
-
-string XiTo::find_RoomBoss(string list){
-    vector<string> arrUser = Dsplit(list,';');
-    vector<string> info = Dsplit(arrUser[0],'_');
-    string boosId = info[1];
-    return boosId;
+    return -1;
 }
 
 void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -436,8 +358,6 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
             CCLOG("Nguoi ra khoi phong: %s",uid->c_str());
             _list_user = *lu;
             updateUsers(_list_user);
-        }else{
-            CCLOG("Khong nhan duoc list user");
         }
     }
     
@@ -452,6 +372,7 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     else if (strcmp("sfstntf", cmd->c_str())==0){
         boost::shared_ptr<long> bettt = param->GetInt("bettt");
         int _bettt = 0;
+
         if(bettt != NULL){
             _bettt = (int)(*bettt);
         }
@@ -463,8 +384,7 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     else if (strcmp("strntf", cmd->c_str())==0){
         CCLOG("Game Start");
 		layerAvatar->setUnReadyAllUser();
-        btnReady->setTouchEnabled(false);
-        btnReady->setVisible(false);
+		getButtonByTag(dTag_btnReady)->setEnabled(false);
         flag_StartGame = true;
         chiaBai();
     }
@@ -476,17 +396,14 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
         boost::shared_ptr<string> lc = param->GetUtfString("lc");
         boost::shared_ptr<bool> isOpenCard = param->GetBool("cropn");
-        CCLOG("uid: %s them card: %s",uid->c_str(),lc->c_str());
-        CCLOG("card convert: %s",convertCard(lc->c_str()).c_str());
         setDeal = false;
+
         if(!setDeal){
-            CCLOG("list card: %s",list_dealCards_allUser.c_str());
             list_dealCards_allUser+=*uid+"_"+*lc+"-";
         }
         if(chooseCard == true && strcmp(uid->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
             my_DealCards = *lc;
             list_dealCards_allUser = "";
-            CCLOG("delete list_dealcard");
         }
     }
     
@@ -510,9 +427,8 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     }
     
     //Luot nguoi to
-    else if(strcmp("ndrntf", cmd->c_str())==0){
-        btnReady->setTouchEnabled(false);
-        btnReady->setVisible(false);
+    else if(strcmp("ndrntf", cmd->c_str()) == 0){
+		getButtonByTag(dTag_btnReady)->setEnabled(false);
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
         boost::shared_ptr<string> typeAllow = param->GetUtfString("betal");
         
@@ -526,7 +442,6 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
             chiaThem1LaBai();
         }
         else{
-            //Hien thi cac Button Bet
             setButtonBet(*uid, *typeAllow);
         }
         setDeal = true;
@@ -657,16 +572,13 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
         string _ginf = ginf->c_str();
         string _betal = "NULL";
         
-        vector<string> btr = Dsplit(_ginf, '|');
+        vector<string> btr = mUtils::splitString(_ginf, '|');
         _list_user = btr[3];
         userReJoinGame(_ginf);
         
         if(betal != NULL){
             _betal = betal->c_str();
         }
-        
-        CCLOG("Room Info : %s",_ginf.c_str());
-        CCLOG("betal: %s",_betal.c_str());
         
         if(_betal != "NULL"){
             setButtonBet(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(), _betal.c_str());
@@ -679,7 +591,6 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     }
     
 }
-
 
 void XiTo::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
@@ -709,23 +620,27 @@ void XiTo::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::sh
             break;
     }
 }
+
 void XiTo::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     
 }
+
 void XiTo::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     
 }
+
 void XiTo::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     
 }
 
-//Update user
 void XiTo::updateUsers(string listUser){
     layerAvatar->resetAll();
-    vector<string> list = Dsplit(listUser, ';');
+
+    vector<string> list = mUtils::splitString(listUser, ';');
     boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-    for(int i=0; i <list.size(); i++){
-        if(lastRoom==NULL){
+
+    for(int i = 0; i < list.size(); i++){
+        if(lastRoom == NULL){
             return;
         }
         
@@ -734,96 +649,64 @@ void XiTo::updateUsers(string listUser){
         }
         
         string player = list[i];
-        vector<string> n = Dsplit(player, '_');
-        if(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1])==NULL){
-            continue;
-        }
-        
+        vector<string> n = mUtils::splitString(player, '_');
+
         int money = 0;
         boost::shared_ptr<string> name;
         
-        if(strcmp(n[1].c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-			layerAvatar->getUserByPos(user_me)->setVisibleLayerInvite(false);
-            layerAvatar->setName(user_me, GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("aN")->GetStringValue()->c_str());
-            layerAvatar->getUserByPos(user_me)->setMoney((int)(*GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("amf")->GetDoubleValue()));
-			layerAvatar->getUserByPos(user_me)->setMoney((int)*GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("amf")->GetDoubleValue());
-			
-			if(n[1]==find_RoomBoss(_list_user)){
-                layerAvatar->setFlag(user_me, true);
-                btnReady->setTitleText("Chia Bài");
-            }
-            if(n[1]!=find_RoomBoss(_list_user)){
-                btnReady->setTitleText("Sẵn Sàng");
-            }
-        }
-        else{
-            name =  GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1])->GetVariable("aN")->GetStringValue();
-            money = (int)*GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1])->GetVariable("amf")->GetDoubleValue();
-            
-            switch (getPosUserByName(n[1], _list_user)) {
-                case user_leftBottom:
-					layerAvatar->getUserByPos(user_leftBottom)->setVisibleLayerInvite(false);
-                    layerAvatar->setName(user_leftBottom, name->c_str());
-                    layerAvatar->getUserByPos(user_leftBottom)->setMoney(money);
-                    if(n[1] == find_RoomBoss(_list_user)){
-                        layerAvatar->setFlag(user_leftBottom, true);
-                    }
-                    break;
-                case user_leftTop:
-					layerAvatar->getUserByPos(user_leftTop)->setVisibleLayerInvite(false);
-                    layerAvatar->setName(user_leftTop, name->c_str());
-                    layerAvatar->getUserByPos(user_leftTop)->setMoney(money);
-                    if(n[1]==find_RoomBoss(_list_user)){
-                        layerAvatar->setFlag(user_leftTop, true);
-                    }
-                    break;
-                case user_rightBottom:
-					layerAvatar->getUserByPos(user_rightBottom)->setVisibleLayerInvite(false);
-                    layerAvatar->setName(user_rightBottom, name->c_str());
-                    layerAvatar->getUserByPos(user_rightBottom)->setMoney(money);
-                    if(n[1]==find_RoomBoss(_list_user)){
-                        layerAvatar->setFlag(user_rightBottom, true);
-                    }
-                    break;
-                case user_rightTop:
-					layerAvatar->getUserByPos(user_rightTop)->setVisibleLayerInvite(false);
-                    layerAvatar->setName(user_rightTop, name->c_str());
-                    layerAvatar->getUserByPos(user_rightTop)->setMoney(money);
-                    if(n[1]==find_RoomBoss(_list_user)){
-                        layerAvatar->setFlag(user_rightTop, true);
-                    }
-                    break;
-            }
-        }
+		if (GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1]) != NULL)
+		{
+			name =  GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1])->GetVariable("aN")->GetStringValue();
+			money = (int)*GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1])->GetVariable("amf")->GetDoubleValue();
+
+			int pos = getPosUserByName(n[1], _list_user);
+			setInfoAvatar(pos, name->c_str(), money, i);
+
+			if (strcmp(n[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
+			{
+				if( i == 0){
+					layerAvatar->setFlag(user_me, true);
+					getButtonByTag(dTag_btnReady)->setTitleText("Chia Bài");
+				}
+				else{
+					getButtonByTag(dTag_btnReady)->setTitleText("Sẵn Sàng");
+				}
+			}
+		}
     }
 }
 
+void XiTo::setInfoAvatar(int pos, string name, int money, int vt) {
+	if (pos == -1)
+	{
+		return;
+	}
+	layerAvatar->getUserByPos(pos)->setVisibleLayerInvite(false);
+	layerAvatar->getUserByPos(pos)->setMoney(money);
+	layerAvatar->getUserByPos(pos)->setName(name);
+	layerAvatar->getUserByPos(pos)->setFlag(vt == 0);
+}
+
 void XiTo::userReJoinGame(string roomInfo){
-    vector<string>  info = Dsplit(roomInfo, '|');
-    vector<string> arrUser = Dsplit(info[3], ';');
-    for(int i=0;i<arrUser.size();i++){
-        CCLOG("user %d: %s",i,arrUser[i].c_str());
-    }
-    CCLOG("I'm come back here");
+    vector<string>  info = mUtils::splitString(roomInfo, '|');
+    vector<string> arrUser = mUtils::splitString(info[3], ';');
+    vector<string> str = mUtils::splitString(arrUser[0], '_');
     
-    vector<string> str = Dsplit(arrUser[0], '_');
-    
-    if(str.size()>=6){
+    if(str.size() >= 6){
         setDeal = true;
         chooseCard = false;
-		btnReady->setVisible(false);
-		btnReady->setTouchEnabled(false);
+		getButtonByTag(dTag_btnReady)->setEnabled(false);
 
-        luotChiathem = (int)Dsplit(Dsplit(arrUser[0], '_')[5], ',').size();
-        CCLOG("luot chia: %d",luotChiathem);
-        for(int i=0;i<arrUser.size();i++){
-            vector<string> n = Dsplit(arrUser[i], '_');
-            if(n.size()>=6){
-                vector<string> l_cards = Dsplit(n[5], ',');
+        luotChiathem = (int)mUtils::splitString(mUtils::splitString(arrUser[0], '_')[5], ',').size();
+        for(int i = 0; i < arrUser.size(); i++){
+            vector<string> n = mUtils::splitString(arrUser[i], '_');
+
+            if(n.size() >= 6){
+                vector<string> l_cards = mUtils::splitString(n[5], ',');
                 int countF = 0;
                 
-                for(int t=0; t<l_cards.size(); t++){
-                    if(atoi(l_cards[t].c_str())<0){
+                for(int t = 0; t < l_cards.size(); t++){
+                    if(atoi(l_cards[t].c_str()) < 0){
                         countF++;
                         string temp;
                         temp = l_cards[0];
@@ -833,13 +716,11 @@ void XiTo::userReJoinGame(string roomInfo){
                 }//end for t
                 
                 string str_newCards = "";
-                for(int t1=0; t1<l_cards.size(); t1++){
-                    CCLOG("i = %d, card: %s",t1,l_cards[t1].c_str());
-                    str_newCards+=l_cards[t1]+",";
+                for(int t1 = 0; t1 < l_cards.size(); t1++){
+                    str_newCards += l_cards[t1] + ",";
                 }
-                CCLOG("str_newCards = %s",str_newCards.c_str());
                 
-                if(strcmp(n[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+                if(strcmp(n[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
                     if(countF == 2){
                         restoreListCard_Reconnected(CARD_ME, str_newCards, false, lf_card_me, bt_card_me, w_card_me, h_card_me);
                     }else{
@@ -894,14 +775,14 @@ void XiTo::restoreListCard_Reconnected(CCArray *P, string lc, bool _state, float
             CardChan *pCard = CardChan::create();
             pCard->loadTexture("card_back.png");
             pCard->setSizeCard(_width, _height);
-            pCard->setPosition(ccp(_left+i*_width/3*2,_bottom));
-            uLayer->addChild(pCard);
+            pCard->setPosition(ccp(_left + i * _width / 3 * 2, _bottom));
+            this->addChild(pCard);
             P->addObject(pCard);
         }
     }else{
         string lsCards = convertCard(lc);
-        vector<string> arrCards = Dsplit(lsCards, '-');
-        for(int i=0;i<arrCards.size();i++){
+        vector<string> arrCards = mUtils::splitString(lsCards, '-');
+        for(int i = 0; i < arrCards.size(); i++){
             if(arrCards[i] != ""){
                 CardChan *pCard = CardChan::create();
                 if(arrCards[i] == "0_0"){
@@ -910,63 +791,49 @@ void XiTo::restoreListCard_Reconnected(CCArray *P, string lc, bool _state, float
                     pCard->loadTexture(findTypeCard(arrCards[i]).c_str());
                 }
                 pCard->setSizeCard(_width, _height);
-                pCard->setPosition(ccp(_left+i*_width/3*2,_bottom));
-                uLayer->addChild(pCard);
+                pCard->setPosition(ccp(_left + i * _width / 3 * 2, _bottom));
+                this->addChild(pCard);
                 P->addObject(pCard);
             }
         }
     }
 }
 
-
 void XiTo::when_userReady(string uid){
-    if(strcmp(uid.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        btnReady->setVisible(false);
-        btnReady->setTouchEnabled(false);
-		layerAvatar->getUserByPos(user_me)->setReady(true);
+	int pos = getPosUserByName(uid, _list_user);
+	if (pos == -1)
+	{
+		return;
+	}
+    if(strcmp(uid.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
+        getButtonByTag(dTag_btnReady)->setEnabled(false);
     }
-    else{
-        switch(getPosUserByName(uid,_list_user)){
-		case user_leftBottom:
-			layerAvatar->getUserByPos(user_leftBottom)->setReady(true);
-			break;
-		case user_leftTop:
-			layerAvatar->getUserByPos(user_leftTop)->setReady(true);
-			break;
-		case user_rightBottom:
-			layerAvatar->getUserByPos(user_rightBottom)->setReady(true);
-			break;
-		case user_rightTop:
-			layerAvatar->getUserByPos(user_rightTop)->setReady(true);
-			break;
-		}
-    }
+	layerAvatar->getUserByPos(pos)->setReady(true);
 }
 
-// Khi nhan được 1 người Bet
 void XiTo::when_playerBet(string uid, long bet, long betValue, long betTotal){
     if(bet != 0 && bet != 2){
 		string t = mUtils::convertMoneyEx(betTotal);
-		CCLOG("TTTTT = %s",t.c_str());
         labelBetTotal->setText(("Tổng: "+t+" $").c_str());
         frameBetTotal->setVisible(true);
     }
+
     if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        //SetMyBet
+        
     }
     else{
         switch (getPosUserByName(uid, _list_user)) {
             case user_leftBottom:
-                setPlayerBet(bet, betValue, user_leftBottom);
+                setBet_Inpos(user_leftBottom, CARD_LEFT_BOTTOM, bet, betValue);
                 break;
             case user_leftTop:
-                setPlayerBet(bet, betValue, user_leftTop);
+                 setBet_Inpos(user_leftTop, CARD_LEFT_TOP, bet, betValue);
                 break;
             case user_rightBottom:
-                setPlayerBet(bet, betValue, user_rightBottom);
+                 setBet_Inpos(user_rightBottom, CARD_RIGHT_BOTTOM, bet, betValue);
                 break;
             case user_rightTop:
-                setPlayerBet(bet, betValue, user_rightTop);
+                 setBet_Inpos(user_rightTop, CARD_RIGHT_TOP, bet, betValue);
                 break;
             default:
                 break;
@@ -974,84 +841,29 @@ void XiTo::when_playerBet(string uid, long bet, long betValue, long betTotal){
     }
 }
 
-//Set Bet For Player
-void XiTo::setPlayerBet(long bet, long betValue, int _pos){
-    switch(_pos){
-        case user_me:
-            if (bet == 0) {
-                for (int i=0; i<CARD_ME->count(); i++) {
-                    CardChan* pCard = (CardChan*)CARD_ME->objectAtIndex(i);
-                    pCard->loadTexture("card_back.png");
-                }
-            }
-            break;
-            
-        case user_leftBottom:
-            if (bet == 0) {
-                for (int i=0; i<CARD_LEFT_BOTTOM->count(); i++) {
-                    CardChan* pCard = (CardChan*)CARD_LEFT_BOTTOM->objectAtIndex(i);
-                    pCard->loadTexture("card_back.png");
-                }
-                frameBet_Left_Bottom->setVisible(false);
-            }
-            else{
-                frameBet_Left_Bottom->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
-                frameBet_Left_Bottom->setVisible(true);
-            }
-            break;
-            
-        case user_leftTop:
-            if (bet == 0) {
-                for (int i=0; i<CARD_LEFT_TOP->count(); i++) {
-                    CardChan* pCard = (CardChan*)CARD_LEFT_TOP->objectAtIndex(i);
-                    pCard->loadTexture("card_back.png");
-                }
-                frameBet_Left_Top->setVisible(false);
-            }
-            else{
-                frameBet_Left_Top->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
-                frameBet_Left_Top->setVisible(true);
-            }
-            break;
-            
-        case user_rightTop:
-            if (bet == 0) {
-                for (int i=0; i<CARD_RIGHT_TOP->count(); i++) {
-                    CardChan* pCard = (CardChan*)CARD_RIGHT_TOP->objectAtIndex(i);
-                    pCard->loadTexture("card_back.png");
-                }
-                frameBet_Right_Top->setVisible(false);
-            }
-            else{
-                frameBet_Right_Top->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
-                frameBet_Right_Top->setVisible(true);
-            }
-            break;
-            
-        case user_rightBottom:
-            if (bet == 0) {
-                for (int i=0; i<CARD_RIGHT_BOTTOM->count(); i++) {
-                    CardChan* pCard = (CardChan*)CARD_RIGHT_BOTTOM->objectAtIndex(i);
-                    pCard->loadTexture("card_back.png");
-                }
-                frameBet_Right_Bottom->setVisible(false);
-            }
-            else{
-                frameBet_Right_Bottom->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
-                frameBet_Right_Bottom->setVisible(true);
-            }
-            break;
-            
-        default:
-            break;
-    }
+void XiTo::setBet_Inpos(int pos, CCArray *P, long bet, long betValue)
+{
+	if (pos == -1 || pos == user_me)
+	{
+		return;
+	}
+
+	if (bet == 0)
+	{
+		for (int i = 0; i < P->count(); i++) {
+			CardChan* pCard = (CardChan*)P->objectAtIndex(i);
+			pCard->loadTexture("card_back.png");
+		}
+		getFrameBetByTag(pos)->setVisible(false);
+	} else {
+		getFrameBetByTag(pos)->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
+		getFrameBetByTag(pos)->setVisible(true);
+	}
 }
 
-//Open All Card
 void XiTo::openAllCard(string uid, string lc){
     string strCards = convertCard(lc);
-    if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        CCLOG("Me, lc: %s (%s)",lc.c_str(),strCards.c_str());
+    if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
         setIDListCard(CARD_ME, lc);
         setListCards(CARD_ME, strCards);
     }else{
@@ -1059,22 +871,18 @@ void XiTo::openAllCard(string uid, string lc){
             case user_leftBottom:
                 setIDListCard(CARD_LEFT_BOTTOM, lc);
                 setListCards(CARD_LEFT_BOTTOM, strCards);
-                CCLOG("Left Bottom, lc: %s (%s)",lc.c_str(),strCards.c_str());
                 break;
             case user_leftTop:
                 setIDListCard(CARD_LEFT_TOP, lc);
                 setListCards(CARD_LEFT_TOP, strCards);
-                CCLOG("Left Top, lc: %s (%s)",lc.c_str(),strCards.c_str());
                 break;
             case user_rightBottom:
                 setIDListCard(CARD_RIGHT_BOTTOM, lc);
                 setListCards(CARD_RIGHT_BOTTOM, strCards);
-                CCLOG("Right Bottom, lc: %s (%s)",lc.c_str(),strCards.c_str());
                 break;
             case user_rightTop:
                 setIDListCard(CARD_RIGHT_TOP, lc);
                 setListCards(CARD_RIGHT_TOP, strCards);
-                CCLOG("Right Top, lc: %s (%s)",lc.c_str(),strCards.c_str());
                 break;
             default:
                 break;
@@ -1083,11 +891,11 @@ void XiTo::openAllCard(string uid, string lc){
 }
 
 void XiTo::setListCards(CCArray *P, string lc){
-    vector<string> arrCard = Dsplit(lc, '-');
-    if(P->count()>=arrCard.size()){
-        for(int i=0;i<arrCard.size();i++){
+    vector<string> arrCard = mUtils::splitString(lc, '-');
+    if(P->count() >= arrCard.size()){
+        for(int i = 0; i < arrCard.size(); i++){
             CardChan *pCard = (CardChan*)P->objectAtIndex(i);
-            if(arrCard[i]=="0_0"){
+            if(arrCard[i] == "0_0"){
                 pCard->loadTexture("card_back.png");
             }
             else{
@@ -1095,15 +903,13 @@ void XiTo::setListCards(CCArray *P, string lc){
             }
         }
     }else{
-        // Add when Reconect ...
     }
 }
 
 void XiTo::setIDListCard(CCArray *P,string lc){
-    vector<string> arrID = Dsplit(lc, ',');
-    CCLOG("size: %lu",arrID.size());
-    if(P->count()>=arrID.size()){
-        for (int i=0; i<arrID.size(); i++) {
+    vector<string> arrID = mUtils::splitString(lc, ',');
+    if(P->count() >= arrID.size()){
+        for (int i = 0; i < arrID.size(); i++) {
             CardChan *pCard = (CardChan*)P->objectAtIndex(i);
             pCard->setID(atoi(arrID[i].c_str()));
         }
@@ -1113,26 +919,22 @@ void XiTo::setIDListCard(CCArray *P,string lc){
 }
 
 void XiTo::setDisplayValueListCard(CCArray *P,string lc){
-    CCLOG("lc = %s",lc.c_str());
+
     if(lc != ""){
-        CCLOG("Jump setDisplay lc != '' ");
-        CCLOG("P->count() = %d",P->count());
-        vector<string> arrID = Dsplit(lc, ',');
+        vector<string> arrID = mUtils::splitString(lc, ',');
         
-        for (int i=0; i<P->count(); i++) {
+        for (int i = 0; i < P->count(); i++) {
             CardChan* pCard = (CardChan*)P->objectAtIndex(i);
-            CCLOG("here i %d",i);
-            for (int j=0; j<arrID.size(); j++) {
-                CCLOG("here j %d",j);
+            for (int j = 0; j < arrID.size(); j++) {
                 if (pCard->getID()==atoi(arrID[j].c_str())) {
                     pCard->setFlag(true);
                 }
             }
         }
-        //Xu ly
-        for (int k=0; k<P->count(); k++) {
+        
+        for (int k = 0; k < P->count(); k++) {
             CardChan *pC = (CardChan*)P->objectAtIndex(k);
-            if(!pC->getFlag()){
+            if( !pC->getFlag() ){
                 pC->setOpacity(200);
             }
         }
@@ -1140,7 +942,7 @@ void XiTo::setDisplayValueListCard(CCArray *P,string lc){
 }
 
 void XiTo::setVictoryType(string uid,long vicType, string lc){
-    if(strcmp(uid.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+    if(strcmp(uid.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
         setDisplayValueListCard(CARD_ME, lc);
     }else
     {
@@ -1163,7 +965,6 @@ void XiTo::setVictoryType(string uid,long vicType, string lc){
     }
 }
 
-//set Money animation
 void XiTo::setMoneyAnimate(string uid, string amf){
     layerAvatar->stopAllTimer();
      Number *number = new Number(amf);
@@ -1194,24 +995,23 @@ void XiTo::setMoneyAnimate(string uid, string amf){
     }
     
     number->setPositionStart(point);
-    uLayer->addChild(number);
+    this->addChild(number);
 }
 
-
 string XiTo::convertCard(string strCard){
-    vector<string> arrCards = Dsplit(strCard,',');
+    vector<string> arrCards = mUtils::splitString(strCard,',');
     string str = "";
     
     for(int i=0;i<arrCards.size();i++){
-        if(arrCards[i]!=""){
-            int a = atoi(arrCards[i].c_str());
-            if(a==-1){
-                str+="0_0-";
+        if(arrCards[i] != ""){
+            int a = atoi(arrCards.at(i).c_str());
+            if(a == -1){
+                str += "0_0-";
             }
             else{
-                int num = a/4 + 7;
+                int num = a / 4 + 7;
                 string cardId = "";
-                int type = a%4;
+                int type = a % 4;
                 
                 if(type == 0){
                     num--;
@@ -1243,24 +1043,20 @@ string XiTo::convertCard(string strCard){
 }
 
 string XiTo::findTypeCard(string listCards){
-    CCLOG("lc %s",listCards.c_str());
-    vector<string> info = Dsplit(listCards, '_');
-    CCLOG("card: %s, type %s",info[0].c_str(),info[1].c_str());
-    string url = "card_"+info[0] + "_" + arrCardTypes[atoi(info[1].c_str())]+".png";
+    vector<string> info = mUtils::splitString(listCards, '_');
+    string url = "card_" + info[0] + "_" + arrCardTypes[atoi(info[1].c_str())] + ".png";
     return url;
 }
 
 void XiTo::chiaBai(){
-    vector<string> realUser = Dsplit(_list_user, ';');
-    CCLOG("So nguoi choi: %lu",realUser.size());
+    vector<string> realUser = mUtils::splitString(_list_user, ';');
     string listUser_vitural = _list_user;
     listUser_vitural+=";"+_list_user;
-    vector<string> data = Dsplit(listUser_vitural, ';');
+    vector<string> data = mUtils::splitString(listUser_vitural, ';');
     int num = (int)data.size();
     
-    CCLOG("Luot chia = %d",luotChia);
-    vector<string> info = Dsplit(data[luotChia], '_');
-    if(strcmp(info[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+    vector<string> info = mUtils::splitString(data[luotChia], '_');
+    if(strcmp(info[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
         luotChia++;
         giveDealCardsForPlayer(CARD_ME, lf_card_me, w_card_me, h_card_me, bt_card_me, num);
     }
@@ -1291,30 +1087,27 @@ void XiTo::giveDealCardsForPlayer(CCArray *P,float _left,float _width,float _hei
     CardChan *pCard = CardChan::create();
     pCard->loadTexture("card_back.png");
     pCard->setSizeCard(w_card_notme, h_card_notme);
-    pCard->setPosition(ccp(WIDTH_DESIGN/2-w_card_notme/2,HEIGHT_DESIGN-h_card_notme));
-    uLayer->addChild(pCard);
+    pCard->setPosition(ccp(WIDTH_DESIGN / 2 - w_card_notme / 2, HEIGHT_DESIGN - h_card_notme));
+    this->addChild(pCard);
     
-    CCMoveBy *newTo = CCMoveTo::create(0.3, ccp(_left+P->count()*_width,_bottom));
-    CCScaleBy *scaleTo = CCScaleBy::create(0.3, _width/w_card_notme,_height/h_card_notme);
+    CCMoveBy *newTo = CCMoveTo::create(0.3, ccp(_left + P->count() * _width, _bottom));
+    CCScaleBy *scaleTo = CCScaleBy::create(0.3, _width / w_card_notme, _height / h_card_notme);
+
     pCard->runAction(newTo);
     pCard->runAction(scaleTo);
     P->addObject(pCard);
-    CCLOG("Card me: %d",CARD_ME->count());
-    if(luotChia<l){
-        this->runAction(CCSequence::create(CCDelayTime::create(0.3),CCCallFunc::create(this, callfunc_selector(XiTo::chiaBai)),NULL));
+
+    if(luotChia < l){
+        this->runAction(CCSequence::create(CCDelayTime::create(0.3), CCCallFunc::create(this, callfunc_selector(XiTo::chiaBai)), NULL));
     }
     else{
-        //Hien thi 2 la bai cua minh
-        CCLOG("deal card me: %s",my_DealCards.c_str());
-        CCLOG("dealCards convert: %s",convertCard(my_DealCards).c_str());
-        vector<string> deal = Dsplit(my_DealCards, ',');
+        vector<string> deal = mUtils::splitString(my_DealCards, ',');
         string strDeal = convertCard(my_DealCards);
-        vector<string> arr = Dsplit(strDeal, '-');
-        CCLOG("Xac thuc %lu",arr.size());
-        for(int i = 0;i<arr.size();i++){
+        vector<string> arr = mUtils::splitString(strDeal, '-');
+
+        for(int i = 0; i < arr.size(); i++){
             CardChan *pXiTo = (CardChan*)CARD_ME->objectAtIndex(i);
             pXiTo->loadTexture(findTypeCard(arr[i]).c_str());
-            CCLOG("set ID Cards: %d",atoi(deal[i].c_str()));
             pXiTo->setID(atoi(deal[i].c_str()));
         }
         
@@ -1346,34 +1139,18 @@ void XiTo::popupXito(string myDealCard){
         popUp = (LayerOpenCard_Xito *)ccbReader->readNodeGraphFromFile( "LayerOpenCard_Xito.ccbi" );
         popUp->setPosition(ccp(10,10));
         popUp->setDealCards(myDealCard);
-        uLayer->addChild(popUp);
+        this->addChild(popUp);
         ccbReader->release();
     }
 }
 
 void XiTo::OpenOneDealCards(string uid,string crdvl){
-    CCLOG("Nguoi mo bai: %s la bai %s - (%s)",uid.c_str(),crdvl.c_str(),convertCard(crdvl).c_str());
-    if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        CCLOG("Ben trong OpenDeal Card: %d",CARD_ME->count());
+    if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
         moveDealCard_Me(crdvl);
     }
     else{
-        switch(getPosUserByName(uid, _list_user)){
-            case user_leftBottom:
-                moveDealCard_Left_Bottom(convertCard(crdvl));
-                break;
-            case user_leftTop:
-                moveDealCard_Left_Top(convertCard(crdvl));
-                break;
-            case user_rightBottom:
-                moveDealCard_Right_Bottom(convertCard(crdvl));
-                break;
-            case user_rightTop:
-                moveDealCard_Right_Top(convertCard(crdvl));
-                break;
-            default:
-                break;
-        }
+		int pos = getPosUserByName(uid, _list_user);
+		moveDealCard_NotMe(pos, convertCard(crdvl));
     }
 }
 
@@ -1381,8 +1158,8 @@ void XiTo::moveDealCard(CardChan *c,float _left, float _bottom){
     CCMoveBy *newTo = CCMoveTo::create(0.4, ccp(_left,_bottom));
     c->runAction(newTo);
 }
+
 void XiTo::moveDealCard_Me(string _lc){
-    CCLOG("trước khi mở: ");
 	if (CARD_ME->count() != 2)
 	{
 		return;
@@ -1390,8 +1167,7 @@ void XiTo::moveDealCard_Me(string _lc){
 	
     for (int i = 0; i < CARD_ME->count(); i++) {
         CardChan *pCards = (CardChan*)CARD_ME->objectAtIndex(i);
-        CCLOG("id: %d",pCards->getID());
-        if(pCards->getID()!=atoi(_lc.c_str()) && i != 0){
+        if(pCards->getID() != atoi(_lc.c_str()) && i != 0){
             CardChan *qCards = (CardChan*)CARD_ME->objectAtIndex(0);
             CARD_ME->replaceObjectAtIndex(0, pCards);
             CARD_ME->replaceObjectAtIndex(i, qCards);
@@ -1403,222 +1179,182 @@ void XiTo::moveDealCard_Me(string _lc){
     moveDealCard(pc, lf_card_me, bt_card_me);
     
     CardChan* pc1 = (CardChan*)CARD_ME->objectAtIndex(1);
-    moveDealCard(pc1, lf_card_me+w_card_me/3*2, bt_card_me);
+    moveDealCard(pc1, lf_card_me+w_card_me / 3 * 2, bt_card_me);
+
     int oldZ = pc->getZOrder();
     pc->setZOrder(pc1->getZOrder());
     pc1->setZOrder(oldZ);
 }
 
-void XiTo::moveDealCard_Left_Bottom(string _lc){
-    vector<string> theCard = Dsplit(_lc, '-');
-    vector<string> info = Dsplit(theCard[0], '_');
-    CardChan *pCard = (CardChan*)CARD_LEFT_BOTTOM->objectAtIndex(1);
-    pCard->loadTexture(findTypeCard(_lc).c_str());
-    CCObject *d;
-    int dem = 0;
-    CCARRAY_FOREACH(CARD_LEFT_BOTTOM, d){
-        CardChan *uu = dynamic_cast<CardChan*>(d);
-        moveDealCard(uu, lf_card_left_bottom+dem*(w_card_notme/3*2), bt_card_bottom);
-        dem++;
-    }
-}
-void XiTo::moveDealCard_Left_Top(string _lc){
-    vector<string> theCard = Dsplit(_lc, '-');
-    vector<string> info = Dsplit(theCard[0], '_');
-    CardChan *pCard = (CardChan*)CARD_LEFT_TOP->objectAtIndex(1);
-    pCard->loadTexture(findTypeCard(_lc).c_str());
-    CCObject *d;
-    int dem = 0;
-    CCARRAY_FOREACH(CARD_LEFT_TOP, d){
-        CardChan *uu = dynamic_cast<CardChan*>(d);
-        moveDealCard(uu, lf_card_left_top+dem*(w_card_notme/3*2), bt_card_top);
-        dem++;
-    }
-}
-void XiTo::moveDealCard_Right_Bottom(string _lc){
-    vector<string> theCard = Dsplit(_lc, '-');
-    vector<string> info = Dsplit(theCard[0], '_');
-    CardChan *pCard = (CardChan*)CARD_RIGHT_BOTTOM->objectAtIndex(1);
-    pCard->loadTexture(findTypeCard(_lc).c_str());
-    CCObject *d;
-    int dem = 0;
-    CCARRAY_FOREACH(CARD_RIGHT_BOTTOM, d){
-        CardChan *uu = dynamic_cast<CardChan*>(d);
-        moveDealCard(uu, lf_card_right_bottom+dem*(w_card_notme/3*2), bt_card_bottom);
-        dem++;
-    }
-}
-void XiTo::moveDealCard_Right_Top(string _lc){
-    vector<string> theCard = Dsplit(_lc, '-');
-    vector<string> info = Dsplit(theCard[0], '_');
-    CardChan *pCard = (CardChan*)CARD_RIGHT_TOP->objectAtIndex(1);
-    pCard->loadTexture(findTypeCard(_lc).c_str());
-    CCObject *d;
-    int dem = 0;
-    CCARRAY_FOREACH(CARD_RIGHT_TOP, d){
-        CardChan *uu = dynamic_cast<CardChan*>(d);
-        moveDealCard(uu, lf_card_right_top+dem*(w_card_notme/3*2), bt_card_top);
-        dem++;
-    }
+void XiTo::moveDealCard_NotMe(int pos, string listcards){
+	switch(pos){
+	case user_leftTop:
+		moveDealCard_Pos(CARD_LEFT_TOP, listcards, lf_card_left_top, w_card_notme, bt_card_top);
+		break;
+	case user_leftBottom:
+		moveDealCard_Pos(CARD_LEFT_BOTTOM, listcards, lf_card_left_bottom, w_card_notme, bt_card_bottom);
+		break;
+	case user_rightTop:
+		moveDealCard_Pos(CARD_RIGHT_TOP, listcards, lf_card_right_top, w_card_notme, bt_card_top);
+		break;
+	case user_rightBottom:
+		moveDealCard_Pos(CARD_RIGHT_BOTTOM, listcards, lf_card_right_bottom, w_card_notme, bt_card_bottom);
+		break;
+	default:
+		break;
+	}
 }
 
+void XiTo::moveDealCard_Pos(CCArray *P, string listcards, float _left, float _width, float _bottom)
+{
+	if (P->count() == 0)
+	{
+		return;
+	}
+
+	vector<string> theCard = mUtils::splitString(listcards, '-');
+	vector<string> info = mUtils::splitString(theCard[0], '_');
+
+	CardChan *pCard = (CardChan*)P->objectAtIndex(1);
+	pCard->loadTexture(findTypeCard(listcards).c_str());
+
+	CCObject *obj;
+	int dem = 0;
+	CCARRAY_FOREACH(P, obj){
+		CardChan *card = dynamic_cast<CardChan*>(obj);
+		moveDealCard(card, _left + dem * (w_card_notme / 3 * 2), _bottom);
+		dem++;
+	}
+}
 
 void XiTo::chiaThem1LaBai(){
     string UID_BET = uidTo;
     string styleAllow_Bet = typeTo;
     //dautv_24-thanhhv3_12-dautv3_7-
+
     if(list_dealCards_allUser == "")
         return;
+
     string listDealCards = list_dealCards_allUser;
-    vector<string> arrGive = Dsplit(listDealCards, '-');
+    vector<string> arrGive = mUtils::splitString(listDealCards, '-');
     int realUser = (int)arrGive.size();
-    CCLOG("So nguoi choi %d",realUser);
-    CCLOG("so list Card ao: %s",list_dealCards_allUser.c_str());
     
-    vector<string> info = Dsplit(arrGive[chiathem], '_');
+    vector<string> info = mUtils::splitString(arrGive[chiathem], '_');
     
     string url = findTypeCard(convertCard(info[1]));
-    CCLOG("url = %s",url.c_str());
     
     if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        // Chia them bai cho minh
-        CCLOG("Baif thêm cho mình: %s",convertCard(info[1]).c_str());
-        chiathem++;
         addCardsForUser(CARD_ME, w_card_me, h_card_me, bt_card_me, lf_card_me, url, realUser);
     }
     else{
-        // Chia them bai cho nguoi khac
         switch (getPosUserByName(info[0], _list_user)) {
             case user_leftBottom:
-                CCLOG("Bài thêm Trái - Dưới: %s",convertCard(info[1]).c_str());
-                chiathem++;
                 addCardsForUser(CARD_LEFT_BOTTOM, w_card_notme, h_card_notme, bt_card_bottom, lf_card_left_bottom, url, realUser);
                 break;
             case user_leftTop:
-                CCLOG("Bài thêm Trái - Trên: %s",convertCard(info[1]).c_str());
-                chiathem++;
                 addCardsForUser(CARD_LEFT_TOP, w_card_notme, h_card_notme, bt_card_top, lf_card_left_top, url, realUser);
                 break;
             case user_rightBottom:
-                CCLOG("Bài thêm Phải - Dưới: %s",convertCard(info[1]).c_str());
-                chiathem++;
                 addCardsForUser(CARD_RIGHT_BOTTOM, w_card_notme, h_card_notme, bt_card_bottom, lf_card_right_bottom, url, realUser);
                 break;
             case user_rightTop:
-                CCLOG("Bài thêm Phải - Trên: %s",convertCard(info[1]).c_str());
-                chiathem++;
                 addCardsForUser(CARD_RIGHT_TOP, w_card_notme, h_card_notme, bt_card_top, lf_card_right_top, url, realUser);
                 break;
             default:
                 break;
         }
     }
-    
 }
 
-/*
- CardChan *pCard = CardChan::create();
- pCard->loadTexture("card_back.png");
- pCard->setSizeCard(w_card_notme, h_card_notme);
- pCard->setPosition(ccp(WIDTH_DESIGN/2-w_card_notme/2,HEIGHT_DESIGN-h_card_notme));
- uLayer->addChild(pCard);
- 
- CCMoveBy *newTo = CCMoveTo::create(0.3, ccp(_left+P->count()*_width,_bottom));
- CCScaleBy *scaleTo = CCScaleBy::create(0.3, _width/w_card_notme,_height/h_card_notme);*/
-
 void XiTo::addCardsForUser(CCArray *P,float _width,float _height,float _bottom,float _left,string _img,int l){
-    CardChan *pCard = CardChan::create();
+    
+	chiathem++;
+	
+	CardChan *pCard = CardChan::create();
     pCard->loadTexture(_img.c_str());
     pCard->setSizeCard(w_card_notme, h_card_notme);
-    pCard->setPosition(ccp(WIDTH_DESIGN/2-w_card_notme/2,HEIGHT_DESIGN-h_card_notme));
-    uLayer->addChild(pCard);
+    pCard->setPosition(ccp(WIDTH_DESIGN / 2 - w_card_notme / 2, HEIGHT_DESIGN - h_card_notme));
+    this->addChild(pCard);
     
-    CCMoveBy *newTo = CCMoveTo::create(0.4, ccp(_left+P->count()*_width/3*2,_bottom));
-    CCScaleBy *scaleTo = CCScaleBy::create(0.3, _width/w_card_notme,_height/h_card_notme);
+    CCMoveBy *newTo = CCMoveTo::create(0.4, ccp(_left + P->count() * _width / 3 * 2, _bottom));
+    CCScaleBy *scaleTo = CCScaleBy::create(0.3, _width / w_card_notme, _height / h_card_notme);
     
     pCard->runAction(newTo);
     pCard->runAction(scaleTo);
     P->addObject(pCard);
-    if(chiathem<l){
+
+    if(chiathem < l){
         this->runAction(CCSequence::create(CCDelayTime::create(0.4),CCCallFunc::create(this, callfunc_selector(XiTo::chiaThem1LaBai)),NULL));
     }
     else{
         luotChiathem++;
-        CCLOG("Chia xong nhay vao to");
         setButtonBet(uidTo, typeTo);
         chiathem = 0;
         list_dealCards_allUser = "";
     }
 }
 
-//Set button Bet
 void XiTo::setButtonBet(string uid, string lsBet){
     layerAvatar->stopAllTimer();
-    if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        btnReady->setVisible(false);
-        btnReady->setTouchEnabled(false);
+    if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
+		getButtonByTag(dTag_btnReady)->setEnabled(false);
+
         int dem1 = 0;
         int dem2 = 0;
         int dem3 = 0;
-        float width_Option = 90;
-        vector<string> listBetType = Dsplit(lsBet, ',');
+        float w_Button = 90;
+
+        vector<string> listBetType = mUtils::splitString(lsBet, ',');
         
-        for (int i=0; i<B1->count(); i++) {
+        for (int i = 0; i < B1->count(); i++) {
             UIButton *bt = (UIButton*)B1->objectAtIndex(i);
-            for (int j=0; j<listBetType.size(); j++) {
-                if (bt->getTag() == atoi(listBetType[j].c_str())) {
-                    bt->setPosition(ccp(WIDTH_DESIGN-btn_Nhuong->getContentSize().width*(dem1+1)-20*(dem1+1),10));
-//                    bt->setPosition(ccp(WIDTH_DESIGN-width_Option*dem1-(dem1+1)*20,0));
-                    bt->setTouchEnabled(true);
-                    bt->setVisible(true);
+            for (int j = 0; j < listBetType.size(); j++) {
+
+				int tag = atoi(listBetType[j].c_str());
+                if (bt->getTag() == getTagButton(tag)) {
+                    bt->setPosition(ccp(WIDTH_DESIGN - w_Button * (dem1 + 1) - 20 * (dem1 + 1), 10));
+                    bt->setEnabled(true);
                     dem1++;
                 }
             }
         }
         
-        for (int i=0; i<B2->count(); i++) {
+        for (int i = 0; i < B2->count(); i++) {
             UIButton *bt = (UIButton*)B2->objectAtIndex(i);
-            for (int j=0; j<listBetType.size(); j++) {
-                if (bt->getTag() == atoi(listBetType[j].c_str())) {
-                    bt->setPosition(ccp(WIDTH_DESIGN-width_Option*(dem2+1)-(dem2+1)*20,44+20));
-                    bt->setTouchEnabled(true);
-                    bt->setVisible(true);
+            for (int j = 0; j < listBetType.size(); j++) {
+
+				int tag = atoi(listBetType[j].c_str());
+                if (bt->getTag() == getTagButton(tag)) {
+                    bt->setPosition(ccp(WIDTH_DESIGN - w_Button * (dem2 + 1) - (dem2 + 1) * 20, 44 + 20));
+                    bt->setEnabled(true);
                     dem2++;
                 }
             }
         }
         
-        for (int i=0; i<B3->count(); i++) {
+        for (int i = 0; i < B3->count(); i++) {
             UIButton *bt = (UIButton*)B3->objectAtIndex(i);
-            for (int j=0; j<listBetType.size(); j++) {
-                if (bt->getTag() == atoi(listBetType[j].c_str())) {
-                    bt->setPosition(ccp(WIDTH_DESIGN-width_Option*(dem3+1)-(dem3+1)*20,44*2+30));
-                    bt->setTouchEnabled(true);
-                    bt->setVisible(true);
+            for (int j = 0; j < listBetType.size(); j++) {
+
+				int tag = atoi(listBetType[j].c_str());
+                if (bt->getTag() == getTagButton(tag)) {
+                    bt->setPosition(ccp(WIDTH_DESIGN - w_Button * (dem3 + 1) - (dem3 + 1) * 20, 44 * 2 + 30));
+					bt->setEnabled(true);
                     dem3++;
                 }
             }
         }
+
         layerAvatar->getUserByPos(user_me)->startTimer();
     }
     else{
         setVisibleButtonPlay();
-        switch (getPosUserByName(uid, _list_user)) {
-            case user_leftBottom:
-                layerAvatar->getUserByPos(user_leftBottom)->startTimer();
-                break;
-            case user_leftTop:
-                layerAvatar->getUserByPos(user_leftTop)->startTimer();
-                break;
-            case user_rightTop:
-                layerAvatar->getUserByPos(user_rightTop)->startTimer();
-                break;
-            case user_rightBottom:
-                layerAvatar->getUserByPos(user_rightBottom)->startTimer();
-                break;
-            default:
-                break;
-        }
+		int pos = getPosUserByName(uid, _list_user);
+		if (pos == -1)
+		{
+			return;
+		}
+		layerAvatar->getUserByPos(pos)->startTimer();
     }
 }
 
@@ -1632,54 +1368,36 @@ void XiTo::whenEndGame(){
     deleteAllCardFromArray(CARD_RIGHT_BOTTOM);
     deleteAllCardFromArray(CARD_RIGHT_TOP);
     
-    frameBet_Right_Top->setVisible(false);
-    frameBet_Right_Bottom->setVisible(false);
-    frameBet_Left_Top->setVisible(false);
-    frameBet_Left_Bottom->setVisible(false);
+	getFrameBetByTag(user_leftTop)->setVisible(false);
+	getFrameBetByTag(user_leftBottom)->setVisible(false);
+	getFrameBetByTag(user_rightBottom)->setVisible(false);
+	getFrameBetByTag(user_rightTop)->setVisible(false);
     frameBetTotal->setVisible(false);
     
-    btnReady->setTouchEnabled(true);
-    btnReady->setVisible(true);
+    getButtonByTag(dTag_btnReady)->setEnabled(true);
     
     luotChiathem = 2;
     chooseCard = true;
     luotChia = 0;
-    
-    
 }
-void XiTo::deleteAllCardFromArray(cocos2d::CCArray *P){
-    while(P->count()>0){
-        CardChan *uu = (CardChan*)P->objectAtIndex(P->count()-1);
-        P->removeObject(uu);
-        uLayer->removeChild(uu);
+
+void XiTo::deleteAllCardFromArray(CCArray *P){
+    while(P->count() > 0){
+        CardChan *pCard = (CardChan*)P->lastObject();
+        P->removeLastObject();
+        pCard->removeFromParentAndCleanup(true);
     }
 }
 
 void XiTo::setVisibleButtonPlay(){
-    btn_To->setTouchEnabled(false);
-    btn_To->setVisible(false);
-    
-    btn_Theo->setTouchEnabled(false);
-    btn_Theo->setVisible(false);
-    
-    btn_Up->setTouchEnabled(false);
-    btn_Up->setVisible(false);
-    
-    btn_Nhuong->setTouchEnabled(false);
-    btn_Nhuong->setVisible(false);
-    
-    //Tố 1/4 - Tố 1/2
-    btn_To1_4->setTouchEnabled(false);
-    btn_To1_4->setVisible(false);
-    
-    btn_To1_2->setTouchEnabled(false);
-    btn_To1_2->setVisible(false);
-    //Tố tất cả, Tố X2
-    btn_ToTatCa->setTouchEnabled(false);
-    btn_ToTatCa->setVisible(false);
-    
-    btn_ToX2->setTouchEnabled(false);
-    btn_ToX2->setVisible(false);
+	getButtonByTag(dTag_btnBet)->setEnabled(false);
+    getButtonByTag(dTag_btnFollow)->setEnabled(false);
+    getButtonByTag(dTag_btnFold)->setEnabled(false);
+    getButtonByTag(dTag_btnGive)->setEnabled(false);
+    getButtonByTag(dTag_btnQuatar)->setEnabled(false);
+    getButtonByTag(dTag_btnHaft)->setEnabled(false);
+    getButtonByTag(dTag_btnAll)->setEnabled(false);
+    getButtonByTag(dTag_btnDouble)->setEnabled(false);
 }
 
 void XiTo::btn_ready_click(CCObject *sender, TouchEventType type){
@@ -1696,6 +1414,7 @@ void XiTo::btn_To_click(CCObject *sender, TouchEventType type){
         sendBetNTF(GAME_TABLE_STATUS_BET_RAISE);
     }
 }
+
 void XiTo::btn_Theo_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
         sendBetNTF(GAME_TABLE_STATUS_BET_FOLLOW);
@@ -1703,34 +1422,35 @@ void XiTo::btn_Theo_click(CCObject *sender, TouchEventType type){
 }
 
 void XiTo::btn_Up_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
-        if(type == TOUCH_EVENT_ENDED){
-            sendBetNTF(GAME_TABLE_STATUS_BET_FOLD);
-        }
-    }
+	if(type == TOUCH_EVENT_ENDED){
+		sendBetNTF(GAME_TABLE_STATUS_BET_FOLD);
+	}
 }
+
 void XiTo::btn_Nhuong_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
-        if(type == TOUCH_EVENT_ENDED){
-            sendBetNTF(GAME_TABLE_STATUS_BET_NONE);
-        }
-    }
+	if(type == TOUCH_EVENT_ENDED){
+		sendBetNTF(GAME_TABLE_STATUS_BET_NONE);
+	}
 }
+
 void XiTo::btn_To1_2_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
         sendBetNTF(GAME_TABLE_STATUS_BET_HAFT);
     }
 }
+
 void XiTo::btn_To1_4_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
         sendBetNTF(GAME_TABLE_STATUS_BET_QUATER);
     }
 }
+
 void XiTo::btn_To_X2_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
         sendBetNTF(GAME_TABLE_STATUS_BET_DOUBLE);
     }
 }
+
 void XiTo::btn_To_All_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
         sendBetNTF(GAME_TABLE_STATUS_BET_ALL);
@@ -1771,7 +1491,69 @@ void XiTo::sendBetNTF(int typeBet){
     setVisibleButtonPlay();
 }
 
+Button* XiTo::createButtonWithTitle_Pos(const char *pName, CCPoint pPoint) {
+	Button* button = Button::create();
+	button->setTouchEnabled(true);
+	button->setScale9Enabled(false);
+	button->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
+	button->setTitleText(pName);
+	button->setTitleColor(ccRED);
+	button->setTitleFontSize(20);
+	button->setTitleFontSize(button->getContentSize().height / 2);
+	button->setAnchorPoint(ccp(0, 0));
+	button->setPosition(pPoint);
 
+	return button;
+}
 
+Button* XiTo::getButtonByTag(int pTag) {
+	if (this->layerButtons->getWidgetByTag(pTag) == NULL)
+	{
+		return NULL;
+	}
+	Button* button = (Button*) this->layerButtons->getWidgetByTag(pTag);
+	return button;
+}
+
+int XiTo::getTagButton(int iTag){
+	switch(iTag)
+	{
+	case GAME_TABLE_STATUS_BET_FOLD:
+		return dTag_btnFold;
+		break;
+	case GAME_TABLE_STATUS_BET_RAISE:
+		return dTag_btnBet;
+		break;
+	case GAME_TABLE_STATUS_BET_NONE:
+		return dTag_btnGive;
+		break;
+	case GAME_TABLE_STATUS_BET_QUATER:
+		return dTag_btnQuatar;
+		break;
+	case GAME_TABLE_STATUS_BET_HAFT:
+		return dTag_btnHaft;
+		break;
+	case GAME_TABLE_STATUS_BET_FOLLOW:
+		return dTag_btnFollow;
+		break;
+	case GAME_TABLE_STATUS_BET_DOUBLE:
+		return dTag_btnDouble;
+		break;
+	case GAME_TABLE_STATUS_BET_ALL:
+		return dTag_btnAll;
+		break;
+	}
+	return -1;
+}
+
+FrameBet* XiTo::getFrameBetByTag(int fTag)
+{
+	if (this->layerFrameBet->getChildByTag(fTag) == NULL)
+	{
+		return NULL;
+	}
+	FrameBet* frameBet = (FrameBet*) this->layerFrameBet->getChildByTag(fTag);
+	return frameBet;
+}
 
 

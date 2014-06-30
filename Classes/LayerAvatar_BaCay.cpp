@@ -301,31 +301,34 @@ void LayerBaCayAvatar::updateUsers()
 		int pos = getPosByName(info[0]);
 		if (pos < 0)
 		{
-			break;
+			continue;
 		}
 
-		boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("aN")->GetStringValue();
-		boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("amf")->GetDoubleValue();
-		boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("aal")->GetStringValue();
-
-		int _money = (money != NULL) ? (int)*money : 0;
-		string _url = (url != NULL) ? url->c_str() : "";
-		string _name = (name != NULL) ? name->c_str() : info[0];
-
-		Avatar *user = getUserByPos(pos);
-		user->setName(_name);
-		user->setFlag(i == 0);
-		user->setIcon(_url);
-		//user->setAI(aI);
-		user->setMoney(_money);
-
-		if (pos == kUserMe)
+		if (GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0]) != NULL)
 		{
-			user->setVisible(true);
-			user->setTouchEnabled(true);
-		}
-		else {
-			user->setVisibleLayerInvite(false);
+			boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("aN")->GetStringValue();
+			boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("amf")->GetDoubleValue();
+			boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("aal")->GetStringValue();
+
+			int _money = (money != NULL) ? (int)*money : 0;
+			string _url = (url != NULL) ? url->c_str() : "";
+			string _name = (name != NULL) ? name->c_str() : info[0];
+
+			Avatar *user = getUserByPos(pos);
+			user->setName(_name);
+			user->setFlag(i == 0);
+			user->setIcon(_url);
+			//user->setAI(aI);
+			user->setMoney(_money);
+
+			if (pos == kUserMe)
+			{
+				user->setVisible(true);
+				user->setTouchEnabled(true);
+			}
+			else {
+				user->setVisibleLayerInvite(false);
+			}
 		}
 	}
 }

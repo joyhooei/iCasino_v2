@@ -15,7 +15,24 @@ FrameBet::FrameBet():iconXu(NULL),frame(NULL),money(NULL){
 
 //Deconstructor
 FrameBet::~FrameBet(){
-    
+    if (iconXu)
+    {
+		iconXu->release();
+		iconXu = NULL;
+    }
+
+	if (frame)
+	{
+		frame->release();
+		frame = NULL;
+	}
+	if (money)
+	{
+		money->release();
+		money = NULL;
+	}
+
+	CCLOG("FrameBet Deconstructor");
 }
 
 //init

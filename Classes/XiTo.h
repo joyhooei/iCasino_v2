@@ -14,8 +14,9 @@
 #include "GameServer.h"
 #include "AllData.h"
 #include "LayerAvatarXiTo.h"
-#include "FrameBet.h"
+#include "_Button_inGame_.h"
 #include "CardChan.h"
+#include "FrameBet.h"
 
 using namespace cocos2d;
 using namespace cocos2d::ui;
@@ -54,38 +55,15 @@ private:
     float w_card_notme;
     float h_card_notme;
     
-    //Vị trí các FrameBet
-    float left_FB_LT;
-    float left_FB_LB;
-    float bottom_TOP;
-    float bottom_BOTTOM;
-    
-    UILayer *uLayer;
-    UIButton *btnReady;
-    //Úp - Theo - Nhường - Tố
-    UIButton *btn_To;
-    UIButton *btn_Theo;
-    UIButton *btn_Up;
-    UIButton *btn_Nhuong;
-    
-    //Tố 1/4 - Tố 1/2
-    UIButton *btn_To1_4;
-    UIButton *btn_To1_2;
-    
-    //Tố tất cả, Tố X2
-    UIButton *btn_ToTatCa;
-    UIButton *btn_ToX2;
-    
+	CCLayer *layerFrameBet;
+
     UIImageView *frameBetTotal;
     UILabel *labelBetTotal;
-    FrameBet *frameBet_Right_Top;
-    FrameBet *frameBet_Right_Bottom;
-    FrameBet *frameBet_Left_Top;
-    FrameBet *frameBet_Left_Bottom;
     
     
     LayerAvatarXiTo *layerAvatar;
-    
+    LayerButtonInGame *layerButtons;
+
     int luotChia;
     int chiathem;
     int luotChiathem;
@@ -93,10 +71,12 @@ private:
     string _list_user;
     string my_DealCards;
     string list_dealCards_allUser;
+
     bool chooseCard;
     bool setDeal;
     bool flag_StartGame;
-    string arrCardTypes[4];
+
+    vector<string> arrCardTypes;
     
     string uidTo;
     string typeTo;
@@ -117,22 +97,25 @@ public:
 	void onExit();
     void createAvatar();
     void createBackground();
-    void createButton();
-    
+    void createButtons();
+    void createFrameBets();
+
     static void setChooseCard(bool _state);
-    vector<string> Dsplit(string &S,const char &str);
     string convertCard(string strCard);
     string findTypeCard(string listCards);
     
     int getPosUserByName(string uid, string _list_user);
-    string find_RoomBoss(string list);
+
     void updateUsers(string listUser);
+	void setInfoAvatar(int pos, string name, int money, int vt);
+
     void userReJoinGame(string roomInfo);
-    
+	
+	void when_playerBet(string uid, long bet, long betValue, long betTotal);
+	FrameBet* getFrameBetByTag(int fTag);
+	void setBet_Inpos(int pos, CCArray *P, long bet, long betValue);
+
     void when_userReady(string uid);
-    void when_playerBet(string uid, long bet, long betValue, long betTotal);
-    
-    void setPlayerBet(long bet, long betValue, int _pos);
     
     void popupXito(string myDealCard);
     void chiaBai();
@@ -144,11 +127,9 @@ public:
     
     void moveDealCard(CardChan *c,float _left, float _bottom);
     void moveDealCard_Me(string _lc);
-    void moveDealCard_Left_Bottom(string _lc);
-    void moveDealCard_Left_Top(string _lc);
-    void moveDealCard_Right_Bottom(string _lc);
-    void moveDealCard_Right_Top(string _lc);
-    
+	void moveDealCard_NotMe(int pos, string listcards);
+	void moveDealCard_Pos(CCArray *P, string listcards, float _left, float _width, float _bottom);
+
     void setButtonBet(string uid, string lsBet);
     void openAllCard(string uid, string lc);
     
@@ -175,6 +156,10 @@ public:
     void btn_To_X2_click(CCObject *sender, TouchEventType type);
     void btn_To_All_click(CCObject *sender, TouchEventType type);
     
+	Button* createButtonWithTitle_Pos(const char *pName, CCPoint pPoint);
+	Button* getButtonByTag(int pTag);
+	int getTagButton(int iTag);
+
     void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
     void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
     void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
