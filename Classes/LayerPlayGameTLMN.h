@@ -12,6 +12,7 @@
 #include <iostream>
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "SimpleAudioEngine.h"
 
 #include "AllData.h"
 #include "GameServer.h"
@@ -36,6 +37,7 @@ private:
     
     string myName;
     string currentPlaying;
+	bool   isNewTurn;
     
     vector<string> arrName;
     vector<int> arrMoney;
@@ -61,6 +63,7 @@ public:
     
     void initGame();
     void resetGame();
+	void playeSound(string soundPath);
     
 	vector<string> split(string &S, const char &str);
     int    convertResponseToInt(string inString);

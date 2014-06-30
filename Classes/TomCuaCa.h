@@ -14,6 +14,8 @@
 #include "GameServer.h"
 #include "AllData.h"
 #include "_Avatar_inTomCuaCa.h"
+#include "FrameBet.h"
+#include "_Number_inGame_.h"
 
 //ket qua
 #define _kqNai 100
@@ -60,11 +62,20 @@ private:
 	UIScrollView *scroll3;
 	UILoadingBar *loading;
 	AvatarInTomCuaCa* lAvatar;
-
-
-	
-
+	int _tienBet;
+	int _time;
+	string kq1;
+	string kq2;
+	string kq3;
+	boost::shared_ptr<string> kq;
 public:
+	FrameBet* betTom;
+	FrameBet* betCua;
+	FrameBet* betCa;
+	FrameBet* betGa;
+	FrameBet* betRuou;
+	FrameBet* betNai;
+
 	TomCuaCa();
 	~TomCuaCa();
 	CREATE_FUNC(TomCuaCa);
@@ -74,6 +85,8 @@ public:
 	void createBackgrounds();
 	void createAvatars();
 	void createButtons();
+	void createChat();
+
 	virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	
 	vector<string> TCCsplit(string &S,const char &str);
@@ -91,10 +104,16 @@ public:
 	void clickBtn(CCObject* obj, TouchEventType type);
 
 
-	int    convertResponseToInt(string inString);
+	int convertResponseToInt(string inString);
 	string convertResponseToString(int inInt);
 	float convertResult(string rs);
 	void update(float dt);
+	void clickBet(int _tag);
+	void bet(int aid, string tienBet);
+	void setTimer(float dt);
+	void hienKetQua();
+	void hienOketqua();
+	virtual void onExit();
 };
 
 #endif /* defined(__iCasino_v2__TomCuaCa__) */

@@ -255,6 +255,13 @@ void LayerPlayGameTLMN::initGame() {
     layerAvatars->setUnReadyAllUser();
 }
 
+
+void LayerPlayGameTLMN::playeSound( string soundPath )
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
+}
+
+
 Button* LayerPlayGameTLMN::createButtonWithTitle_Position(const char *title, CCPoint pPoint) {
     // Create the button
     Button* button = Button::create();
@@ -521,6 +528,8 @@ void LayerPlayGameTLMN::event_EXT_EVENT_DEAL_CARD_NOTIF(){
     if (listCard != NULL) {
         CCLog("listCard= %s", listCard->c_str());
         layerCards->actionDealCard(layerCards->getIDFromString_TienLen(listCard->c_str()));
+
+		playeSound("e_card.mp3");
     }
 }
 
@@ -608,6 +617,12 @@ void LayerPlayGameTLMN::event_EXT_EVENT_VICTORY_NOTIF(){
         switch (*vicPos.get()) {
             case 1:
                 result = "Hết bài- Nhất!";
+
+				if (name->c_str() == myName)
+				{
+					playeSound("thang_roi.mp3");
+				}
+
                 break;
                 
             case 2:
@@ -668,7 +683,9 @@ void LayerPlayGameTLMN::event_EXT_EVENT_NEAD_PLAY_NOTIF(){
         }
         
         // lượt mới: ẩn các quân đang có trên bàn và release mảng chứa
+		isNewTurn = false;
         if (*isfr.get() == 1) {
+			isNewTurn = true;
             for (int i = 0; i < arrIDTurn.size(); i++) {
                 int id = arrIDTurn[i];
                 layerCards->getCardByID(id)->setVisible(false);
@@ -704,6 +721,25 @@ void LayerPlayGameTLMN::event_EXT_EVENT_PLAY_CARD_NOTIF(){
             arrIDTurn.push_back(arrID[i]);
         }
     }
+
+	// am thanh
+	if (isNewTurn) {
+		vector<string> arr;
+		arr.push_back("danh_di.mp3");
+		arr.push_back("thach_danh.mp3");
+		int index = rand() % arr.size();
+		playeSound(arr.at(index));
+		arr.clear();
+	} else {
+		vector<string> arr;
+		arr.push_back("chay_dang_troi.mp3");
+		arr.push_back("chay_di_dau.mp3");
+		arr.push_back("chay_di_dau_2.mp3");
+		arr.push_back("con_nua_ne.mp3");
+		int index = rand() % arr.size();
+		playeSound(arr.at(index));
+		arr.clear();
+	}
 }
 
 void LayerPlayGameTLMN::event_EXT_EVENT_GAME_CHANGE_NOTIF(){
@@ -780,6 +816,12 @@ void LayerPlayGameTLMN::event_EXT_EVENT_PASS_CARD_NOTIF(){
         CCLog("%s", name->c_str());
         
         layerChats->showChatByPos(layerAvatars->getPosByName(name->c_str()), "Bỏ lượt!");
+
+		vector<string> arr;
+		arr.push_back("em_tha_do.mp3");
+		int index = rand() % arr.size();
+		playeSound(arr.at(index));
+		arr.clear();
     }
 }
 

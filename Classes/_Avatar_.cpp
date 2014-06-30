@@ -9,10 +9,13 @@
 
 #include "_Avatar_.h"
 #include "SceneManager.h"
+#include "mUtils.h"
 
 #include "cocos2d.h"
 
 USING_NS_CC;
+
+mUtils mu;
 
 Avatar::Avatar(bool isMe):
 timer(NULL)
@@ -98,7 +101,7 @@ timer(NULL)
 		bg->addTouchEventListener(this, toucheventselector(Avatar::onTouch));
 
 		// icon
-		this->sizeIcon.setSize(85, 90);
+		this->sizeIcon.setSize(90, 85);
 		icon = ImageView::create();
 		icon->loadTexture("icon_default.png");
 
@@ -257,7 +260,11 @@ void Avatar::showLayerInvite() {
 
 void Avatar::setIcon(string url){
 	// hideLayerInvite();
-	downLoadImage(url, "icon.png");
+	vector<string> arr = mu.splitString(url, '/');
+	string nameIcon;
+	if (arr.size() == 0) return;
+	else nameIcon = arr.at(arr.size()-1);
+	downLoadImage(url, nameIcon);
 }
 
 void Avatar::setFlag(bool isShow){

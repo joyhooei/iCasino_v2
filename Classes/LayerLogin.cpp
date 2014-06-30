@@ -177,6 +177,7 @@ void LayerLogin::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 	readInfo();
 	//
     this->setTouchEnabled(true);
+	this->setKeypadEnabled(true);
     return;
 }
 
@@ -285,5 +286,26 @@ void LayerLogin::notificationCallBack( bool isOK, int tag )
 			LayerMain::getSingleton().autoJoinGameWithID(mGameID, mRoomID);
 		}
 		break;
+	case tagCloseApp:
+		if( isOK ){
+			SceneManager::getSingleton().exitScene();
+		}
+		break;
 	}
+}
+
+void LayerLogin::keyBackClicked()
+{
+	if( SceneManager::getSingleton().getCurrentLayerTag() != tag_LayerLogin )
+		return;
+	CCLOG("LayerLogin::keyBackClicked()");
+	LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+	if( !SceneManager::getSingleton().showNotification() ){
+		CCLOG("NTF Dialog already open!");
+		return;
+	}
+	//if true
+	layer->setNotificationOptions("THOÁT ỨNG DỤNG", 
+		"Bạn có muốn thoát?"
+		, true , "ĐỒNG Ý", tagCloseApp, this );
 }

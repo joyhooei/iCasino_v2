@@ -12,6 +12,7 @@
 #include "TextFieldCustomLoader.h"
 #include "SliderCustomLoader.h"
 #include "mUtils.h"
+#include "LayerInviteFriends.h"
 
 #include "SceneManager.h"
 
@@ -113,6 +114,16 @@ void LayerFriend::onButtonClick(CCObject* pSender)
             //
             break;
         case tag_inviteDisable:
+			CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+			CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+			ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+			LayerInviteFriends* mLayer;
+			if (ccbReader)
+			{
+				mLayer = (LayerInviteFriends *)ccbReader->readNodeGraphFromFile( "LayerInviteFriends.ccbi" );
+				this->addChild(mLayer, 1, 1);
+				ccbReader->release();
+			}
             return;
             currTag = tag_inviteEnable;
             break;

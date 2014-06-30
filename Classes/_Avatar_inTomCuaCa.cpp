@@ -44,8 +44,8 @@ AvatarInTomCuaCa::~AvatarInTomCuaCa(){
 
 void AvatarInTomCuaCa::onExit() {
 	CCLOG("onExit: clean LayerAvatarInGame");
-	/*
-	arrName.clear();
+	
+	/*arrName.clear();
 	arrFlag.clear();
 	arrURL.clear();
 	arrAI.clear();
@@ -390,18 +390,20 @@ void AvatarInTomCuaCa::setPosChuong(int pos){
 	bool meIsBoss = false;
 	switch (pos) {
 	case kUserLeft:
-		chuong->setPosition(ccp(101,175));
+		chuong->setPosition(ccp(640,360));
 		chuong->setVisible(true);
 		break;
 	case kUserRight:
-		chuong->setPosition(ccp(678,175));
+		chuong->setPosition(ccp(655,190));
 		chuong->setVisible(true);
 		break;
 	case kUserTop:
-		chuong->setPosition(ccp(445,345));
+		chuong->setPosition(ccp(40,360));
 		chuong->setVisible(true);
 		break;
 	case kUserBot:
+		chuong->setPosition(ccp(15,190));
+		chuong->setVisible(true);
 		break;
 	case kUserMe:
 		chuong->setPosition(ccp(175,420));

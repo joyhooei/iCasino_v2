@@ -99,6 +99,7 @@ private:
 public:
     Lieng();
     ~Lieng();
+	void onExit();
     void createBackgrounds();
     void createAvatars();
     void createButtons();

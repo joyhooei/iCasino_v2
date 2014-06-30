@@ -138,9 +138,16 @@ BaCayNormal::BaCayNormal():CARD_RIGHT(NULL),CARD_ME(NULL),CARD_TOP(NULL),CARD_LE
     
     //Khởi tạo mảng các lá bài
     CARD_ME = new CCArray();
+	CARD_ME->retain();
+
     CARD_LEFT = new CCArray();
+	CARD_LEFT->retain();
+
     CARD_RIGHT = new CCArray();
+	CARD_RIGHT->retain();
+
     CARD_TOP = new CCArray();
+	CARD_TOP->retain();
 
 	SceneManager::getSingleton().hideLoading();
 }
@@ -148,6 +155,32 @@ BaCayNormal::BaCayNormal():CARD_RIGHT(NULL),CARD_ME(NULL),CARD_TOP(NULL),CARD_LE
 BaCayNormal::~BaCayNormal(){
     GameServer::getSingleton().removeListeners(this);
     CCLOG("Deconstructor 3 Cay Normal");
+	CARD_ME->removeAllObjects();
+	CARD_ME->release();
+	CARD_LEFT->removeAllObjects();
+	CARD_LEFT->release();
+	CARD_RIGHT->removeAllObjects();
+	CARD_RIGHT->release();
+	CARD_TOP->removeAllObjects();
+	CARD_TOP->release();
+	this->removeAllComponents();
+	CCLOG("Deconstructor 3 Cay Normal --- Jump Here !");
+}
+
+void BaCayNormal::onExit()
+{
+	GameServer::getSingleton().removeListeners(this);
+	CCLOG("Deconstructor 3 Cay Normal");
+	CARD_ME->removeAllObjects();
+	CARD_ME->release();
+	CARD_LEFT->removeAllObjects();
+	CARD_LEFT->release();
+	CARD_RIGHT->removeAllObjects();
+	CARD_RIGHT->release();
+	CARD_TOP->removeAllObjects();
+	CARD_TOP->release();
+	this->removeAllComponents();
+	CCLOG("Deconstructor 3 Cay Normal --- Jump Here !");
 }
 
 void BaCayNormal::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent){

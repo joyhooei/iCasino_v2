@@ -114,6 +114,7 @@ private:
 public:
     XiTo();
     ~XiTo();
+	void onExit();
     void createAvatar();
     void createBackground();
     void createButton();

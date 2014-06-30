@@ -71,6 +71,7 @@ private:
 public:
 	BaCayNormal();
 	~BaCayNormal();
+	void onExit();
 	CREATE_FUNC(BaCayNormal);
 	bool init();
 	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);

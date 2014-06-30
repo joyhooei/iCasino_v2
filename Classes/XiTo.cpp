@@ -273,17 +273,38 @@ XiTo::~XiTo(){
     GameServer::getSingleton().removeListeners(this);
     CARD_ME->removeAllObjects();
     CARD_ME = NULL;
+	CARD_ME->release();
     CARD_RIGHT_BOTTOM->removeAllObjects();
     CARD_RIGHT_BOTTOM = NULL;
+	CARD_RIGHT_BOTTOM->release();
     CARD_RIGHT_TOP->removeAllObjects();
     CARD_RIGHT_TOP = NULL;
+	CARD_RIGHT_TOP->release();
     CARD_LEFT_TOP->removeAllObjects();
     CARD_LEFT_TOP = NULL;
+	CARD_LEFT_TOP->release();
     CARD_LEFT_BOTTOM->removeAllObjects();
     CARD_LEFT_BOTTOM = NULL;
-    this->removeAllChildrenWithCleanup(true);
+	CARD_LEFT_BOTTOM->release();
     this->removeAllComponents();
     CCLOG("Deconstructor----- Jump Here");
+}
+
+void XiTo::onExit()
+{
+	GameServer::getSingleton().removeListeners(this);
+	CARD_ME->removeAllObjects();
+	CARD_ME->release();
+	CARD_RIGHT_BOTTOM->removeAllObjects();
+	CARD_RIGHT_BOTTOM->release();
+	CARD_RIGHT_TOP->removeAllObjects();
+	CARD_RIGHT_TOP->release();
+	CARD_LEFT_TOP->removeAllObjects();
+	CARD_LEFT_TOP->release();
+	CARD_LEFT_BOTTOM->removeAllObjects();
+	CARD_LEFT_BOTTOM->release();
+	this->removeAllComponents();
+	CCLOG("Deconstructor----- Jump Here");
 }
 
 void XiTo::createAvatar(){
@@ -1334,7 +1355,6 @@ void XiTo::OpenOneDealCards(string uid,string crdvl){
     CCLOG("Nguoi mo bai: %s la bai %s - (%s)",uid.c_str(),crdvl.c_str(),convertCard(crdvl).c_str());
     if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
         CCLOG("Ben trong OpenDeal Card: %d",CARD_ME->count());
-//        moveDealCard_Me(convertCard(crdvl));
         moveDealCard_Me(crdvl);
     }
     else{
@@ -1368,7 +1388,7 @@ void XiTo::moveDealCard_Me(string _lc){
 		return;
 	}
 	
-    for (int i=0; i<CARD_ME->count(); i++) {
+    for (int i = 0; i < CARD_ME->count(); i++) {
         CardChan *pCards = (CardChan*)CARD_ME->objectAtIndex(i);
         CCLOG("id: %d",pCards->getID());
         if(pCards->getID()!=atoi(_lc.c_str()) && i != 0){

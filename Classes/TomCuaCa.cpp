@@ -9,11 +9,14 @@
 #include "_Background_inGame_.h"
 #include "_Button_inGame_.h"
 #include "Requests/ExtensionRequest.h"
-#include "_Number_inGame_.h"
+#include "_Number_inTomCuaCa.h"
 #include "_Chat_inGame_.h"
 #include "mUtils.h"
 #include "_Chat_.h"
 #include "SceneManager.h"
+#include "LayerBet_TomCuaCa.h"
+#include "SliderCustomLoader.h"
+
 
 
 enum TCC_REPONSE {
@@ -30,7 +33,8 @@ enum TCC_REPONSE {
 	EXT_EVENT_VICTORY_NOTIF,        // = "vicntf";
 	EXT_EVENT_READY_REQ,            // = "rr";
 	EXT_EVENT_UNREADY_REQ,			// = "urr"
-	EXT_EVENT_GAME_RESULT		// = "grs"
+	EXT_EVENT_GAME_RESULT,			// = "grs"
+	EXT_EVENT_GAME_BET_NTF			//= "gb_ntf"
 };
 int TomCuaCa::convertResponseToInt(string inString) {
 	if (inString == "jrntf")    return EXT_EVENT_USER_JOIN_NOTIF;
@@ -42,7 +46,7 @@ int TomCuaCa::convertResponseToInt(string inString) {
 	if (inString == "urr")		return EXT_EVENT_UNREADY_REQ;
 	if (inString == "luu")      return EXT_EVENT_LIST_USER_UPDATE;
 	if (inString == "s")		return EXT_EVENT_START;
-
+	if (inString == "gb_ntf")		return EXT_EVENT_GAME_BET_NTF;
 
 	if (inString == "e")   return EXT_EVENT_END;
 	if (inString == "cblltf")   return EXT_EVENT_AMF_TEST_NOTIF;
@@ -56,7 +60,7 @@ int TomCuaCa::convertResponseToInt(string inString) {
 }
 string TomCuaCa::convertResponseToString(int inInt) {
 	if (inInt == EXT_EVENT_USER_JOIN_NOTIF)     return "jrntf";
-
+	if (inInt == EXT_EVENT_GAME_BET_NTF)     return "gb_ntf";
 	if (inInt == EXT_EVENT_ERROR_READY_NTF)     return "e_rntf";
 
 	if (inInt == EXT_EVENT_UNREADY_NTF)         return "urntf";
@@ -89,10 +93,13 @@ float TomCuaCa::convertResult(string rs)
 }
 TomCuaCa::TomCuaCa(){
 
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
+		"sounds/game_tomcuaca/background.mp3", true);
 		_count=100;
-	
+		
 		uLayer = UILayer::create();
 		uLayer->addWidget(GUIReader::shareReader()->widgetFromJsonFile("TomCuaCa/scroll/TomCuaCa_1_1.json"));
+		
 		
 
 		btnReady = UIButton::create();
@@ -123,45 +130,50 @@ TomCuaCa::TomCuaCa(){
 	
 		//BUTTON
 		btnTom = UIButton::create();
-		btnTom->loadTextures("TomCuaCa/Tom.png","TomCuaCa/Tom_payment.png","");
+		btnTom->loadTextures("TomCuaCa/Tom.png","TomCuaCa/Tom_payment.png","TomCuaCa/result_tom.png");
 		btnTom->setPosition(ccp(260,280));
-		btnTom->setTouchEnabled(true);
+		btnTom->setTouchEnabled(false);
 		btnTom->addTouchEventListener(this,(SEL_TouchEvent)&TomCuaCa::clickBtn);
 		btnTom->setTag(t_tom);
 		uLayer->addWidget(btnTom);
 
 		btnCua = UIButton::create();
-		btnCua->loadTextures("TomCuaCa/Cua.png","TomCuaCa/Cua_payment.png","");
+		btnCua->loadTextures("TomCuaCa/Cua.png","TomCuaCa/Cua_payment.png","TomCuaCa/result_cua.png");
 		btnCua->setPosition(ccp(400,280));
-		btnCua->setTouchEnabled(true);
+		btnCua->setTouchEnabled(false);
 		btnCua->addTouchEventListener(this,(SEL_TouchEvent)&TomCuaCa::clickBtn);
+		btnCua->setTag(t_cua);
 		uLayer->addWidget(btnCua);
 
 		btnCa = UIButton::create();
-		btnCa->loadTextures("TomCuaCa/Ca.png","TomCuaCa/Ca_payment.png","");
+		btnCa->loadTextures("TomCuaCa/Ca.png","TomCuaCa/Ca_payment.png","TomCuaCa/result_ca.png");
 		btnCa->setPosition(ccp(540,280));
-		btnCa->setTouchEnabled(true);
+		btnCa->setTouchEnabled(false);
+		btnCa->setTag(t_ca);
 		btnCa->addTouchEventListener(this,(SEL_TouchEvent)&TomCuaCa::clickBtn);
 		uLayer->addWidget(btnCa);
 
 		btnGa = UIButton::create();
-		btnGa->loadTextures("TomCuaCa/Ga.png","TomCuaCa/Ga_payment.png","");
+		btnGa->loadTextures("TomCuaCa/Ga.png","TomCuaCa/Ga_payment.png","TomCuaCa/result_ga.png");
 		btnGa->setPosition(ccp(260,160));
-		btnGa->setTouchEnabled(true);
+		btnGa->setTouchEnabled(false);
+		btnGa->setTag(t_ga);
 		btnGa->addTouchEventListener(this,(SEL_TouchEvent)&TomCuaCa::clickBtn);
 		uLayer->addWidget(btnGa);
 
 		btnRuou = UIButton::create();
-		btnRuou->loadTextures("TomCuaCa/Ruou.png","TomCuaCa/Ruou_payment.png","");
+		btnRuou->loadTextures("TomCuaCa/Ruou.png","TomCuaCa/Ruou_payment.png","TomCuaCa/result_ruou.png");
 		btnRuou->setPosition(ccp(400,160));
-		btnRuou->setTouchEnabled(true);
+		btnRuou->setTouchEnabled(false);
+		btnRuou->setTag(t_ruou);
 		btnRuou->addTouchEventListener(this,(SEL_TouchEvent)&TomCuaCa::clickBtn);
 		uLayer->addWidget(btnRuou);
 
 		btnNai = UIButton::create();
-		btnNai->loadTextures("TomCuaCa/Nai.png","TomCuaCa/Nai_payment.png","");
+		btnNai->loadTextures("TomCuaCa/Nai.png","TomCuaCa/Nai_payment.png","TomCuaCa/result_nai.png");
 		btnNai->setPosition(ccp(540,160));
-		btnNai->setTouchEnabled(true);
+		btnNai->setTouchEnabled(false);
+		btnNai->setTag(t_nai);
 		btnNai->addTouchEventListener(this,(SEL_TouchEvent)&TomCuaCa::clickBtn);
 		uLayer->addWidget(btnNai);
 
@@ -180,14 +192,41 @@ TomCuaCa::TomCuaCa(){
 		scroll1->setTouchEnabled(false);
 		scroll2->setTouchEnabled(false);
 		scroll3->setTouchEnabled(false);
-
-		
-	
 		
 		createBackgrounds();
 		createAvatars();
 		createButtons();
 		
+		//frame bet
+		betTom = FrameBet::create();
+		betTom->setPosition(218,238);
+		betTom->setValueBet(" Cuoc");
+		uLayer->addChild(betTom);
+		
+		betCua = FrameBet::create();
+		betCua->setPosition(358,238);
+		betCua->setValueBet(" Cuoc");
+		uLayer->addChild(betCua);
+
+		betCa = FrameBet::create();
+		betCa->setPosition(498,238);
+		betCa->setValueBet(" Cuoc");
+		uLayer->addChild(betCa);
+
+		betGa = FrameBet::create();
+		betGa->setPosition(218,118);
+		betGa->setValueBet(" Cuoc");
+		uLayer->addChild(betGa);
+
+		betRuou = FrameBet::create();
+		betRuou->setPosition(358,118);
+		betRuou->setValueBet(" Cuoc");
+		uLayer->addChild(betRuou);
+
+		betNai = FrameBet::create();
+		betNai->setPosition(498,118);
+		betNai->setValueBet(" Cuoc");
+		uLayer->addChild(betNai);
 		
 	GameServer::getSingleton().addListeners(this);
 	this->addChild(uLayer);
@@ -230,7 +269,8 @@ void TomCuaCa::updateUser(string list){
 
 		int _money = 0;
 		string _name = "";
-		string _url = "";
+		string _url = "imagizer.imageshack.us/v2/96x96q90/822/2u66.jpg";
+		
 
 		boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("aN")->GetStringValue();
 		boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("amf")->GetDoubleValue();
@@ -243,17 +283,20 @@ void TomCuaCa::updateUser(string list){
 		}
 		if (url != NULL)
 		{
-			_url = url->c_str();
+			//_url = url->c_str();
 			CCLOG("Avatar: %s",url->c_str());
 		}
 
 		if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+			
 			lAvatar->setName(kUserMe, _name.c_str());
 			lAvatar->getUserByPos(kUserMe)->setMoney(_money);
 			lAvatar->getUserByPos(kUserMe)->setIcon(_url);
 
 
 			if(n[0]==find_ChuPhong(_list_user)){
+				lAvatar->setPosChuong(kUserMe);
+				_time=1;
 				lAvatar->setFlag(kUserMe, true);
 				btnReady->setTitleText("Bắt đầu");
 			}
@@ -271,6 +314,8 @@ void TomCuaCa::updateUser(string list){
 				lAvatar->getUserByPos(kUserLeft)->setIcon(_url);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserLeft, true);
+					lAvatar->setPosChuong(kUserLeft);
+					_time=0;
 				}
 				break;
 			case kUserRight:
@@ -280,6 +325,8 @@ void TomCuaCa::updateUser(string list){
 				lAvatar->getUserByPos(kUserRight)->setIcon(_url);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserRight, true);
+					lAvatar->setPosChuong(kUserRight);
+					_time=0;
 				}
 				break;
 			case kUserTop:
@@ -289,6 +336,8 @@ void TomCuaCa::updateUser(string list){
 				lAvatar->getUserByPos(kUserTop)->setIcon(_url);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserTop, true);
+					lAvatar->setPosChuong(kUserTop);
+					_time=0;
 				}
 				break;
 			case kUserBot:
@@ -298,6 +347,8 @@ void TomCuaCa::updateUser(string list){
 				lAvatar->getUserByPos(kUserBot)->setIcon(_url);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserBot, true);
+					lAvatar->setPosChuong(kUserBot);
+					_time=0;
 				}
 			}
 		}
@@ -309,7 +360,7 @@ string TomCuaCa::find_ChuPhong(string listUser){
 	string boosId = info[0];
 	return boosId;
 }
-int TomCuaCa::getPosUserByName(string uid,string _list_user){
+int	 TomCuaCa::getPosUserByName(string uid,string _list_user){
 	int vt = -1;
 	vector<string> list;
 	if(_list_user.c_str() != NULL && _list_user != ""){
@@ -357,6 +408,7 @@ void TomCuaCa::whenUserReady(string uid){
 		// hiện unready
 		btnUnReady->setTouchEnabled(true);
 		btnUnReady->setVisible(true);
+		lAvatar->getUserByPos(kUserMe)->setReady(true);
 	}else{
 		switch (getPosUserByName(uid, _list_user)) {
 		case kUserLeft:
@@ -377,13 +429,33 @@ void TomCuaCa::whenUserReady(string uid){
 	}
 }
 void TomCuaCa::whenUserUnready(string uid){
-	if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-		btnUnReady->setTouchEnabled(false);
-		btnUnReady->setVisible(false);
-		//hiện ready
-		btnReady->setTouchEnabled(true);
-		btnReady->setVisible(true);
-	}
+		if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+			btnUnReady->setTouchEnabled(false);
+			btnUnReady->setVisible(false);
+			//hiện ready
+			lAvatar->setReady(kUserMe,false);
+			btnReady->setTouchEnabled(true);
+			btnReady->setVisible(true);
+		
+		}
+		else{
+			switch (getPosUserByName(uid, _list_user)) {
+			case kUserLeft:
+				lAvatar->setReady(kUserLeft,false);
+				break;
+			case kUserRight:
+				lAvatar->setReady(kUserRight,false);
+				break;
+			case kUserTop:
+				lAvatar->setReady(kUserTop,false);
+				break;
+			case kUserBot:
+				lAvatar->setReady(kUserBot,false);
+				break;
+			default:
+				break;
+			}
+		}
 	
 }
 void TomCuaCa::whenGameStart(){
@@ -392,39 +464,107 @@ void TomCuaCa::whenGameStart(){
 	btnUnReady->setTouchEnabled(false);
 	btnUnReady->setVisible(false);
 
-	scheduleUpdate();
-	
+			CCLog("%d",_time);
+			if(_time==1)
+			{
+				btnTom->setTouchEnabled(false);
+				btnCua->setTouchEnabled(false);
+				btnCa->setTouchEnabled(false);
+				btnGa->setTouchEnabled(false);
+				btnRuou->setTouchEnabled(false);
+				btnNai->setTouchEnabled(false);
+			}
+		else
+			{
+				btnTom->setTouchEnabled(true);
+				btnCua->setTouchEnabled(true);
+				btnCa->setTouchEnabled(true);
+				btnGa->setTouchEnabled(true);
+				btnRuou->setTouchEnabled(true);
+				btnNai->setTouchEnabled(true);
+			}
+
+
+
+	this->schedule(schedule_selector(TomCuaCa::update));
+
+	Chat *toast = new Chat("Đặt cược đê....", -1);
+	this->addChild(toast);
+
 	CCLog("Game start");
-	}
+	
+	
+
+
+}
 void TomCuaCa::whenResuiltGame(string rg){
-	LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
+
+	this->unschedule(schedule_selector(TomCuaCa::update));
+	
+	
+
+	vector<string> resuilt = TCCsplit(rg, '_');
+	
+	scroll1->scrollToPercentVertical(convertResult(resuilt[0]),6,true);
+
+	scroll2->scrollToPercentVertical(convertResult(resuilt[1]),7,true);
+
+	scroll3->scrollToPercentVertical(convertResult(resuilt[2]),8,true);
+
+	btnTom->setTouchEnabled(false);
+	btnCua->setTouchEnabled(false);
+	btnCa->setTouchEnabled(false);
+	btnGa->setTouchEnabled(false);
+	btnRuou->setTouchEnabled(false);
+	btnNai->setTouchEnabled(false);
+		
+	
+	
+
+	
+		
+}
+void TomCuaCa::whenGameEnd(){
+	NumberInTomCuaCa *layerNumbers = NumberInTomCuaCa::create();
 	this->addChild(layerNumbers);
 	LayerChatInGame *layerChat = LayerChatInGame::create();
 	this->addChild(layerChat);
-	vector<string> resuilt = TCCsplit(rg, '_');
-	scroll1->scrollToPercentVertical(convertResult(resuilt[0]),6,true);
-
-	scroll2->scrollToPercentVertical(convertResult(resuilt[1]),8,true);
-
-	scroll3->scrollToPercentVertical(convertResult(resuilt[2]),10,true);
-		 
-}
-void TomCuaCa::whenGameEnd(){
+	
+	_count=100;
+	loading->setPercent(_count);
 	btnReady -> setTouchEnabled(true);
 	btnReady->setVisible(true);
 	btnUnReady->setTouchEnabled(false);
 	btnUnReady->setVisible(false);
+
+	
 	scroll1->scrollToTop(0.1,false);
 
 	scroll2->scrollToTop(0.1,false);
 
 	scroll3->scrollToTop(0.1,false);
 
+	betTom->setValueBet("  Cuoc");
+	betCua->setValueBet("  Cuoc");
+	betCa->setValueBet("  Cuoc");
+	betGa->setValueBet("  Cuoc");
+	betRuou->setValueBet("  Cuoc");
+	betNai->setValueBet("  Cuoc");
+
 	CCLog("End game");
+	btnTom->setBright(true);
+	btnCua->setBright(true);
+	btnCa->setBright(true);
+	btnGa->setBright(true);
+	btnRuou->setBright(true);
+	btnNai->setBright(true);
 
 }
-TomCuaCa::~TomCuaCa(){
+	 TomCuaCa::~TomCuaCa(){
 	GameServer::getSingleton().removeListeners(this);
+	this->removeAllChildren();
+	
+
 }
 bool TomCuaCa::init(){
 	if(!CCLayer::init()){
@@ -465,6 +605,11 @@ void TomCuaCa::createAvatars(){
 
 
 }
+void TomCuaCa::createChat()
+{
+	LayerChatInGame *chat = LayerChatInGame::create();
+	uLayer->addChild(chat);
+	}
 void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 
 
@@ -518,6 +663,11 @@ void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_
 						Chat *toast = new Chat("Đợi người chơi khác sẵn sàng", -1);
 						this->addChild(toast);
 					}
+					if (*errc == 29) 
+					{
+						Chat *toast = new Chat("Không đủ tiền đặt cược",-1);
+						this->addChild(toast);
+					}
 				}
 				break;
 			}
@@ -536,6 +686,7 @@ void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_
 			}
 		case EXT_EVENT_END:
 			{
+				
 				whenGameEnd();
 				break;
 			}
@@ -543,9 +694,38 @@ void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_
 			{
 				boost::shared_ptr<string> resul = param->GetUtfString("rg");
 				CCLog("--------%s",resul->c_str());
+				kq = param->GetUtfString("rgu");
+				CCLog("--------%s",kq->c_str());
+				vector<string> gameRs = TCCsplit(*resul, '_');
+				kq1=gameRs[0];
+				kq2=gameRs[1];
+				kq3=gameRs[2];
 				whenResuiltGame(*resul);
+
+				this->runAction(CCSequence::create(CCDelayTime::create(8),CCCallFunc::create(this, callfunc_selector(TomCuaCa::hienOketqua)),NULL));
+				this->runAction(CCSequence::create(CCDelayTime::create(9),CCCallFunc::create(this, callfunc_selector(TomCuaCa::hienKetQua)),NULL));
+				
+					 
 				break;
 				}
+		case EXT_EVENT_GAME_BET_NTF:
+			{
+				boost::shared_ptr<long> tienbet = param->GetInt("gbv");
+				_tienBet=int(*tienbet);
+				CCLog("---Bet: %d",_tienBet);
+		
+				boost::shared_ptr<long> oCuoc = param->GetInt("aid");
+				CCLog("---O cuoc: %d",*oCuoc);
+
+				char _bet[20];
+				sprintf (_bet, "%d", _tienBet);
+				int _aid=0;
+				_aid =int(*oCuoc);
+				bet(_aid,_bet);
+
+
+				break;
+			}
 		default:
 			break;
 	}
@@ -577,15 +757,186 @@ void TomCuaCa::clickBtn(CCObject* obj, TouchEventType type)
 			}
 		case t_tom:
 			{
-				
+				clickBet(t_tom);
+
+				break;
+			}
+		case t_cua:
+			{
+				clickBet(t_cua);
+				break;
+			}
+		case t_ca:
+			{
+				clickBet(t_ca);
+				break;
+			}
+		case t_ga:
+			{
+				clickBet(t_ga);
+				break;
+			}
+		case t_ruou:
+			{
+				clickBet(t_ruou);
+				break;
+			}
+		case t_nai:
+			{
+				clickBet(t_nai);
 				break;
 			}
 		}
 
-
 }
 void TomCuaCa::update(float dt)
 {
-	_count-=0.150;
+	_count-=0.12;
 	loading->setPercent(_count);
+	if(_count<0){
+		Chat *toast = new Chat("Khóa sổ rồi không đặt được nữa đâu!",-1);
+		this->addChild(toast);
+		}
 }
+void TomCuaCa::clickBet(int _tag)
+{
+	cocos2d::extension::CCBReader * ccbReader = NULL;
+	CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, SliderCustom);
+
+	// register loaders
+	ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerBet_BaCayChuong",   LayerBet_TomCuaCaLoader::loader());
+	// read main layer
+	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+
+	LayerBet_TomCuaCa *popUp;
+	
+
+	if (ccbReader)
+	{
+		popUp = (LayerBet_TomCuaCa *)ccbReader->readNodeGraphFromFile( "LayerBet_BaCayChuong.ccbi" );
+		popUp->setPosition(ccp(10,10));
+		popUp->getAID(_tag);
+		uLayer->addChild(popUp);
+		ccbReader->release();
+	}
+	switch(_tag)
+		{
+		case t_tom:
+			CCLog("bet Tom");
+			break;
+		case t_cua:
+			CCLog("bet cua");
+			break;
+		case t_ca:
+			CCLog("bet ca");
+			break;
+		case t_ga:
+			CCLog("bet ga");
+			break;
+		case t_ruou:
+			CCLog("bet ruou");
+			break;
+		case t_nai:
+			CCLog("bet nai");
+			break;
+		}
+}
+void TomCuaCa::bet(int aid, string tienBet)
+{
+	switch (aid) {
+	case 1:
+		betNai->setValueBet((tienBet+" $").c_str());
+		break;
+	case 2:
+		betRuou->setValueBet((tienBet+" $").c_str());
+		break;
+	case 3:
+		betGa->setValueBet((tienBet+" $").c_str());
+		break;
+	case 4:
+		betCa->setValueBet((tienBet+" $").c_str());
+		break;
+	case 5:
+		betCua->setValueBet((tienBet+" $").c_str());
+		break;
+	case 6:
+		betTom->setValueBet((tienBet+" $").c_str());
+		break;
+	default:
+		break;
+	}
+
+}
+void TomCuaCa::setTimer(float dt)
+{
+		
+}
+void TomCuaCa::hienKetQua()
+{
+	NumberInTomCuaCa *layerNumbers = NumberInTomCuaCa::create();
+	this->addChild(layerNumbers);
+	vector<string> _kq = TCCsplit(*kq, ';');
+	for(int i=0;i<_kq.size();i++)
+	{
+		vector<string> info = TCCsplit(_kq[i], '@');
+		string _temp =info[1];
+		string _money="";
+		string _dola="";
+
+			if(_temp[0]!='-'){_money="+"+info[1]+_dola;}
+			else{_money=info[1]+_dola;}
+
+		if(strcmp(info[0].c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0)
+		{
+			//layerChat->showChatByPos(kUserMe,(info[1]+" Điểm"));
+			layerNumbers->showNumberByPos(kUserMe, _money);
+			CCLog("me");
+		}
+		else{
+			switch (getPosUserByName(info[0], _list_user))
+			{
+			case kUserLeft:
+				layerNumbers->showNumberByPos(kUserLeft,_money);
+				CCLog("left");
+				break;
+			case kUserRight:
+				layerNumbers->showNumberByPos(kUserRight, _money);
+				CCLog("righ");
+				break;
+			case kUserTop:
+				layerNumbers->showNumberByPos(kUserTop, _money);
+				CCLog("top");
+				break;
+			case kUserBot:
+				layerNumbers->showNumberByPos(kUserBot, _money);
+				CCLog("bot");
+				break;
+			default:
+				break;
+			}//switch
+			}//else
+	}//for
+}//void
+void TomCuaCa::hienOketqua()
+{
+	CCLog("here");
+	if(kq1=="1" || kq2=="1" || kq3=="1")
+		btnNai->setBright(false);
+	if(kq1=="2" || kq2=="2" || kq3=="2")
+		btnRuou->setBright(false);
+	if(kq1=="3" || kq2=="3" || kq3=="3")
+		btnGa->setBright(false);
+	if(kq1=="4" || kq2=="4" || kq3=="4")
+		btnCa->setBright(false);
+	if(kq1=="5" || kq2=="5" || kq3=="5")
+		btnCua->setBright(false);
+	if(kq1=="6" || kq2=="6" || kq3=="6")
+		btnTom->setBright(false);
+}
+void TomCuaCa::onExit()
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic(
+		"sounds/game_tomcuaca/background.mp3");
+		}

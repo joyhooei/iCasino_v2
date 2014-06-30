@@ -9,9 +9,9 @@
 #ifndef __iCasino_v2__LayerPlayGamePhom__
 #define __iCasino_v2__LayerPlayGamePhom__
 
-#include <iostream>
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "SimpleAudioEngine.h"
 
 #include "AllData.h"
 #include "GameServer.h"
@@ -89,12 +89,15 @@ private:
 		AN_BAI,
 		XEP_BAI,
 		HA_PHOM,
-		SAN_SANG
+		SAN_SANG,
+		START_GAME,
+		END_GAME
 	};
 
     int actionLast;
     string myName;
     string currentPlaying;
+	string listID_HaPhom;
     
     // mảng lưu các tên và thông tin tương ứng để hiển thị
     vector<string> arrName;
@@ -122,6 +125,7 @@ public:
     
     void initGame();
     void resetGame();
+	void playSound(string soundPath);
     
     int    convertResponseToInt(string inString);
     string convertResponseToString(int inInt);
@@ -136,6 +140,7 @@ public:
     void actionEatCards(CCObject *pSender, TouchEventType pType);
     void actionHaPhom(CCObject *pSender, TouchEventType pType);
 	void callbackHaPhom(float dt);
+	void callbackHaPhom_stepByStep(float dt);
     void actionPush(CCObject *pSender, TouchEventType pType);
     void actionUUU(CCObject *pSender, TouchEventType pType);
     

@@ -63,6 +63,8 @@ public:
     
     static LayerMain& getSingleton(void);
 	static LayerMain* getSingletonPtr(void);
+
+	void keyBackClicked();
     
 	void setCurrentViewTagDefault(){
 		currViewTag = tag_LayerDefault;
