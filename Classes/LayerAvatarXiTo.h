@@ -9,33 +9,16 @@
 #ifndef __iCasinov2__LayerAvatarXiTo__
 #define __iCasinov2__LayerAvatarXiTo__
 
+#include <iostream>
 #include "cocos2d.h"
 #include "_Avatar_.h"
-#include "_Number_.h"
 using namespace cocos2d;
-
-
-enum {
-    user_me,
-    user_rightBottom,
-    user_rightTop,
-    user_leftTop,
-    user_leftBottom
-};
+using namespace std;
 
 class LayerAvatarXiTo : public CCLayer{
 private:
-    float widthAvatar;
-	float heightAvatar;
-    Avatar *me,*left_bottom,*left_top,*right_bottom,*right_top;
-    
-    float bt_card_me;
-    float bt_card_bottom;
-    float bt_card_top;
-    
-    float lf_card_me;
-    float lf_card_left_bottom;
-    float lf_card_left_top;
+	string listusers;
+	string myName;
 public:
     LayerAvatarXiTo();
     ~LayerAvatarXiTo();
@@ -45,12 +28,24 @@ public:
     void setFlag(int pos, bool isShow);
     void setName(int pos,const char *name);
     void setMoney(int pos,const char *money);
+
+	void resetAvatar(Avatar* avatar);
+
     void resetAll();
     void stopAllTimer();
+	void runTimer(int pos);
+
 	void setUnReadyAllUser();
     
     void showNunberByPos(int pos, string numberString);
     Avatar* getUserByPos(int pos);
+
+	void updateUser();
+
+	void setListUserXiTo(string _listusers);
+	void setMyName(string myname);
+
+	int getPosByName(string pName);
 };
 
 #endif /* defined(__iCasinov2__LayerAvatarXiTo__) */

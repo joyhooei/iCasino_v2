@@ -72,6 +72,7 @@ private:
 	string EXT_EVENT_REQ_DRAW_CARD;
 	string EXT_EVENT_REQ_TAKE_CARD;
 	string EXT_EVENT_REQ_DUOI_CARD;
+	string EXT_EVENT_REQ_TRENTAY_DETAIL;
 
 	//send
 	string EXT_SRVNTF_GAME_MASTER_INFO;
@@ -97,8 +98,6 @@ private:
 	string EXT_EVENT_REQ_CHIU_CARD;
 	//xem noc
 	string EXT_EVENT_REQ_NOC_DETAIL;
-	//xem bai tren tay
-	string EXT_EVENT_REQ_TRENTAY_DETAIL; 
 	//chiu thanh cong
 	string EXT_EVENT_RES_CHIU_CARD;
 
@@ -214,6 +213,7 @@ public:
 	void whenConguoi_ChoU(string uid);
 	void whenConguoi_Chiu(string uid);
 	void XuongU();
+	void resuiltGame(string resuilt);
 
 	void deleteAllCardFromArray(CCArray *P);
 
