@@ -200,32 +200,32 @@ TomCuaCa::TomCuaCa(){
 		//frame bet
 		betTom = FrameBet::create();
 		betTom->setPosition(218,238);
-		betTom->setValueBet(" Cuoc");
+		betTom->setValueBet("  Cược");
 		uLayer->addChild(betTom);
 		
 		betCua = FrameBet::create();
 		betCua->setPosition(358,238);
-		betCua->setValueBet(" Cuoc");
+		betCua->setValueBet("  Cược");
 		uLayer->addChild(betCua);
 
 		betCa = FrameBet::create();
 		betCa->setPosition(498,238);
-		betCa->setValueBet(" Cuoc");
+		betCa->setValueBet("  Cược");
 		uLayer->addChild(betCa);
 
 		betGa = FrameBet::create();
 		betGa->setPosition(218,118);
-		betGa->setValueBet(" Cuoc");
+		betGa->setValueBet("  Cược");
 		uLayer->addChild(betGa);
 
 		betRuou = FrameBet::create();
 		betRuou->setPosition(358,118);
-		betRuou->setValueBet(" Cuoc");
+		betRuou->setValueBet("  Cược");
 		uLayer->addChild(betRuou);
 
 		betNai = FrameBet::create();
 		betNai->setPosition(498,118);
-		betNai->setValueBet(" Cuoc");
+		betNai->setValueBet("  Cược");
 		uLayer->addChild(betNai);
 		
 	GameServer::getSingleton().addListeners(this);
@@ -488,7 +488,7 @@ void TomCuaCa::whenGameStart(){
 
 	this->schedule(schedule_selector(TomCuaCa::update));
 
-	Chat *toast = new Chat("Đặt cược đê....", -1);
+	Chat *toast = new Chat("Đặt cược đê các bác...", -1);
 	this->addChild(toast);
 
 	CCLog("Game start");
@@ -544,12 +544,12 @@ void TomCuaCa::whenGameEnd(){
 
 	scroll3->scrollToTop(0.1,false);
 
-	betTom->setValueBet("  Cuoc");
-	betCua->setValueBet("  Cuoc");
-	betCa->setValueBet("  Cuoc");
-	betGa->setValueBet("  Cuoc");
-	betRuou->setValueBet("  Cuoc");
-	betNai->setValueBet("  Cuoc");
+	betTom->setValueBet("  Cược");
+	betCua->setValueBet("  Cược");
+	betCa->setValueBet("  Cược");
+	betGa->setValueBet("  Cược");
+	betRuou->setValueBet("  Cược");
+	betNai->setValueBet("  Cược");
 
 	CCLog("End game");
 	btnTom->setBright(true);
@@ -558,7 +558,11 @@ void TomCuaCa::whenGameEnd(){
 	btnGa->setBright(true);
 	btnRuou->setBright(true);
 	btnNai->setBright(true);
-
+	lAvatar->setReady(kUserMe,false);
+	lAvatar->setReady(kUserTop,false);
+	lAvatar->setReady(kUserLeft,false);
+	lAvatar->setReady(kUserRight,false);
+	lAvatar->setReady(kUserBot,false);
 }
 	 TomCuaCa::~TomCuaCa(){
 	GameServer::getSingleton().removeListeners(this);
@@ -794,7 +798,7 @@ void TomCuaCa::update(float dt)
 	_count-=0.12;
 	loading->setPercent(_count);
 	if(_count<0){
-		Chat *toast = new Chat("Khóa sổ rồi không đặt được nữa đâu!",-1);
+		Chat *toast = new Chat("Khóa sổ rồi ko đặt được nữa đâu!",-1);
 		this->addChild(toast);
 		}
 }
