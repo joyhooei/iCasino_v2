@@ -142,6 +142,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\GameServer.cpp" />
     <ClCompile Include="..\Classes\LayerAction.cpp" />
     <ClCompile Include="..\Classes\LayerAvatarXiTo.cpp" />
+    <ClCompile Include="..\Classes\LayerAvatar_BaCay.cpp" />
     <ClCompile Include="..\Classes\LayerBet_BaCayChuong.cpp" />
     <ClCompile Include="..\Classes\LayerBet_Lieng.cpp" />
     <ClCompile Include="..\Classes\LayerBorrowMoney.cpp" />
@@ -197,11 +198,13 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\_Button_.cpp" />
     <ClCompile Include="..\Classes\_Button_inGame_.cpp" />
     <ClCompile Include="..\Classes\_Button_inMain_.cpp" />
+    <ClCompile Include="..\Classes\_CardBaCay_.cpp" />
     <ClCompile Include="..\Classes\_Card_.cpp" />
     <ClCompile Include="..\Classes\_Card_inGame_.cpp" />
     <ClCompile Include="..\Classes\_Chat_.cpp" />
     <ClCompile Include="..\Classes\_Chat_inGame_.cpp" />
     <ClCompile Include="..\Classes\_Chess_.cpp" />
+    <ClCompile Include="..\Classes\_LayerBet_.cpp" />
     <ClCompile Include="..\Classes\_Layer_CardChan_.cpp" />
     <ClCompile Include="..\Classes\_Number_.cpp" />
     <ClCompile Include="..\Classes\_Number_inGame_.cpp" />
@@ -220,6 +223,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\GameServer.h" />
     <ClInclude Include="..\Classes\LayerAction.h" />
     <ClInclude Include="..\Classes\LayerAvatarXiTo.h" />
+    <ClInclude Include="..\Classes\LayerAvatar_BaCay.h" />
     <ClInclude Include="..\Classes\LayerBet_BaCayChuong.h" />
     <ClInclude Include="..\Classes\LayerBet_Lieng.h" />
     <ClInclude Include="..\Classes\LayerBorrowMoney.h" />
@@ -284,11 +288,13 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\_Button_.h" />
     <ClInclude Include="..\Classes\_Button_inGame_.h" />
     <ClInclude Include="..\Classes\_Button_inMain_.h" />
+    <ClInclude Include="..\Classes\_CardBaCay_.h" />
     <ClInclude Include="..\Classes\_Card_.h" />
     <ClInclude Include="..\Classes\_Card_inGame_.h" />
     <ClInclude Include="..\Classes\_Chat_.h" />
     <ClInclude Include="..\Classes\_Chat_inGame_.h" />
     <ClInclude Include="..\Classes\_Chess_.h" />
+    <ClInclude Include="..\Classes\_LayerBet_.h" />
     <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
     <ClInclude Include="..\Classes\_Number_.h" />
     <ClInclude Include="..\Classes\_Number_inGame_.h" />
