@@ -12,6 +12,9 @@
 #include <iostream>
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "GameServer.h"
+
+using namespace std;
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
@@ -21,10 +24,17 @@ class LayerGameChan_KetQua
 	, public cocos2d::extension::CCBSelectorResolver
 	, public cocos2d::extension::CCBMemberVariableAssigner
 	, public cocos2d::extension::CCNodeLoaderListener
+	, public PlayerCallBack
 {
 private:
 	CCLabelTTF *lblThongBao;
 	CCLabelTTF* lblMoney;
+
+	CCArray *CARD_NOC;
+	CCArray *CARD_WINNER;
+
+	string EXT_EVENT_REQ_TRENTAY_DETAIL;
+	string EXT_EVENT_REQ_NOC_DETAIL;// = "rqnocdtl";
 public:
 	LayerGameChan_KetQua();
 	virtual ~LayerGameChan_KetQua();
@@ -43,7 +53,18 @@ public:
 		return NULL;
 	};
 	// selector callbacks
+	string findTypeCard(string number,string suite);
+	void rotateListCards(CCArray *P);
+	void setCard_Noc(string listnoc);
+	void setListCard_WinnerUser(string listcard);
+
+	void displayListCard_Noc(CCArray *P);
+	void displayListCard_Winner(string listcard);
+
 	void onButtonXemNoc(CCObject* pSender);
+
+	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+
 };
 
 class LayerGameChan_KetQuaLoader : public cocos2d::extension::CCLayerLoader

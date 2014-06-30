@@ -302,9 +302,39 @@ public:
 
 	static CCAction* getActionOpenPopup(){
 		return CCSequence::create(CCScaleTo::create(0.0, 0.0),
-			CCScaleTo::create(0.06, 1.05),
-			CCScaleTo::create(0.08, 0.95),
-			CCScaleTo::create(0.08, 1.0), NULL);
+			CCScaleTo::create(0.06f, 1.05f),
+			CCScaleTo::create(0.08f, 0.95f),
+			CCScaleTo::create(0.08f, 1.0f), NULL);
+	}
+
+	static vector<string> splitStringByListRegex(string S, vector<string> lstRegex){
+		vector<string> arrStr;
+		do{
+			//Tìm substr gần nhất
+			int minPos = INT_MAX; 
+			string currRegx = "";
+			//Find
+			for( int i = 0; i<(int)lstRegex.size(); i++ ){
+				std::size_t vt1 = S.find(lstRegex.at(i));
+				if (vt1!=std::string::npos && minPos>(int)vt1){ //Find it
+					minPos = vt1;
+					currRegx = lstRegex.at(i);
+				}
+			}
+			if( minPos == INT_MAX ){
+				//End
+				arrStr.push_back( S );
+				break;
+			}else{
+				//Push to vector and continues
+				if( minPos!=0 )
+					arrStr.push_back( S.substr( 0, minPos ) );
+				arrStr.push_back(currRegx);
+				S = S.substr( minPos+currRegx.length(), S.length()-minPos-currRegx.length() );
+			}
+		}while(S.length()>=4);
+
+		return arrStr;
 	}
 };
 #endif

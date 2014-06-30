@@ -59,6 +59,7 @@ LayerGameChan_XuongU::~LayerGameChan_XuongU()
     GameServer::getSingleton().removeListeners(this);
 	chooseXuong->removeAllObjects();
 	chooseXuong->release();
+	cuoc.clear();
 	CCLOG("Jump to Deconstructor LayerGameChan_XuongU");
 }
 

@@ -68,6 +68,30 @@ enum{
 	kTotDo
 };
 
+//btn dautv
+enum {
+	user_me,
+	user_rightBottom,
+	user_rightTop,
+	user_leftTop,
+	user_leftBottom
+};
+
+enum{
+	dTag_btnReady = 0,
+	dTag_btnUnready,
+	dTag_btnBet,
+	dTag_btnTurnAll,
+	dTag_btnView,
+	dTag_btnSqueez,
+	dTag_btnFollow,
+	dTag_btnFold,
+	dTag_btnHaft,
+	dTag_btnQuatar,
+	dTag_btnDouble,
+	dTag_btnAll,
+	dTag_btnGive
+};
 // @thanhhv
 // Đặt những hàm được sử dụng thường xuyên ở đây
 class DoTogether {

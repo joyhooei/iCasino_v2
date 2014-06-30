@@ -29,12 +29,17 @@ class LayerChatRoom
 {
 private:
     enum tagLabelInRow{
-        tag_Content=0
+        tag_Content=0,
+		tag_User,
     };
     enum tagChatRoom{
         tagListRoom=0,
         tagListContent=1
-    };
+	};
+	struct MessageInfo{
+		string user;
+		string content;
+	};
 
     cocos2d::CCLabelTTF *lblTitle;
     
@@ -45,6 +50,12 @@ private:
     CCTableView* tblListContents;
     
     int m_gID;
+
+	int currRoomChatIndex;
+	int currRoomID;
+
+	vector<MessageInfo> lstChatMessage;
+	vector<string> lstRegex;
 public:
     LayerChatRoom();
     virtual ~LayerChatRoom();
@@ -53,9 +64,12 @@ public:
     
     void setGameID(int gID);
     
-    CCNode* createLabel4Cell(int tag, const char* text, CCSize size, CCPoint point);
+	CCNode* createLabel4Cell(int tag, const char* text, CCSize size, CCPoint point);
+	CCNode* createLabel4CellContent(int tag, const char* text, const char* user, CCSize size, CCPoint point);
+	void setContent2Richtext(RichText* rt, const char* text);
     
-    CCLabelTTF* getLabelFromTagID(CCTableViewCell *cell, int tag);
+	CCLabelTTF* getLabelFromTagID(CCTableViewCell *cell, int tag);
+	RichText* getRichTextFromTagID(CCTableViewCell *cell, int tag);
     
     CCTableViewCell* process4ListRooms(cocos2d::extension::CCTableView *table, unsigned int idx);
     CCTableViewCell* process4ListContents(cocos2d::extension::CCTableView *table, unsigned int idx);
@@ -79,13 +93,12 @@ public:
     virtual cocos2d::extension::CCTableViewCell* tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
     virtual unsigned int numberOfCellsInTableView(cocos2d::extension::CCTableView *table);
     //
-    void OnSmartFoxRoomJoin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
-    void OnSmartFoxRoomJoinError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
-    void OnSmartFoxRoomCreationError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
-    void OnSmartFoxRoomAdd(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
-    void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
-    void OnSmartFoxInvitation(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
     void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxRoomJoin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxRoomJoinError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	//Callback
+	void callbackFromChatWindow(CCNode*, void*);
 };
 
 class LayerChatRoomLoader : public cocos2d::extension::CCLayerLoader
