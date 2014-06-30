@@ -18,12 +18,12 @@
   "designHeight": 480,
   "designWidth": 800,
   "textures": [
-    "../assest.plist",
+    "assest.plist",
     "onions.plist",
     "LayerChatWindow0.plist"
   ],
   "texturesPng": [
-    "../assest.png",
+    "assest.png",
     "onions.png",
     "LayerChatWindow0.png"
   ],

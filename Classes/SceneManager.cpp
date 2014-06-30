@@ -186,7 +186,7 @@ bool SceneManager::init() {
 	this->addChild(layerMain, zorder_LayerMain, tag_LayerMain);
 	this->addChild(layerNotification, zorder_LayerNotification, tag_LayerNotification);
 
-	mLayerChatWindow = LayerChatWindow::create();
+	mLayerChatWindow = LayerChatWindow::create(); 
 	this->addChild(mLayerChatWindow, zorder_LayerNotification, tag_LayerNotification);
 
 	// Layer Đầu tiên: Login

@@ -4,7 +4,7 @@
 
 USING_NS_CC;
 USING_NS_CC_EXT;
-using namespace ui;
+using namespace cocos2d::ui;
 
 CCScene* LayerChatWindow::scene()
 {
@@ -30,11 +30,11 @@ bool LayerChatWindow::init()
 	{
 		return false;
 	}
+	//return true;
 
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 	_count = 100;
-
 	UILayer* ul = UILayer::create();
 	ul->addWidget(GUIReader::shareReader()->widgetFromJsonFile("LayerChatWindow_1.ExportJson"));
 	this->addChild(ul);
@@ -98,6 +98,7 @@ bool LayerChatWindow::init()
 
 		pImg->addChild( _richText );
 		pImg->addChild( b );
+		CCLOG("button w: %lf h: %lf", b->getContentSize().width, b->getContentSize().height);
 		col++;
 	}
 	return true;
@@ -110,20 +111,22 @@ void LayerChatWindow::onButtonClose( CCObject* pSender, TouchEventType type )
 // 		{
 // 			(m_callback->*m_callbackListener)(this, "");
 // 		}
-// 		SceneManager::getSingleton().hideLayerChatWindow();
-// 		txtChat->setText("");
+		SceneManager::getSingleton().hideLayerChatWindow();
+		txtChat->setText("");
+		txtChat->setDetachWithIME(true);
 	}
 }
 
 void LayerChatWindow::onButtonSend( CCObject* pSender, TouchEventType type )
 {
 	if(type == TOUCH_EVENT_ENDED){
-// 		if (m_callback && m_callbackListener)
-// 		{
-// 			(m_callback->*m_callbackListener)(this, (void*)txtChat->getStringValue());
-// 		}
-// 		SceneManager::getSingleton().hideLayerChatWindow();
-// 		txtChat->setText("");
+		if (m_callback && m_callbackListener)
+		{
+			(m_callback->*m_callbackListener)(this, (void*)txtChat->getStringValue());
+		}
+		SceneManager::getSingleton().hideLayerChatWindow();
+		txtChat->setText("");
+		txtChat->setDetachWithIME(true);
 	}
 }
 
@@ -161,11 +164,11 @@ void LayerChatWindow::onExit()
 
 void LayerChatWindow::OnEmoClick( CCObject* pSender, TouchEventType type )
 {
-// 	UIButton* btn = dynamic_cast<UIButton*>(pSender);
-// 	if( type == TouchEventType::TOUCH_EVENT_ENDED ){
-// 		CCLOG("OnEmoClick button tag: %d", btn->getTag());
-// 		txtChat->setText( CCString::createWithFormat("%s(%d)", txtChat->getStringValue(), btn->getTag())->getCString() );
-// 	}
+	UIButton* btn = dynamic_cast<UIButton*>(pSender);
+	if( type == TOUCH_EVENT_ENDED ){
+		CCLOG("OnEmoClick button tag: %d", btn->getTag());
+		txtChat->setText( CCString::createWithFormat("%s(%d)", txtChat->getStringValue(), btn->getTag())->getCString() );
+	}
 }
 
 void LayerChatWindow::setCallbackFunc( CCObject* target, SEL_CallFuncND callfun )
