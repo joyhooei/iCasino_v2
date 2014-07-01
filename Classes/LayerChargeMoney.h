@@ -43,14 +43,22 @@ private:
     tagButtonState currState;
     
     CCSprite* arrow_left;
+
+	bool isPopup;
 public:
     LayerChargeMoney();
-    virtual ~LayerChargeMoney();
+	virtual ~LayerChargeMoney();
+	virtual void registerWithTouchDispatcher(void);
+	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void onEnter();
+	virtual void onExit();
 
 	void notificationCallBack(bool isOK, int tag);
     
     void setButtonState(tagButtonState);
     void initTextField(CCEditBox* txt, const char* hintText);
+
+	void setIsPopup(bool b);
     
     CREATE_FUNC(LayerChargeMoney);
     
@@ -65,7 +73,10 @@ public:
     void onButtonMobiClick(CCObject* pSender);
     void onButtonOKClick(CCObject* pSender);
     void onButtonSMSClick(CCObject* pSender);
-    void onButtonTyGiaClick(CCObject* pSender);
+	void onButtonTyGiaClick(CCObject* pSender);
+	//For Popup
+	void onButtonCloseClick(CCObject* pSender);
+	void onButtonExchangeClick(CCObject* pSender);
     //Server
     void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 };

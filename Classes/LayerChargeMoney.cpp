@@ -29,6 +29,8 @@ LayerChargeMoney::LayerChargeMoney()
     arrow_left = NULL;
     
     currState = tag_viettel;
+
+	isPopup = false;
     //
     GameServer::getSingleton().addListeners(this);
 
@@ -67,6 +69,7 @@ void LayerChargeMoney::setButtonState( tagButtonState tag){
 SEL_MenuHandler LayerChargeMoney::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, const char *pSelectorName)
 {
     //CCLOG("Imhere onResolveCCBCCMenuItemSelector: %s", pSelectorName);
+	
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnViettel", LayerChargeMoney::onButtonViettelClick);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnViettelStatus", LayerChargeMoney::onButtonViettelClick);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnVina", LayerChargeMoney::onButtonVinaClick);
@@ -77,7 +80,32 @@ SEL_MenuHandler LayerChargeMoney::onResolveCCBCCMenuItemSelector(cocos2d::CCObje
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnOK", LayerChargeMoney::onButtonOKClick);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnSMS", LayerChargeMoney::onButtonSMSClick);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnTyGia", LayerChargeMoney::onButtonTyGiaClick);
+
+	CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnClose", LayerChargeMoney::onButtonCloseClick);
+	CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnExchange", LayerChargeMoney::onButtonExchangeClick);
     return NULL;
+}
+
+void LayerChargeMoney::onButtonCloseClick( CCObject* pSender )
+{
+	CCLOG("onButtonCloseClick");
+	this->removeFromParentAndCleanup(true);
+}
+
+void LayerChargeMoney::onButtonExchangeClick(CCObject* pSender){
+	CCLOG("onButtonExchangeClick");
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	ccNodeLoaderLibrary->unregisterCCNodeLoader("LayerSMS");
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerSMS",   LayerTyGiaLoader::loader());
+	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	LayerTyGia* mLayer;
+	if (ccbReader)
+	{
+		mLayer = (LayerTyGia *)ccbReader->readNodeGraphFromFile( "LayerSMS.ccbi" );
+		this->addChild(mLayer, 1, 1);
+		//        SceneManager::getSingleton().showLayer(mLayer);
+		ccbReader->release();
+	}
 }
 
 void LayerChargeMoney::onButtonViettelClick(CCObject* pSender){
@@ -119,10 +147,9 @@ void LayerChargeMoney::onButtonSMSClick(CCObject* pSender){
     CCLOG("onButtonSMSClick");
     //
 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
-	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     ccNodeLoaderLibrary->unregisterCCNodeLoader("LayerSMS");
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerSMS",   LayerSMSLoader::loader());
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+    CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerSMS* mLayer;
     if (ccbReader)
     {
@@ -135,10 +162,9 @@ void LayerChargeMoney::onButtonTyGiaClick(CCObject* pSender){
     CCLOG("onButtonTyGiaClick");
     //
 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
-	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     ccNodeLoaderLibrary->unregisterCCNodeLoader("LayerSMS");
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerSMS",   LayerTyGiaLoader::loader());
-    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+    CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
     LayerTyGia* mLayer;
     if (ccbReader)
     {
@@ -188,6 +214,7 @@ void LayerChargeMoney::initTextField(CCEditBox* txt, const char* hintText){
     txt->setReturnType(kKeyboardReturnTypeDefault);
 	txt->setPlaceHolder(hintText);
 	txt->setInputMode(kEditBoxInputModeAny);
+	txt->setTouchPriority(-128);
 }
 
 void LayerChargeMoney::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -214,4 +241,35 @@ void LayerChargeMoney::OnExtensionResponse(unsigned long long ptrContext, boost:
 				"Nạp thẻ thất bại", false , "", 1, this );
         }
     }
+}
+
+void LayerChargeMoney::setIsPopup( bool b )
+{
+	isPopup = b;
+}
+
+void LayerChargeMoney::registerWithTouchDispatcher( void )
+{
+	if( isPopup ){
+		CCLOG("isPopup: %s", isPopup?"true":"false");
+		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -127, true);
+	}
+}
+
+bool LayerChargeMoney::ccTouchBegan( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )
+{
+	return true;
+}
+
+void LayerChargeMoney::onEnter()
+{
+	CCLayer::onEnter();
+	//
+	if( isPopup )
+		this->runAction(mUtils::getActionOpenPopup());
+}
+
+void LayerChargeMoney::onExit()
+{
+	CCLayer::onExit();
 }

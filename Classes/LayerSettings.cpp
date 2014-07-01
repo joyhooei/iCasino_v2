@@ -43,11 +43,11 @@ void LayerSettings::onButtonSound(CCObject* pSender)
     CCLOG("onButtonSound");
     CCMenuItemImage* btn = (CCMenuItemImage*)pSender;
     CCLOG("onButtonSound x:%f", btn->getPositionX());
-	bool bVal = false;
+	bool bVal = true;
     if( btn->getPositionX()==211 ){
         //disabling, switch to enable
         btn->setPosition(ccp(270, btn->getPositionY()));
-		bVal = true;
+		bVal = false;
     }else{
         //else
         btn->setPosition(ccp(211, btn->getPositionY()));
@@ -60,12 +60,12 @@ void LayerSettings::onButtonSound(CCObject* pSender)
 void LayerSettings::onButtonVibrate(CCObject* pSender)
 {
 	CCLOG("onButtonVibrate");
-	bool bVal = false;
+	bool bVal = true;
     CCMenuItemImage* btn = (CCMenuItemImage*)pSender;
     CCLOG("onButtonSound x:%f", btn->getPositionX());
     if( btn->getPositionX()==211 ){
         //disabling, switch to enable
-		bVal = true;
+		bVal = false;
         btn->setPosition(ccp(270, btn->getPositionY()));
     }else{
         //else

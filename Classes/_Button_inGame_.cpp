@@ -11,6 +11,8 @@
 #include "_Button_inGame_.h"
 #include "LayerChatWindow.h"
 #include "GameServer.h"
+#include "LayerChargeMoney.h"
+#include "LayerSettings.h"
 
 #include "Requests/PublicMessageRequest.h"
 
@@ -115,6 +117,15 @@ void LayerButtonInGame::eventTouchBtnBack(CCObject *pObject, TouchEventType pTyp
 void LayerButtonInGame::eventTouchBtnSetting(CCObject *pObject, TouchEventType pType){
 	if (pType == TOUCH_EVENT_ENDED){
 		CCLOG("Click Setting");
+		CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+		CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+		LayerSettings* mLayerSettings;
+		if (ccbReader)
+		{
+			mLayerSettings = (LayerSettings *)ccbReader->readNodeGraphFromFile( "LayerSettings.ccbi" );
+			this->addChild(mLayerSettings, 1, 1);
+			ccbReader->release();
+		}
 	}
 }
 
@@ -129,7 +140,19 @@ void LayerButtonInGame::eventTouchBtnChat(CCObject *pObject, TouchEventType pTyp
 
 void LayerButtonInGame::eventTouchBtnCoin(CCObject *pObject, TouchEventType pType){
 	if (pType == TOUCH_EVENT_ENDED){
-		CCLOG("Click Coin");
+		CCLOG("Click Coin"); 
+		//
+		CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+		CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+		LayerChargeMoney* mLayer;
+		if (ccbReader)
+		{
+			mLayer = (LayerChargeMoney *)ccbReader->readNodeGraphFromFile( "LayerPopupChargeMoney.ccbi" );
+			mLayer->setIsPopup(true);
+			this->getParent()->addChild(mLayer, 1, 1);
+			mLayer->setTouchEnabled(true);
+			ccbReader->release();
+		}
 	}
 }
 

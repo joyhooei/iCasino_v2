@@ -16,6 +16,7 @@
 #include "LayerBorrowMoney.h"
 
 #include "LayerPasswordRoom.h"
+#include "LayerSettings.h"
 
 #include "LayerUserInfo_Details.h"
 #include "LayerChangeAvatar.h"
@@ -152,6 +153,7 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerBorrowMoney",   LayerBorrowMoneyLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerLichSuGiaoDich",   LayerLichSuGiaoDichLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChargeMoney",   LayerChargeMoneyLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPopupChargeMoney",   LayerChargeMoneyLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUserInfo_Details",   LayerUserInfo_DetailsLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChangeAvatar",   LayerChangeAvatarLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerBuyAvatar",   LayerBuyAvatarLoader::loader());
@@ -159,6 +161,7 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerAction",   LayerActionLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUpdateInfo",   LayerUpdateInfoLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPasswordRoom",   LayerPasswordRoomLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerSettings",   LayerSettingsLoader::loader());
 
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);

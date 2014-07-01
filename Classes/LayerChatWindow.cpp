@@ -55,6 +55,7 @@ bool LayerChatWindow::init()
 	txtChat = dynamic_cast<UITextField*>(ul->getWidgetByName("txtChat"));
 	txtChat->setText("");
 	txtChat->setPlaceHolder("Noi dung");
+	txtChat->addEventListenerTextField(this, textfieldeventselector(LayerChatWindow::textFieldEvent));
 
 	UIPanel* pEmo = dynamic_cast<UIPanel*>(ul->getWidgetByName("pEmo"));
 	UIImageView* pImg = dynamic_cast<UIImageView*>(ul->getWidgetByName("Image_25_0"));
@@ -113,7 +114,7 @@ void LayerChatWindow::onButtonClose( CCObject* pSender, TouchEventType type )
 // 		}
 		SceneManager::getSingleton().hideLayerChatWindow();
 		txtChat->setText("");
-		txtChat->setDetachWithIME(true);
+		txtChat->setDetachWithIME(false);
 	}
 }
 
@@ -126,7 +127,7 @@ void LayerChatWindow::onButtonSend( CCObject* pSender, TouchEventType type )
 		}
 		SceneManager::getSingleton().hideLayerChatWindow();
 		txtChat->setText("");
-		txtChat->setDetachWithIME(true);
+		txtChat->setDetachWithIME(false);
 	}
 }
 
@@ -180,4 +181,31 @@ void LayerChatWindow::setCallbackFunc( CCObject* target, SEL_CallFuncND callfun 
 LayerChatWindow::~LayerChatWindow()
 {
 	CCLOG("~LayerChatWindow()");
+}
+
+void LayerChatWindow::textFieldEvent( CCObject *pSender, TextFiledEventType type )
+{
+	switch (type)
+	{
+	case TEXTFIELD_EVENT_ATTACH_WITH_IME:
+		{
+			CCLOG("TEXTFIELD_EVENT_ATTACH_WITH_IME");
+		}
+		break;
+
+	case TEXTFIELD_EVENT_DETACH_WITH_IME:
+		{
+			CCLOG("TEXTFIELD_EVENT_DETACH_WITH_IME");
+		}
+		break;
+
+	case TEXTFIELD_EVENT_INSERT_TEXT:
+		CCLOG("TEXTFIELD_EVENT_INSERT_TEXT");
+		break;
+	case TEXTFIELD_EVENT_DELETE_BACKWARD:
+		CCLOG("TEXTFIELD_EVENT_DELETE_BACKWARD");
+		break;
+	default:
+		break;
+	}
 }
