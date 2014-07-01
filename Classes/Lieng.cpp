@@ -63,6 +63,9 @@ Lieng::Lieng()
 	createLayerBet();
 	createCards();
 
+	layerChat = LayerChatInGame::create();
+	this->addChild(layerChat);
+
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
 }
@@ -406,7 +409,19 @@ void Lieng::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::s
 }
 
 void Lieng::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
+	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueMessage);
+	//
+	CCLOG("ptrNotifiedMessage: %s", ptrNotifiedMessage->c_str());
+	int pos = layerAvatars->getPosByName(ptrNotifiedUser->Name()->c_str());
+	if (pos == -1)
+	{
+		return;
+	}
+	layerChat->showChatByPos(pos, ptrNotifiedMessage->c_str());
 }
 
 void Lieng::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){

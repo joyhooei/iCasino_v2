@@ -622,7 +622,20 @@ void XiTo::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::sh
 }
 
 void XiTo::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
+	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueMessage);
+	//
+	CCLOG("ptrNotifiedMessage: %s", ptrNotifiedMessage->c_str());
+	int pos = getPosUserByName(ptrNotifiedUser->Name()->c_str(), _list_user);
+	if (pos == -1)
+	{
+		return;
+	}
+	//ptrNotifiedMessage->c_str()
+	layerAvatar->showChatByPos(pos, ptrNotifiedMessage->c_str());
 }
 
 void XiTo::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){

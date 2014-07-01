@@ -43,6 +43,8 @@ public:
 	void setMyName(string myname);
 
 	int getPosByName(string pName);
+
+	void showChatByPos(int pos, string mes);
 };
 
 #endif /* defined(__iCasinov2__LayerAvatarXiTo__) */

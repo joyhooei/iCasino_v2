@@ -57,6 +57,10 @@ BaCayChuong::BaCayChuong(){
 	createButtons();
 	createCards();
 	createLayerBet();
+
+	layerChat = LayerChatInGame::create();
+	this->addChild(layerChat);
+
 	CCLOG("Da khoi tao het cac du lieu can thiet ....");
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
@@ -353,7 +357,19 @@ void BaCayChuong::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, bo
 }
 
 void BaCayChuong::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
+	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueMessage);
+	//
+	CCLOG("ptrNotifiedMessage: %s", ptrNotifiedMessage->c_str());
+	int pos = layerAvatars->getPosByName(ptrNotifiedUser->Name()->c_str());
+	if (pos == -1)
+	{
+		return;
+	}
+	layerChat->showChatByPos(pos, ptrNotifiedMessage->c_str());
 }
 
 void BaCayChuong::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -501,8 +517,6 @@ void BaCayChuong::whenGameStart(){
 void BaCayChuong::whenResuiltGame(string rg){
 	//thanhhv3|3|3|2|1000;dautv3|2|1|1|-1000
 	LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
-	LayerChatInGame *Chatdd = LayerChatInGame::create();
-	this->addChild(Chatdd);
 	this->addChild(layerNumbers);
 
 	vector<string> resuilt = mUtils::splitString(rg, ';');
@@ -510,24 +524,23 @@ void BaCayChuong::whenResuiltGame(string rg){
 		vector<string> info = mUtils::splitString(resuilt[i], '|');
 
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
-			Chatdd->showChatByPos(kUserMe,(info[1] +" Điểm"));
+			layerChat->showChatByPos(kUserMe,(info[1] +" Điểm"));
 			layerNumbers->showNumberByPos(kUserMe, info[4]);
 		}
 		else
 		{
 			int pos = layerAvatars->getPosByName(info[0]);
-
 			switch (pos) {
 			case kUserLeft:
-				Chatdd->showChatByPos(kUserLeft,(info[1] + " Điểm"));
+				layerChat->showChatByPos(kUserLeft,(info[1] +" Điểm"));
 				layerNumbers->showNumberByPos(kUserLeft, info[4]);
 				break;
 			case kUserRight:
-				Chatdd->showChatByPos(kUserRight,(info[1] + " Điểm"));
+				layerChat->showChatByPos(kUserRight,(info[1] +" Điểm"));
 				layerNumbers->showNumberByPos(kUserRight, info[4]);
 				break;
 			case kUserTop:
-				Chatdd->showChatByPos(kUserTop,(info[1] + " Điểm"));
+				layerChat->showChatByPos(kUserTop,(info[1] +" Điểm"));
 				layerNumbers->showNumberByPos(kUserTop, info[4]);
 				break;
 			default:

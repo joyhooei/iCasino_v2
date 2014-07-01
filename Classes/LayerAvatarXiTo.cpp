@@ -11,6 +11,7 @@
 #include "mUtils.h"
 #include "_Number_.h"
 #include "AllData.h"
+#include "_Chat_.h"
 LayerAvatarXiTo::LayerAvatarXiTo(){
     
 }
@@ -197,4 +198,39 @@ void LayerAvatarXiTo::runTimer(int pos)
 {
 	stopAllTimer();
 	getUserByPos(pos)->startTimer();
+}
+
+void LayerAvatarXiTo::showChatByPos(int pos, string mes)
+{
+	Chat *newMes = new Chat(mes, pos);
+	CCPoint point;
+
+	switch (pos) {
+	case user_me:
+		point.setPoint(180, 176);
+		break;
+
+	case user_leftTop:
+		point.setPoint(95, 433);
+		break;
+
+	case user_leftBottom:
+		point.setPoint(20, 285);
+		break;
+
+	case user_rightTop:
+		point.setPoint(WIDTH_DESIGN - newMes->getSize().width - 95, 433);
+		break;
+
+	case user_rightBottom:
+		point.setPoint(WIDTH_DESIGN - newMes->getSize().width - 20, 285);
+		break;
+	default:
+		point.setPoint((WIDTH_DESIGN - newMes->getSize().width) / 2, (HEIGHT_DESIGN - newMes->getSize().height) / 2);
+		newMes->setStatusByServer(true);
+		break;
+	}
+
+	newMes->setPosition(point);
+	this->addChild(newMes);
 }
