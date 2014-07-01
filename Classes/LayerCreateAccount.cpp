@@ -226,7 +226,7 @@ void LayerCreateAccount::OnSmartFoxLoginError( unsigned long long ptrContext, bo
 
 void LayerCreateAccount::connect2RegistZone()
 {
-	GameServer::getSingleton().connectToServer("192.168.1.88", "9933");
+	GameServer::getSingleton().connectToServer(sIpAddress.c_str(), "9933");
 }
 
 void LayerCreateAccount::registerWithTouchDispatcher( void )
@@ -271,4 +271,9 @@ void LayerCreateAccount::doConnect()
 	}else{
 		connect2RegistZone();
 	}
+}
+
+void LayerCreateAccount::setIpAddress( string sip )
+{
+	sIpAddress = sip;
 }

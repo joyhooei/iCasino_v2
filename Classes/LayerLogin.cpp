@@ -17,7 +17,7 @@
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
-
+static string ipDefault = "192.168.1.88";
 
 LayerLogin::LayerLogin()
 {
@@ -85,9 +85,12 @@ void LayerLogin::onButtonLogin(CCObject* pSender){
 	}
 //    SceneManager::getSingleton().gotoMain();
 //    return;
-    if( !GameServer::getSingleton().getSmartFox()->IsConnected() )
-        GameServer::getSingleton().connectToServer("192.168.1.88", "9933");
-    else{
+    if( !GameServer::getSingleton().getSmartFox()->IsConnected() ){
+		string sip = ipDefault;
+		if( gListIpAddress.size()!=0 )
+			sip = gListIpAddress.at(0);
+        GameServer::getSingleton().connectToServer(sip.c_str(), "9933");
+	}else{
         doLogin();
     }
 }
@@ -119,6 +122,12 @@ void LayerLogin::onButtonCreateAccount(CCObject* pSender){
     {
         mLayer = (LayerCreateAccount *)ccbReader->readNodeGraphFromFile( "LayerCreateAccount.ccbi" );
         this->addChild(mLayer, 1, 1);
+		//
+		string sip = ipDefault;
+		if( gListIpAddress.size()!=0 )
+			sip = gListIpAddress.at(0);
+		//
+		mLayer->setIpAddress( sip.c_str() );
         ccbReader->release();
 		//
 		isRegistPopupShown = true;
@@ -139,6 +148,7 @@ bool LayerLogin::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMembe
 
 void LayerLogin::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
+	downLoadFileIP("https://raw.githubusercontent.com/TitaniumTeam/iCasino_v2/master/ip.txt", "ip.txt");
     //CCLOG("Imhere onNodeLoaded");
     //Init textfield
     initTextField(txtUsername, "Tên đăng nhập");
@@ -309,4 +319,51 @@ void LayerLogin::keyBackClicked()
 	layer->setNotificationOptions("THOÁT ỨNG DỤNG", 
 		"Bạn có muốn thoát?"
 		, true , "ĐỒNG Ý", tagCloseApp, this );
+}
+
+void LayerLogin::downLoadFileIP( string url, string fileName )
+{
+	if( url.compare("")==0 ){
+		return;
+	}
+	gListIpAddress.clear();
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(url.c_str());
+	request->setRequestType(CCHttpRequest::kHttpGet);
+	request->setResponseCallback(this, httpresponse_selector(LayerLogin::onFileDownLoaded));
+	request->setTag(fileName.c_str());
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void LayerLogin::onFileDownLoaded( CCHttpClient* pSender, CCHttpResponse* pResponse )
+{
+	CCHttpResponse* response = pResponse;
+
+	if (!response)
+	{
+		return ;
+	}
+	int statusCode = response->getResponseCode();
+
+	char statusString[64] = {};
+	sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+	CCLog("response code: %d", statusCode);
+
+	if (!response->isSucceed())
+	{
+		CCLog("response failed");
+		CCLog("error buffer: %s", response->getErrorBuffer());
+		return;
+	}
+	std::vector<char>*buffer = response->getResponseData();
+
+	//char sip[500];
+	//std::copy(buffer->begin(), buffer->end(), sip);
+	CCLOG("CURRENT IP: %s", buffer[0].data());
+	if( strlen(buffer->data()) == 0 )
+		return;
+	vector<string> lstIp = mUtils::splitString( string(buffer[0].data()), '\n' );
+	//
+	gListIpAddress.push_back( lstIp.at(0) );
 }

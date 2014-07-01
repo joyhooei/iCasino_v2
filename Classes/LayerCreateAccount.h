@@ -39,6 +39,8 @@ private:
 
 	CCObject* m_callbackListener;
 	SEL_CallFunc m_callback;
+
+	string sIpAddress;
 public:
     LayerCreateAccount();
 	virtual ~LayerCreateAccount();
@@ -51,6 +53,8 @@ public:
 
 	void doLogin();
 	void doConnect();
+
+	void setIpAddress(string sip);
     
 	void notificationCallBack(bool, int tag);
     void initTextField(CCEditBox* txt, const char* hintText);

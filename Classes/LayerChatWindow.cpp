@@ -99,7 +99,7 @@ bool LayerChatWindow::init()
 
 		pImg->addChild( _richText );
 		pImg->addChild( b );
-		CCLOG("button w: %lf h: %lf", b->getContentSize().width, b->getContentSize().height);
+		//CCLOG("button w: %lf h: %lf", b->getContentSize().width, b->getContentSize().height);
 		col++;
 	}
 	return true;
