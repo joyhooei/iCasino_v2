@@ -9,6 +9,7 @@
 #include "_CardBaCay_.h"
 #include "CardChan.h"
 #include "mUtils.h"
+#include "SimpleAudioEngine.h"
 
 CardBaCay::~CardBaCay()
 {
@@ -110,8 +111,15 @@ void CardBaCay::setMyName(string name)
 	this->myName = name;
 }
 
+void CardBaCay::playSound(string pathSound)
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(pathSound.c_str());
+}
+
 void CardBaCay::givePocker()
 {
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
+
 	string virtualList = listUser + listUser + listUser;
 	CCLOG("list virtual %s",virtualList.c_str());
 	vector<string> arrVirtuals = mUtils::splitString(virtualList,';');

@@ -86,7 +86,7 @@ void LayerLogin::onButtonLogin(CCObject* pSender){
 //    SceneManager::getSingleton().gotoMain();
 //    return;
     if( !GameServer::getSingleton().getSmartFox()->IsConnected() )
-        GameServer::getSingleton().connectToServer("bestteam.no-ip.biz", "9933");
+        GameServer::getSingleton().connectToServer("192.168.1.88", "9933");
     else{
         doLogin();
     }

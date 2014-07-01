@@ -43,6 +43,8 @@ public:
 	void setListUser(string listuser);
 	void setMyName(string name);
 
+	void playSound(string pathSound);
+
 	int getPosUserByName(string pName);
 
 	void setCallbackFunc(CCObject* target, SEL_CallFuncN callfun);

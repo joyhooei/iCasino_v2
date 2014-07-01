@@ -16,9 +16,6 @@ using namespace cocos2d;
 using namespace std;
 
 class LayerAvatarXiTo : public CCLayer{
-private:
-	string listusers;
-	string myName;
 public:
     LayerAvatarXiTo();
     ~LayerAvatarXiTo();
