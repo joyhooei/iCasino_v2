@@ -1,20 +1,10 @@
 ﻿#include "Nan3Cay.h"
 #include <algorithm>
-
-Nan3Cay::Nan3Cay():m_callback(NULL)
-	,m_callbackListener(NULL)
-{
-
-}
-
-Nan3Cay::Nan3Cay( CCObject *pSender )
-{
-
-}
-
+#include "mUtils.h"
+#include "AllData.h"
 
 Nan3Cay::~Nan3Cay(){
-
+	cardOnhand->release();
 }
 
 bool Nan3Cay::init(){
@@ -23,11 +13,23 @@ bool Nan3Cay::init(){
 		return false;
 	}
 
-	CCLOG("Init layer nan ba cay");
-	arrCardTypes[0] = "s";
-	arrCardTypes[1] = "c";
-	arrCardTypes[2] = "h";
-	arrCardTypes[3] = "d";
+	this->setAnchorPoint(ccp(0, 0));
+	this->setPosition(ccp(0, 0));
+	this->setTouchEnabled(true);
+
+	arrCardTypes.push_back("s");
+	arrCardTypes.push_back("c");
+	arrCardTypes.push_back("h");
+	arrCardTypes.push_back("d");
+
+	this->sizeScreen = CCDirector::sharedDirector()->getVisibleSize();
+	float scaleX = sizeScreen.width / WIDTH_DESIGN;
+	float scaleY = sizeScreen.height / HEIGHT_DESIGN;
+	float scaleMin = (scaleX < scaleY) ? scaleX : scaleY;
+	scaleApp = scaleMin;
+
+	startLeft = (sizeScreen.width - WIDTH_DESIGN) / 2;
+	startTop = (sizeScreen.height - HEIGHT_DESIGN) / 2; 
 
 	dx = 0;
 	dy = 0;
@@ -53,12 +55,6 @@ bool Nan3Cay::init(){
 	//touch end
 	vt = -1;
 
-	this->sizeScreen = CCDirector::sharedDirector()->getVisibleSize();
-	float scaleX = sizeScreen.width / WIDTH_DESIGN;
-	float scaleY = sizeScreen.height / HEIGHT_DESIGN;
-	float scaleMin = (scaleX < scaleY) ? scaleX : scaleY;
-	scaleApp = scaleMin;
-
 	bottomCard = 68;
 	leftCard = 267;
 	rightCard = 267;
@@ -66,44 +62,68 @@ bool Nan3Cay::init(){
 	widthCard = 267;
 	heightCard = 344;
 
-	this->setAnchorPoint(ccp(0, 0));
-	this->setPosition(ccp(0, 0));
-	this->setTouchEnabled(true);
-
-	cardOnhand = new CCArray();
+	cardOnhand = CCArray::create();
 	cardOnhand->retain();
 
-	btnBack = UIButton::create();
-	btnBack->loadTextures("ready.png", "ready_selected.png", "");
-	btnBack->setTitleText("Thoát");
-	btnBack->setAnchorPoint(ccp(0,0));
-	btnBack->setPosition(ccp(WIDTH_DESIGN-btnBack->getContentSize().width-20,10));
-	btnBack->setTouchEnabled(false);
-	btnBack->addTouchEventListener(this, toucheventselector(Nan3Cay::btnBack_click));
-	btnBack->setTitleFontSize(20);
-	btnBack->setTitleColor(ccRED);
-
-	CCLOG("Jumphere");
 	return true;
 }
 
+CCPoint Nan3Cay::convertPoint(CCPoint pPoint) {
+	float xCenter = this->sizeScreen.width / 2;
+	float yCenter = this->sizeScreen.height / 2;
+
+	float xTap = pPoint.x;
+	float yTap = pPoint.y;
+
+	float x1, x2;
+	float y1, y2;
+
+	float A = ((powf(xCenter - xTap, 2) + powf(yCenter - yTap, 2))) / powf(scaleApp, 2);
+	float B = powf((yCenter - yTap) / (xCenter - xTap) , 2) + 1;
+
+	x1 = xCenter + sqrtf(A / B);
+	x2 = xCenter - sqrtf(A / B);
+
+	y1 = yCenter + (yCenter - yTap) * (x1 - xCenter) / (xCenter - xTap);
+	y2 = yCenter + (yCenter - yTap) * (x2 - xCenter) / (xCenter - xTap);
+
+	// "điểm cần convert" = A
+	// Bởi vì A và Tap nằm ở cùng 1 phía so với Center nên nếu xTap < xCenter thì xA < xCenter và ngược lại
+	if ((xTap < xCenter && x1 < xCenter) || (xTap > xCenter && x1 > xCenter)) {
+		x1 -= startLeft;
+		y1 -= startTop;
+
+		pPoint.x = x1;
+		pPoint.y = y1;
+	} else if ((xTap < xCenter && x2 < xCenter) || (xTap > xCenter && x2 > xCenter)) {
+		x2 -= startLeft;
+		y2 -= startTop;
+
+		pPoint.x = x2;
+		pPoint.y = y2;
+	} else {
+		CCLog("No define POINT CONVERT");
+	}
+
+	return pPoint;
+}
 
 void Nan3Cay::initListCardHand(string lsCards){
-	vector<string> arr = Dsplit(lsCards,'-');
-	for (int i=0; i<arr.size(); i++)
+	vector<string> arr = mUtils::splitString(lsCards, '-');
+	for (int i = 0; i < arr.size(); i++)
 	{
-		vector<string> info = Dsplit(arr[i],'_');
+		vector<string> info = mUtils::splitString(arr[i],'_');
 		CardChan *pCard = CardChan::create();
-		string t = "Nan3Cay/card_"+findTypeCard(info[0])+"_"+arrCardTypes[atoi(info[1].c_str())]+".png";
+		string t = "Nan3Cay/card_" + findTypeCard(info[0]) + "_" + arrCardTypes[atoi(info[1].c_str())] + ".png";
 		pCard->loadTexture(t.c_str());
-		pCard->setSizeCard(widthCard,heightCard);
-		pCard->setPosition(ccp(leftCard,bottomCard));
-		pCard->setZOrder(i+1);
+		pCard->setSizeCard(widthCard, heightCard);
+		pCard->setPosition(ccp(leftCard, bottomCard));
+		pCard->setZOrder(i + 1);
 		cardOnhand->addObject(pCard);
 		this->addChild(pCard);
 	}
 
-	if(cardOnhand->count()==0)
+	if(cardOnhand->count() == 0)
 		return;
 	cardIndex = (int)cardOnhand->count() - 1;
 }
@@ -118,11 +138,9 @@ void Nan3Cay::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent){
 	CCTouch *touch;
 	touch = (CCTouch*)(*iterator);
 	CCPoint tap;
-	tap = touch->getLocation();
-	this->pointTouchBegan = touch->getLocation();
+	tap = convertPoint(touch->getLocation());
+	this->pointTouchBegan = tap;
 	disTouchBegan.setSize(0,0);
-
-	//Execute
 	if (tap.x > leftCard && tap.x < leftCard + widthCard &&
 		tap.y > bottomCard && tap.y < bottomCard + heightCard)
 	{
@@ -148,8 +166,7 @@ void Nan3Cay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 
 	iterator = pTouches->begin();
 	touch = (CCTouch*)(*iterator);
-	tap = touch->getLocation();
-
+	tap = convertPoint(touch->getLocation());
 	 if (isTouched)
 	 {
 		 deltaX = sX - tap.x;
@@ -215,23 +232,23 @@ void Nan3Cay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 			return;
 		}
 		CardChan *pCard = (CardChan*)cardOnhand->objectAtIndex(vt);
-		if (pCard->getPositionX() <= (leftCard-widthCard) || pCard->getPositionX() >= (leftCard+widthCard) ||
-			pCard->getPositionY() >= (bottomCard+heightCard))
+		if (pCard->getPositionX() <= (leftCard - widthCard) || pCard->getPositionX() >= (leftCard + widthCard) ||
+			pCard->getPositionY() >= (bottomCard + heightCard))
 		{
 			if (flag_left == 0)
 			{
-				movePockerFinish(pCard,vt);
+				movePockerFinish(pCard, vt);
 				cardIndex--;
 			}
 			if (flag_right == 0)
 			{
-				movePockerFinish(pCard,vt);
+				movePockerFinish(pCard, vt);
 				cardIndex_under++;
 			}
 		}
 		else
 		{
-			pCard->setPosition(ccp(leftCard,bottomCard));
+			pCard->setPosition(ccp(leftCard, bottomCard));
 		}
 
 		//Reset Cac tay cam la bai
@@ -274,9 +291,7 @@ void Nan3Cay::movePockerFinish(CardChan *pCard,int pos){
 }
 
 void Nan3Cay::closeLayerNanBai(){
-	//callback
-
-	CCLOG("Call back");
+	//Callback
 	if (m_callback && m_callbackListener)
 	{
 		(m_callback->*m_callbackListener)(this);
@@ -298,35 +313,4 @@ string Nan3Cay::findTypeCard(string card){
 		card = "k";
 	}
 	return card;
-}
-
-vector<string> Nan3Cay::Dsplit(string &S,const char &str){
-	vector<string> arrStr;
-	string::iterator t,t2;
-	for(t=S.begin();t<S.end();){
-		t2=find(t, S.end(),str);
-		if(t!=t2)
-			arrStr.push_back(string(t,t2));
-		if(t2 == S.end())
-			break;
-		t=t2+1;
-	}
-	return arrStr;
-}
-
-bool Nan3Cay::isTouch(CardChan *card, CCPoint tap){
-	if (tap.x > card->getPositionX() && tap.x < card->getPositionX() + widthCard &&
-		tap.y > card->getPositionY() && tap.y < card->getPositionY() + heightCard)
-	{
-		return true;
-	}
-	return false;
-}
-
-void Nan3Cay::btnBack_click(CCObject *psender, TouchEventType type){
-	if (type == TOUCH_EVENT_ENDED)
-	{
-		CCLOG("Btn Back Click");
-		this->removeFromParentAndCleanup(true);
-	}
 }

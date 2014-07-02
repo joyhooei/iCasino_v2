@@ -11,7 +11,6 @@
 
 #include <iostream>
 #include "cocos2d.h"
-#include "AllData.h"
 #include "CardChan.h"
 
 using namespace cocos2d;
@@ -35,8 +34,8 @@ private:
 	float startTop;
 
 	//Nan 3 Cay
-	float dx,dy;
-	int _index,_where;
+	float dx, dy;
+	int _index, _where;
 	bool isTouched;
 
 	//Bat dau nan 3 cay
@@ -52,36 +51,31 @@ private:
 	//Touch move
 	int cardIndex_under;
 	bool flag_move;
-	int flag_left,flag_right;
+	int flag_left, flag_right;
 	int count_move;
 
 	//Touch end
 	int vt;
 
-	string arrCardTypes[4];
+	vector<string> arrCardTypes;
 	CCArray *cardOnhand;
-
-	UIButton *btnBack;
 
 	CCObject* m_callback;
 	SEL_CallFuncN m_callbackListener;
 
 public:
-	Nan3Cay();
-	Nan3Cay(CCObject *pSender);
 	~Nan3Cay();
 	bool init();
 	CREATE_FUNC(Nan3Cay);
 
 	void initListCardHand(string lsCards);
 	string findTypeCard(string card);
-	vector<string> Dsplit(string &S,const char &str);
 
-	bool isTouch(CardChan *card, CCPoint tap);
 	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
 	virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
 	virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
-	void btnBack_click(CCObject *psender, TouchEventType type);
+
+	CCPoint convertPoint(CCPoint pPoint);
 
 	void movePockerFinish(CardChan *pCard,int pos);
 	void closeLayerNanBai();
