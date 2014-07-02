@@ -66,18 +66,19 @@ void LayerFriend::gotoFriendDetails(){
 }
 
 void LayerFriend::gotoInviteFriends(){
-    removeOldView();
+    //removeOldView();
 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	LayerInviteFriendsFacebook* mLayer;
+	LayerInviteFriends* mLayer;
 	if (ccbReader)
 	{
-		mLayer = (LayerInviteFriendsFacebook *)ccbReader->readNodeGraphFromFile( "LayerInviteFriendsFacebook.ccbi" );
-		nodeChild->addChild(mLayer, 1, 1);
+		mLayer = (LayerInviteFriends *)ccbReader->readNodeGraphFromFile( "LayerInviteFriends.ccbi" );
+		nodeChild->getParent()->addChild(mLayer, 1, 1);
 		ccbReader->release();
+		mLayer->setZOrder(INT_MAX);
 	}
-    currNodeView = mLayer;
+    //currNodeView = mLayer;
 }
 
 // CCBSelectorResolver interface

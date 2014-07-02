@@ -109,6 +109,7 @@ bool SceneManager::init() {
 	SIZE_SCREEN = CCDirector::sharedDirector()->getVisibleSize();
 
 	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo( "onion1.ExportJson" );
+	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("quanco.plist");
 
 	// Add updateEvent for this class - Important
 	this->schedule(schedule_selector(SceneManager::updateEvent));

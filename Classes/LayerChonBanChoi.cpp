@@ -42,6 +42,7 @@ LayerChonBanChoi::LayerChonBanChoi()
 	GameServer::getSingleton().addListeners(this);
 
 	mRoomID4Invite = -1;
+	mCurrentRoomIndex = 0;
 }
 
 LayerChonBanChoi::~LayerChonBanChoi()
@@ -230,14 +231,15 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
         GameServer::getSingleton().getSmartFox()->Send(request);
     }else{
 		//Uncheck other cell
-// 		for( int i = 0; i<7; i++ ){
-// 			CustomTableViewCell* cc = (CustomTableViewCell*)table->cellAtIndex(i);
-// 			if( cc==NULL )
-// 				continue;
-// 			cc->setSelectedState(false);
-// 		}
-// 		CustomTableViewCell*c = (CustomTableViewCell*)cell;
-// 		c->setSelectedState(true);
+		for( int i = 0; i<7; i++ ){
+			CustomTableViewCell* cc = (CustomTableViewCell*)table->cellAtIndex(i);
+			if( cc==NULL )
+				continue;
+			cc->setSelectedState(false);
+		}
+		CustomTableViewCell*c = (CustomTableViewCell*)cell;
+		c->setSelectedState(true);
+		mCurrentRoomIndex = cell->getIdx();
 	}
 }
 
@@ -355,7 +357,7 @@ CCTableViewCell* LayerChonBanChoi::process4Rooms(cocos2d::extension::CCTableView
         cell->setObjectID(idx);
         cell->autorelease();
         cell->setTag(idx);
-        cell->setSelectedState( idx==0 );
+        cell->setSelectedState( idx==mCurrentRoomIndex );
         //
         cell->addChild(createLabel4Cell(tag_RoomID, soPhong->getCString(), CCSizeMake(nodeTableRooms->getContentSize().width, 40), ccp(0, 0)));
         //
@@ -368,8 +370,8 @@ CCTableViewCell* LayerChonBanChoi::process4Rooms(cocos2d::extension::CCTableView
     else{
         CCLabelTTF *label1 = getLabelFromTagID(cell, tag_RoomID);
         if( label1!=NULL )
-            label1->setString(soPhong->getCString());
-		cell->setSelectedState(cell->getSelectedState());
+			label1->setString(soPhong->getCString());
+		cell->setSelectedState( idx==mCurrentRoomIndex );
     }
     return cell;
 }

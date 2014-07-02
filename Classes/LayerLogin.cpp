@@ -89,14 +89,25 @@ void LayerLogin::onButtonLogin(CCObject* pSender){
 		string sip = ipDefault;
 		if( gListIpAddress.size()!=0 )
 			sip = gListIpAddress.at(0);
-        GameServer::getSingleton().connectToServer(sip.c_str(), "9933");
+        //GameServer::getSingleton().connectToServer(sip.c_str(), "9933");
+		try{
+			GameServer::getSingleton().connectToServer(sip.c_str(), "9933");
+		}catch(std::exception const&  ex)
+		{
+			LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+			if( !SceneManager::getSingleton().showNotification() ){
+				CCLOG("NTF Dialog already open!");
+				return;
+			}
+			layer->setNotificationOptions("Lỗi", "Không kết nối được tới server!", false , "", 1, NULL );
+		}
 	}else{
         doLogin();
     }
 }
 
 void LayerLogin::onButtonLoginWithFacebook(CCObject* pSender){
-	SceneManager::getSingleton().showLayerChatWindow();
+//	SceneManager::getSingleton().showLayerChatWindow();
 //    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 //    * mLayer;
 //    if (ccbReader)

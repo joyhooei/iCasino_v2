@@ -226,7 +226,17 @@ void LayerCreateAccount::OnSmartFoxLoginError( unsigned long long ptrContext, bo
 
 void LayerCreateAccount::connect2RegistZone()
 {
-	GameServer::getSingleton().connectToServer(sIpAddress.c_str(), "9933");
+	try{
+		GameServer::getSingleton().connectToServer(sIpAddress.c_str(), "9933");
+	}catch(std::exception const&  ex)
+	{
+		LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+		if( !SceneManager::getSingleton().showNotification() ){
+			CCLOG("NTF Dialog already open!");
+			return;
+		}
+		layer->setNotificationOptions("Lỗi", "Không kết nối được tới server!", false , "", 1, NULL );
+	}
 }
 
 void LayerCreateAccount::registerWithTouchDispatcher( void )

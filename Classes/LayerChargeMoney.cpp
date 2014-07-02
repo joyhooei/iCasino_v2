@@ -69,7 +69,11 @@ void LayerChargeMoney::setButtonState( tagButtonState tag){
 SEL_MenuHandler LayerChargeMoney::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, const char *pSelectorName)
 {
     //CCLOG("Imhere onResolveCCBCCMenuItemSelector: %s", pSelectorName);
-	
+// 	if( strcmp( pSelectorName, "btnExchange" )==0 ){
+// 		CCMenuItem* btnExchange = dynamic_cast<CCMenuItem*>(pTarget);
+// 		CCLOG("btnExchange w: %lf h:%lf", btnExchange->getContentSize().width, btnExchange->getContentSize().height);
+// 	}
+	CCLOG("pSelectorName: %s", pSelectorName);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnViettel", LayerChargeMoney::onButtonViettelClick);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnViettelStatus", LayerChargeMoney::onButtonViettelClick);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnVina", LayerChargeMoney::onButtonVinaClick);

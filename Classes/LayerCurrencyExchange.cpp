@@ -10,6 +10,7 @@
 #include "Requests/ExtensionRequest.h"
 #include "SceneManager.h"
 #include <math.h>
+#include "mUtils.h"
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
@@ -95,7 +96,8 @@ void LayerCurrencyExchange::valueChanged(CCObject *sender, CCControlEvent contro
     float sliderWidth =pSlider->getContentSize().width;
 	nodeMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), nodeMoney->getPositionY()));
 	//HoangDD comment
-    lblMoney->setString( CCString::createWithFormat("%.0fchips=%.0fxu", floor(pSlider->getValue()), floor(pSlider->getValue())*rate)->getCString());
+    lblMoney->setString( CCString::createWithFormat("%schips=%sxu", mUtils::convertMoneyEx( floor(pSlider->getValue()) ).c_str()
+		, mUtils::convertMoneyEx( floor(pSlider->getValue())*rate).c_str() )->getCString() );
 }
 
 // CCBMemberVariableAssigner interface

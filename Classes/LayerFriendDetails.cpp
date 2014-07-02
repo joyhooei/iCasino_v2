@@ -154,6 +154,8 @@ void LayerFriendDetails::tableCellTouched(cocos2d::extension::CCTableView *table
 		GameServer::getSingleton().getSmartFox()->Send(request1);
 
 		currFriendID = fname;
+
+		mCurrentRoomIndex = cell->getIdx();
 	}
 }
 
@@ -251,6 +253,8 @@ CCTableViewCell* LayerFriendDetails::createCell4Friends(CCTableView *table, int 
 		//set id
 		cell->setObjectID( buddys->at(idx)->Id() );
 		cell->setStringObject( *buddys->at(idx)->Name() );
+		//
+		cell->setSelectedState( idx == mCurrentRoomIndex );
     }
     else
     {
@@ -270,6 +274,8 @@ CCTableViewCell* LayerFriendDetails::createCell4Friends(CCTableView *table, int 
 		sOnline->setTag(tag_OnlineStateImage);
 		cell->addChild(sOnline);
 		cell->setStringObject( *buddys->at(idx)->Name() );
+		
+		cell->setSelectedState( idx == mCurrentRoomIndex );
         //
 //        CCLabelTTF *labelWin = (CCLabelTTF*)cell->getChildByTag(tag_WinLose);
 //        labelWin->setString(CCString::createWithFormat("Thắng %d/Thua %d", historys[idx].numOfWin, historys[idx].numOfLose)->getCString());
@@ -382,6 +388,7 @@ void LayerFriendDetails::loadFirstCell()
 	}
 	//check
 	CustomTableViewCell*c = (CustomTableViewCell*)tblFriends->cellAtIndex(0);
+	mCurrentRoomIndex = 0;
 	c->setSelectedState(true);
 	//Get all info
 	boost::shared_ptr<ISFSObject> params (new SFSObject());

@@ -56,6 +56,8 @@ private:
     int m_gID;
 
 	int mRoomID4Invite;
+
+	int mCurrentRoomIndex;
 public:
     LayerChonBanChoi();
     virtual ~LayerChonBanChoi();

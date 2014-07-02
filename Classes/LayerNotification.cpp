@@ -49,9 +49,9 @@ void LayerNotification::setTwoButton(bool isTwoButton){
 
 void LayerNotification::addListeners( NotificationCallBack * callBack )
 {
+	mCallBack.clear();
 	if ( callBack == NULL )
 		return;
-	mCallBack.clear();
 
 	mCallBack.insert(NotificationCallBackMapPair(mCallBackIndex++,callBack));
 }

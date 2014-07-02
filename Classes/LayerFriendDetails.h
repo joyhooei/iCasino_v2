@@ -67,6 +67,8 @@ private:
     int rowsFriendsCount;
 
 	string currFriendID;
+
+	int mCurrentRoomIndex;
 public:
     LayerFriendDetails();
     virtual ~LayerFriendDetails();
