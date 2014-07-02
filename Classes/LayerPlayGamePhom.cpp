@@ -359,7 +359,8 @@ void LayerPlayGamePhom::resetGame() {
 
 void LayerPlayGamePhom::playSound( string soundPath )
 {
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
+	if( mUtils::isSoundOn() )
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
 }
 
 Button* LayerPlayGamePhom::createButtonWithTitle_Position(const char *title, CCPoint pPoint) {

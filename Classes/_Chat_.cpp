@@ -54,10 +54,11 @@ bool Chat::init() {
 				hLabel = 55;
 			}else{
 				CCLabelTTF *l = CCLabelTTF::create(lstContents.at(i).c_str(), "Arial", 16);
+				l->setColor(ccc3(204, 16, 85));
 				cocos2d::ui::RichElementText* re1 = cocos2d::ui::RichElementText::create(1, ccWHITE, 255, lstContents.at(i).c_str(), "Arial", 16);
 				label->pushBackElement(re1);
 				wLabel+=l->getContentSize().width;
-				CCLOG("labelw: %lf, rte: %lf", l->getContentSize().width, 1);
+				//CCLOG("labelw: %lf, rte: %lf", l->getContentSize().width, 1);
 				hLabel = hLabel>50?55:l->getContentSize().height;
 			}
 	}

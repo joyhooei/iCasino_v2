@@ -256,9 +256,10 @@ void LayerPlayGameTLMN::initGame() {
 }
 
 
-void LayerPlayGameTLMN::playeSound( string soundPath )
+void LayerPlayGameTLMN::playSound( string soundPath )
 {
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
+	if( mUtils::isSoundOn() )
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
 }
 
 
@@ -529,7 +530,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_DEAL_CARD_NOTIF(){
         CCLog("listCard= %s", listCard->c_str());
         layerCards->actionDealCard(layerCards->getIDFromString_TienLen(listCard->c_str()));
 
-		playeSound("e_card.mp3");
+		playSound("e_card.mp3");
     }
 }
 
@@ -620,7 +621,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_VICTORY_NOTIF(){
 
 				if (name->c_str() == myName)
 				{
-					playeSound("thang_roi.mp3");
+					playSound("thang_roi.mp3");
 				}
 
                 break;
@@ -728,7 +729,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_PLAY_CARD_NOTIF(){
 		arr.push_back("danh_di.mp3");
 		arr.push_back("thach_danh.mp3");
 		int index = rand() % arr.size();
-		playeSound(arr.at(index));
+		playSound(arr.at(index));
 		arr.clear();
 	} else {
 		vector<string> arr;
@@ -737,7 +738,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_PLAY_CARD_NOTIF(){
 		arr.push_back("chay_di_dau_2.mp3");
 		arr.push_back("con_nua_ne.mp3");
 		int index = rand() % arr.size();
-		playeSound(arr.at(index));
+		playSound(arr.at(index));
 		arr.clear();
 	}
 }
@@ -820,7 +821,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_PASS_CARD_NOTIF(){
 		vector<string> arr;
 		arr.push_back("em_tha_do.mp3");
 		int index = rand() % arr.size();
-		playeSound(arr.at(index));
+		playSound(arr.at(index));
 		arr.clear();
     }
 }

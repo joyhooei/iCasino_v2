@@ -37,6 +37,8 @@ public:
 
 	void OnEmoClick(CCObject* pSender, TouchEventType type);
 
+	void textFieldEvent(CCObject *pSender, TextFiledEventType type);
+
 	UILoadingBar *loadingBar;
 
 	CREATE_FUNC(LayerChatWindow);

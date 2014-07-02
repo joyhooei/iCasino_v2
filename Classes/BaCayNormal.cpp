@@ -11,7 +11,6 @@
 #include "Requests/ExtensionRequest.h"
 #include "_Number_inGame_.h"
 #include "Nan3Cay.h"
-#include "_Chat_inGame_.h"
 #include "mUtils.h"
 #include "_Chat_.h"
 #include "SceneManager.h"
@@ -39,6 +38,9 @@ BaCayNormal::BaCayNormal(){
     createAvatars();
     createButtons();
 	createCards();
+
+	layerChat = LayerChatInGame::create();
+	this->addChild(layerChat);
 
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
@@ -288,12 +290,27 @@ void BaCayNormal::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, bo
 //             break;
 //     }
 }
+
 void BaCayNormal::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
+	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueMessage);
+	//
+	CCLOG("ptrNotifiedMessage: %s", ptrNotifiedMessage->c_str());
+	int pos = layerAvatars->getPosByName(ptrNotifiedUser->Name()->c_str());
+	if (pos == -1)
+	{
+		return;
+	}
+	layerChat->showChatByPos(pos, ptrNotifiedMessage->c_str());
 }
+
 void BaCayNormal::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     
 }
+
 void BaCayNormal::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("User ExitRoom On Room");
 }
@@ -468,8 +485,6 @@ void BaCayNormal::whenResuiltGame(string rg){
 	//dautv3|4|8|3|1000;dautv|1|1|2|-1000
 
     LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
-	LayerChatInGame *layerChat = LayerChatInGame::create();
-	this->addChild(layerChat);
 	this->addChild(layerNumbers);
 
 

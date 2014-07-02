@@ -63,7 +63,7 @@ public:
     
     void initGame();
     void resetGame();
-	void playeSound(string soundPath);
+	void playSound(string soundPath);
     
 	vector<string> split(string &S, const char &str);
     int    convertResponseToInt(string inString);

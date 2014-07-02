@@ -16,9 +16,6 @@ using namespace cocos2d;
 using namespace std;
 
 class LayerAvatarXiTo : public CCLayer{
-private:
-	string listusers;
-	string myName;
 public:
     LayerAvatarXiTo();
     ~LayerAvatarXiTo();
@@ -46,6 +43,8 @@ public:
 	void setMyName(string myname);
 
 	int getPosByName(string pName);
+
+	void showChatByPos(int pos, string mes);
 };
 
 #endif /* defined(__iCasinov2__LayerAvatarXiTo__) */

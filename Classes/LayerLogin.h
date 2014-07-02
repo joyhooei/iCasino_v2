@@ -43,6 +43,7 @@ private:
 	int mGameID;
 
 	string LSK;
+	vector<string> gListIpAddress;
 public:
     LayerLogin();
     virtual ~LayerLogin();
@@ -61,6 +62,9 @@ public:
 
 	void readInfo();
 	void saveInfo();
+	//Get File text, contain ips
+	void downLoadFileIP(string url, string fileName);
+	void onFileDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse);
     
     CREATE_FUNC(LayerLogin);
     

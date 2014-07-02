@@ -11,6 +11,7 @@
 #include "mUtils.h"
 #include "_Number_.h"
 #include "AllData.h"
+#include "_Chat_.h"
 LayerAvatarXiTo::LayerAvatarXiTo(){
     
 }
@@ -23,8 +24,6 @@ bool LayerAvatarXiTo::init(){
     if(!CCLayer::init()){
         return false;
     }
-    
-	listusers = "";
 
     float widthAvatar = 90;
 	float heightAvatar = 125;
@@ -195,123 +194,43 @@ Avatar* LayerAvatarXiTo::getUserByPos(int pos){
 	return (Avatar*) this->getChildByTag(pos);
 }
 
-void LayerAvatarXiTo::updateUser()
-{
-	if (listusers == "")
-	{
-		return;
-	}
-
-	vector<string> arrUser = mUtils::splitString(listusers, ';');
-	if (arrUser.size() == 0)
-	{
-		return;
-	}
-
-	Avatar* me = getUserByPos(user_me);
-	Avatar* left_bottom = getUserByPos(user_leftBottom);
-	Avatar* left_top = getUserByPos(user_leftTop);
-	Avatar* right_bottom = getUserByPos(user_rightBottom);
-	Avatar* right_top = getUserByPos(user_rightTop);
-
-	resetAvatar(me);
-	resetAvatar(left_bottom);
-	resetAvatar(left_top);
-	resetAvatar(right_top);
-	resetAvatar(right_bottom);
-
-	CCLOG("list users %s",listusers.c_str());
-
-	for (int i = 0; i <  arrUser.size(); i++)
-	{
-		vector<string> info = mUtils::splitString(arrUser[i],'_');
-		int pos = getPosByName(info[1]);
-		if (pos < 0)
-		{
-			continue;
-		}
-
-		if (GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[1]) != NULL)
-		{
-			boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[1])->GetVariable("aN")->GetStringValue();
-			boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[1])->GetVariable("amf")->GetDoubleValue();
-			boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[1])->GetVariable("aal")->GetStringValue();
-		
-			int _money = (money != NULL) ? (int)*money : 0;
-			string _url = (url != NULL) ? url->c_str() : "";
-			string _name = (name != NULL) ? name->c_str() : info[1];
-
-			Avatar *user = getUserByPos(pos);
-			user->setName(_name);
-			user->setFlag(i == 0);
-			user->setIcon(_url);
-			//user->setAI(aI);
-			user->setMoney(_money);
-			user->setVisibleLayerInvite(false);
-		
-		}
-	}
-}
-
-void LayerAvatarXiTo::setListUserXiTo(string _listusers)
-{
-	this->listusers = _listusers;
-	setMyName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
-	updateUser();
-}
-
-void LayerAvatarXiTo::setMyName(string myname)
-{
-	this->myName = myname;
-}
-
-int LayerAvatarXiTo::getPosByName(string pName)
-{
-	int vt = -1;
-	if (listusers == "")
-	{
-		return vt;
-	}
-	vector<string> list = mUtils::splitString(listusers, ';');
-
-	for(int i = 0; i < list.size(); i++){
-		string _id = mUtils::splitString(list[i], '_')[1];
-		if(strcmp(_id.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
-			vt = i;
-			break;
-		}
-	}
-
-	for(int k = 0; k < list.size(); k++){
-		if(strcmp(list[k].c_str(), "") == 0){
-			continue;
-		}
-		string player = list[k];
-		vector<string> n = mUtils::splitString(player, '_');
-		if(strcmp(n[1].c_str(), pName.c_str())==0){
-			if(k == vt){
-				return 0;
-			}
-			else if(k == (vt + 1) % 5){
-				return user_rightBottom;
-			}
-			else if(k == (vt + 2) % 5){
-				return user_rightTop;
-			}
-			else if(k == (vt + 3) % 5){
-				return user_leftTop;
-			}
-			else if(k == ( vt + 4) % 5){
-				return user_leftBottom;
-			}
-			break;
-		}
-	}
-	return -1;
-}
-
 void LayerAvatarXiTo::runTimer(int pos)
 {
 	stopAllTimer();
 	getUserByPos(pos)->startTimer();
+}
+
+void LayerAvatarXiTo::showChatByPos(int pos, string mes)
+{
+	Chat *newMes = new Chat(mes, pos);
+	CCPoint point;
+
+	switch (pos) {
+	case user_me:
+		point.setPoint(180, 176);
+		break;
+
+	case user_leftTop:
+		point.setPoint(95, 433);
+		break;
+
+	case user_leftBottom:
+		point.setPoint(20, 285);
+		break;
+
+	case user_rightTop:
+		point.setPoint(WIDTH_DESIGN - newMes->getSize().width - 95, 433);
+		break;
+
+	case user_rightBottom:
+		point.setPoint(WIDTH_DESIGN - newMes->getSize().width - 20, 285);
+		break;
+	default:
+		point.setPoint((WIDTH_DESIGN - newMes->getSize().width) / 2, (HEIGHT_DESIGN - newMes->getSize().height) / 2);
+		newMes->setStatusByServer(true);
+		break;
+	}
+
+	newMes->setPosition(point);
+	this->addChild(newMes);
 }

@@ -336,5 +336,13 @@ public:
 
 		return arrStr;
 	}
+	static bool isSoundOn(){
+		CCUserDefault *def=CCUserDefault::sharedUserDefault();
+		return def->getBoolForKey("sound", true);
+	}
+	static bool isVibrateOn(){
+		CCUserDefault *def=CCUserDefault::sharedUserDefault();
+		return def->getBoolForKey("vibrate", true);
+	}
 };
 #endif

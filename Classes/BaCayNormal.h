@@ -15,6 +15,7 @@
 #include "LayerAvatar_BaCay.h"
 #include "_CardBaCay_.h"
 #include "_Button_inGame_.h"
+#include "_Chat_inGame_.h"
 
 using namespace cocos2d;
 using namespace cocos2d::ui;
@@ -48,6 +49,7 @@ private:
 	LayerBaCayAvatar *layerAvatars;
 	LayerButtonInGame *layerbutton;
 	CardBaCay *layerCards;
+	LayerChatInGame *layerChat;
 	
 public:
 	BaCayNormal();

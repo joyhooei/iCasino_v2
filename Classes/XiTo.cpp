@@ -622,7 +622,20 @@ void XiTo::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::sh
 }
 
 void XiTo::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
+	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueMessage);
+	//
+	CCLOG("ptrNotifiedMessage: %s", ptrNotifiedMessage->c_str());
+	int pos = getPosUserByName(ptrNotifiedUser->Name()->c_str(), _list_user);
+	if (pos == -1)
+	{
+		return;
+	}
+	//ptrNotifiedMessage->c_str()
+	layerAvatar->showChatByPos(pos, ptrNotifiedMessage->c_str());
 }
 
 void XiTo::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -1055,6 +1068,7 @@ void XiTo::chiaBai(){
     vector<string> data = mUtils::splitString(listUser_vitural, ';');
     int num = (int)data.size();
     
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
     vector<string> info = mUtils::splitString(data[luotChia], '_');
     if(strcmp(info[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
         luotChia++;
@@ -1264,6 +1278,7 @@ void XiTo::chiaThem1LaBai(){
                 break;
         }
     }
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
 }
 
 void XiTo::addCardsForUser(CCArray *P,float _width,float _height,float _bottom,float _left,string _img,int l){
@@ -1276,7 +1291,7 @@ void XiTo::addCardsForUser(CCArray *P,float _width,float _height,float _bottom,f
     pCard->setPosition(ccp(WIDTH_DESIGN / 2 - w_card_notme / 2, HEIGHT_DESIGN - h_card_notme));
     this->addChild(pCard);
     
-    CCMoveBy *newTo = CCMoveTo::create(0.4, ccp(_left + P->count() * _width / 3 * 2, _bottom));
+    CCMoveBy *newTo = CCMoveTo::create(0.3, ccp(_left + P->count() * _width / 3 * 2, _bottom));
     CCScaleBy *scaleTo = CCScaleBy::create(0.3, _width / w_card_notme, _height / h_card_notme);
     
     pCard->runAction(newTo);
@@ -1284,7 +1299,7 @@ void XiTo::addCardsForUser(CCArray *P,float _width,float _height,float _bottom,f
     P->addObject(pCard);
 
     if(chiathem < l){
-        this->runAction(CCSequence::create(CCDelayTime::create(0.4),CCCallFunc::create(this, callfunc_selector(XiTo::chiaThem1LaBai)),NULL));
+        this->runAction(CCSequence::create(CCDelayTime::create(0.3),CCCallFunc::create(this, callfunc_selector(XiTo::chiaThem1LaBai)),NULL));
     }
     else{
         luotChiathem++;
