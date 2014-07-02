@@ -87,10 +87,9 @@ public:
 	void createBackgrounds();
 	void createAvatars();
 	void createButtons();
-	void createChat();
 
 	virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
-	
+	void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	vector<string> TCCsplit(string &S,const char &str);
 	void updateUser(string list);
 	string find_ChuPhong(string listUser);

@@ -445,3 +445,39 @@ void AvatarInTomCuaCa::resetAll(){
 	this->getUserByPos(kUserTop)->setVisibleLayerInvite(true);
 	this->getUserByPos(kUserBot)->setVisibleLayerInvite(true);
 }
+void AvatarInTomCuaCa::showChatByPos(int pos, string mes)
+{
+	Chat *newMes = new Chat(mes, pos);
+	newMes->setAnchorPoint(ccp(newMes->getContentSize().width/2,0));
+	CCPoint point;
+
+	switch (pos) {
+	case kUserMe:
+		point.setPoint((WIDTH_DESIGN/2-newMes->getSize().width/2), 30);
+		
+		break;
+
+	case kUserTop:
+		point.setPoint(50, 320);
+		break;
+
+	case kUserBot:
+		point.setPoint(50, 180);
+		break;
+
+	case kUserLeft:
+		point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 380);
+		break;
+
+	case kUserRight:
+		point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 180);
+		break;
+	default:
+		point.setPoint((WIDTH_DESIGN - newMes->getSize().width) / 2, (HEIGHT_DESIGN - newMes->getSize().height) / 2);
+		newMes->setStatusByServer(true);
+		break;
+	}
+
+	newMes->setPosition(point);
+	this->addChild(newMes);
+}

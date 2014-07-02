@@ -356,6 +356,7 @@ void BaCayChuong::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, bo
 	}
 }
 
+
 void BaCayChuong::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];

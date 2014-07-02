@@ -54,7 +54,7 @@ public:
 	string getNameByPos(int pos);
 	//
 	void updateUsers();
-
+	void showChatByPos(int pos, string mes);
 	// Time
 
 

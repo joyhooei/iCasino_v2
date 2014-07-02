@@ -10,7 +10,6 @@
 #include "_Button_inGame_.h"
 #include "Requests/ExtensionRequest.h"
 #include "_Number_inTomCuaCa.h"
-#include "_Chat_inGame_.h"
 #include "mUtils.h"
 #include "_Chat_.h"
 #include "SceneManager.h"
@@ -92,6 +91,7 @@ float TomCuaCa::convertResult(string rs)
 }
 TomCuaCa::TomCuaCa(){
 
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
 	
 		uLayer = UILayer::create();
@@ -188,10 +188,7 @@ TomCuaCa::TomCuaCa(){
 		scroll2->setTouchEnabled(false);
 		scroll3->setTouchEnabled(false);
 		
-		createBackgrounds();
-		createAvatars();
-		createButtons();
-		createChat();
+		
 		
 		//frame bet
 		betTom = FrameBet::create();
@@ -225,8 +222,11 @@ TomCuaCa::TomCuaCa(){
 		uLayer->addChild(betNai);
 		
 	GameServer::getSingleton().addListeners(this);
+	createBackgrounds();
+	createAvatars();
+	createButtons();
 	this->addChild(uLayer);
-
+	
 	 _id_me =((boost::shared_ptr<string>)(GameServer::getSingleton().getSmartFox()->MySelf()->Name()));
 }
 vector<string> TomCuaCa::TCCsplit(string &S,const char &str){
@@ -459,11 +459,7 @@ void TomCuaCa::whenGameStart(){
 	btnUnReady->setTouchEnabled(false);
 	btnUnReady->setVisible(false);
 
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
-		"sounds/game_tomcuaca/datde.mp3");
 	
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
-		"sounds/game_tomcuaca/datde2.mp3");
 
 			CCLog("%d",_time);
 			if(_time==1)
@@ -495,6 +491,7 @@ void TomCuaCa::whenGameStart(){
 }
 void TomCuaCa::whenResuiltGame(string rg){
 
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 	this->unscheduleUpdate();
 	
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
@@ -552,11 +549,12 @@ void TomCuaCa::whenGameEnd(){
 	lAvatar->setReady(kUserLeft,false);
 	lAvatar->setReady(kUserRight,false);
 	lAvatar->setReady(kUserBot,false);
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 }
 	 TomCuaCa::~TomCuaCa(){
 	GameServer::getSingleton().removeListeners(this);
 	this->removeAllChildren();
-	
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 
 }
 bool TomCuaCa::init(){
@@ -594,13 +592,7 @@ void TomCuaCa::createAvatars(){
 	uLayer->addChild(lAvatar);
 
 }
-void TomCuaCa::createChat()
-{
-	layerChat = LayerChatInGame::create();
 
-	uLayer->addChild(layerChat);
-
-	}
 void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 
 
@@ -811,9 +803,8 @@ void TomCuaCa::clickBet(int _tag)
 		popUp->getAID(_tag);
 		uLayer->addChild(popUp);
 		ccbReader->release();
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("sounds/game_tomcuaca/datcuoc.wav");
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
-			"sounds/game_tomcuaca/datcuoc.wav");
+		
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/datcuoc.mp3");
 	}
 	switch(_tag)
 		{
@@ -884,7 +875,7 @@ void TomCuaCa::hienKetQua()
 
 		if(strcmp(info[0].c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0)
 		{
-			//layerChat->showChatByPos(kUserMe,(info[1]+" Điểm"));
+			
 			layerNumbers->showNumberByPos(kUserMe, _money);
 			if(_temp[0]!='-'){
 				
@@ -939,5 +930,21 @@ void TomCuaCa::hienOketqua()
 }
 void TomCuaCa::onExit()
 {
-	
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 		}
+void TomCuaCa::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueSender);
+	boost::shared_ptr<void> ptrEventParamValueMessage = (*ptrEventParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueMessage);
+	//
+	CCLOG("ptrNotifiedMessage: %s", ptrNotifiedMessage->c_str());
+	int pos =getPosUserByName(ptrNotifiedUser->Name()->c_str(),_list_user);
+	if (pos == -1)
+	{
+		return;
+	}
+	lAvatar->showChatByPos(pos, ptrNotifiedMessage->c_str());
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/chat.mp3");
+}
