@@ -361,9 +361,10 @@ void LayerLogin::onFileDownLoaded( CCHttpClient* pSender, CCHttpResponse* pRespo
 	//char sip[500];
 	//std::copy(buffer->begin(), buffer->end(), sip);
 	CCLOG("CURRENT IP: %s", buffer[0].data());
+	string strIP = string(buffer[0].data());
 	if( strlen(buffer->data()) == 0 )
 		return;
-	vector<string> lstIp = mUtils::splitString( string(buffer[0].data()), '\n' );
+	vector<string> lstIp = mUtils::splitString( strIP, '\n' );
 	//
 	gListIpAddress.push_back( lstIp.at(0) );
 }

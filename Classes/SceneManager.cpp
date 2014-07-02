@@ -17,6 +17,8 @@
 
 #include "LayerPasswordRoom.h"
 #include "LayerSettings.h"
+#include "LayerGameChan_KetQua.h"
+#include "LayerInviteFriends.h"
 
 #include "LayerUserInfo_Details.h"
 #include "LayerChangeAvatar.h"
@@ -64,11 +66,14 @@ CCScene* SceneManager::createScene()
 	SceneManager *layer = SceneManager::create();
 	scene->addChild(layer);
 
+	float sLeft = (sizeScreen.width - scaleMin * WIDTH_DESIGN) / 2;
+	float sTop  = (sizeScreen.height - scaleMin * HEIGHT_DESIGN) / 2;
+
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.3", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.6", "", 16);
 	nameVersion->setColor(ccWHITE);
-	nameVersion->setPosition(ccp(10 + nameVersion->getContentSize().width / 2, 20));
-	scene->addChild(nameVersion);
+	nameVersion->setPosition(ccp(-WIDTH_DESIGN/2 + 10 + nameVersion->getContentSize().width / 2, -HEIGHT_DESIGN/2 - sTop + 20));
+	layer->addChild(nameVersion, 1001);
 
 	// return the scene
 	return scene;
@@ -94,6 +99,10 @@ bool SceneManager::init() {
 	searchPaths.push_back("fonts");
 	searchPaths.push_back("card_Chan");
 	searchPaths.push_back("Nan3Cay");
+	searchPaths.push_back("sounds");
+	searchPaths.push_back("sounds/game");
+	searchPaths.push_back("sounds/game_phom");
+	searchPaths.push_back("sounds/game_tienlen");
 	searchPaths.push_back("chats");
 	CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
 
@@ -162,7 +171,8 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUpdateInfo",   LayerUpdateInfoLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPasswordRoom",   LayerPasswordRoomLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerSettings",   LayerSettingsLoader::loader());
-
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerInviteFriends",   LayerInviteFriendsLoader::loader());
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	if (ccbReader)
@@ -223,6 +233,7 @@ bool SceneManager::showNotification(){
 	layerNotification->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
 	//layerNotification->setPosition(ccp(SIZE_SCREEN.width/2, SIZE_SCREEN.width/2));
 	layerNotification->setVisible(true);
+	layerNotification->runAction(mUtils::getActionOpenPopup());
 	return true;
 }
 
@@ -252,12 +263,14 @@ void SceneManager::hideLoading() {
 
 // Đến màn hình login
 void SceneManager::gotoLogin() {
+	mCurrentLayerTag = tag_LayerLogin;
 	showLayer(layerLogin);
 	hideLayer(layerMain);
 }
 
 // Đến Main
 void SceneManager::gotoMain() {
+	mCurrentLayerTag = tag_LayerMain;
 	releaseCurrentLayerGame();
 	showLayer(layerMain);
 	layerMain->gotoServices();
@@ -268,6 +281,7 @@ void SceneManager::gotoMain() {
 // Go to Game
 void SceneManager::gotoGameByTag(int typeGame) {
 	CCLOG("typeGame: %d", typeGame);
+	mCurrentLayerTag = tag_LayerGaming;
 	switch (typeGame) {
 	case kGameTienLenMienNam:
 
