@@ -23,15 +23,15 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     EXT_EVENT_READY_REQ = "rr";
     EXT_EVENT_RAISE_REQ = "rsrq";
     
-    bt_card_me = 87;
-    bt_card_bottom = 211;
-    bt_card_top = 350;
+    bt_card_me = 130.5;
+    bt_card_bottom = 242;
+    bt_card_top = 381;
     
-    lf_card_me = 280;
-    lf_card_left_bottom = 113;
-    lf_card_left_top = 178;
-    lf_card_right_bottom = 507;
-    lf_card_right_top = 447;
+    lf_card_me = 313.5;
+    lf_card_left_bottom = 137;
+    lf_card_left_top = 202;
+    lf_card_right_bottom = 531;
+    lf_card_right_top = 471;
     
     w_card_me = 67;
     h_card_me = 87;
@@ -785,26 +785,26 @@ void XiTo::userReJoinGame(string roomInfo){
 void XiTo::restoreListCard_Reconnected(CCArray *P, string lc, bool _state, float _left, float _bottom, float _width, float _height){
     if(!_state){
         for(int i = 0; i < 2; i++){
-            CardChan *pCard = CardChan::create();
-            pCard->loadTexture("card_back.png");
-            pCard->setSizeCard(_width, _height);
+			Card *pCard = new Card("card_back.png");
+			pCard->setScaleCard(_width / pCard->getContentSize().width, _height / pCard->getContentSize().height);
             pCard->setPosition(ccp(_left + i * _width / 3 * 2, _bottom));
+			pCard->setVisible(true);
             this->addChild(pCard);
             P->addObject(pCard);
         }
     }else{
         string lsCards = convertCard(lc);
         vector<string> arrCards = mUtils::splitString(lsCards, '-');
+
         for(int i = 0; i < arrCards.size(); i++){
             if(arrCards[i] != ""){
-                CardChan *pCard = CardChan::create();
-                if(arrCards[i] == "0_0"){
-                    pCard->loadTexture("card_back.png");
-                }else{
-                    pCard->loadTexture(findTypeCard(arrCards[i]).c_str());
+				Card *pCard = new Card("card_back.png");
+                if(arrCards[i] != "0_0"){
+					pCard->initWithFile(findTypeCard(arrCards[i]).c_str());
                 }
-                pCard->setSizeCard(_width, _height);
+				pCard->setScaleCard(_width / pCard->getContentSize().width, _height / pCard->getContentSize().height);
                 pCard->setPosition(ccp(_left + i * _width / 3 * 2, _bottom));
+				pCard->setVisible(true);
                 this->addChild(pCard);
                 P->addObject(pCard);
             }
@@ -864,8 +864,8 @@ void XiTo::setBet_Inpos(int pos, CCArray *P, long bet, long betValue)
 	if (bet == 0)
 	{
 		for (int i = 0; i < P->count(); i++) {
-			CardChan* pCard = (CardChan*)P->objectAtIndex(i);
-			pCard->loadTexture("card_back.png");
+			Card* pCard = (Card*)P->objectAtIndex(i);
+			pCard->initWithFile("card_back.png");
 		}
 		getFrameBetByTag(pos)->setVisible(false);
 	} else {
@@ -907,12 +907,12 @@ void XiTo::setListCards(CCArray *P, string lc){
     vector<string> arrCard = mUtils::splitString(lc, '-');
     if(P->count() >= arrCard.size()){
         for(int i = 0; i < arrCard.size(); i++){
-            CardChan *pCard = (CardChan*)P->objectAtIndex(i);
+            Card *pCard = (Card*)P->objectAtIndex(i);
             if(arrCard[i] == "0_0"){
-                pCard->loadTexture("card_back.png");
+				pCard->initWithFile("card_back.png");
             }
             else{
-                pCard->loadTexture(findTypeCard(arrCard[i]).c_str());
+                pCard->initWithFile(findTypeCard(arrCard[i]).c_str());
             }
         }
     }else{
@@ -923,7 +923,7 @@ void XiTo::setIDListCard(CCArray *P,string lc){
     vector<string> arrID = mUtils::splitString(lc, ',');
     if(P->count() >= arrID.size()){
         for (int i = 0; i < arrID.size(); i++) {
-            CardChan *pCard = (CardChan*)P->objectAtIndex(i);
+            Card *pCard = (Card*)P->objectAtIndex(i);
             pCard->setID(atoi(arrID[i].c_str()));
         }
     }else{
@@ -937,17 +937,17 @@ void XiTo::setDisplayValueListCard(CCArray *P,string lc){
         vector<string> arrID = mUtils::splitString(lc, ',');
         
         for (int i = 0; i < P->count(); i++) {
-            CardChan* pCard = (CardChan*)P->objectAtIndex(i);
+            Card* pCard = (Card*)P->objectAtIndex(i);
             for (int j = 0; j < arrID.size(); j++) {
-                if (pCard->getID()==atoi(arrID[j].c_str())) {
-                    pCard->setFlag(true);
+                if (pCard->getID() == atoi(arrID[j].c_str())) {
+                    pCard->setClicked(true);
                 }
             }
         }
         
         for (int k = 0; k < P->count(); k++) {
-            CardChan *pC = (CardChan*)P->objectAtIndex(k);
-            if( !pC->getFlag() ){
+            Card *pC = (Card*)P->objectAtIndex(k);
+            if( !pC->getClicked() ){
                 pC->setOpacity(200);
             }
         }
@@ -1098,10 +1098,10 @@ void XiTo::chiaBai(){
 }
 
 void XiTo::giveDealCardsForPlayer(CCArray *P,float _left,float _width,float _height,float _bottom,int l){
-    CardChan *pCard = CardChan::create();
-    pCard->loadTexture("card_back.png");
-    pCard->setSizeCard(w_card_notme, h_card_notme);
+	Card *pCard = new Card("card_back.png");
+	pCard->setScaleCard(w_card_notme / pCard->getContentSize().width, h_card_notme / pCard->getContentSize().height);
     pCard->setPosition(ccp(WIDTH_DESIGN / 2 - w_card_notme / 2, HEIGHT_DESIGN - h_card_notme));
+	pCard->setVisible(true);
     this->addChild(pCard);
     
     CCMoveBy *newTo = CCMoveTo::create(0.3, ccp(_left + P->count() * _width, _bottom));
@@ -1120,8 +1120,8 @@ void XiTo::giveDealCardsForPlayer(CCArray *P,float _left,float _width,float _hei
         vector<string> arr = mUtils::splitString(strDeal, '-');
 
         for(int i = 0; i < arr.size(); i++){
-            CardChan *pXiTo = (CardChan*)CARD_ME->objectAtIndex(i);
-            pXiTo->loadTexture(findTypeCard(arr[i]).c_str());
+            Card *pXiTo = (Card*)CARD_ME->objectAtIndex(i);
+			pXiTo->initWithFile(findTypeCard(arr[i]).c_str());
             pXiTo->setID(atoi(deal[i].c_str()));
         }
         
@@ -1168,7 +1168,7 @@ void XiTo::OpenOneDealCards(string uid,string crdvl){
     }
 }
 
-void XiTo::moveDealCard(CardChan *c,float _left, float _bottom){
+void XiTo::moveDealCard(Card *c,float _left, float _bottom){
     CCMoveBy *newTo = CCMoveTo::create(0.4, ccp(_left,_bottom));
     c->runAction(newTo);
 }
@@ -1180,20 +1180,20 @@ void XiTo::moveDealCard_Me(string _lc){
 	}
 	
     for (int i = 0; i < CARD_ME->count(); i++) {
-        CardChan *pCards = (CardChan*)CARD_ME->objectAtIndex(i);
+        Card *pCards = (Card*)CARD_ME->objectAtIndex(i);
         if(pCards->getID() != atoi(_lc.c_str()) && i != 0){
-            CardChan *qCards = (CardChan*)CARD_ME->objectAtIndex(0);
+            Card *qCards = (Card*)CARD_ME->objectAtIndex(0);
             CARD_ME->replaceObjectAtIndex(0, pCards);
             CARD_ME->replaceObjectAtIndex(i, qCards);
         }
     }
     
-    CardChan *pc = (CardChan*)CARD_ME->objectAtIndex(0);
+    Card *pc = (Card*)CARD_ME->objectAtIndex(0);
     pc->setOpacity(180);
     moveDealCard(pc, lf_card_me, bt_card_me);
     
-    CardChan* pc1 = (CardChan*)CARD_ME->objectAtIndex(1);
-    moveDealCard(pc1, lf_card_me+w_card_me / 3 * 2, bt_card_me);
+    Card* pc1 = (Card*)CARD_ME->objectAtIndex(1);
+    moveDealCard(pc1, lf_card_me + w_card_me / 3 * 2, bt_card_me);
 
     int oldZ = pc->getZOrder();
     pc->setZOrder(pc1->getZOrder());
@@ -1229,13 +1229,13 @@ void XiTo::moveDealCard_Pos(CCArray *P, string listcards, float _left, float _wi
 	vector<string> theCard = mUtils::splitString(listcards, '-');
 	vector<string> info = mUtils::splitString(theCard[0], '_');
 
-	CardChan *pCard = (CardChan*)P->objectAtIndex(1);
-	pCard->loadTexture(findTypeCard(listcards).c_str());
+	Card *pCard = (Card*)P->objectAtIndex(1);
+	pCard->initWithFile(findTypeCard(listcards).c_str());
 
 	CCObject *obj;
 	int dem = 0;
 	CCARRAY_FOREACH(P, obj){
-		CardChan *card = dynamic_cast<CardChan*>(obj);
+		Card *card = dynamic_cast<Card*>(obj);
 		moveDealCard(card, _left + dem * (w_card_notme / 3 * 2), _bottom);
 		dem++;
 	}
@@ -1285,11 +1285,11 @@ void XiTo::addCardsForUser(CCArray *P,float _width,float _height,float _bottom,f
     
 	chiathem++;
 	
-	CardChan *pCard = CardChan::create();
-    pCard->loadTexture(_img.c_str());
-    pCard->setSizeCard(w_card_notme, h_card_notme);
+	Card *pCard = new Card(_img.c_str());
+    pCard->setScaleCard(w_card_notme / pCard->getContentSize().width, h_card_notme / pCard->getContentSize().height);
     pCard->setPosition(ccp(WIDTH_DESIGN / 2 - w_card_notme / 2, HEIGHT_DESIGN - h_card_notme));
-    this->addChild(pCard);
+    pCard->setVisible(true);
+	this->addChild(pCard);
     
     CCMoveBy *newTo = CCMoveTo::create(0.3, ccp(_left + P->count() * _width / 3 * 2, _bottom));
     CCScaleBy *scaleTo = CCScaleBy::create(0.3, _width / w_card_notme, _height / h_card_notme);
@@ -1398,7 +1398,7 @@ void XiTo::whenEndGame(){
 
 void XiTo::deleteAllCardFromArray(CCArray *P){
     while(P->count() > 0){
-        CardChan *pCard = (CardChan*)P->lastObject();
+        Card *pCard = (Card *)P->lastObject();
         P->removeLastObject();
         pCard->removeFromParentAndCleanup(true);
     }

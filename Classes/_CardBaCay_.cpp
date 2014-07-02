@@ -7,9 +7,9 @@
 //
 
 #include "_CardBaCay_.h"
-#include "CardChan.h"
 #include "mUtils.h"
 #include "SimpleAudioEngine.h"
+#include "_Card_.h"
 
 CardBaCay::~CardBaCay()
 {
@@ -20,7 +20,7 @@ CardBaCay::~CardBaCay()
 	this->removeAllChildren();
 	CCLOG("Deconstructor Layer Cards Ba Cay");
 }
-//Chân
+
 bool CardBaCay::init()
 {
 	if (!CCLayer::init())
@@ -73,13 +73,13 @@ void CardBaCay::initGame()
 	listUser = "";
 	myName = "";
 
-	leftMe = 319;
-	leftLeft = 117;
-	leftRight = 539;
-	leftTop = 328;
-	bottomMe = 90; 
-	bottomLeft = 209;
-	bottomTop = 268;
+	leftMe = 346;
+	leftLeft = 145;
+	leftRight = 563;
+	leftTop = 352;
+	bottomMe = 125.1; 
+	bottomLeft = 240.2;
+	bottomTop = 299.2;
 	
 	w_card_me = 54;
 	w_card_notme = 48;
@@ -118,7 +118,7 @@ void CardBaCay::playSound(string pathSound)
 
 void CardBaCay::givePocker()
 {
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
+	//CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
 
 	string virtualList = listUser + listUser + listUser;
 	CCLOG("list virtual %s",virtualList.c_str());
@@ -159,14 +159,16 @@ void CardBaCay::givePocker()
 void CardBaCay::give_next(CCArray *P, float _width, float _height, float _left, float _bottom, int count)
 {
 	count_give++;
-	CardChan *card = CardChan::create();
-    card->loadTexture("card_back.png");
-    card->setSizeCard(w_card_notme, h_card_notme);
-    card->setPosition(ccp(WIDTH_DESIGN/2-card->getContentSize().width/2,HEIGHT_DESIGN/2-card->getContentSize().height/2));
-    this->addChild(card);
+
+	Card *card = new Card("card_back.png");
+	card->setPosition(ccp(WIDTH_DESIGN / 2 - w_card_notme / 2, HEIGHT_DESIGN / 2 - h_card_notme / 2));
+	card->setScaleCard(w_card_notme / card->getContentSize().width, h_card_notme / card->getContentSize().height);
+	card->setVisible(true);
+	this->addChild(card);
 
 	CCMoveBy *newTo = CCMoveTo::create(0.3, ccp(_left + P->count() *_width, _bottom));
     CCScaleBy *scaleTo = CCScaleBy::create(0.3, _width / w_card_notme, _height / h_card_notme);
+
     card->runAction(newTo);
     card->runAction(scaleTo);
     P->addObject(card);
@@ -189,7 +191,6 @@ void CardBaCay::give_next(CCArray *P, float _width, float _height, float _left, 
 //create list card
 void CardBaCay::turnUpAllCards(string lc, int pos)
 {
-	CCLOG("Jumpe to turn upp");
 	switch(pos)
 	{
 	case kUserMe:
@@ -225,16 +226,17 @@ void CardBaCay::turnUpAllCards_Pos(string lc, CCArray *P, float _width, float _h
 
 	for (int i = 0; i < arrCards.size(); i++)
 	{
-		CardChan *pCard = (CardChan*)P->objectAtIndex(i);
+		Card *pCard = (Card*)P->objectAtIndex(i);
+
 		if (strcmp(arrCards[i].c_str(),"0_0") == 0)
 		{
-			pCard->loadTexture("card_back.png");
+			pCard->initWithFile("card_back.png");
 		}
 		else
 		{
 			vector<string> info = mUtils::splitString(arrCards[i],'_');
-			string str = "card_"+findTypeCardByID(info[0])+"_"+arrCardTypes[atoi(info[1].c_str())]+".png";
-			pCard->loadTexture(str.c_str());
+			string str = "card_" + findTypeCardByID(info[0]) + "_" + arrCardTypes[atoi(info[1].c_str())] + ".png";
+			pCard->initWithFile(str.c_str());
 		}
 	}
 }
@@ -279,10 +281,11 @@ void CardBaCay::createListCard_Back(CCArray *P, float _width, float _height, flo
 {
 	for (int i = 0; i < 3; i++)
 	{
-		CardChan *pCard = CardChan::create();
-		pCard->loadTexture("card_back.png");
+		Card *pCard = new Card("card_back.png");
+		pCard->setScaleCard(_width / pCard->getContentSize().width, _height / pCard->getContentSize().height);
 		pCard->setPosition(ccp(_left + i * _width, _bottom));
-		pCard->setSizeCard(_width, _height);
+		pCard->setVisible(true);
+
 		P->addObject(pCard);
 		this->addChild(pCard);
 	}
@@ -292,7 +295,7 @@ void CardBaCay::deleteAllCards_FromArray(CCArray *P)
 {
 	while(P->count() > 0)
 	{
-		CardChan *pCard = (CardChan*)P->lastObject();
+		Card *pCard = (Card *)P->lastObject();
 		P->removeLastObject();
 		pCard->removeFromParentAndCleanup(true);
 	}

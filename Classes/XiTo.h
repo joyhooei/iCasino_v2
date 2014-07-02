@@ -15,7 +15,7 @@
 #include "AllData.h"
 #include "LayerAvatarXiTo.h"
 #include "_Button_inGame_.h"
-#include "CardChan.h"
+#include "_Card_.h"
 #include "FrameBet.h"
 
 using namespace cocos2d;
@@ -125,7 +125,7 @@ public:
     void addCardsForUser(CCArray *P,float _width,float _height,float _top,float _left,string _img,int l);
     void restoreListCard_Reconnected(CCArray *P, string lc, bool _state, float _left, float _bottom, float _width, float _height);
     
-    void moveDealCard(CardChan *c,float _left, float _bottom);
+    void moveDealCard(Card *c,float _left, float _bottom);
     void moveDealCard_Me(string _lc);
 	void moveDealCard_NotMe(int pos, string listcards);
 	void moveDealCard_Pos(CCArray *P, string listcards, float _left, float _width, float _bottom);
