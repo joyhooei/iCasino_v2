@@ -16,6 +16,7 @@
 #include "_Avatar_inTomCuaCa.h"
 #include "FrameBet.h"
 #include "_Number_inGame_.h"
+#include "_Chat_inGame_.h"
 
 //ket qua
 #define _kqNai 100
@@ -62,6 +63,7 @@ private:
 	UIScrollView *scroll3;
 	UILoadingBar *loading;
 	AvatarInTomCuaCa* lAvatar;
+	LayerChatInGame *layerChat;
 	int _tienBet;
 	int _time;
 	string kq1;
@@ -107,7 +109,7 @@ public:
 	int convertResponseToInt(string inString);
 	string convertResponseToString(int inInt);
 	float convertResult(string rs);
-	void update(float dt);
+	virtual void update(float dt);
 	void clickBet(int _tag);
 	void bet(int aid, string tienBet);
 	void setTimer(float dt);

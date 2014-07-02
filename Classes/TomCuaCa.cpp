@@ -18,7 +18,6 @@
 #include "SliderCustomLoader.h"
 
 
-
 enum TCC_REPONSE {
 	EXT_EVENT_USER_JOIN_NOTIF,      // jrntf
 	EXT_EVENT_READY_NTF,
@@ -93,14 +92,10 @@ float TomCuaCa::convertResult(string rs)
 }
 TomCuaCa::TomCuaCa(){
 
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
-		"sounds/game_tomcuaca/background.mp3", true);
 		_count=100;
-		
+	
 		uLayer = UILayer::create();
 		uLayer->addWidget(GUIReader::shareReader()->widgetFromJsonFile("TomCuaCa/scroll/TomCuaCa_1_1.json"));
-		
-		
 
 		btnReady = UIButton::create();
 		btnReady->loadTextures("ready.png", "ready_selected.png", "");
@@ -196,6 +191,7 @@ TomCuaCa::TomCuaCa(){
 		createBackgrounds();
 		createAvatars();
 		createButtons();
+		createChat();
 		
 		//frame bet
 		betTom = FrameBet::create();
@@ -455,14 +451,19 @@ void TomCuaCa::whenUserUnready(string uid){
 			default:
 				break;
 			}
-		}
-	
+		}	
 }
 void TomCuaCa::whenGameStart(){
 	btnReady -> setTouchEnabled(false);
 	btnReady->setVisible(false);
 	btnUnReady->setTouchEnabled(false);
 	btnUnReady->setVisible(false);
+
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
+		"sounds/game_tomcuaca/datde.mp3");
+	
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
+		"sounds/game_tomcuaca/datde2.mp3");
 
 			CCLog("%d",_time);
 			if(_time==1)
@@ -484,25 +485,21 @@ void TomCuaCa::whenGameStart(){
 				btnNai->setTouchEnabled(true);
 			}
 
-
-
-	this->schedule(schedule_selector(TomCuaCa::update));
+	this->scheduleUpdate();
 
 	Chat *toast = new Chat("Đặt cược đê các bác...", -1);
 	this->addChild(toast);
 
 	CCLog("Game start");
 	
-	
-
-
 }
 void TomCuaCa::whenResuiltGame(string rg){
 
-	this->unschedule(schedule_selector(TomCuaCa::update));
+	this->unscheduleUpdate();
 	
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
+		"sounds/game_tomcuaca/quay.mp3");
 	
-
 	vector<string> resuilt = TCCsplit(rg, '_');
 	
 	scroll1->scrollToPercentVertical(convertResult(resuilt[0]),6,true);
@@ -517,19 +514,11 @@ void TomCuaCa::whenResuiltGame(string rg){
 	btnGa->setTouchEnabled(false);
 	btnRuou->setTouchEnabled(false);
 	btnNai->setTouchEnabled(false);
-		
-	
-	
-
-	
-		
+				
 }
 void TomCuaCa::whenGameEnd(){
 	NumberInTomCuaCa *layerNumbers = NumberInTomCuaCa::create();
 	this->addChild(layerNumbers);
-	LayerChatInGame *layerChat = LayerChatInGame::create();
-	this->addChild(layerChat);
-	
 	_count=100;
 	loading->setPercent(_count);
 	btnReady -> setTouchEnabled(true);
@@ -583,8 +572,7 @@ void TomCuaCa::createBackgrounds(){
 	CCSprite *bg = CCSprite::create("back.png");
 	bg->setPosition(ccp(WIDTH_DESIGN/2,HEIGHT_DESIGN/2-20));
 	this->addChild(bg);
-	LayerChatInGame* chat_ = LayerChatInGame::create();
-	this->addChild(chat_);
+	
 }
 void TomCuaCa::createButtons(){
 
@@ -603,16 +591,15 @@ void TomCuaCa::createAvatars(){
 	lAvatar->getUserByPos(kUserMe)->setMeIsBoss(true);
 	lAvatar->getUserByPos(kUserMe)->setFlag(true);
 	lAvatar->getUserByPos(kUserMe)->setMoney(*inv);
-	
 	uLayer->addChild(lAvatar);
-
-
 
 }
 void TomCuaCa::createChat()
 {
-	LayerChatInGame *chat = LayerChatInGame::create();
-	uLayer->addChild(chat);
+	layerChat = LayerChatInGame::create();
+
+	uLayer->addChild(layerChat);
+
 	}
 void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 
@@ -824,6 +811,9 @@ void TomCuaCa::clickBet(int _tag)
 		popUp->getAID(_tag);
 		uLayer->addChild(popUp);
 		ccbReader->release();
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("sounds/game_tomcuaca/datcuoc.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
+			"sounds/game_tomcuaca/datcuoc.wav");
 	}
 	switch(_tag)
 		{
@@ -896,6 +886,14 @@ void TomCuaCa::hienKetQua()
 		{
 			//layerChat->showChatByPos(kUserMe,(info[1]+" Điểm"));
 			layerNumbers->showNumberByPos(kUserMe, _money);
+			if(_temp[0]!='-'){
+				
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/win.mp3");
+			}
+			else{
+				
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/lose.mp3");
+			}
 			CCLog("me");
 		}
 		else{
@@ -941,6 +939,5 @@ void TomCuaCa::hienOketqua()
 }
 void TomCuaCa::onExit()
 {
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic(
-		"sounds/game_tomcuaca/background.mp3");
+	
 		}
