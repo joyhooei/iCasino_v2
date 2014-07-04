@@ -20,6 +20,7 @@ LayerForgotPassword::LayerForgotPassword()
 
 LayerForgotPassword::~LayerForgotPassword()
 {
+	CC_SAFE_RELEASE(txtUsername);
 }
 
 // CCBSelectorResolver interface

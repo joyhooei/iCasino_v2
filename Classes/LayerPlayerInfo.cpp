@@ -32,6 +32,16 @@ LayerPlayerInfo::LayerPlayerInfo()
 LayerPlayerInfo::~LayerPlayerInfo()
 {
 	GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(lblAMF);
+	CC_SAFE_RELEASE(lblName);
+	CC_SAFE_RELEASE(lblSex);
+
+	CC_SAFE_RELEASE(btnInviteFriend);
+	CC_SAFE_RELEASE(btnUnFriend);
+	CC_SAFE_RELEASE(btnKick);
+
+	CC_SAFE_RELEASE(nodeAvatar);
 }
 
 // CCBSelectorResolver interface

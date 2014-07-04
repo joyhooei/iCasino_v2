@@ -20,41 +20,16 @@ LayerMoiChoi::LayerMoiChoi()
     tblTable = NULL;
 	lblTitle = NULL;
     //
-//     StructSMS sms1;
-//     sms1.content = "Nạp thẻ 10.000 được 10.000 chips";
-//     StructSMS sms2;
-//     sms2.content = "Nạp thẻ 20.000 được 20.000 chips";
-//     StructSMS sms3;
-//     sms3.content = "Nạp thẻ 50.000 được 50.000 chips";
-//     StructSMS sms4;
-//     sms4.content = "Nạp thẻ 100.000 được 100.000 chips";
-//     StructSMS sms5;
-//     sms5.content = "Nạp thẻ 200.000 được 200.000 chips";
-//     
-//     StructSMS sms8;
-//     sms8.content = "SMS 5.000 được 2.500 chips";
-//     StructSMS sms6;
-//     sms6.content = "SMS 10.000 được 5.000 chips";
-//     StructSMS sms7;
-//     sms7.content = "SMS 15.000 được 7.500 chips";
-//     
-//     lstSMS.push_back(sms8);
-//     lstSMS.push_back(sms6);
-//     lstSMS.push_back(sms7);
-//     
-//     lstSMS.push_back(sms1);
-//     lstSMS.push_back(sms2);
-//     lstSMS.push_back(sms3);
-//     lstSMS.push_back(sms4);
-//     lstSMS.push_back(sms5);
-    //
-	CCLOG("Im hereeeee");
     GameServer::getSingleton().addListeners(this);
 }
 
 LayerMoiChoi::~LayerMoiChoi()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(nodeTable);
+	CC_SAFE_RELEASE(tblTable);
+	CC_SAFE_RELEASE(lblTitle);
 }
 
 void LayerMoiChoi::loadAllDatas(){

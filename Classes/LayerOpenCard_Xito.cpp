@@ -27,6 +27,8 @@ LayerOpenCard_Xito::LayerOpenCard_Xito()
 
 LayerOpenCard_Xito::~LayerOpenCard_Xito()
 {
+	CC_SAFE_RELEASE(btnCard1);
+	CC_SAFE_RELEASE(btnCard2);
 }
 
 // CCBSelectorResolver interface

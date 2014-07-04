@@ -53,6 +53,9 @@ LayerTyGia::LayerTyGia()
 LayerTyGia::~LayerTyGia()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(nodeTable);
+	CC_SAFE_RELEASE(lblTitle);
 }
 
 void LayerTyGia::loadAllDatas(){

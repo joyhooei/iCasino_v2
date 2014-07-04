@@ -34,6 +34,15 @@ LayerCurrencyExchange::LayerCurrencyExchange()
 LayerCurrencyExchange::~LayerCurrencyExchange()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(lblMoney);
+	CC_SAFE_RELEASE(lblCurrentMoney);
+	CC_SAFE_RELEASE(lblCanBorrow);
+
+	CC_SAFE_RELEASE(sliderMoney);
+	CC_SAFE_RELEASE(spriteMoney);
+
+	CC_SAFE_RELEASE(nodeMoney);
 }
 
 void LayerCurrencyExchange::loadAllMyDatas(){

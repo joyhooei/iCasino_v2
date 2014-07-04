@@ -19,13 +19,13 @@ LayerLichSuGiaoDich::LayerLichSuGiaoDich()
     tblHistory = NULL;
     //
     GameServer::getSingleton().addListeners(this);
-    
-    CCLOG("current: %s", mUtils::getCurrentDateTime("%d/%m/%Y %I:%M:%S").c_str());
 }
 
 LayerLichSuGiaoDich::~LayerLichSuGiaoDich()
 {
-    GameServer::getSingleton().removeListeners(this);
+	GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(nodeHistory);
 }
 
 void LayerLichSuGiaoDich::loadAllDatas(){

@@ -48,6 +48,12 @@ LayerChonBanChoi::LayerChonBanChoi()
 LayerChonBanChoi::~LayerChonBanChoi()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(nodeTableRooms);
+
+	CC_SAFE_RELEASE(nodeTableListRooms);
+
+	CC_SAFE_RELEASE(lblTitle);
 }
 
 void LayerChonBanChoi::setGameID(int gID){

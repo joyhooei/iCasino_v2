@@ -57,6 +57,33 @@ LayerMoney::LayerMoney()
 LayerMoney::~LayerMoney()
 {
 	currNodeView->removeFromParentAndCleanup(true);
+	//
+	CC_SAFE_RELEASE(lblChargeDisable);
+	CC_SAFE_RELEASE(lblHistoryDisable);
+	CC_SAFE_RELEASE(lblTransferDisable);
+	CC_SAFE_RELEASE(lblLoanDisable);
+	CC_SAFE_RELEASE(lblExchangeDisable);
+
+	CC_SAFE_RELEASE(lblChargeEnable);
+	CC_SAFE_RELEASE(lblHistoryEnable);
+	CC_SAFE_RELEASE(lblTransferEnable);
+	CC_SAFE_RELEASE(lblLoanEnable);
+	CC_SAFE_RELEASE(lblExchangeEnable);
+
+	CC_SAFE_RELEASE(btnCharge_enable);
+	CC_SAFE_RELEASE(btnHistory_enable);
+	CC_SAFE_RELEASE(btnTransfer_enable);
+	CC_SAFE_RELEASE(btnLoan_enable);
+	CC_SAFE_RELEASE(btnExchange_enable);
+
+	CC_SAFE_RELEASE(btnCharge_disable);
+	CC_SAFE_RELEASE(btnHistory_disable);
+	CC_SAFE_RELEASE(btnTransfer_disable);
+	CC_SAFE_RELEASE(btnLoan_disable);
+	CC_SAFE_RELEASE(btnExchange_disable);
+
+	CC_SAFE_RELEASE(nodeChild);
+	//CC_SAFE_RELEASE(currNodeView);
 }
 
 // CCBSelectorResolver interface

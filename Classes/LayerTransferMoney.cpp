@@ -30,6 +30,12 @@ LayerTransferMoney::LayerTransferMoney()
 LayerTransferMoney::~LayerTransferMoney()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(lblMoney);
+	CC_SAFE_RELEASE(txtTransferTo);
+
+	CC_SAFE_RELEASE(sliderMoney);
+	CC_SAFE_RELEASE(spriteMoney);
 }
 
 void LayerTransferMoney::loadMinMaxMoney(){

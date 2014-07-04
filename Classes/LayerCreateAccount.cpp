@@ -28,7 +28,6 @@ LayerCreateAccount::LayerCreateAccount()
     txtRePassword=NULL;
     txtPhone=NULL;
     txtEmail=NULL;
-
 }
 
 LayerCreateAccount::~LayerCreateAccount()
@@ -39,6 +38,12 @@ LayerCreateAccount::~LayerCreateAccount()
 	if (m_callback && m_callbackListener){
 		(m_callbackListener->*m_callback)();
 	}
+	//
+	CC_SAFE_RELEASE(txtUsername);
+	CC_SAFE_RELEASE(txtPassword);
+	CC_SAFE_RELEASE(txtRePassword);
+	CC_SAFE_RELEASE(txtPhone);
+	CC_SAFE_RELEASE(txtEmail);
 }
 
 void LayerCreateAccount::notificationCallBack(bool isOK, int tag){

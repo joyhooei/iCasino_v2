@@ -50,6 +50,12 @@ LayerChatRoom::~LayerChatRoom()
 	// leave room
 	boost::shared_ptr<IRequest> request (new LeaveRoomRequest());
 	GameServer::getSingleton().getSmartFox()->Send(request);
+	//
+	CC_SAFE_RELEASE(nodeListContents);
+
+	CC_SAFE_RELEASE(nodeListRooms);
+
+	CC_SAFE_RELEASE(lblTitle);
 }
 
 void LayerChatRoom::setGameID(int gID){

@@ -38,7 +38,19 @@ LayerFriendDetails::LayerFriendDetails()
 
 LayerFriendDetails::~LayerFriendDetails()
 {
-    GameServer::getSingleton().removeListeners(this);
+	GameServer::getSingleton().removeListeners(this);
+	CCLOG("LayerFriendDetails::~LayerFriendDetails()");
+
+	//
+	CC_SAFE_RELEASE(lblSex);
+	CC_SAFE_RELEASE(lblXu);
+	CC_SAFE_RELEASE(lblOnline);
+	CC_SAFE_RELEASE(lblName);
+
+	CC_SAFE_RELEASE(spriteOnline);
+
+	CC_SAFE_RELEASE(nodeTableHistory);
+	CC_SAFE_RELEASE(nodeFriends);
 }
 
 // CCBSelectorResolver interface

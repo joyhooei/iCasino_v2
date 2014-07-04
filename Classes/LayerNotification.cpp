@@ -27,6 +27,12 @@ LayerNotification::LayerNotification()
 
 LayerNotification::~LayerNotification()
 {
+	CC_SAFE_RELEASE(lblCancel);
+	CC_SAFE_RELEASE(lblDetails);
+	CC_SAFE_RELEASE(lblOK);
+	CC_SAFE_RELEASE(lblTitle);
+	CC_SAFE_RELEASE(btnCancel);
+	CC_SAFE_RELEASE(btnOK);
 }
 
 void LayerNotification::setTitle(const char* title){

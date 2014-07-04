@@ -42,6 +42,21 @@ LayerFriend::LayerFriend()
 LayerFriend::~LayerFriend()
 {
 	removeOldView();
+	CCLOG("LayerFriend::~LayerFriend()");
+
+	//
+	CC_SAFE_RELEASE(lblInviteDisable);
+	CC_SAFE_RELEASE(lblInviteEnable);
+	CC_SAFE_RELEASE(lblFriendInfoDisable);
+	CC_SAFE_RELEASE(lblFriendInfoEnable);
+
+	CC_SAFE_RELEASE(btnFriendInfo_disable);
+	CC_SAFE_RELEASE(btnInvite_disable);
+	CC_SAFE_RELEASE(btnFriendInfo_enable);
+	CC_SAFE_RELEASE(btnInvite_enable);
+
+	CC_SAFE_RELEASE(currNodeView);
+	CC_SAFE_RELEASE(nodeChild);
 }
 
 void LayerFriend::removeOldView(){

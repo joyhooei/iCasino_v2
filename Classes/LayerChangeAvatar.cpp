@@ -26,12 +26,7 @@ LayerChangeAvatar::~LayerChangeAvatar()
 {
     GameServer::getSingleton().removeListeners(this);
     //
-//    CC_SAFE_RELEASE(txtName);
-//    CC_SAFE_RELEASE(txtStatus);
-//    CC_SAFE_RELEASE(txtPhoneNumber);
-//    CC_SAFE_RELEASE(txtFavour);
-//    CC_SAFE_RELEASE(txtEmail);
-//    CC_SAFE_RELEASE(btnSex);
+    CC_SAFE_RELEASE(nodeListAvatar);
 }
 
 void LayerChangeAvatar::loadAllMyDatas(){

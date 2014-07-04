@@ -51,11 +51,7 @@ LayerUserInfo_Details::~LayerUserInfo_Details()
     CC_SAFE_RELEASE(lblID);
     CC_SAFE_RELEASE(lblLevel);
     
-    tblHistory->removeAllChildrenWithCleanup(true);
-    CC_SAFE_RELEASE(tblHistory);
-//    CC_SAFE_RELEASE(nodeTableHistory);
-//    CC_SAFE_RELEASE(ccbReader);
-//    CC_SAFE_RELEASE(ccNodeLoaderLibrary);
+    CC_SAFE_RELEASE(nodeTableHistory);
 }
 
 void LayerUserInfo_Details::loadAllMyDatas(){

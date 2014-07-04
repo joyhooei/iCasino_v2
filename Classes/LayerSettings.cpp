@@ -26,6 +26,13 @@ LayerSettings::LayerSettings()
 
 LayerSettings::~LayerSettings()
 {
+	CC_SAFE_RELEASE(lblMoney);
+	CC_SAFE_RELEASE(sliderMoney);
+	CC_SAFE_RELEASE(txtPassword);
+	CC_SAFE_RELEASE(spriteMoney);
+
+	CC_SAFE_RELEASE(btnSound);
+	CC_SAFE_RELEASE(btnVibrate);
 }
 
 // CCBSelectorResolver interface

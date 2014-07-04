@@ -43,8 +43,19 @@ LayerUserInfo::LayerUserInfo()
 LayerUserInfo::~LayerUserInfo()
 {
 	CCLOG("LayerUserInfo::~LayerUserInfo()");
+
 	if( currNodeView )
 		currNodeView->removeFromParentAndCleanup(true);
+
+	CC_SAFE_RELEASE(lblActionDisable);
+	CC_SAFE_RELEASE(lblActionEnable);
+	CC_SAFE_RELEASE(lblUserInfoDisable);
+	CC_SAFE_RELEASE(lblUserInfoEnable);
+	CC_SAFE_RELEASE(btnUserInfo_disable);
+	CC_SAFE_RELEASE(btnAction_disable);
+	CC_SAFE_RELEASE(btnUserInfo_enable);
+	CC_SAFE_RELEASE(btnAction_enable);
+	CC_SAFE_RELEASE(nodeChild);
 }
 
 void LayerUserInfo::gotoUserInfo(){

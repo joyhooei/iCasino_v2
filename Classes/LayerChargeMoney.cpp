@@ -39,6 +39,15 @@ LayerChargeMoney::LayerChargeMoney()
 LayerChargeMoney::~LayerChargeMoney()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(lblCuPhap);
+	CC_SAFE_RELEASE(lblDauSo);
+	CC_SAFE_RELEASE(txtMaThe);
+	CC_SAFE_RELEASE(txtSoThe);
+	CC_SAFE_RELEASE(btnViettelStatus);
+	CC_SAFE_RELEASE(btnVinaStatus);
+	CC_SAFE_RELEASE(btnMobiStatus);
+	CC_SAFE_RELEASE(arrow_left);
 }
 
 void LayerChargeMoney::notificationCallBack(bool isOK, int tag){

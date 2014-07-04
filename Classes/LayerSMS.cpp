@@ -41,6 +41,9 @@ LayerSMS::LayerSMS()
 LayerSMS::~LayerSMS()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(nodeTable);
+	CC_SAFE_RELEASE(tblTable);
 }
 
 void LayerSMS::loadAllDatas(){

@@ -22,6 +22,7 @@ LayerPasswordRoom::LayerPasswordRoom()
 
 LayerPasswordRoom::~LayerPasswordRoom()
 {
+	CC_SAFE_RELEASE(txtPassword);
 }
 
 // CCBSelectorResolver interface

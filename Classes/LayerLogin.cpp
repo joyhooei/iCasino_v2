@@ -36,6 +36,11 @@ LayerLogin::LayerLogin()
 LayerLogin::~LayerLogin()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+// 	CC_SAFE_RELEASE(txtPassword);
+// 	CC_SAFE_RELEASE(txtUsername);
+// 
+// 	CC_SAFE_RELEASE(chkSaveInfo);
 }
 
 void LayerLogin::readInfo(){

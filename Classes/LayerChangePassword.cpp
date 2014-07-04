@@ -22,6 +22,10 @@ LayerChangePassword::LayerChangePassword()
 LayerChangePassword::~LayerChangePassword()
 {
 	GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(txtOldPassword);
+	CC_SAFE_RELEASE(txtNewPassword);
+	CC_SAFE_RELEASE(txtRePassword);
 }
 
 // CCBSelectorResolver interface

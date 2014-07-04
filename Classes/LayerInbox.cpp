@@ -28,6 +28,8 @@ LayerInbox::LayerInbox()
 LayerInbox::~LayerInbox()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(nodeTableEmail);
 }
 
 // CCBSelectorResolver interface

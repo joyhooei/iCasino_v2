@@ -29,6 +29,13 @@ LayerBorrowMoney::LayerBorrowMoney()
 LayerBorrowMoney::~LayerBorrowMoney()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(lblMoney);
+	CC_SAFE_RELEASE(lblCurrentMoney);
+	CC_SAFE_RELEASE(lblCanBorrow);
+
+	CC_SAFE_RELEASE(sliderMoney);
+	CC_SAFE_RELEASE(spriteMoney);
 }
 
 void LayerBorrowMoney::loadAllMyDatas(){

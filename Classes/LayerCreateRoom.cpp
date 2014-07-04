@@ -31,6 +31,11 @@ LayerCreateRoom::LayerCreateRoom()
 LayerCreateRoom::~LayerCreateRoom()
 {
     GameServer::getSingleton().removeListeners(this);
+	//
+	CC_SAFE_RELEASE(lblMoney);
+	CC_SAFE_RELEASE(sliderMoney);
+	CC_SAFE_RELEASE(txtPassword);
+	CC_SAFE_RELEASE(spriteMoney);
 }
 
 void LayerCreateRoom::setGameID(int gameID){
