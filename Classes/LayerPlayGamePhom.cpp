@@ -489,11 +489,10 @@ void LayerPlayGamePhom::actionHaPhom(CCObject *pSender, TouchEventType pType) {
 		params->PutUtfString("lc", listID);
 		boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 		boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_HANDOFF_PHOM), params, lastRoom));
-
 		GameServer::getSingleton().getSmartFox()->Send(request);
 
-		// recomment by Sver
-		this->scheduleOnce(schedule_selector(LayerPlayGamePhom::callbackHaPhom), 0.3);
+		// recomment by Sver (giờ ko cần nữa)
+		// this->scheduleOnce(schedule_selector(LayerPlayGamePhom::callbackHaPhom), 0.3);
     }
 }
 

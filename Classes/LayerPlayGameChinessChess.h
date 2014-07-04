@@ -17,6 +17,8 @@
 #include "AllData.h"
 #include "_Chess_.h"
 #include "LogicInChess.h"
+#include "NotificationCallback.h"
+
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
@@ -27,6 +29,7 @@ class LayerPlayGameChinessChess
 	, public cocos2d::extension::CCBMemberVariableAssigner
 	, public cocos2d::extension::CCNodeLoaderListener
 	, public PlayerCallBack
+	, public NotificationCallBack
 {
 private:
 	//Chứa avatar bên màu đỏ
@@ -101,7 +104,15 @@ private:
 		EXT_EVENT_FOR_PEACE,        // = "fp";
 		EXT_EVENT_IM_LOSE,          // = "iml"
 		EXT_EVENT_MOVE,
+		EXT_EVENT_REPLY_FOR_PEACE   // = "rfp";
 	};
+
+	enum STYLE_DIALOG {
+		DONG_Y_XIN_HOA,
+		DONG_Y_XIN_THUA,
+		DONG_Y_HOA
+	};
+
 	int convertResponseToInt(string inString);
 	string convertResponseToString(int inInt);
 
@@ -120,6 +131,8 @@ private:
 	CCSprite *tag2;
 	CCSprite *chieuTuongRed;
 	CCSprite *chieuTuongBlack;
+// 	CCSprite *iconWin;
+// 	CCSprite *iconLose;
 	vector<Chess*> arrChess;
 	bool isMaster;
 	bool isStartedGame;
@@ -132,6 +145,7 @@ private:
 	int indexTarget;
 	int timeRestBlack;
 	int timeRestRed;
+	int timeToReady;
 
 	CCSprite *selected_chess;
 	ChessLogic *logicChess;
@@ -141,11 +155,15 @@ public:
 	virtual ~LayerPlayGameChinessChess();
 
 	void loadAllDatas();
+	void playSound(string soundPath);
 
 	float getDistant2Point(CCPoint p1, CCPoint p2);
 	CCPoint getPositionFromIndex(int id);
-	int     getIndexFromPosition(CCPoint pos);
+	int getIndexFromPosition(CCPoint pos);
 	void setPointVisiable(int id, bool isShow);
+	//Callback
+	void callbackFromChatWindow(CCNode*, void*);
+	void notificationCallBack(bool, int tag); 
 
 	CREATE_FUNC(LayerPlayGameChinessChess);
 
@@ -169,6 +187,7 @@ public:
 	//Server
 	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	virtual void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
 	void event_EXT_EVENT_START();             // = “s”();
 	void event_EXT_EVENT_NEXT_TURN();         // = "nt"();

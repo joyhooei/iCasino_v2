@@ -144,7 +144,7 @@ string ChessLogic::getArrayLostPieces(int side) {
 	osBishop<<(countBishop);
 	osPawn<<(countPawn);
 	
-	str = osRook.str() + "_" + osCannon.str() + "_" + osKnight.str() + "_" + osElephant.str() + "_" + osBishop.str() + "_" + osPawn.str();
+	str = "x" + osRook.str() + "_" + "x" + osCannon.str() + "_" + "x" + osKnight.str() + "_" + "x" + osElephant.str() + "_" + "x" + osBishop.str() + "_" + "x" + osPawn.str();
 	//str = countRook + "_" + countCannon + '_' + countKnight + '_' + countElephant + '_' + countBishop + '_' + countPawn;
     
     return str;

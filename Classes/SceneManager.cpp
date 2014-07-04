@@ -103,6 +103,7 @@ bool SceneManager::init() {
 	searchPaths.push_back("sounds/game");
 	searchPaths.push_back("sounds/game_phom");
 	searchPaths.push_back("sounds/game_tienlen");
+	searchPaths.push_back("sounds/game_cotuong");
 	searchPaths.push_back("chats");
 	CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
 
