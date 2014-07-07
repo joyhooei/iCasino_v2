@@ -54,7 +54,7 @@ timer(NULL)
 		bg->addTouchEventListener(this, toucheventselector(Avatar::onTouch));
 
 		// icon
-		this->sizeIcon.setSize(53, 47);
+		this->sizeIcon.setSize(57, 50);
 		icon = ImageView::create();
 		icon->loadTexture("icon_default.png");
 		icon->setPositionX(-(getSizeThis().width / 2 - icon->getContentSize().width / 2));
@@ -260,11 +260,26 @@ void Avatar::showLayerInvite() {
 
 void Avatar::setIcon(string url){
 	// hideLayerInvite();
-	vector<string> arr = mu.splitString(url, '/');
-	string nameIcon;
-	if (arr.size() == 0) return;
-	else nameIcon = arr.at(arr.size()-1);
-	downLoadImage(url, nameIcon);
+	vector<string> arr = mUtils::splitString(url, '/');
+	string nameIcon = "icon.png";
+	if (arr.size() > 0) nameIcon = arr.at(arr.size()-1);
+
+	std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+	writablePath.append(nameIcon);
+
+	CCLog("writablePath.c_str()= %s", writablePath.c_str());
+
+	CCSprite *avatar = CCSprite::create(writablePath.c_str());
+	if (avatar == NULL) {
+		CCLog("Load avatar from Server");
+		downLoadImage(url, nameIcon);
+	}
+	else {
+		CCLog("Load avatar from Device");
+		setAvatarBySprite(avatar);
+	}
+
+	
 }
 
 void Avatar::setFlag(bool isShow){
@@ -432,21 +447,12 @@ void Avatar::loadDefaultImage(){
 		return;
 	}
 
-	CCSprite* pSprite = CCSprite::createWithSpriteFrameName("assest/icon_default.png");
-	pSprite->setTag(tagIcon);
-	CCSize sizeSprite = pSprite->getContentSize();
-	pSprite->cocos2d::CCNode::setScale(sizeIcon.width / sizeSprite.width, sizeIcon.height / sizeSprite.height);
-	if (this->isMe) {
-		pSprite->setPositionX(-(getSizeThis().width / 2 - sizeIcon.width / 2 - 7));
-		pSprite->setPositionY(2);
-	}
-	//Call callback
-
-	layerWidget->removeChildByTag(tagIcon);
-	layerWidget->addChild(pSprite);
+	CCSprite* pSprite = CCSprite::create("icon_default.png");
+	setAvatarBySprite(pSprite);
 }
 
 void Avatar::downLoadImage(string url, string fileName){
+	CCLog("url= %s", url.c_str());
 	if( url.compare("")==0 ){
 		loadDefaultImage();
 		return;
@@ -494,19 +500,25 @@ void Avatar::onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse)
 	// add this line
 	img->saveToFile(writablePath.c_str());
 
-	//Now create Sprite from downloaded image
-	CCSprite* pSprite = CCSprite::create(writablePath.c_str());
-	pSprite->setTag(tagIcon);
-	CCSize sizeSprite = pSprite->getContentSize();
-	pSprite->cocos2d::CCNode::setScale(sizeIcon.width / sizeSprite.width, sizeIcon.height / sizeSprite.height);
+	setAvatarByPath(writablePath.c_str());
+}
+
+void Avatar::setAvatarByPath(string path) {
+	CCSprite *img = CCSprite::create(path.c_str());
+	setAvatarBySprite(img);
+}
+
+void Avatar::setAvatarBySprite(CCSprite* img) {
+	img->setTag(tagIcon);
+	CCSize sizeSprite = img->getContentSize();
+	img->cocos2d::CCNode::setScale(sizeIcon.width / sizeSprite.width, sizeIcon.height / sizeSprite.height);
 	if (this->isMe) {
-		pSprite->setPositionX(-(getSizeThis().width / 2 - sizeIcon.width / 2 - 7));
-		pSprite->setPositionY(2);
+		img->setPositionX(-(getSizeThis().width / 2 - sizeIcon.width / 2 - 3));
+		img->setPositionY(2);
 	}
-	//Call callback
 
 	layerWidget->removeChildByTag(tagIcon);
-	layerWidget->addChild(pSprite);
+	layerWidget->addChild(img);
 }
 
 void Avatar::setMeIsBoss( bool isBoss )

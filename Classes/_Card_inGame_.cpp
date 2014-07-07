@@ -92,6 +92,24 @@ vector<int> LayerCardInGame::getIDFromString(string pList) {
     return arrID;
 }
 
+vector<int> LayerCardInGame::getIDFromString_Last(string pList) {
+	vector<string> arrString = split(pList, ';');
+
+	vector<int> arrID;
+	int length = arrString.size();
+
+	for (int i = 0; i < length; i++) {
+		if (arrString[i].length() > 3) {
+			vector<string> arrInfo = split(arrString[i], ':');
+			if (arrInfo[0].length() > 0) {
+				arrID.push_back(atoi(arrInfo[arrInfo.size()-1].c_str()));
+			}
+		}
+	}
+
+	return arrID;
+}
+
 // "id, id, id, id"
 vector<int> LayerCardInGame::getIDFromString_TienLen(string pList) {
     vector<string> arrString = split(pList, ',');
@@ -1284,50 +1302,54 @@ void LayerCardInGame::actionRecommendCard(CCNode *pSender) {
     this->lcRecommendHaPhom = "";
 }
 
-void LayerCardInGame::actionHaPhom(vector<int> arrID) {
-    
-    bool isHadPhom = false;
+void LayerCardInGame::actionHaPhom(vector<int> arrID, vector<int> arrIDPhom) {
+    if (arrID.size() != arrIDPhom.size()) return;
+
     int dem = 0;
+	int currentPhom = 0;
     for (int i = 0; i < arrID.size(); i++) {
-        int id = arrID[i];
-        
+        int id = arrID.at(i);
+		int orderPhom = arrIDPhom.at(i);
+		CCLog("actionHaPhom id=%d, orderPhom=%d", id, orderPhom);
+        if (currentPhom != orderPhom){
+			currentPhom = orderPhom;
+			dem=0;
+		}
+
         Card *card = getCardByID(id);
         
-        if (!card->getPhom()) {
+        //if (!card->getPhom()) {
             removeCardOnHandByID(id);
             
             card->setVisible(true);
             card->setPhom(true);
             
             card->setZOrder(ZORDER_PHOM + countCardMe_Phom);
-            int left = 10 + dem%3 * disCards / 2;
+            int left = 10 + dem * disCards / 2;
             int top = topCard + (sizeCard.height - card->getContentSize().height / 2);
-            
-            if (countMe_Phom == 0 || countCardMe_Phom/3 == 0) {
-                // chua co phom nao - mac dinh
-            }
-            if (countMe_Phom == 1 || countCardMe_Phom/3 == 1) {
-                // da co 1 phom
-                top -= sizeCard.height / 3;
-            }
-            if (countMe_Phom == 2 || countCardMe_Phom/3 == 2) {
-                // da co 2 phom
-                top -= 2 * sizeCard.height / 3;
-            }
+            top -= (orderPhom-1) * sizeCard.height / 3;
             
             card->runAction(CCMoveTo::create(0.3, ccp(left, top)));
             card->runAction(CCScaleTo::create(0.3, 0.5));
             
             countCardMe_Phom++;
             dem++;
-            isHadPhom = true;
-        }
+        //}
         
     }
-    if(isHadPhom) {
-        countMe_Phom++;
-        // refreshCardOnHand();
-    }
+}
+
+void LayerCardInGame::actionHaPhomFromListID(string listID) {
+	// index:number:suit:turnedUp:origination:phomID
+	/*	 8:9:1:1:4:1;
+		21:9:2:1:4:1;
+		34:9:3:1:2:1;
+		18:6:2:1:4:2;
+		19:7:2:1:4:2;
+		20:8:2:1:4:2;
+	*/
+
+
 }
 
 void LayerCardInGame::actionHaPhomByPos(int pos, int pID) {
@@ -1402,7 +1424,7 @@ void LayerCardInGame::removeCardOnHandByID(int pID) {
 
 Card* LayerCardInGame::getCardByID(int pID) {
     int length = arrAllCard->count();
-    int indexCard = 0;
+    int indexCard = -1;
     for (int i = 0; i < length; i++) {
         Card *card = (Card*) arrAllCard->objectAtIndex(i);
         if (card->getID() == pID) {
@@ -1411,6 +1433,7 @@ Card* LayerCardInGame::getCardByID(int pID) {
         }
     }
     
+	if (indexCard < 0) return NULL;
     return (Card*)arrAllCard->objectAtIndex(indexCard);
 }
 
@@ -1426,6 +1449,7 @@ void LayerCardInGame::eventListcardNTF(int posUser, string lc) {
     vector<int> arrID_OnHand;
     vector<int> arrID_OnTable;
     vector<int> arrID_Phom;
+	vector<int> arrID_PhomID;
     
     if (length >= 2) {
         arrID_OnHand = getIDFromString(arrString[1]);
@@ -1437,6 +1461,7 @@ void LayerCardInGame::eventListcardNTF(int posUser, string lc) {
     
     if (length >= 4) {
         arrID_Phom =   getIDFromString(arrString[3]);
+		arrID_PhomID = getIDFromString_Last(arrString[3]);
     }
     
     
@@ -1463,7 +1488,7 @@ void LayerCardInGame::eventListcardNTF(int posUser, string lc) {
             
             // phỏm
 			if (lengArrPhom > countCardMe_Phom){
-				actionHaPhom(arrID_Phom);
+				actionHaPhom(arrID_Phom, arrID_PhomID);
 				isPlaySound=true;
 			}
             

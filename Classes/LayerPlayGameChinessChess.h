@@ -217,6 +217,13 @@ public:
 
 	void updateTimer(float dt);
 	string convertTimer(int time);
+
+	// hoangdd
+	void downLoadImage(string url, string fileName);
+	void setAvatarByPath(CCNode *nodeContainer, string path); // đường dẫn ảnh đã được lưu trong máy
+	void setAvatarBySprite(CCNode *nodeContainer, CCSprite* img);
+	void onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse);
+	void loadDefaultImage(CCNode *nodeContainer);
 };
 
 class LayerPlayGameChinessChessLoader : public cocos2d::extension::CCLayerLoader

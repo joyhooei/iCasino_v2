@@ -964,10 +964,10 @@ void LayerPlayGamePhom::event_EXT_EVENT_COIN_NTF() {
 		string ressonString = "";
 		switch (*coinchr) {
 			case 0:
-				ressonString = "Bị ăn bài";
+				ressonString = "Bị ăn";
 				break;
 			case 1:
-				ressonString = "Ăn bài";
+				ressonString = "Được ăn";
 				break;
 			case 2:
 				//ressonString = "Kết thúc";
@@ -976,7 +976,13 @@ void LayerPlayGamePhom::event_EXT_EVENT_COIN_NTF() {
 				ressonString = "Ăn láo";
 				break;
 			case 4:
-				ressonString = "Đền làng";
+				ressonString = "Bị đền làng";
+				break;
+			case 7:
+				ressonString = "Bị ăn chốt";
+				break;
+			case 8:
+				ressonString = "Được ăn chốt";
 				break;
 		}
 

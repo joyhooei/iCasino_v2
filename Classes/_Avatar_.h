@@ -1,4 +1,4 @@
-//
+﻿//
 //  AvatarLayer.h
 //  iCasino_v2
 //
@@ -55,6 +55,8 @@ public:
     // hoangdd
     void downLoadImage(string url, string fileName);
     void onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse);
+	void setAvatarByPath(string path); // đường dẫn ảnh đã được lưu trong máy
+	void setAvatarBySprite(CCSprite* img);
     void loadDefaultImage();
     
 private:

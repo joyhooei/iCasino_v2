@@ -555,25 +555,30 @@ void LayerPlayGameChinessChess::onButtonBack(CCObject* pSender){
     boost::shared_ptr<IRequest> request (new LeaveRoomRequest());
     GameServer::getSingleton().getSmartFox()->Send(request);
     
-    
     GameServer::getSingleton().removeListeners(this);
     this->removeAllChildrenWithCleanup(true);
-//    this->removeFromParentAndCleanup(true);
-//    CC_SAFE_RELEASE(this);
     
     SceneManager::getSingleton().gotoMain();
-    
-    //Test thu get position
-//    CCPoint a = getPositionFromIndex(89);
-//    CCLOG("x:%lf, y:%lf", a.x, a.y);
-//    
-//    for (int i = 0; i < 90; i++) {
-////        CCSprite *tag1 = CCSprite::create("tag_phom_1.png");
-////        tag1->setPosition(getPositionFromIndex(i));
-////
-////        nodeTableChess->addChild(tag1, 1000);
-//        setPointVisiable(i, true);
-//    }
+
+	/*if( GameServer::getSingleton().getSmartFox()->LastJoinedRoom()==NULL ){
+		SceneManager::getSingleton().gotoMain();
+		return;
+	} 
+	boost::shared_ptr<string> gameID = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId();
+	if (gameID == NULL) {
+		return;
+	}
+	string _gameID = gameID->c_str();
+	if (_gameID == "109") {
+		SceneManager::getSingleton().setBackgroundScreen(false);
+	}
+
+	SceneManager::getSingleton().gotoMain();
+	LayerMain::getSingleton().gotoChonBanChoi( atol(gameID->c_str()) );
+
+	// leave room
+	boost::shared_ptr<IRequest> request (new LeaveRoomRequest());
+	GameServer::getSingleton().getSmartFox()->Send(request);*/
 }
 void LayerPlayGameChinessChess::onButtonSetting(CCObject* pSender){
 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
@@ -857,14 +862,15 @@ void LayerPlayGameChinessChess::OnSmartFoxUserVariableUpdate(unsigned long long 
 	int    money = (int) (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
 	string name = boost::to_string(*ptrNotifiedUser->Name());
 
-	CCLOG("Update User Variables");
-	CCLOG("name=%s, money=%d", name.c_str(), money);
+	CCLOG("Update User Variables name=%s, money=%d", name.c_str(), money);
 
+	/*
 	mUtils mu;
 	if (name==myName) {
 		lblMoneyBlack->setString(mu.convertMoneyEx(money).c_str());
 	}
 	else lblMoneyRed->setString(mu.convertMoneyEx(money).c_str());
+	*/
 }
 
 void LayerPlayGameChinessChess::OnSmartFoxPublicMessage( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
@@ -1181,23 +1187,90 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
                     isMaster = false;
                 }
             }
-            
         }
         
+		string nameEnemy = "";
         if (isMaster) {
             // thong tin đối thủ ở i = 1 (nếu có)
             if (sizeInfo >= 2) {
                 vector<string> arr = split(arrInfo[1], '|');
-                lblNameRed->setString(arr[0].c_str());
+				nameEnemy = arr.at(0);
             }
         }
         else {
             vector<string> arr = split(arrInfo[0], '|');
-            lblNameRed->setString(arr[0].c_str());
+			nameEnemy = arr.at(0);
         }
         
-        // name của mình luôn đặt ở dưới, của đối thủ đặt ở trên
+        // myself
+		// name
         lblNameBlack->setString(myName.c_str());
+		boost::shared_ptr<User> userInfo = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName);
+		boost::shared_ptr<double> amf = userInfo->GetVariable("amf")->GetDoubleValue();
+		int money = (int)(*amf);
+		// money
+		lblMoneyBlack->setString(mUtils::convertMoneyEx(money).c_str());
+		// avatar
+		boost::shared_ptr<string> url = userInfo->GetVariable("aal")->GetStringValue();
+		if (url != NULL) {
+			CCLog("Avatar link %s", url->c_str());
+			string urlString = url->c_str();
+			vector<string> arr  = split(urlString, '/');
+			string iconname = "iconname.png";
+			if (arr.size() > 0) {
+				iconname = arr.at(arr.size() - 1);
+			} 
+			
+			//
+			iconname = "black_" + iconname;
+			std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+			writablePath.append(iconname);
+
+			//
+			CCSprite *avatar = CCSprite::create(writablePath.c_str());
+			if (avatar == NULL) {
+				CCLog("avatar downLoadImage");
+				downLoadImage(url->c_str(), iconname);
+			}
+			else {
+				CCLog("avatar from device");
+				setAvatarBySprite(nodeAvatarBlack, avatar);
+			}
+		}
+
+
+		// enemy
+		if (nameEnemy.length() < 2) return;
+		lblNameRed->setString(nameEnemy.c_str());
+		boost::shared_ptr<User> userInfoEnemy = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(nameEnemy);
+		boost::shared_ptr<double> amfEnemy = userInfoEnemy->GetVariable("amf")->GetDoubleValue();
+		int moneyEnemy = (int)(*amfEnemy);
+		lblMoneyRed->setString(mUtils::convertMoneyEx(moneyEnemy).c_str());
+		// avatar
+		boost::shared_ptr<string> urlEnemy = userInfoEnemy->GetVariable("aal")->GetStringValue();
+		if (urlEnemy != NULL) {
+			CCLog("Avatar link %s", urlEnemy->c_str());
+			string urlString = urlEnemy->c_str();
+			vector<string> arr  = split(urlString, '/');
+			string iconname = "iconname.png";
+			if (arr.size() > 0) {
+				iconname = arr.at(arr.size() - 1);
+			} 
+
+			//
+			iconname = "red_" + iconname;
+			std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+			writablePath.append(iconname);
+
+			//
+			CCSprite *avatar = CCSprite::create(writablePath.c_str());
+			if (avatar == NULL) {
+				downLoadImage(urlEnemy->c_str(), iconname);
+			}
+			else {
+				setAvatarBySprite(nodeAvatarRed, avatar);
+			}
+		}
     }
 }
 
@@ -1268,7 +1341,7 @@ void LayerPlayGameChinessChess::moveChess(int fromID, int toID) {
         if (id_pos == fromID){
             chess->setIDPos(toID);
             chess->setZOrder(1);
-            chess->runAction(CCMoveTo::create(0.5, getPositionFromIndex(toID)));
+            chess->runAction(CCMoveTo::create(0.25, getPositionFromIndex(toID)));
             chess->setClick(true);
 
 			playSound("ChessMove.mp3");
@@ -1330,6 +1403,109 @@ void LayerPlayGameChinessChess::moveChess(int fromID, int toID) {
 	lblTuongBlack_status->setString(arrChessBlack.at(3).c_str());
 	lblSyBlack_status->setString(arrChessBlack.at(4).c_str());
 	
+}
+
+
+// hoangdd
+void LayerPlayGameChinessChess::loadDefaultImage(CCNode *nodeContainer){
+	if (nodeContainer == NULL) {
+		return;
+	}
+
+	CCSprite* pSprite = CCSprite::create("icon_default.png");
+	//pSprite->setTag(tagIcon);
+	pSprite->setAnchorPoint(ccp(0, 0));
+	CCSize sizeSprite = pSprite->getContentSize();
+	// 75x70
+	CCSize sizeExactly = nodeContainer->getContentSize();
+	pSprite->cocos2d::CCNode::setScale(sizeExactly.width / sizeSprite.width, sizeExactly.height / sizeSprite.height);
+
+	nodeContainer->removeAllChildrenWithCleanup(true);
+	nodeContainer->addChild(pSprite);
+}
+
+void LayerPlayGameChinessChess::downLoadImage(string url, string fileName){
+	if( url.compare("")==0 ){
+		
+		// load default icon
+		string where = "black";
+		vector<string> arr = split(fileName, '_');
+		if (arr.size() > 0) where = arr.at(0);
+		arr.clear();
+		if (where == "black") loadDefaultImage(nodeAvatarBlack);
+		else loadDefaultImage(nodeAvatarRed);
+		
+		return;
+	}
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(url.c_str());
+	request->setRequestType(CCHttpRequest::kHttpGet);
+	request->setResponseCallback(this, httpresponse_selector(LayerPlayGameChinessChess::onImageDownLoaded));
+	request->setTag(fileName.c_str());
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void LayerPlayGameChinessChess::setAvatarByPath(CCNode *nodeContainer, string path) {
+	CCSprite *img = CCSprite::create(path.c_str());
+	setAvatarBySprite(nodeContainer, img);
+}
+
+void LayerPlayGameChinessChess::setAvatarBySprite(CCNode *nodeContainer, CCSprite* img) {
+	CCSize sizeOfContainer = nodeContainer->getContentSize();
+	img->setAnchorPoint(CCPointZero);
+	img->setScaleX(sizeOfContainer.width/img->getContentSize().width);
+	img->setScaleY(sizeOfContainer.height/img->getContentSize().height);
+
+	nodeContainer->removeAllChildrenWithCleanup(true);
+	nodeContainer->addChild(img);
+}
+
+void LayerPlayGameChinessChess::onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse){
+	CCHttpResponse* response = pResponse;
+
+	if (!response)
+	{
+		CCLog("No Response");
+		//loadDefaultImage();
+		return ;
+	}
+	int statusCode = response->getResponseCode();
+
+	char statusString[64] = {};
+	CCLog("HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+	CCLog("response code: %d", statusCode);
+
+	if (!response->isSucceed())
+	{
+		CCLog("response failed");
+		CCLog("error buffer: %s", response->getErrorBuffer());
+		//loadDefaultImage();
+		return;
+	}
+	std::vector<char>*buffer = response->getResponseData();
+
+
+	CCImage * img=new CCImage();
+	img->initWithImageData(&(buffer->front()), buffer->size());
+
+	// Save image file to device.
+	std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+	writablePath.append(response->getHttpRequest()->getTag());
+	// add this line
+	img->saveToFile(writablePath.c_str());
+
+	// xác định nơi đặt avatar (black or red)
+	string where = "black";
+	string iconname = response->getHttpRequest()->getTag();
+	vector<string> arr = split(iconname, '_');
+	if (arr.size() > 0) where = arr.at(0);
+	arr.clear();
+	CCNode *nodeContainer;
+	if (where == "black") nodeContainer = nodeAvatarBlack;
+	else nodeContainer = nodeAvatarRed;
+
+	setAvatarByPath(nodeContainer, writablePath.c_str());
 }
 
 

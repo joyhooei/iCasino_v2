@@ -72,7 +72,8 @@ public:
     void actionRecommendCard(CCNode *pSender);
     
     // hạ phỏm
-    void actionHaPhom(vector<int> arrID);
+    void actionHaPhom(vector<int> arrID, vector<int> arrIDPhom);
+	void actionHaPhomFromListID(string listID); // giữ nguyên cấu trúc của listID từ sv, id:number:suit:turnedUp:origination:phomID
     void actionHaPhomByPos(int pos, int pID);
     
     // ----
@@ -80,6 +81,7 @@ public:
     // phom
     vector<string> split(string &S, const char &str);
     vector<int> getIDFromString(string pListCard);
+	vector<int> getIDFromString_Last(string pListCard); 
     vector<int> getIDFromString_TienLen(string pList);
     int getCountCardOnHand();
     int getCountCardTaken();
