@@ -60,7 +60,7 @@ void LayerBorrowMoney::onButtonCreate(CCObject* pSender)
     //Send request
     boost::shared_ptr<ISFSObject> params (new SFSObject());
     params->PutUtfString("aI", myself->Name());
-    params->PutLong("amf", sliderMoney->getValue());
+    params->PutLong("amf", ceil(sliderMoney->getValue()));
     boost::shared_ptr<IRequest> request (new ExtensionRequest("lbfree", params));
     GameServer::getSingleton().getSmartFox()->Send(request);
 }
@@ -78,7 +78,7 @@ void LayerBorrowMoney::valueChanged(CCObject *sender, CCControlEvent controlEven
     float posX =pSlider->getPositionX();
     float sliderWidth =pSlider->getContentSize().width;
     spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
-    lblMoney->setString( CCString::createWithFormat("%.0f xu", ceil(pSlider->getValue()))->getCString() );
+    lblMoney->setString( CCString::createWithFormat("%s xu", mUtils::convertMoneyEx(ceil(pSlider->getValue())).c_str() )->getCString() );
 }
 
 // CCBMemberVariableAssigner interface

@@ -179,6 +179,22 @@ void LayerMain::gotoMoney(){
     currViewTag = tag_Money;
 }
 
+void LayerMain::gotoTransferMoney( string toUser )
+{
+	removeOldView();
+	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	LayerMoney* mLayer;
+	if (ccbReader)
+	{
+		mLayer = (LayerMoney *)ccbReader->readNodeGraphFromFile( "LayerMoney.ccbi" );
+		this->addChild(mLayer, 1, 1);
+		ccbReader->release();
+		mLayer->gotoTransfer( toUser );
+	}
+	currNodeView = mLayer;
+	currViewTag = tag_Money;
+}
+
 void LayerMain::gotoMail(){
     if( currViewTag == tag_Mail )
         return;

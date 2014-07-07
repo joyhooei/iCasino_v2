@@ -19,6 +19,7 @@
 #include "LayerSettings.h"
 #include "LayerGameChan_KetQua.h"
 #include "LayerInviteFriends.h"
+#include "LayerForgotPassword.h"
 
 #include "LayerUserInfo_Details.h"
 #include "LayerChangeAvatar.h"
@@ -175,6 +176,7 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerSettings",   LayerSettingsLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerInviteFriends",   LayerInviteFriendsLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerForgotPassword",   LayerForgotPasswordLoader::loader());
 	// Add LayerLogin
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	if (ccbReader)

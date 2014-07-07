@@ -11,6 +11,7 @@
 #include "Requests/ExtensionRequest.h"
 #include "CustomTableViewCell.h"
 #include "_Chat_.h"
+#include "LayerMain.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -70,8 +71,8 @@ void LayerFriendDetails::onButtonSMS(CCObject* pSender)
 
 void LayerFriendDetails::onButtonTransferMoney(CCObject* pSender)
 {
-    CCLOG("onButtonTransferMoney");
-    
+    CCLOG("onButtonTransferMoney toUser: %s", currFriendID.c_str());
+    LayerMain::getSingleton().gotoTransferMoney( currFriendID );
 }
 
 void LayerFriendDetails::onButtonUnInvite(CCObject* pSender)

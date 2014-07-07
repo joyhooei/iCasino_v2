@@ -74,7 +74,8 @@ void LayerTransferMoney::onButtonCreate(CCObject* pSender)
     boost::shared_ptr<ISFSObject> params (new SFSObject());
     params->PutUtfString("aI", myself->Name());
     params->PutUtfString("aR", txtTransferTo->getText());
-    params->PutLong("am", sliderMoney->getValue());
+	CCLOG("am value: %lf", ceil(sliderMoney->getValue()) );
+    params->PutLong("am", ceil(sliderMoney->getValue()) );
     boost::shared_ptr<IRequest> request (new ExtensionRequest("tfbalance", params));
     GameServer::getSingleton().getSmartFox()->Send(request);
 }
@@ -92,7 +93,7 @@ void LayerTransferMoney::valueChanged(CCObject *sender, CCControlEvent controlEv
     float posX =pSlider->getPositionX();
     float sliderWidth =pSlider->getContentSize().width;
     spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
-    lblMoney->setString( CCString::createWithFormat("%s xu", mUtils::convertMoneyEx(ceil(pSlider->getValue())).c_str() )->getCString() );
+    lblMoney->setString( CCString::createWithFormat("%s chips", mUtils::convertMoneyEx(ceil(pSlider->getValue())).c_str() )->getCString() );
 }
 
 // CCBMemberVariableAssigner interface
@@ -167,4 +168,9 @@ void LayerTransferMoney::OnSmartFoxUserVariableUpdate(unsigned long long ptrCont
 void LayerTransferMoney::notificationCallBack( bool isOK, int tag )
 {
 
+}
+
+void LayerTransferMoney::setTransferTo( string user )
+{
+	txtTransferTo->setText( user.c_str() );
 }

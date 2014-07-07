@@ -128,7 +128,7 @@ void GameServer::initServer( )
 //connect
 void GameServer::connectToServer( const char * strIP, const char * strPort )
 {
-    CCLOG("connectToServer");
+    CCLOG("connectToServer with IP: %s", strIP);
 	double port = atof(strPort);
 	if( mSmartFox ){
 		mSmartFox->RemoveAllEventListeners();

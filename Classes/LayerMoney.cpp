@@ -143,7 +143,7 @@ void LayerMoney::onButtonClick(CCObject* pSender)
             break;
         case tag_TransferDisable:
             currTag = tag_TransferEnable;
-            gotoTransfer();
+            gotoTransfer("");
             break;
         case tag_LoanDisable:
             currTag = tag_LoanEnable;
@@ -224,7 +224,7 @@ void LayerMoney::gotoHistory(){
     mLayer->loadAllDatas();
     currNodeView = mLayer;
 }
-void LayerMoney::gotoTransfer(){
+void LayerMoney::gotoTransfer(string toUser){
 	removeOldView();
 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
@@ -234,6 +234,11 @@ void LayerMoney::gotoTransfer(){
         mLayer = (LayerTransferMoney *)ccbReader->readNodeGraphFromFile( "LayerTransferMoney.ccbi" );
         nodeChild->addChild(mLayer, 1, 1);
         ccbReader->release();
+		if( toUser.length()!=0 ){
+			currTag = tag_TransferEnable;
+			disableTabs(currTag);
+			mLayer->setTransferTo( toUser );
+		}
     }
     currNodeView = mLayer;
 }

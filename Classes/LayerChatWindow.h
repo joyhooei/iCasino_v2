@@ -3,10 +3,13 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include <vector>
+#include <string>
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace ui;
+using namespace std;
 
 class LayerChatWindow : public cocos2d::CCLayer 
 {
@@ -16,6 +19,8 @@ private:
 
 	CCObject* m_callback;
 	SEL_CallFuncND m_callbackListener;
+
+	vector<string> lstStringMessage;
 public:
 	~LayerChatWindow();
 	virtual void registerWithTouchDispatcher(void);

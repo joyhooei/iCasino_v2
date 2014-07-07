@@ -28,7 +28,6 @@ LayerMoiChoi::~LayerMoiChoi()
     GameServer::getSingleton().removeListeners(this);
 	//
 	CC_SAFE_RELEASE(nodeTable);
-	CC_SAFE_RELEASE(tblTable);
 	CC_SAFE_RELEASE(lblTitle);
 }
 

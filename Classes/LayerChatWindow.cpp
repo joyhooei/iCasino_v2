@@ -1,4 +1,4 @@
-#include "LayerChatWindow.h"
+﻿#include "LayerChatWindow.h"
 #include "SceneManager.h"
 #include "mUtils.h"
 
@@ -30,6 +30,16 @@ bool LayerChatWindow::init()
 	{
 		return false;
 	}
+	lstStringMessage.clear();
+	lstStringMessage.push_back("Nhanh lên nào (14)!");
+	lstStringMessage.push_back("Mạng lag quá (9)!");
+	lstStringMessage.push_back("Bài xấu quá (3)!");
+	lstStringMessage.push_back("Hehe, lên nóc nhà\nmà bắt con gà (6)");
+	lstStringMessage.push_back("Nhất rồi, haha (1)");
+	lstStringMessage.push_back("Đánh gà thế (11)!");
+	lstStringMessage.push_back("Đỏ vãi lúa (13)!");
+	lstStringMessage.push_back("Nhọ như chó mực (5)!");
+
 	//return true;
 
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
@@ -44,6 +54,7 @@ bool LayerChatWindow::init()
 	//Get all chat button
 	for( int i = 1; i <= 8; i++ ){
 		UIButton* btnChat = dynamic_cast<UIButton*>(ul->getWidgetByName( CCString::createWithFormat("btnChat%d", i)->getCString() ));
+		btnChat->setTitleText( lstStringMessage.at(i-1).c_str() );
 		btnChat->addTouchEventListener(this,(SEL_TouchEvent)&LayerChatWindow::onButtonChats);
 	}
 	UIButton* btnClose = dynamic_cast<UIButton*>(ul->getWidgetByName("btnClose"));

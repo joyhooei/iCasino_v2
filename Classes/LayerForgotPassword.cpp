@@ -1,4 +1,4 @@
-//
+﻿//
 //  LayerForgotPassword.cpp
 //  demo
 //
@@ -40,13 +40,12 @@ void LayerForgotPassword::onButtonFind(CCObject* pSender)
 void LayerForgotPassword::onButtonClose(CCObject* pSender)
 {
     CCLOG("onButtonClose");
+	this->removeFromParentAndCleanup(true);
 }
 
 // CCBMemberVariableAssigner interface
 bool LayerForgotPassword::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemberVariableName, cocos2d::CCNode *pNode)
 {
-    //CCLOG("Imhere onAssignCCBMemberVariable: %s", pMemberVariableName);
-    
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "txtUsername", CCEditBox*, txtUsername);
     return true;
 }
@@ -54,6 +53,7 @@ bool LayerForgotPassword::onAssignCCBMemberVariable(CCObject *pTarget, const cha
 void LayerForgotPassword::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
     CCLOG("Imhere onNodeLoaded");
+	initTextField(txtUsername, "Tên tài khoản");
 	//
 	this->setTouchEnabled(true);
     return;
@@ -79,4 +79,14 @@ void LayerForgotPassword::onEnter()
 void LayerForgotPassword::onExit()
 {
 	CCLayer::onExit();
+}
+
+void LayerForgotPassword::initTextField( CCEditBox* txt, const char* hintText )
+{
+	txt->setFontColor(ccBLACK);
+	txt->setPlaceholderFontColor(ccBLACK);
+	txt->setFont("fonts/Roboto-Regular.ttf", 18);
+	txt->setReturnType(kKeyboardReturnTypeDefault);
+	txt->setPlaceHolder(hintText);
+	txt->setTouchPriority(-128);
 }

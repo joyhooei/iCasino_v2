@@ -40,6 +40,8 @@ public:
 	void notificationCallBack(bool isOK, int tag);
     
     void loadMinMaxMoney();
+
+	void setTransferTo(string user);
     
     CREATE_FUNC(LayerTransferMoney);
     

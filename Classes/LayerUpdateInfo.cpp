@@ -9,6 +9,8 @@
 #include "LayerUpdateInfo.h"
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
+#include "LayerNotification.h"
+#include "SceneManager.h"
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
@@ -149,6 +151,7 @@ void LayerUpdateInfo::OnExtensionResponse(unsigned long long ptrContext, boost::
     
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
     boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
+	CCLOG("LayerUpdateInfo::OnExtensionResponse: cmd = %s", cmd->c_str());
     if(strcmp("gaic", cmd->c_str())==0){
         //Insert datas to textfield
         txtName->setText( param->GetUtfString("aN")->c_str() );
@@ -157,7 +160,23 @@ void LayerUpdateInfo::OnExtensionResponse(unsigned long long ptrContext, boost::
         txtFavour->setText( "" );
         txtStatus->setText( "" );
         btnSex->setPosition(ccp(*param->GetBool("aS")==true ? 198 : 140, btnSex->getPositionY()));
-    }
+	}else if(strcmp("uac", cmd->c_str())==0){
+		LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+		if( !SceneManager::getSingleton().showNotification() ){
+			CCLOG("NTF Dialog already open!");
+			return;
+		}
+		this->setTouchEnabled(false);
+		if( *param->GetInt("rc")==0 ){//OK
+			CCLOG("lbfree OK");
+			layer->setNotificationOptions("CẬP NHẬT THÔNG TIN", 
+				"Cập nhật thông tin thành công!", false , "", 1, this );
+		}else{//Not OK
+			CCLOG("lbfree Not OK - error: %s", param->GetUtfString("rd")->c_str());
+			layer->setNotificationOptions("CẬP NHẬT THÔNG TIN THẤt BẠI", 
+				param->GetUtfString("rd")->c_str(), false , "", 1, this );
+		}
+	}
 }
 
 void LayerUpdateInfo::registerWithTouchDispatcher( void )

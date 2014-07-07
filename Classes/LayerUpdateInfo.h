@@ -13,6 +13,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "GameServer.h"
+#include "NotificationCallback.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -24,6 +25,7 @@ class LayerUpdateInfo
 , public cocos2d::extension::CCBMemberVariableAssigner
 , public cocos2d::extension::CCNodeLoaderListener
 , public PlayerCallBack
+, public NotificationCallBack
 {
 private:
     CCEditBox* txtName;

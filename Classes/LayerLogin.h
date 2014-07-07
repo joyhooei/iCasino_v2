@@ -77,6 +77,7 @@ public:
     void onButtonLogin(CCObject* pSender);
     void onButtonLoginWithFacebook(CCObject* pSender);
     void onButtonCreateAccount(CCObject* pSender);
+	void onButtonForgotPassword( CCObject *pSender );
 protected:
     void OnSmartFoxConnection(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
     void OnSmartFoxLogin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);

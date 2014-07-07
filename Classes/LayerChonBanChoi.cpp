@@ -418,19 +418,23 @@ void LayerChonBanChoi::OnSmartFoxInvitation(unsigned long long ptrContext, boost
 	//Get PAI
 	CCLOG("Invitee: %s Inviter: %s, gameID: %s, minbet: %s", invitation->Invitee()->Name()->c_str(), invitation->Inviter()->Name()->c_str(),
 		 param->GetUtfString("gid")->c_str(), param->GetUtfString("mb")->c_str());
-	if( myself->GetVariable("pai")->GetStringValue()->compare("0")!=0 ){
+	if( myself->GetVariable("pai")->GetIntValue() != 0 ){
 		LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
 		if( !SceneManager::getSingleton().showNotification() ){
 			CCLOG("NTF Dialog already open!");
 			return;
 		}
+		CCLOG("***** DEBUG 1");
 		mRoomID4Invite = atoi( param->GetUtfString("roomid")->c_str() );
+		CCLOG("***** DEBUG 2");
 		layer->setNotificationOptions("THƯ MỜI CHƠi", 
 			CCString::createWithFormat("Người chơi %s mời bạn cùng chơi:\n%s\n Tiền cược: %s\n Bạn có muốn cùng tham gia?"
 				, invitation->Inviter()->Name()->c_str(), mUtils::getGameNameByID( atoi(param->GetUtfString("gid")->c_str()) )->getCString()
 				, param->GetUtfString("mb")->c_str())->getCString()
-			, true , "ĐỒNG Ý", tagComfirmInvite, this );
+				, true , "ĐỒNG Ý", tagComfirmInvite, this );
+		CCLOG("***** DEBUG 3");
 	}
+	CCLOG("***** DEBUG 4");
 }
 
 void LayerChonBanChoi::OnSmartFoxRoomJoin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){

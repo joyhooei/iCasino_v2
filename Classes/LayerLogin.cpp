@@ -205,6 +205,18 @@ void LayerLogin::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 	//
     this->setTouchEnabled(true);
 	this->setKeypadEnabled(true);
+	//
+	CCMenu* m_pItemMenu = CCMenu::create();
+	m_pItemMenu->setPosition( CCPointZero );
+	CCMenuItemFont::setFontName("Arial");
+	CCMenuItemFont::setFontSize(16);
+
+	CCMenuItemFont* pItem = CCMenuItemFont::create("Quên mật khẩu", this, menu_selector(LayerLogin::onButtonForgotPassword));
+	pItem->setAnchorPoint(ccp(1, 1));
+	pItem->setPosition(ccp( txtPassword->getContentSize().width/2 + txtPassword->getPositionX() , 37));
+	m_pItemMenu->addChild(pItem, 10);
+
+	this->addChild( m_pItemMenu );
     return;
 }
 
@@ -383,4 +395,17 @@ void LayerLogin::onFileDownLoaded( CCHttpClient* pSender, CCHttpResponse* pRespo
 	vector<string> lstIp = mUtils::splitString( strIP, '\n' );
 	//
 	gListIpAddress.push_back( lstIp.at(0) );
+}
+
+void LayerLogin::onButtonForgotPassword( CCObject *pSender )
+{
+	CCLOG("LayerLogin::onButtonForgotPassword()");
+	CCNodeLoaderLibrary * ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	CCBReader * ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	LayerForgotPassword* mLayer;
+	if (ccbReader)
+	{
+		mLayer = (LayerForgotPassword *)ccbReader->readNodeGraphFromFile( "LayerForgotPassword.ccbi" );
+		this->addChild(mLayer, 1, 1);
+	}
 }

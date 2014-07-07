@@ -15,6 +15,7 @@
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
+using namespace std;
 
 class LayerMoney
 : public cocos2d::CCLayer
@@ -73,7 +74,7 @@ public:
     
     void gotoChargeMoney();
     void gotoHistory();
-    void gotoTransfer();
+    void gotoTransfer(string toUser);
     void gotoBorrow();
     void gotoExchange();
     

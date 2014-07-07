@@ -78,7 +78,10 @@ public:
     void gotoChooseGame();
     void gotoChonBanChoi(int gID);
     void gotoUserInfo();
+
     void gotoMoney();
+	void gotoTransferMoney(string toUser);
+
     void gotoMail();
     void gotoFriends();
     void gotoGuide();

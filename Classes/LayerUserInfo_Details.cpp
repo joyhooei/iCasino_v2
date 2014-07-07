@@ -112,6 +112,7 @@ void LayerUserInfo_Details::onButtonLogout(CCObject* pSender)
 // CCBMemberVariableAssigner interface
 bool LayerUserInfo_Details::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemberVariableName, cocos2d::CCNode *pNode)
 {
+	CCLOG("pMemberVariableName: %s", pMemberVariableName);
 //    if( pMemberVariableName==NULL || strcmp(pMemberVariableName, "")==0 )
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblAM", CCLabelTTF *, lblAM);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblAMF", CCLabelTTF *, lblAMF);
