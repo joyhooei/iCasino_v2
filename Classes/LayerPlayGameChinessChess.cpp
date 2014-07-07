@@ -552,15 +552,18 @@ void LayerPlayGameChinessChess::loadAllDatas(){
 
 void LayerPlayGameChinessChess::onButtonBack(CCObject* pSender){
     // leave room
-    boost::shared_ptr<IRequest> request (new LeaveRoomRequest());
+    /*boost::shared_ptr<IRequest> request (new LeaveRoomRequest());
     GameServer::getSingleton().getSmartFox()->Send(request);
     
     GameServer::getSingleton().removeListeners(this);
     this->removeAllChildrenWithCleanup(true);
     
-    SceneManager::getSingleton().gotoMain();
+    SceneManager::getSingleton().gotoMain();*/
 
-	/*if( GameServer::getSingleton().getSmartFox()->LastJoinedRoom()==NULL ){
+	GameServer::getSingleton().removeListeners(this);
+	this->removeAllChildrenWithCleanup(true);
+
+	if( GameServer::getSingleton().getSmartFox()->LastJoinedRoom()==NULL ){
 		SceneManager::getSingleton().gotoMain();
 		return;
 	} 
@@ -568,17 +571,13 @@ void LayerPlayGameChinessChess::onButtonBack(CCObject* pSender){
 	if (gameID == NULL) {
 		return;
 	}
-	string _gameID = gameID->c_str();
-	if (_gameID == "109") {
-		SceneManager::getSingleton().setBackgroundScreen(false);
-	}
 
 	SceneManager::getSingleton().gotoMain();
 	LayerMain::getSingleton().gotoChonBanChoi( atol(gameID->c_str()) );
 
 	// leave room
 	boost::shared_ptr<IRequest> request (new LeaveRoomRequest());
-	GameServer::getSingleton().getSmartFox()->Send(request);*/
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 void LayerPlayGameChinessChess::onButtonSetting(CCObject* pSender){
 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
