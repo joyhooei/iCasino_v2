@@ -66,7 +66,7 @@ SEL_MenuHandler LayerFriendDetails::onResolveCCBCCMenuItemSelector(cocos2d::CCOb
 void LayerFriendDetails::onButtonSMS(CCObject* pSender)
 {
     CCLOG("onButtonSMS");
-    
+
 }
 
 void LayerFriendDetails::onButtonTransferMoney(CCObject* pSender)

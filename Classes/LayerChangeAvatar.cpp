@@ -10,6 +10,7 @@
 #include "LayerChangeAvatar.h"
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
+#include "Android.h"
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
@@ -53,16 +54,24 @@ void LayerChangeAvatar::onButtonDefault(CCObject* pSender){
     
 }
 void LayerChangeAvatar::onButtonFacebook(CCObject* pSender){
-    CCLOG("onButtonFacebook");
+
     
 }
 void LayerChangeAvatar::onButtonChooseFile(CCObject* pSender){
     CCLOG("onButtonChooseFile");
-    
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+	openImage();
+#else
+	CCLog("Khong ho tro nen tang nay!");
+#endif
 }
 void LayerChangeAvatar::onButtonCapture(CCObject* pSender){
     CCLOG("onButtonCapture");
-    
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+	camera();
+#else
+	CCLog("Khong ho tro nen tang nay!");
+#endif
 }
 
 // CCBMemberVariableAssigner interface

@@ -14,6 +14,7 @@
 #include "SceneManager.h"
 #include "_Chat_.h"
 #include "mUtils.h"
+#include "Android.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -129,6 +130,11 @@ void LayerLogin::onButtonLoginWithFacebook(CCObject* pSender){
 //         this->addChild(mLayer, 1, 1);
 //         ccbReader->release();
 //     }
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+	loginFB();
+#else
+	CCLog("Ko ho tro nen tang nay !");
+#endif
 }
 void LayerLogin::onButtonCreateAccount(CCObject* pSender){
 	CCNodeLoaderLibrary * ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
