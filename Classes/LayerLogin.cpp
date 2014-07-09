@@ -240,7 +240,7 @@ void LayerLogin::selectedStateEvent(CCObject* pSender, CheckBoxEventType type){
 
 void LayerLogin::OnSmartFoxConnection(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent)
 {
-	if( isRegistPopupShown ) 
+	if( isRegistPopupShown || !GameServer::getSingleton().getSmartFox()->IsConnected() ) 
 		return;
     CCLog("LayerLogin: OnSmartFoxConnection");
     doLogin();

@@ -135,6 +135,9 @@ void GameServer::connectToServer( const char * strIP, const char * strPort )
 		mSmartFox.reset();
 	}
 	initServer();
+	mSmartFox->AddLogListener(LOGLEVEL_DEBUG, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnDebugMessage, (unsigned long long)this)));
+	mSmartFox->UseBlueBox(false);
+	mSmartFox->SetReconnectionSeconds(0);
 	mSmartFox->Connect(strIP,(long int)port);
 }
 
@@ -318,4 +321,12 @@ void GameServer::OnSmartFoxNtf(eEventTags tag, unsigned long long ptrContext, bo
 		};
 		
     }
+}
+
+void GameServer::OnDebugMessage( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["message"];
+	boost::shared_ptr<string> ptrNotifiedMsg = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
+	CCLOG("GameServer::OnDebugMessage() - %s", ptrNotifiedMsg->c_str());
 }

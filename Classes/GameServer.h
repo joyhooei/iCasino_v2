@@ -147,6 +147,9 @@ public:
 	static void OnSmartFoxInvitation(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
     
 	static void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+
+	//Log
+	static void OnDebugMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent) ;
     
 public: //4 notify
     void OnSmartFoxNtf(eEventTags tag, unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
