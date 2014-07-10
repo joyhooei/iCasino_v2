@@ -12,11 +12,11 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "GameServer.h"
-#include "AllData.h"
 #include "_Avatar_inGame_.h"
 #include "FrameBet.h"
 #include "CardChan.h"
 #include "NotificationCallback.h"
+#include "_Button_inGame_.h"
 
 #define PI 3.141592653589
 using namespace cocos2d;
@@ -151,15 +151,9 @@ private:
 	int count_chiu_top;
 
 	LayerAvatarInGame *layerAvatars;
+	LayerButtonInGame *layerButtons;
 
 	UILayer *uLayer;
-	UIButton *btnReady;
-	UIButton *btnTake;
-	UIButton *btnBoc;
-	UIButton *btnEate;
-	UIButton *btnDuoi;
-	UIButton *btnU;
-	UIButton *btnChiu;
 	UILabel *lblDetail;
 
 
@@ -254,6 +248,9 @@ public:
 
 	void hideAllButton();
 	void resetPositionButton();
+
+	Button* createButtonWithTitle_Pos(const char *pName, CCPoint pPoint);
+	Button* getButtonByTag(int pTag);
 
 	void CardTouch(CCObject *pSender,TouchEventType type);
 

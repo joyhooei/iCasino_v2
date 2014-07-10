@@ -8,7 +8,6 @@
 
 #include "LayerChanGame.h"
 #include "_Background_inGame_.h"
-#include "_Button_inGame_.h"
 #include "Requests/ExtensionRequest.h"
 #include "CardChan.h"
 #include "_Chat_.h"
@@ -16,6 +15,8 @@
 #include "SliderCustomLoader.h"
 #include "SceneManager.h"
 #include "LayerGameChan_KetQua.h"
+#include "AllData.h"
+
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
 LayerChanGame::LayerChanGame(){
@@ -98,8 +99,6 @@ LayerChanGame::LayerChanGame(){
 	//Khoảng cách lá bài cửa trì
 	kc_me = kc_left = kc_right = kc_top = w_card;
 
-	GameServer::getSingleton().addListeners(this);
-	this->scheduleOnce(schedule_selector(LayerChanGame::sendRequestJoinGame),1.0f);
 	createButtons();
 	createAvatars();
 
@@ -107,97 +106,6 @@ LayerChanGame::LayerChanGame(){
 	uLayer->setAnchorPoint(ccp(0, 0));
 	uLayer->setPosition(ccp(0, 0));
 	this->addChild(uLayer);
-
-	//Btn Ready
-	btnReady = UIButton::create();
-	btnReady->loadTextures("ready.png", "ready_selected.png", "");
-	btnReady->setTitleText("Sẵn Sàng");
-	btnReady->setAnchorPoint(ccp(0,0));
-	btnReady->setPosition(ccp(WIDTH_DESIGN-btnReady->getContentSize().width-20,20));
-	btnReady->setTouchEnabled(true);
-	btnReady->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_ready_click));
-	btnReady->setTitleFontSize(20);
-	btnReady->setTitleColor(ccRED);
-	btnReady->setVisible(true);
-	uLayer->addWidget(btnReady);
-
-	//btn Take
-	btnTake = UIButton::create();
-	btnTake->loadTextures("ready.png", "ready_selected.png", "");
-	btnTake->setTitleText("Đánh");
-	btnTake->setAnchorPoint(ccp(0,0));
-	btnTake->setPosition(ccp(WIDTH_DESIGN-btnTake->getContentSize().width-20,20));
-	btnTake->setTouchEnabled(false);
-	btnTake->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_take_click));
-	btnTake->setTitleFontSize(20);
-	btnTake->setTitleColor(ccRED);
-	btnTake->setVisible(false);
-	uLayer->addWidget(btnTake);
-
-	//btn Bốc
-	btnBoc = UIButton::create();
-	btnBoc->loadTextures("ready.png", "ready_selected.png", "");
-	btnBoc->setTitleText("Bốc");
-	btnBoc->setAnchorPoint(ccp(0,0));
-	btnBoc->setPosition(ccp(WIDTH_DESIGN-btnBoc->getContentSize().width-20,btnBoc->getContentSize().height + 30));
-	btnBoc->setTouchEnabled(false);
-	btnBoc->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_boc_click));
-	btnBoc->setTitleFontSize(20);
-	btnBoc->setTitleColor(ccRED);
-	btnBoc->setVisible(false);
-	uLayer->addWidget(btnBoc);
-
-	//btn Dưới
-	btnDuoi = UIButton::create();
-	btnDuoi->loadTextures("ready.png", "ready_selected.png", "");
-	btnDuoi->setTitleText("Dưới");
-	btnDuoi->setAnchorPoint(ccp(0,0));
-	btnDuoi->setPosition(ccp(WIDTH_DESIGN-btnDuoi->getContentSize().width-20,btnDuoi->getContentSize().height*2+40));
-	btnDuoi->setTouchEnabled(false);
-	btnDuoi->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_Duoi_click));
-	btnDuoi->setTitleFontSize(20);
-	btnDuoi->setTitleColor(ccRED);
-	btnDuoi->setVisible(false);
-	uLayer->addWidget(btnDuoi);
-
-	//btn Eate
-	btnEate = UIButton::create();
-	btnEate->loadTextures("ready.png", "ready_selected.png", "");
-	btnEate->setTitleText("Ăn");
-	btnEate->setAnchorPoint(ccp(0,0));
-	btnEate->setPosition(ccp(WIDTH_DESIGN-btnEate->getContentSize().width-20,btnEate->getContentSize().height*2+40));
-	btnEate->setTouchEnabled(false);
-	btnEate->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_eate_click));
-	btnEate->setTitleFontSize(20);
-	btnEate->setTitleColor(ccRED);
-	btnEate->setVisible(false);
-	uLayer->addWidget(btnEate);
-
-	//btn Ù
-	btnU = UIButton::create();
-	btnU->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-	btnU->setTitleText("Ù");
-	btnU->setAnchorPoint(ccp(0,0));
-	btnU->setPosition(ccp(WIDTH_DESIGN-btnEate->getContentSize().width - btnU->getContentSize().width - 30, 20));
-	btnU->setTouchEnabled(false);
-	btnU->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_U_Click));
-	btnU->setTitleFontSize(20);
-	btnU->setTitleColor(ccRED);
-	btnU->setVisible(false);
-	uLayer->addWidget(btnU);
-
-	//btn Chíu
-	btnChiu = UIButton::create();
-	btnChiu->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
-	btnChiu->setTitleText("Chíu");
-	btnChiu->setAnchorPoint(ccp(0,0));
-	btnChiu->setPosition(ccp(WIDTH_DESIGN-btnEate->getContentSize().width - btnChiu->getContentSize().width - 30, btnChiu->getContentSize().height + 30));
-	btnChiu->setTouchEnabled(false);
-	btnChiu->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_Chiu_Click));
-	btnChiu->setTitleFontSize(20);
-	btnChiu->setTitleColor(ccRED);
-	btnChiu->setVisible(false);
-	uLayer->addWidget(btnChiu);
 
 	lblDetail = UILabel::create();
 	lblDetail->setText("");
@@ -252,6 +160,9 @@ LayerChanGame::LayerChanGame(){
 	CARD_D_TOP_bottom = CCArray::create();
 	CARD_D_TOP_bottom->retain();
 
+
+	GameServer::getSingleton().addListeners(this);
+	this->scheduleOnce(schedule_selector(LayerChanGame::sendRequestJoinGame),1.0f);
 	SceneManager::getSingleton().hideLoading();
 }
 
@@ -349,8 +260,53 @@ void LayerChanGame::onExit()
 }
 
 void LayerChanGame::createButtons(){
-	LayerButtonInGame *bt = LayerButtonInGame::create();
-	this->addChild(bt);
+	layerButtons = LayerButtonInGame::create();
+	this->addChild(layerButtons);
+
+	int w_Button = 129;
+	int h_Button = 44;
+	int _space = 20;
+
+	Button *btnReady = createButtonWithTitle_Pos("Sẵn Sàng",ccp(WIDTH_DESIGN - w_Button - _space, _space));
+	Button *btnTake = createButtonWithTitle_Pos("Đánh",ccp(WIDTH_DESIGN - w_Button - _space, _space));
+	Button *btnBoc = createButtonWithTitle_Pos("Bốc", ccp(WIDTH_DESIGN - w_Button - _space, h_Button + 30));
+	Button *btnDuoi = createButtonWithTitle_Pos("Dưới", ccp(WIDTH_DESIGN - w_Button - _space, h_Button * 2 + 40));
+	Button *btnEate = createButtonWithTitle_Pos("Ăn", ccp(WIDTH_DESIGN - w_Button - _space, h_Button * 2 + 40));
+	Button *btnU = createButtonWithTitle_Pos("Ù", ccp(WIDTH_DESIGN - w_Button * 2 - 30, 20));
+	Button *btnChiu = createButtonWithTitle_Pos("Chíu", ccp(WIDTH_DESIGN - w_Button * 2 - 30, h_Button + 30));
+
+	btnReady->setEnabled(true);
+	btnTake->setEnabled(false);
+	btnBoc->setEnabled(false);
+	btnDuoi->setEnabled(false);
+	btnEate->setEnabled(false);
+	btnU->setEnabled(false);
+	btnChiu->setEnabled(false);
+
+	btnReady->setTag(cTag_btnReady);
+	btnTake->setTag(cTag_btnTake);
+	btnBoc->setTag(cTag_btnBoc);
+	btnDuoi->setTag(cTag_btnDuoi);
+	btnEate->setTag(cTag_btnEate);
+	btnU->setTag(cTag_btnU);
+	btnChiu->setTag(cTag_btnChiu);
+
+	btnReady->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_ready_click));
+	btnTake->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_take_click));
+	btnBoc->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_boc_click));
+	btnDuoi->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_Duoi_click));
+	btnEate->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_eate_click));
+	btnU->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_U_Click));
+	btnChiu->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_Chiu_Click));
+
+	layerButtons->addWidget(btnReady);
+	layerButtons->addWidget(btnTake);
+	layerButtons->addWidget(btnBoc);
+	layerButtons->addWidget(btnDuoi);
+	layerButtons->addWidget(btnEate);
+	layerButtons->addWidget(btnU);
+	layerButtons->addWidget(btnChiu);
+
 }
 void LayerChanGame::createAvatars(){
 	layerAvatars = LayerAvatarInGame::create();
@@ -515,11 +471,10 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if(rescode != NULL){
 			CCLOG("Resuilt code Draw: %ld",*rescode);
 			if (*rescode == 0) {
-				btnBoc->setTouchEnabled(false);
-				btnBoc->setVisible(false);
-				btnEate->setPosition(btnBoc->getPosition());
-				btnDuoi->setVisible(true);
-				btnDuoi->setTouchEnabled(true);
+
+				getButtonByTag(cTag_btnBoc)->setEnabled(false);
+				getButtonByTag(cTag_btnEate)->setPosition(getButtonByTag(cTag_btnBoc)->getPosition());
+				getButtonByTag(cTag_btnDuoi)->setEnabled(true);
 			}
 		}
 		CCLOG("EXT_EVENT_RES_DRAW_CARD");
@@ -614,10 +569,8 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		{
 			if (*rscode == 0)
 			{
-				btnChiu->setTouchEnabled(false);
-				btnChiu->setVisible(false);
-				btnTake->setVisible(true);
-				btnTake->setTouchEnabled(true);
+				getButtonByTag(cTag_btnChiu)->setEnabled(false);
+				getButtonByTag(cTag_btnTake)->setEnabled(true);
 			}
 		}
 	}
@@ -1592,11 +1545,9 @@ void LayerChanGame::addCard_toCuaTri(CCNode* sender, void* data){
 		//Hien Button an,vs button dưới
 		if (strcmp(currentPlayer.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
 		{
-			btnBoc->setTouchEnabled(false);
-			btnBoc->setVisible(false);
-			btnEate->setPosition(btnBoc->getPosition());
-			btnDuoi->setVisible(true);
-			btnDuoi->setTouchEnabled(true);
+			getButtonByTag(cTag_btnBoc)->setEnabled(false);
+			getButtonByTag(cTag_btnEate)->setPosition(getButtonByTag(cTag_btnBoc)->getPosition());
+			getButtonByTag(cTag_btnDuoi)->setEnabled(true);
 		}
 		break;
 	case kUserLeft:
@@ -1722,6 +1673,26 @@ CardChan* LayerChanGame::getCardFromPos_take(int pos){
 	return fcard;
 }
 
+Button* LayerChanGame::createButtonWithTitle_Pos(const char *pName, CCPoint pPoint){
+	Button* button = Button::create();
+	button->setTouchEnabled(true);
+	button->setScale9Enabled(false);
+	button->loadTextures("ready.png", "ready_selected.png", "");
+	button->setTitleText(pName);
+	button->setTitleColor(ccRED);
+	button->setTitleFontSize(20);
+	button->setTitleFontSize(button->getContentSize().height / 2);
+	button->setAnchorPoint(ccp(0, 0));
+	button->setPosition(pPoint);
+
+	return button;
+}
+
+Button* LayerChanGame::getButtonByTag(int pTag){
+	Button* button = (Button*) this->layerButtons->getWidgetByTag(pTag);
+	return button;
+}
+
 //Card Touch
 void LayerChanGame::CardTouch(CCObject *pSender,TouchEventType type){
 	if (type == TOUCH_EVENT_ENDED) {
@@ -1803,12 +1774,9 @@ string LayerChanGame::getNameCard(int number, int suite){
 //When user take Cards
 void LayerChanGame::whenUserTakeCards(long rscode){
 	if(rscode == 0){
-		btnEate->setTouchEnabled(false);
-		btnEate->setVisible(false);
-		btnBoc->setVisible(false);
-		btnBoc->setTouchEnabled(false);
-		btnDuoi->setTouchEnabled(false);
-		btnDuoi->setVisible(false);
+		getButtonByTag(cTag_btnEate)->setEnabled(false);
+		getButtonByTag(cTag_btnBoc)->setEnabled(false);
+		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 	}else{
 		CCLOG("Ăn không đúng Chắn, Cạ");
 		Chat *toast = new Chat("Ăn không đúng Chắn Cạ", -1);
@@ -1820,32 +1788,23 @@ void LayerChanGame::whenUserTakeCards(long rscode){
 void LayerChanGame::setCurrentPlayer(string uid,int _count){
 	layerAvatars->stopAllTimer();
 	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0) {
-		btnReady->setTouchEnabled(false);
-		btnReady->setVisible(false);
-		btnTake->setVisible(true);
-		btnTake->setTouchEnabled(true);
+		getButtonByTag(cTag_btnReady)->setEnabled(false);
+		getButtonByTag(cTag_btnTake)->setEnabled(true);
 		if (_count == 0) {
-			btnEate->setTouchEnabled(false);
-			btnEate->setVisible(false);
-			btnBoc->setVisible(false);
-			btnBoc->setTouchEnabled(false);
+			getButtonByTag(cTag_btnEate)->setEnabled(false);
+			getButtonByTag(cTag_btnBoc)->setEnabled(false);
 		}else{
-			btnEate->setPosition(btnDuoi->getPosition());
-			btnEate->setTouchEnabled(true);
-			btnEate->setVisible(true);
-			btnBoc->setVisible(true);
-			btnBoc->setTouchEnabled(true);
+			getButtonByTag(cTag_btnEate)->setPosition(getButtonByTag(cTag_btnDuoi)->getPosition());
+			getButtonByTag(cTag_btnEate)->setEnabled(true);
+			getButtonByTag(cTag_btnBoc)->setEnabled(true);
 		}
 	}
 	else{
-		btnTake->setVisible(false);
-		btnTake->setTouchEnabled(false);
-		btnEate->setTouchEnabled(false);
-		btnEate->setVisible(false);
-		btnBoc->setVisible(false);
-		btnBoc->setTouchEnabled(false);
-		btnDuoi->setVisible(false);
-		btnDuoi->setTouchEnabled(false);
+		getButtonByTag(cTag_btnTake)->setEnabled(false);
+		getButtonByTag(cTag_btnEate)->setEnabled(false);
+		getButtonByTag(cTag_btnBoc)->setEnabled(false);
+		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+
 		switch (getPosUserByName(uid, _list_user)) {
 		case kUserLeft:
 			layerAvatars->getUserByPos(kUserLeft)->startTimer();
@@ -1865,8 +1824,7 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 //set user ready
 void LayerChanGame::setUserReady(string uid){
 	if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-		btnReady->setTouchEnabled(false);
-		btnReady->setVisible(false);
+		getButtonByTag(cTag_btnReady)->setEnabled(false);
 	}else{
 		switch (getPosUserByName(uid, _list_user)) {
 		case kUserLeft:
@@ -1996,16 +1954,14 @@ void LayerChanGame::whenConguoi_ChoU(string uid){
 
 	if(strcmp(uid.c_str(),myName.c_str()) == 0){
 		// Hiển thị button Ù
-		btnU->setVisible(true);
-		btnU->setTouchEnabled(true);
+		getButtonByTag(cTag_btnU)->setEnabled(true);
 		if(strcmp(myName.c_str(),currentPlayer.c_str()) == 0)
 		{
 			
 		}
 		else
 		{
-			btnEate->setVisible(true);
-			btnEate->setTouchEnabled(true);
+			getButtonByTag(cTag_btnEate)->setEnabled(true);
 		}
 
 	}else{
@@ -2036,8 +1992,7 @@ void LayerChanGame::whenConguoi_Chiu(string uid){
 
 	if (strcmp(uid.c_str(),myName.c_str()) == 0)
 	{
-		btnChiu->setVisible(true);
-		btnChiu->setTouchEnabled(true);
+		getButtonByTag(cTag_btnChiu)->setEnabled(true);
 	}
 	else
 	{
@@ -2128,22 +2083,14 @@ void LayerChanGame::setEndGame(){
 	deleteAllCardFromArray(CARD_D_ME_top);
 	deleteAllCardFromArray(CARD_D_LEFT_top);
 
-	btnBoc->setVisible(false);
-	btnBoc->setTouchEnabled(false);
-	btnDuoi->setTouchEnabled(false);
-	btnDuoi->setVisible(false);
-	btnEate->setVisible(false);
-	btnEate->setTouchEnabled(false);
-	btnTake->setTouchEnabled(false);
-	btnTake->setVisible(false);
 
-	btnU->setVisible(false);
-	btnU->setTouchEnabled(false);
-	btnChiu->setVisible(false);
-	btnChiu->setTouchEnabled(false);
-
-	btnReady->setTouchEnabled(true);
-	btnReady->setVisible(true);
+	getButtonByTag(cTag_btnBoc)->setEnabled(false);
+	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+	getButtonByTag(cTag_btnEate)->setEnabled(false);
+	getButtonByTag(cTag_btnTake)->setEnabled(false);
+	getButtonByTag(cTag_btnU)->setEnabled(false);
+	getButtonByTag(cTag_btnChiu)->setEnabled(false);
+	getButtonByTag(cTag_btnReady)->setEnabled(true);
 }
 
 void LayerChanGame::deleteAllCardFromArray(CCArray *P){
@@ -2282,26 +2229,13 @@ void LayerChanGame::btn_Chiu_Click(CCObject *sender, TouchEventType type){
 }
 
 void LayerChanGame::hideAllButton(){
-	btnReady->setVisible(false);
-	btnReady->setTouchEnabled(false);
-
-	btnEate->setVisible(false);
-	btnEate->setTouchEnabled(false);
-
-	btnBoc->setVisible(false);
-	btnBoc->setTouchEnabled(false);
-
-	btnDuoi->setVisible(false);
-	btnDuoi->setTouchEnabled(false);
-
-	btnTake->setVisible(false);
-	btnTake->setTouchEnabled(false);
-
-	btnChiu->setVisible(false);
-	btnChiu->setTouchEnabled(false);
-
-	btnU->setVisible(false);
-	btnU->setTouchEnabled(false);
+	getButtonByTag(cTag_btnReady)->setEnabled(false);
+	getButtonByTag(cTag_btnEate)->setEnabled(false);
+	getButtonByTag(cTag_btnBoc)->setEnabled(false);
+	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+	getButtonByTag(cTag_btnTake)->setEnabled(false);
+	getButtonByTag(cTag_btnChiu)->setEnabled(false);
+	getButtonByTag(cTag_btnU)->setEnabled(false);
 }
 void LayerChanGame::resetPositionButton(){
 

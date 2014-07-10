@@ -92,6 +92,16 @@ enum{
 	dTag_btnAll,
 	dTag_btnGive
 };
+
+enum{
+	cTag_btnReady = 0,
+	cTag_btnTake,
+	cTag_btnBoc,
+	cTag_btnDuoi,
+	cTag_btnEate,
+	cTag_btnU,
+	cTag_btnChiu
+};
 // @thanhhv
 // Đặt những hàm được sử dụng thường xuyên ở đây
 class DoTogether {
