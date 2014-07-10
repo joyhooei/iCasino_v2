@@ -14,6 +14,7 @@
 #include "cocos-ext.h"
 #include "SingLeton.h"
 #include "GameServer.h"
+#include "ImageDownloader.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -57,6 +58,8 @@ private:
     CCNodeLoaderLibrary * ccNodeLoaderLibrary;
     
     CCNode* currNodeView;
+
+	ImageDownloader* imageDownloader;
 public:
     LayerMain();
     virtual ~LayerMain();
@@ -110,9 +113,9 @@ public:
     void onButtonSettings(CCObject* pSender);
     void onButtonBack(CCObject* pSender);
     //HTTPCLIENT
-    void downLoadImage(string url, string fileName);
-    void onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse);
-    void loadDefaultImage();
+//     void downLoadImage(string url, string fileName);
+//     void onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse);
+//     void loadDefaultImage();
     //Server
     void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 };

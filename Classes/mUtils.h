@@ -344,5 +344,11 @@ public:
 		CCUserDefault *def=CCUserDefault::sharedUserDefault();
 		return def->getBoolForKey("vibrate", true);
 	}
+	static string getFileName(string fullpath){
+		unsigned  found = fullpath.find_last_of("/");
+		if( found!=-1 )
+			return fullpath.substr(found+1);
+		return "";
+	}
 };
 #endif

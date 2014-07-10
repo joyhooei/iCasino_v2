@@ -140,6 +140,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\CustomTableViewCell.cpp" />
     <ClCompile Include="..\Classes\FrameBet.cpp" />
     <ClCompile Include="..\Classes\GameServer.cpp" />
+    <ClCompile Include="..\Classes\ImageDownloader.cpp" />
     <ClCompile Include="..\Classes\LayerAction.cpp" />
     <ClCompile Include="..\Classes\LayerAvatarXiTo.cpp" />
     <ClCompile Include="..\Classes\LayerAvatar_BaCay.cpp" />
@@ -226,6 +227,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\CustomTableViewCell.h" />
     <ClInclude Include="..\Classes\FrameBet.h" />
     <ClInclude Include="..\Classes\GameServer.h" />
+    <ClInclude Include="..\Classes\ImageDownloader.h" />
     <ClInclude Include="..\Classes\LayerAction.h" />
     <ClInclude Include="..\Classes\LayerAvatarXiTo.h" />
     <ClInclude Include="..\Classes\LayerAvatar_BaCay.h" />

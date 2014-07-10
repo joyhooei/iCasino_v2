@@ -17,6 +17,7 @@
 #include "LayerMoiChoi.h"
 
 #include "_Chat_.h"
+#include "ImageDownloader.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -53,24 +54,25 @@ public:
     string convertMoney(int money);
 
     // hoangdd
-    void downLoadImage(string url, string fileName);
-    void onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse);
-	void setAvatarByPath(string path); // đường dẫn ảnh đã được lưu trong máy
-	void setAvatarBySprite(CCSprite* img);
-    void loadDefaultImage();
+//     void downLoadImage(string url, string fileName);
+//     void onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse);
+// 	void setAvatarByPath(string path); // đường dẫn ảnh đã được lưu trong máy
+// 	void setAvatarBySprite(CCSprite* img);
+//     void loadDefaultImage();
     
 private:
     enum {
         tagIcon = 0,
         tagInvite
     };
-    
+    ImageDownloader* imagedownloader;
     bool isMe;
 	bool meIsBoss;
 	string aI;
 	string nameString;
     CCSize sizeThis;
     CCSize sizeIcon;
+	CCNode* nodeIcon;
     
     CCProgressTimer *timer;
     UILayer   *layerWidget;

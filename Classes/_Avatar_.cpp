@@ -27,11 +27,13 @@ timer(NULL)
 ,name(NULL)
 ,money(NULL)
 {
+	imagedownloader = new ImageDownloader();
 	meIsBoss = false;
 	// khoi tao
 	this->isMe = isMe;
 	this->setAnchorPoint(ccp(0, 0));
 	layerPlayerInfo = NULL;
+
 
 	if (isMe) {
 		sizeThis.setSize(196, 56);
@@ -139,6 +141,14 @@ timer(NULL)
 		this->addChild(layerWidget);
 		this->addChild(layerInvite);
 	}
+	nodeIcon = CCNode::create();
+	nodeIcon->setContentSize( sizeIcon );
+	nodeIcon->setAnchorPoint(ccp(0.5, 0.5));
+	if (this->isMe) {
+		nodeIcon->setPositionX(-(getSizeThis().width / 2 - sizeIcon.width / 2 - 3));
+		nodeIcon->setPositionY(2);
+	}
+	layerWidget->addChild(nodeIcon);
 }
 
 Avatar::~Avatar() {
@@ -181,6 +191,7 @@ Avatar::~Avatar() {
 		layerPlayerInfo->release();
 		layerPlayerInfo=NULL;
 	}
+	CC_SAFE_DELETE(imagedownloader);
 	/*if (layerMoiChoi) {
 		layerMoiChoi->release();
 		layerMoiChoi=NULL;
@@ -259,27 +270,27 @@ void Avatar::showLayerInvite() {
 }
 
 void Avatar::setIcon(string url){
-	// hideLayerInvite();
-	vector<string> arr = mUtils::splitString(url, '/');
-	string nameIcon = "icon.png";
-	if (arr.size() > 0) nameIcon = arr.at(arr.size()-1);
-
-	std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
-	writablePath.append(nameIcon);
-
-	CCLog("writablePath.c_str()= %s", writablePath.c_str());
-
-	CCSprite *avatar = CCSprite::create(writablePath.c_str());
-	if (avatar == NULL) {
-		CCLog("Load avatar from Server");
-		downLoadImage(url, nameIcon);
-	}
-	else {
-		CCLog("Load avatar from Device");
-		setAvatarBySprite(avatar);
-	}
-
-	
+// 	hideLayerInvite();
+// 		vector<string> arr = mUtils::splitString(url, '/');
+// 		string nameIcon = "icon.png";
+// 		if (arr.size() > 0) nameIcon = arr.at(arr.size()-1);
+// 	
+// 		std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+// 		writablePath.append(nameIcon);
+// 	
+// 		CCLog("writablePath.c_str()= %s", writablePath.c_str());
+// 	
+// 		CCSprite *avatar = CCSprite::create(writablePath.c_str());
+// 		if (avatar == NULL) {
+// 			CCLog("Load avatar from Server");
+// 			downLoadImage(url, nameIcon);
+// 		}
+// 		else {
+// 			CCLog("Load avatar from Device");
+// 			setAvatarBySprite(avatar);
+// 		}
+	imagedownloader->setPointerNodeImage( nodeIcon );
+	imagedownloader->downLoadImage(url);
 }
 
 void Avatar::setFlag(bool isShow){
@@ -442,84 +453,84 @@ string Avatar::convertMoney(int money){
 }
 
 // hoangdd
-void Avatar::loadDefaultImage(){
-	if (icon ==NULL) {
-		return;
-	}
-
-	CCSprite* pSprite = CCSprite::create("icon_default.png");
-	setAvatarBySprite(pSprite);
-}
-
-void Avatar::downLoadImage(string url, string fileName){
-	CCLog("url= %s", url.c_str());
-	if( url.compare("")==0 ){
-		loadDefaultImage();
-		return;
-	}
-	CCHttpRequest* request = new CCHttpRequest();
-	request->setUrl(url.c_str());
-	request->setRequestType(CCHttpRequest::kHttpGet);
-	request->setResponseCallback(this, httpresponse_selector(Avatar::onImageDownLoaded));
-	request->setTag(fileName.c_str());
-	CCHttpClient::getInstance()->send(request);
-	request->release();
-}
-
-void Avatar::onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse){
-	CCHttpResponse* response = pResponse;
-
-	if (!response)
-	{
-		CCLog("No Response");
-		loadDefaultImage();
-		return ;
-	}
-	int statusCode = response->getResponseCode();
-
-	char statusString[64] = {};
-	sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
-	CCLog("response code: %d", statusCode);
-
-	if (!response->isSucceed())
-	{
-		CCLog("response failed");
-		CCLog("error buffer: %s", response->getErrorBuffer());
-		loadDefaultImage();
-		return;
-	}
-	std::vector<char>*buffer = response->getResponseData();
-
-
-	CCImage * img=new CCImage();
-	img->initWithImageData(&(buffer->front()), buffer->size());
-
-	// Save image file to device.
-	std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
-	writablePath.append(response->getHttpRequest()->getTag());
-	// add this line
-	img->saveToFile(writablePath.c_str());
-
-	setAvatarByPath(writablePath.c_str());
-}
-
-void Avatar::setAvatarByPath(string path) {
-	CCSprite *img = CCSprite::create(path.c_str());
-	setAvatarBySprite(img);
-}
-
-void Avatar::setAvatarBySprite(CCSprite* img) {
-	img->setTag(tagIcon);
-	CCSize sizeSprite = img->getContentSize();
-	img->cocos2d::CCNode::setScale(sizeIcon.width / sizeSprite.width, sizeIcon.height / sizeSprite.height);
-	if (this->isMe) {
-		img->setPositionX(-(getSizeThis().width / 2 - sizeIcon.width / 2 - 3));
-		img->setPositionY(2);
-	}
-
-	layerWidget->removeChildByTag(tagIcon);
-	layerWidget->addChild(img);
-}
+// void Avatar::loadDefaultImage(){
+// 	if (icon ==NULL) {
+// 		return;
+// 	}
+// 
+// 	CCSprite* pSprite = CCSprite::create("icon_default.png");
+// 	setAvatarBySprite(pSprite);
+// }
+// 
+// void Avatar::downLoadImage(string url, string fileName){
+// 	CCLog("url= %s", url.c_str());
+// 	if( url.compare("")==0 ){
+// 		loadDefaultImage();
+// 		return;
+// 	}
+// 	CCHttpRequest* request = new CCHttpRequest();
+// 	request->setUrl(url.c_str());
+// 	request->setRequestType(CCHttpRequest::kHttpGet);
+// 	request->setResponseCallback(this, httpresponse_selector(Avatar::onImageDownLoaded));
+// 	request->setTag(fileName.c_str());
+// 	CCHttpClient::getInstance()->send(request);
+// 	request->release();
+// }
+// 
+// void Avatar::onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse){
+// 	CCHttpResponse* response = pResponse;
+// 
+// 	if (!response)
+// 	{
+// 		CCLog("No Response");
+// 		loadDefaultImage();
+// 		return ;
+// 	}
+// 	int statusCode = response->getResponseCode();
+// 
+// 	char statusString[64] = {};
+// 	sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+// 	CCLog("response code: %d", statusCode);
+// 
+// 	if (!response->isSucceed())
+// 	{
+// 		CCLog("response failed");
+// 		CCLog("error buffer: %s", response->getErrorBuffer());
+// 		loadDefaultImage();
+// 		return;
+// 	}
+// 	std::vector<char>*buffer = response->getResponseData();
+// 
+// 
+// 	CCImage * img=new CCImage();
+// 	img->initWithImageData(&(buffer->front()), buffer->size());
+// 
+// 	// Save image file to device.
+// 	std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+// 	writablePath.append(response->getHttpRequest()->getTag());
+// 	// add this line
+// 	img->saveToFile(writablePath.c_str());
+// 
+// 	setAvatarByPath(writablePath.c_str());
+// }
+// 
+// void Avatar::setAvatarByPath(string path) {
+// 	CCSprite *img = CCSprite::create(path.c_str());
+// 	setAvatarBySprite(img);
+// }
+// 
+// void Avatar::setAvatarBySprite(CCSprite* img) {
+// 	img->setTag(tagIcon);
+// 	CCSize sizeSprite = img->getContentSize();
+// 	img->cocos2d::CCNode::setScale(sizeIcon.width / sizeSprite.width, sizeIcon.height / sizeSprite.height);
+// 	if (this->isMe) {
+// 		img->setPositionX(-(getSizeThis().width / 2 - sizeIcon.width / 2 - 3));
+// 		img->setPositionY(2);
+// 	}
+// 
+// 	layerWidget->removeChildByTag(tagIcon);
+// 	layerWidget->addChild(img);
+// }
 
 void Avatar::setMeIsBoss( bool isBoss )
 {

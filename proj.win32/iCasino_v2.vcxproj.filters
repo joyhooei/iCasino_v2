@@ -257,6 +257,9 @@
     <ClCompile Include="..\Classes\_LayerBet_.cpp" />
     <ClCompile Include="..\Classes\_Layer_CardChan_.cpp" />
     <ClCompile Include="..\Classes\_Number_inTomCuaCa.cpp" />
+    <ClCompile Include="..\Classes\ImageDownloader.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -522,6 +525,9 @@
     <ClInclude Include="..\Classes\_LayerBet_.h" />
     <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
     <ClInclude Include="..\Classes\_Number_inTomCuaCa.h" />
+    <ClInclude Include="..\Classes\ImageDownloader.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

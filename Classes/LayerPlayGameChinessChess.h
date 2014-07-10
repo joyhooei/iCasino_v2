@@ -18,12 +18,13 @@
 #include "_Chess_.h"
 #include "LogicInChess.h"
 #include "NotificationCallback.h"
+#include "ImageDownloader.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
 
-class LayerPlayGameChinessChess
+class LayerPlayGameChinessChess 
 	: public cocos2d::CCLayer
 	, public cocos2d::extension::CCBSelectorResolver
 	, public cocos2d::extension::CCBMemberVariableAssigner
@@ -156,6 +157,9 @@ private:
 
 	CCSprite *selected_chess;
 	ChessLogic *logicChess;
+
+	ImageDownloader* imagedownloader4Red;
+	ImageDownloader* imagedownloader4Black;
 
 public:
 	LayerPlayGameChinessChess();

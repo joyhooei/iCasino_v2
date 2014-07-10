@@ -38,6 +38,8 @@ LayerMain& LayerMain::getSingleton(void)
 
 LayerMain::LayerMain()
 {
+	imageDownloader = new ImageDownloader();
+
     lblAM = NULL;
     lblAMF = NULL;
     lblCountOfMails = NULL;
@@ -95,7 +97,8 @@ void LayerMain::loadAllMyDatas(){
     lblAMF->setString( mUtils::convertMoneyEx(*amf).c_str() );
     lblAM->setString( mUtils::convertMoneyEx(*am).c_str() );
     //Set avatar
-    downLoadImage(*aal, "myself.png");
+    imageDownloader->setPointerNodeImage( nodeAvatar );
+	imageDownloader->downLoadImage(*aal);
 }
 
 void LayerMain::gotoServices(){
@@ -429,73 +432,97 @@ void LayerMain::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boos
 		loadAllMyDatas();
 }
 
-void LayerMain::loadDefaultImage(){
-    CCSprite* pSprite = CCSprite::createWithSpriteFrameName("assest/icon_default.png");
-    pSprite->setAnchorPoint(ccp(0, 0));
-    pSprite->cocos2d::CCNode::setScale(nodeAvatar->getContentSize().width/pSprite->getContentSize().width, nodeAvatar->getContentSize().height/pSprite->getContentSize().height);
-    //Call callback
-    nodeAvatar->removeAllChildrenWithCleanup(true);
-    //
-    nodeAvatar->addChild(pSprite);
-}
-
-void LayerMain::downLoadImage(string url, string fileName){
-    if( url.compare("")==0 ){
-        loadDefaultImage();
-        return;
-    }
-    CCHttpRequest* request = new CCHttpRequest();
-    request->setUrl(url.c_str());
-    request->setRequestType(CCHttpRequest::kHttpGet);
-    request->setResponseCallback(this, httpresponse_selector(LayerMain::onImageDownLoaded));
-    request->setTag(fileName.c_str());
-    CCHttpClient::getInstance()->send(request);
-    request->release();
-}
-
-void LayerMain::onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse){
-    CCHttpResponse* response = pResponse;
-    
-    if (!response)
-    {
-        CCLog("No Response");
-        loadDefaultImage();
-        return ;
-    }
-    int statusCode = response->getResponseCode();
-    
-    char statusString[64] = {};
-    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
-    CCLog("response code: %d", statusCode);
-    
-    if (!response->isSucceed())
-    {
-        CCLog("response failed");
-        CCLog("error buffer: %s", response->getErrorBuffer());
-        loadDefaultImage();
-        return;
-    }
-    std::vector<char>*buffer = response->getResponseData();
-    
-    
-    CCImage * img=new CCImage();
-    img->initWithImageData(&(buffer->front()), buffer->size());
-    
-    // Save image file to device.
-    std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
-    writablePath.append(response->getHttpRequest()->getTag());
-    // add this line
-    img->saveToFile(writablePath.c_str());
-    
-    //Now create Sprite from downloaded image
-    CCSprite* pSprite = CCSprite::create(writablePath.c_str());
-    pSprite->setAnchorPoint(ccp(0, 0));
-    pSprite->cocos2d::CCNode::setScale(nodeAvatar->getContentSize().width/pSprite->getContentSize().width, nodeAvatar->getContentSize().height/pSprite->getContentSize().height);
-    //Call callback
-    nodeAvatar->removeAllChildrenWithCleanup(true);
-    //
-    nodeAvatar->addChild(pSprite);
-}
+// void LayerMain::loadDefaultImage(){
+//     CCSprite* pSprite = CCSprite::createWithSpriteFrameName("assest/icon_default.png");
+//     pSprite->setAnchorPoint(ccp(0, 0));
+//     pSprite->cocos2d::CCNode::setScale(nodeAvatar->getContentSize().width/pSprite->getContentSize().width, nodeAvatar->getContentSize().height/pSprite->getContentSize().height);
+//     //Call callback
+//     nodeAvatar->removeAllChildrenWithCleanup(true);
+//     //
+//     nodeAvatar->addChild(pSprite);
+// }
+// 
+// void LayerMain::downLoadImage(string url, string fileName){
+//     if( url.compare("")==0 || fileName=="" ){
+//         loadDefaultImage();
+//         return;
+//     }
+// 	//Check filename existed ?
+// 	std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+// 	writablePath.append( fileName );
+// 	std::ifstream f(writablePath.c_str());
+// 	if(f){
+// 		//existed
+// 		CCSprite* pSprite = NULL;
+// 		try{
+// 			pSprite = CCSprite::create("abcxyz");
+// 		}catch(...){
+// 			return;
+// 		}
+// 		if( pSprite==NULL )
+// 			return;
+// 		pSprite->setAnchorPoint(ccp(0, 0));
+// 		pSprite->cocos2d::CCNode::setScale(nodeAvatar->getContentSize().width/pSprite->getContentSize().width, nodeAvatar->getContentSize().height/pSprite->getContentSize().height);
+// 		//Call callback
+// 		nodeAvatar->removeAllChildrenWithCleanup(true);
+// 		//
+// 		nodeAvatar->addChild(pSprite);
+// 		CCLOG("fileName: %s existed", fileName.c_str());
+// 		return;
+// 	}
+// 	//
+//     CCHttpRequest* request = new CCHttpRequest();
+//     request->setUrl(url.c_str());
+//     request->setRequestType(CCHttpRequest::kHttpGet);
+//     request->setResponseCallback(this, httpresponse_selector(LayerMain::onImageDownLoaded));
+//     request->setTag(fileName.c_str());
+//     CCHttpClient::getInstance()->send(request);
+//     request->release();
+// }
+// 
+// void LayerMain::onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse){
+//     CCHttpResponse* response = pResponse;
+//     
+//     if (!response)
+//     {
+//         CCLog("No Response");
+//         loadDefaultImage();
+//         return ;
+//     }
+//     int statusCode = response->getResponseCode();
+//     
+//     char statusString[64] = {};
+//     sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+//     CCLog("response code: %d", statusCode);
+//     
+//     if (!response->isSucceed())
+//     {
+//         CCLog("response failed");
+//         CCLog("error buffer: %s", response->getErrorBuffer());
+//         loadDefaultImage();
+//         return;
+//     }
+//     std::vector<char>*buffer = response->getResponseData();
+//     
+//     
+//     CCImage * img=new CCImage();
+//     img->initWithImageData(&(buffer->front()), buffer->size());
+//     
+//     // Save image file to device.
+//     std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+//     writablePath.append(response->getHttpRequest()->getTag());
+//     // add this line
+//     img->saveToFile(writablePath.c_str());
+//     
+//     //Now create Sprite from downloaded image
+//     CCSprite* pSprite = CCSprite::create(writablePath.c_str());
+//     pSprite->setAnchorPoint(ccp(0, 0));
+//     pSprite->cocos2d::CCNode::setScale(nodeAvatar->getContentSize().width/pSprite->getContentSize().width, nodeAvatar->getContentSize().height/pSprite->getContentSize().height);
+//     //Call callback
+//     nodeAvatar->removeAllChildrenWithCleanup(true);
+//     //
+//     nodeAvatar->addChild(pSprite);
+// }
 
 void LayerMain::autoJoinGameWithID( int gID, int rID )
 {
