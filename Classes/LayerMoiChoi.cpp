@@ -37,8 +37,8 @@ void LayerMoiChoi::loadAllDatas(){
 	//
 	boost::shared_ptr<ISFSObject> params (new SFSObject());
 	params->PutInt("maqp", 10);
-	params->PutDouble("mimp", 1000);
-	params->PutDouble("amf ", 10000);
+	params->PutLong("mimp", 1000);
+	params->PutInt("amf ", 10000);
 	params->PutInt("gid", gid);
 	boost::shared_ptr<IRequest> request (new ExtensionRequest("rglip", params));
 	GameServer::getSingleton().getSmartFox()->Send(request);

@@ -135,7 +135,7 @@ void GameServer::connectToServer( const char * strIP, const char * strPort )
 		mSmartFox.reset();
 	}
 	initServer();
-	mSmartFox->AddLogListener(LOGLEVEL_DEBUG, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnDebugMessage, (unsigned long long)this)));
+	//mSmartFox->AddLogListener(LOGLEVEL_DEBUG, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnDebugMessage, (unsigned long long)this)));
 	mSmartFox->UseBlueBox(false);
 	mSmartFox->SetReconnectionSeconds(0);
 	mSmartFox->Connect(strIP,(long int)port);
