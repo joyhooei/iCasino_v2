@@ -37,7 +37,8 @@ public:
     bool Attack(int pos, int side);
     bool moveSave(int from, int dest);
     bool IsKingFace(int pos);
-    
+    void setChessIDBySide( int idChess, int side, int pos ); // add a chess onto table
+
 private:
     
 };

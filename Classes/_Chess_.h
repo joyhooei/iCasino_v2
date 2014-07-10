@@ -21,7 +21,7 @@ private:
     int id_pos;
     int id_pos_init;
     string name;
-    
+
     bool isClicked;
     
 public:

@@ -166,14 +166,15 @@ void LayerPlayGameTLMN::createBackgrounds() {
 	string money = arrInfo.at(0);
 
 	mUtils mu;
-	//string name = mu.getGameNameByID(id);
-	string name = "TLMN";
+	CCString *name = mUtils::getGameNameByID(id);
+	//string name = "TLMN";
 	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
 
 	string result = "";
-	if (name.length() > 0 && moneyConvert.length() > 0)
+	if (name->length() > 0 && moneyConvert.length() > 0)
 	{
-		result = name + " - cược:" + moneyConvert;
+		result = name->getCString();
+		result += (" - cược:" + moneyConvert);
 	}
 	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
 	nameGame->setPosition(ccp(400-5, 213+10));

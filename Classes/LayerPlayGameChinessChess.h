@@ -104,13 +104,18 @@ private:
 		EXT_EVENT_FOR_PEACE,        // = "fp";
 		EXT_EVENT_IM_LOSE,          // = "iml"
 		EXT_EVENT_MOVE,
-		EXT_EVENT_REPLY_FOR_PEACE   // = "rfp";
+		EXT_EVENT_REPLY_FOR_PEACE,  // = "rfp";
+		EXT_EVENT_UNDO_MOVE_REQ,	// = "umr";
+		EXT_EVENT_REPLY_UNDO_MOVE,	// = "rum";
+		EXT_EVENT_UNDO_MOVE_NTF,	// = "umntf";
 	};
 
 	enum STYLE_DIALOG {
 		DONG_Y_XIN_HOA,
 		DONG_Y_XIN_THUA,
-		DONG_Y_HOA
+		DONG_Y_XIN_DI_LAI,
+		DONG_Y_CHO_HOA,
+		DONG_Y_CHO_DI_LAI
 	};
 
 	int convertResponseToInt(string inString);
@@ -145,6 +150,8 @@ private:
 	int indexTarget;
 	int timeRestBlack;
 	int timeRestRed;
+	int timeForTurnBlack;
+	int timeForTurnRed;
 	int timeToReady;
 
 	CCSprite *selected_chess;
@@ -197,7 +204,9 @@ public:
 	void event_EXT_EVENT_ERROR_READY_NTF();   // = "e_rntf"();
 	void event_EXT_EVENT_LIST_USER_UPDATE();  // = "luu"();
 	void event_EXT_EVENT_MOVE_NTF();          // = "mntf"();
-	void event_EXT_EVENT_FOR_PEACE_NTF();   // = "fpntf"();
+	void event_EXT_EVENT_FOR_PEACE_NTF();     // = "fpntf"();
+	void event_EXT_EVENT_UNDO_MOVE_REQ();
+	void event_EXT_EVENT_UNDO_MOVE_NTF();
 
 	// @thanhhv
 	vector<string> split(string &s, const char &c);

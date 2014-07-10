@@ -6,6 +6,7 @@
 //
 //
 
+#include "AllData.h"
 #include "LayerPlayGameChinessChess.h"
 #include "SceneManager.h"
 #include "mUtils.h"
@@ -68,6 +69,9 @@ int LayerPlayGameChinessChess::convertResponseToInt(string inString) {
     if (inString == "iml")      return EXT_EVENT_IM_LOSE;
     if (inString == "move")     return EXT_EVENT_MOVE;
 	if (inString == "rfp")      return EXT_EVENT_REPLY_FOR_PEACE;
+	if (inString == "umr")      return EXT_EVENT_UNDO_MOVE_REQ;
+	if (inString == "rum")      return EXT_EVENT_REPLY_UNDO_MOVE;
+	if (inString == "umntf")    return EXT_EVENT_UNDO_MOVE_NTF;
     
     return -1;
 }
@@ -87,7 +91,9 @@ string LayerPlayGameChinessChess::convertResponseToString(int inInt) {
     if (inInt == EXT_EVENT_IM_LOSE)             return "iml";
     if (inInt == EXT_EVENT_MOVE)                return "move";
 	if (inInt == EXT_EVENT_REPLY_FOR_PEACE)     return "rfp";
-
+	if (inInt == EXT_EVENT_UNDO_MOVE_REQ)		return "umr";
+	if (inInt == EXT_EVENT_REPLY_UNDO_MOVE)     return "rum";
+	if (inInt == EXT_EVENT_UNDO_MOVE_NTF)		return "umntf";
     
     return "";
 }
@@ -168,13 +174,19 @@ LayerPlayGameChinessChess::LayerPlayGameChinessChess()
 
 void LayerPlayGameChinessChess::updateTimer(float dt) {
     if (isStartedGame && nameCurrentTurn.length() > 0) {
+		if (timeRestBlack <= 0 || timeRestRed <= 0 || timeForTurnBlack <= 0 || timeForTurnRed <= 0)
+			return;
         if (nameCurrentTurn == myName) {
             timeRestBlack--;
             lblTotalTimeBlack->setString(convertTimer(timeRestBlack).c_str());
+			timeForTurnBlack--;
+			lblTimeBlack->setString(convertTimer(timeForTurnBlack).c_str());
         }
         else {
             timeRestRed--;
             lblTotalTimeRed->setString(convertTimer(timeRestRed).c_str());
+			timeForTurnRed--;
+			lblTimeRed->setString(convertTimer(timeForTurnRed).c_str());
         }
     }
 	else {
@@ -194,14 +206,11 @@ void LayerPlayGameChinessChess::updateTimer(float dt) {
 			timeToReady--;
 
 			time->runAction(CCSequence::create(
-				//CCDelayTime::create(0.2), 
-				//CCMoveTo::create(0.5, ccp(time->getPositionX(), time->getPositionY()+10)),
 				CCFadeTo::create(1, 50),
 				CCRemoveSelf::create(), 
 				NULL));
 		}
 		else {
-			// het gio
 		}
 
 		timeRestBlack = 900;
@@ -381,6 +390,11 @@ void LayerPlayGameChinessChess::ccTouchesEnded(CCSet *pTouches, CCEvent *event){
                 boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
                 boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_MOVE), params, lastRoom));
                 GameServer::getSingleton().getSmartFox()->Send(request);
+
+				CCLOG("Đã gửi indexCurrent = %d, indexTarget  = %d", indexCurrent, indexTarget);
+
+				vector<int> ar;
+				drawCanMove(ar);
             }
             CCLog("indexCurrent = %d", indexCurrent);
             CCLog("indexTarget  = %d", indexTarget);
@@ -658,13 +672,23 @@ void LayerPlayGameChinessChess::onButtonPeace(CCObject* pSender){
 void LayerPlayGameChinessChess::notificationCallBack( bool isOK, int tag )
 {
 	switch (tag){
-	case DONG_Y_HOA:
+	case DONG_Y_CHO_HOA:
 		if( isOK ){
 			// gửi lại sv là mình đồng ý (rep=1)
 			boost::shared_ptr<ISFSObject> parameter (new SFSObject());
 			parameter->PutInt("rep", 1);
 			boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 			boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REPLY_FOR_PEACE), parameter, lastRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request);
+		}
+		break;
+	case DONG_Y_CHO_DI_LAI:
+		if( isOK ){
+			// gửi lại sv là mình đồng ý (rep=1)
+			boost::shared_ptr<ISFSObject> parameter (new SFSObject());
+			parameter->PutInt("rep", 1);
+			boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+			boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REPLY_UNDO_MOVE), parameter, lastRoom));
 			GameServer::getSingleton().getSmartFox()->Send(request);
 		}
 		break;
@@ -684,11 +708,34 @@ void LayerPlayGameChinessChess::notificationCallBack( bool isOK, int tag )
 			GameServer::getSingleton().getSmartFox()->Send(request);
 		}
 		break;
+	case DONG_Y_XIN_DI_LAI:
+		if( isOK ){
+			CCLOG("Dong y di lai");
+			boost::shared_ptr<ISFSObject> parameter (new SFSObject());
+			parameter->PutLong("amf", 1000);
+			boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+			boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_UNDO_MOVE_REQ), parameter, lastRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request);
+		}
+		break;
 	}
 }
 
 void LayerPlayGameChinessChess::onButtonRemove(CCObject* pSender){
-    
+	CCLog("Undo button clicked");
+	if (!isStartedGame) {
+		Chat *noti = new Chat("Chưa bắt đầu game!", -1);
+		this->addChild(noti, 100);
+
+		return;
+	}
+
+	LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+	if( !SceneManager::getSingleton().showNotification() ){
+		return;
+	}
+	layer->setNotificationOptions("ĐI LẠI", 
+		"Bạn chắc muốn XIN ĐI LẠI chứ?", true, "Ok", DONG_Y_XIN_DI_LAI, this);
 }
 void LayerPlayGameChinessChess::onButtonReady(CCObject* pSender){
     CCLog("clicked ready");
@@ -808,24 +855,24 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
     lblWinRateRed->setString("--");
     lblTimeRed->setString("--");
     lblTotalTimeRed->setString("--");
-    lblXeRed_status->setString("--");
-    lblPhaoRed_status->setString("--");
-    lblMaRed_status->setString("--");
-    lblTotRed_status->setString("--");
-    lblTuongRed_status->setString("--");
-    lblSyRed_status->setString("--");
+    lblXeRed_status->setString("x2");
+    lblPhaoRed_status->setString("x2");
+    lblMaRed_status->setString("x2");
+    lblTotRed_status->setString("x5");
+    lblTuongRed_status->setString("x2");
+    lblSyRed_status->setString("x2");
     //
     lblNameBlack->setString("--");
     lblMoneyBlack->setString("--");
     lblWinRateBlack->setString("--");
     lblTimeBlack->setString("--");
     lblTotalTimeBlack->setString("--");
-    lblXeBlack_status->setString("--");
-    lblPhaoBlack_status->setString("--");
-    lblMaBlack_status->setString("--");
-    lblTotBlack_status->setString("--");
-    lblTuongBlack_status->setString("--");
-    lblSyBlack_status->setString("--");
+    lblXeBlack_status->setString("x2");
+    lblPhaoBlack_status->setString("x2");
+    lblMaBlack_status->setString("x2");
+    lblTotBlack_status->setString("x5");
+    lblTuongBlack_status->setString("x2");
+    lblSyBlack_status->setString("x2");
 
 	// thông tin bàn chơi và mức cược
 	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
@@ -949,6 +996,14 @@ void LayerPlayGameChinessChess::OnExtensionResponse(unsigned long long ptrContex
         case EXT_EVENT_FOR_PEACE_NTF:
             event_EXT_EVENT_FOR_PEACE_NTF();
             break;
+
+		case EXT_EVENT_UNDO_MOVE_REQ:
+			event_EXT_EVENT_UNDO_MOVE_REQ();
+			break;
+
+		case EXT_EVENT_UNDO_MOVE_NTF:
+			event_EXT_EVENT_UNDO_MOVE_NTF();
+			break;
     }
 }
 
@@ -999,9 +1054,10 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_START(){
 void LayerPlayGameChinessChess::event_EXT_EVENT_NEXT_TURN(){
     boost::shared_ptr<string> name = param->GetUtfString("uid");
     boost::shared_ptr<string> list_time = param->GetUtfString("crt");
+	boost::shared_ptr<long> tft = param->GetInt("tft");
     
-    if (name != NULL && list_time != NULL) {
-        CCLog("event_EXT_EVENT_NEXT_TURN:: name=%s, list_time=%s", name->c_str(), list_time->c_str());
+    if (name != NULL && list_time != NULL && tft != NULL) {
+        CCLog("event_EXT_EVENT_NEXT_TURN:: name=%s, list_time=%s, turn_time=%d", name->c_str(), list_time->c_str(), *tft);
         
 		// nếu là ban đầu thì kiểm tra xem người đi đầu là mình hay đối thủ
 		if (nameCurrentTurn.length() < 2)
@@ -1019,10 +1075,14 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_NEXT_TURN(){
 			noti->setPositionY(70);
 			noti->setPositionX(nodeTableChess->getContentSize().width/2 - noti->getSize().width/2);
 			nodeTableChess->addChild(noti, 100);
+
+			timeForTurnBlack = *tft;
         }
         else {
             box_time_focus_red->setVisible(true);
             box_time_focus_black->setVisible(false);
+
+			timeForTurnRed = *tft;
         }
         
         // ptich chuoi thanhhv|900;thanhhv2|900;
@@ -1166,7 +1226,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
     if (listUser != NULL) {
         CCLog("event_EXT_EVENT_LIST_USER_UPDATE:: listUser=%s", listUser->c_str());
         
-        // thanhhv2|r;thanhhv1|b;
+        // thanhhv2|r|30.00;thanhhv1|b|32.02;
         // Dựa vào ds này xác định xem mình là chủ phòng hay ko
         string ls = listUser->c_str();
         vector<string> arrInfo = split(ls, ';');
@@ -1185,6 +1245,9 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
                 else {
                     isMaster = false;
                 }
+
+				string tile = "Tỉ lệ thắng: " + arr.at(2) + "%";
+				lblWinRateBlack->setString(tile.c_str());
             }
         }
         
@@ -1194,11 +1257,15 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
             if (sizeInfo >= 2) {
                 vector<string> arr = split(arrInfo[1], '|');
 				nameEnemy = arr.at(0);
+				string tile = "Tỉ lệ thắng: " + arr.at(2) + "%";
+				lblWinRateRed->setString(tile.c_str());
             }
         }
         else {
             vector<string> arr = split(arrInfo[0], '|');
 			nameEnemy = arr.at(0);
+			string tile = "Tỉ lệ thắng: " + arr.at(2) + "%";
+			lblWinRateRed->setString(tile.c_str());
         }
         
         // myself
@@ -1302,7 +1369,146 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_FOR_PEACE_NTF(){
 		return;
 	}
 	layer->setNotificationOptions("Đối phương muốn CẦU HÒA!", 
-		"Bạn đồng ý chứ?", true, "Ok", DONG_Y_HOA, this);
+		"Bạn đồng ý chứ?", true, "Ok", DONG_Y_CHO_HOA, this);
+}
+
+void LayerPlayGameChinessChess::event_EXT_EVENT_UNDO_MOVE_REQ() {
+	// accept for replay
+	// EXT_FIELD_USERID
+	// EXT_FIELD_MONEY= "amf"
+	CCLog("event_EXT_EVENT_UNDO_MOVE_REQ");
+	boost::shared_ptr<long> amf = param->GetInt("amf");
+	if (amf==NULL) return;
+	int money = *amf;
+	CCLog("money=%d", money);
+
+	LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
+	if( !SceneManager::getSingleton().showNotification() ){
+		return;
+	}
+	layer->setNotificationOptions("Đối phương muốn XIN ĐI LẠI!", 
+		"Bạn đồng ý chứ?", true, "Ok", DONG_Y_CHO_DI_LAI, this);
+}
+void LayerPlayGameChinessChess::event_EXT_EVENT_UNDO_MOVE_NTF() {
+	// move chess for replay
+	// EXT_FIELD_LIST_MOVE= "lm"
+	//
+	//idside,from,to,fromIdChess,toIdChess;... ( từ lần di chuyển gần nhất tới lâu nhất )
+	CCLog("event_EXT_EVENT_UNDO_MOVE_NTF");
+	boost::shared_ptr<string> lm = param->GetUtfString("lm");
+	if (lm==NULL) return;
+	CCLog("lm=%s", lm->c_str());
+
+	// 
+	string lmstring = lm->c_str();
+	vector<string> arr = split(lmstring, ';');
+	if (arr.size() < 2) return;
+	for (int i = 0; i < 2; i++)
+	{
+		vector<string> arrInfo = split(arr.at(i), ',');
+		if (arrInfo.size() < 5) return;
+		string name = arrInfo.at(0);
+		int fromID = atoi(arrInfo.at(1).c_str());
+		int toID = atoi(arrInfo.at(2).c_str());
+		int IDChessUndo1 = atoi(arrInfo.at(3).c_str());
+		int IDChessUndo2 = atoi(arrInfo.at(4).c_str());
+
+		// di chuyển quân
+		int moveFrom = toID;
+		int moveTo   = fromID;
+		if (isRedChess) {
+			moveChess(convertID(moveFrom), convertID(moveTo));
+		}
+		else {
+			moveChess(moveFrom, moveTo);
+		}
+
+		// kiểm tra xem IDChessUndo2 có phải 1 quân cờ hay ko, nếu phải thì hiện hình :D
+		int kChess=-1;
+		if (name != myName) {
+			// minh quan do tren ban co
+			switch (IDChessUndo2) {
+				case 0:
+					kChess = kTotDo;
+					break;
+				case 1:
+					kChess = kSiDo;
+					break;
+				case 2:
+					kChess = kTuongjDo;
+					break;
+				case 3:
+					kChess = kMaDo;
+					break;
+				case 4:
+					kChess = kPhaoDo;
+					break;
+				case 5:
+					kChess = kXeDo;
+					break;
+				case 6:
+					kChess = kTuongDo;
+					break;
+			}
+		}
+		else {
+			switch (IDChessUndo2) {
+			case 0:
+				kChess = kTotXanh;
+				break;
+			case 1:
+				kChess = kSiXanh;
+				break;
+			case 2:
+				kChess = kTuongjXanh;
+				break;
+			case 3:
+				kChess = kMaXanh;
+				break;
+			case 4:
+				kChess = kPhaoXanh;
+				break;
+			case 5:
+				kChess = kXeXanh;
+				break;
+			case 6:
+				kChess = kTuongXanh;
+				break;
+			}
+		}
+
+		if (kChess < 0) continue;
+		else {
+			isRedChess?(toID=convertID(toID)):toID;
+			Chess *chess;
+			// tim kiem quan co tuong ung va dat lai vi tri toID
+			for (int i = 0; i < arrChess.size(); i++) 
+			{
+				chess = arrChess.at(i);
+				if (chess->getIDName() == kChess && !chess->isVisible()) {
+					chess->setVisible(true);
+					chess->setIDPos(toID);
+					chess->setPosition(getPositionFromIndex(toID));
+					chess->setClick(false);
+
+					logicChess->setChessIDBySide(IDChessUndo2, (isRedChess)?2:1, toID);
+					break;
+				}
+			}
+		}
+	}
+
+	/*int PAWN = 0;   // tốt
+	int BISHOP = 1;   // sỹ
+	int ELEPHANT = 2; // tượng
+	int KNIGHT = 3;   // mã
+	int CANNON = 4;	  // pháo
+	int ROOK = 5;	  // xe
+	int KING = 6;	  // tướng
+	int EMPTY = 7;*/  
+
+	
+
 }
 
 int LayerPlayGameChinessChess::convertID(int id) {
@@ -1322,7 +1528,6 @@ int LayerPlayGameChinessChess::convertID(int id) {
 }
 
 void LayerPlayGameChinessChess::moveChess(int fromID, int toID) {
-    CCLog("action moveChess fromID=%d, toID=%d", fromID, toID);
     if (isRedChess) {
         logicChess->Move(convertID(fromID), convertID(toID));
     }

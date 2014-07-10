@@ -509,5 +509,11 @@ bool ChessLogic::IsKingFace(int pos) {
     return false;
 };
 
+void ChessLogic::setChessIDBySide( int idChess, int side, int pos )
+{
+	color[pos] = side;
+	piece[pos] = idChess;
+}
+
 
 
