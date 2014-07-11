@@ -1214,4 +1214,14 @@ void LayerPlayGamePhom::OnSmartFoxPublicMessage( unsigned long long ptrContext, 
 	layerChats->showChatByPos(vt, ptrNotifiedMessage->c_str());
 }
 
+void LayerPlayGamePhom::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
+	//
+	if( ptrNotifiedUser->IsItMe() ){
+		//close window - tricks by HoangDD
+		layerButtons->eventTouchBtnBack(NULL, TOUCH_EVENT_ENDED);
+	}
+}
 

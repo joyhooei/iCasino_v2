@@ -954,6 +954,17 @@ void LayerPlayGameChinessChess::OnSmartFoxPublicMessage( unsigned long long ptrC
 	this->addChild(newMes);
 }
 
+void LayerPlayGameChinessChess::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
+	//
+	if( ptrNotifiedUser->IsItMe() ){
+		//close window - tricks by HoangDD
+		this->onButtonBack(NULL);
+	}
+}
+
 void LayerPlayGameChinessChess::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
     boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];

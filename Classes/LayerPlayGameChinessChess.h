@@ -196,9 +196,10 @@ public:
 	void onButtonReady(CCObject* pSender);
 	void onButtonUnReady(CCObject* pSender);
 	//Server
-	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	virtual void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
 	void event_EXT_EVENT_START();             // = “s”();
 	void event_EXT_EVENT_NEXT_TURN();         // = "nt"();

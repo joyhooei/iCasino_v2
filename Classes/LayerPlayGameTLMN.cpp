@@ -460,6 +460,17 @@ void LayerPlayGameTLMN::OnSmartFoxPublicMessage( unsigned long long ptrContext, 
 	layerChats->showChatByPos(vt, ptrNotifiedMessage->c_str());
 }
 
+void LayerPlayGameTLMN::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
+	//
+	if( ptrNotifiedUser->IsItMe() ){
+		//close window - tricks by HoangDD
+		layerButtons->eventTouchBtnBack(NULL, TOUCH_EVENT_ENDED);
+	}
+}
+
 void LayerPlayGameTLMN::event_EXT_EVENT_USER_JOIN_NOTIF(){
     boost::shared_ptr<string> listUser = param->GetUtfString("lu");
     CCLog("EXT_EVENT_USER_JOIN_NOTIF");
@@ -583,7 +594,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_AMF_TEST_NOTIF(){
     boost::shared_ptr<string> name = param->GetUtfString("uid");
     int money = (int) (*(param->GetDouble("amf")));
 	int resson = -1;
-	if ((param->GetDouble("cbt")) != NULL) resson = (int) (*(param->GetDouble("cbt")));
+	if ((param->GetInt("cbt")) != NULL) resson = (int) (*(param->GetInt("cbt")));
     
     CCLog("event_EXT_EVENT_AMF_TEST_NOTIF");
     if (name != NULL && money != NULL) {
@@ -592,7 +603,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_AMF_TEST_NOTIF(){
         int pos = layerAvatars->getPosByName(name->c_str());
         layerNumbers->showNumberByPos(pos, to_string(money));
 		
-		if (resson == -1) return;
+		if (resson < 0) return;
 		string ressonString = "";
 		switch (resson) {
 			case 1:
