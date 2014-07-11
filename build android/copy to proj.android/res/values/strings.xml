@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Game3</string>
+    <string name="app_id">650092181748441</string>
+    <string name="hello_facebook">Hello Facebook</string>
+     <string name="error_dialog_title">Error</string>
+	<string name="error_dialog_button_text">OK</string>	
+	<string name="send_request">Send Request</string>
+</resources>
