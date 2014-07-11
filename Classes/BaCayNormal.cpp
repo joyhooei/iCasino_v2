@@ -313,10 +313,15 @@ void BaCayNormal::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost:
 
 void BaCayNormal::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("User ExitRoom On Room");
+	boost::shared_ptr<map<string, boost::shared_ptr<void>>> ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
+	//
+	if( ptrNotifiedUser->IsItMe() ){
+		//close window - tricks by HoangDD
+		layerbutton->eventTouchBtnBack(NULL, TOUCH_EVENT_ENDED);
+	}
 }
-
-
-
 
 // Button Sẵn Sàng Click
 void BaCayNormal::btn_ready_click(CCObject *sender, TouchEventType type){

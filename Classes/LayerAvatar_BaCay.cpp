@@ -83,8 +83,17 @@ void LayerBaCayAvatar::setIcon (int pos, char *url)
 
 void LayerBaCayAvatar::setFlag (int pos, bool isShow)
 {
+	bool meIsBoss = isShow;
 	if (this->getUserByPos(pos) == NULL) return;
 	this->getUserByPos(pos)->setFlag(isShow);
+	//
+	if(pos == kUserMe){
+		//
+		this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
+		this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
+		this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
+		this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
+	}
 }
 
 void LayerBaCayAvatar::setName (int pos, string name)
@@ -144,7 +153,6 @@ void LayerBaCayAvatar::resetAll()
 
 void LayerBaCayAvatar::setPosChuong(int pos)
 {
-	bool meIsBoss = false;
 	switch (pos) {
 	case kUserLeft:
 		chuong->setPosition(ccp(101,175));
@@ -163,16 +171,10 @@ void LayerBaCayAvatar::setPosChuong(int pos)
 	case kUserMe:
 		chuong->setPosition(ccp(175,420));
 		chuong->setVisible(true);
-		meIsBoss = true;
 		break;
 	default:
 		break;
 	}
-	//
-	this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
-	this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
-	this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
-	this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
 }
 
 void LayerBaCayAvatar::setUnReadyAllUser()
@@ -317,6 +319,15 @@ void LayerBaCayAvatar::updateUsers()
 			Avatar *user = getUserByPos(pos);
 			user->setName(_name);
 			user->setFlag(i == 0);
+			//
+			bool meIsBoss = (i == 0);
+			if(pos == kUserMe){
+				this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
+			}
+			//
 			user->setIcon(_url);
 			//user->setAI(aI);
 			user->setMoney(_money);

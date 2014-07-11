@@ -397,6 +397,14 @@ void LayerAvatarInGame::updateUsers() {
 			Avatar *user = getUserByPos(pos);
 			user->setName(name);
 			user->setFlag(atoi(flag.c_str()) == 1);
+			//
+			bool meIsBoss = (atoi(flag.c_str()) == 1);
+			if(pos == kUserMe){
+				this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
+			}
 			user->setIcon(url);
 			user->setAI(aI);
 			user->setMoney(money);

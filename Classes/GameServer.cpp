@@ -243,84 +243,92 @@ void GameServer::OnExtensionResponse(unsigned long long ptrContext, boost::share
 
 void GameServer::OnSmartFoxNtf(eEventTags tag, unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     PlayerCallBackMapIter iTer = mCallBack.begin();
-	for ( ; iTer != mCallBack.end() ; iTer ++ ){
-// 		if( iTer->second == 0x0e0e0e0e )
-// 			continue;
-		switch(tag)
-		{
-		case tag_EventConnection:
-			iTer->second->OnSmartFoxConnection(ptrContext, ptrEvent);
-			break;
-		case tag_EventConnectionLost:
-			iTer->second->OnSmartFoxConnectionLost(ptrContext, ptrEvent);
-			break;
-		case tag_EventDisconnected:
-			iTer->second->OnSmartFoxDisconnection(ptrContext, ptrEvent);
-			break;
-		case tag_EventSocketError:
-			iTer->second->OnSmartFoxSocketError(ptrContext, ptrEvent);
-			break;
-		case tag_EventLogin:
-			iTer->second->OnSmartFoxLogin(ptrContext, ptrEvent);
-			break;
-		case tag_EventLoginError:
-			iTer->second->OnSmartFoxLoginError(ptrContext, ptrEvent);
-			break;
-		case tag_EventLogout0:
-			CCLOG("tag_EventLogout");
-			iTer->second->OnSmartFoxLogout(ptrContext, ptrEvent);
-			break;
-		case tag_EventRoomJoin:
-			iTer->second->OnSmartFoxRoomJoin(ptrContext, ptrEvent);
-			break;
-		case tag_EventRoomJoinError:
-			iTer->second->OnSmartFoxRoomJoinError(ptrContext, ptrEvent);
-			break;
-		case tag_EventCreationError:
-			iTer->second->OnSmartFoxRoomCreationError(ptrContext, ptrEvent);
-			break;
-		case tag_EventRoomAdd:
-			iTer->second->OnSmartFoxRoomAdd(ptrContext, ptrEvent);
-			break;
-		case tag_EventRoomVariableUpdate:
-			iTer->second->OnSmartFoxRoomVariableUpdate(ptrContext, ptrEvent);
-			break;
-		case tag_EventRoomPasswordStateChange:
-			iTer->second->OnSmartFoxRoomPasswordStateChange(ptrContext, ptrEvent);
-			break;
-		case tag_EventRoomPasswordStateChangeError:
-			iTer->second->OnSmartFoxRoomPasswordStateChangeError(ptrContext, ptrEvent);
-			break;
-		case tag_EventPublicMessage:
-			iTer->second->OnSmartFoxPublicMessage(ptrContext, ptrEvent);
-			break;
-		case tag_EventUserVariableUpdate:
-			iTer->second->OnSmartFoxUserVariableUpdate(ptrContext, ptrEvent);
-			break;
-		case tag_EventUserCountChange:
-			iTer->second->OnSmartFoxUserCountChange(ptrContext, ptrEvent);
-			break;
-		case tag_EventUserEnterRoom:
-			iTer->second->OnSmartFoxUserEnterRoom(ptrContext, ptrEvent);
-			break;
-		case tag_EventUserExitRoom:
-			iTer->second->OnSmartFoxUserExitRoom(ptrContext, ptrEvent);
-			break;
-		case tag_EventSpectatorToPlayerError:
-			iTer->second->OnSmartFoxSpectatorToPlayerError(ptrContext, ptrEvent);
-			break;
-		case tag_EventPlayerToSpectatorError:
-			iTer->second->OnSmartFoxPlayerToSpectatorError(ptrContext, ptrEvent);
-			break;
-		case tag_EventInvitation:
-			iTer->second->OnSmartFoxInvitation(ptrContext, ptrEvent);
-			break;
-		case tag_EventExtensionResponse:
-			iTer->second->OnExtensionResponse(ptrContext, ptrEvent);
-			break;
-		};
-		
-    }
+	int lenOfMap = mCallBack.size();
+	try{
+		for ( ; iTer != mCallBack.end() ; iTer ++ ){
+			// 		if( iTer->second == 0x0e0e0e0e )
+			// 			continue;
+			switch(tag)
+			{
+			case tag_EventConnection:
+				iTer->second->OnSmartFoxConnection(ptrContext, ptrEvent);
+				break;
+			case tag_EventConnectionLost:
+				iTer->second->OnSmartFoxConnectionLost(ptrContext, ptrEvent);
+				break;
+			case tag_EventDisconnected:
+				iTer->second->OnSmartFoxDisconnection(ptrContext, ptrEvent);
+				break;
+			case tag_EventSocketError:
+				iTer->second->OnSmartFoxSocketError(ptrContext, ptrEvent);
+				break;
+			case tag_EventLogin:
+				iTer->second->OnSmartFoxLogin(ptrContext, ptrEvent);
+				break;
+			case tag_EventLoginError:
+				iTer->second->OnSmartFoxLoginError(ptrContext, ptrEvent);
+				break;
+			case tag_EventLogout0:
+				CCLOG("tag_EventLogout");
+				iTer->second->OnSmartFoxLogout(ptrContext, ptrEvent);
+				break;
+			case tag_EventRoomJoin:
+				iTer->second->OnSmartFoxRoomJoin(ptrContext, ptrEvent);
+				break;
+			case tag_EventRoomJoinError:
+				iTer->second->OnSmartFoxRoomJoinError(ptrContext, ptrEvent);
+				break;
+			case tag_EventCreationError:
+				iTer->second->OnSmartFoxRoomCreationError(ptrContext, ptrEvent);
+				break;
+			case tag_EventRoomAdd:
+				iTer->second->OnSmartFoxRoomAdd(ptrContext, ptrEvent);
+				break;
+			case tag_EventRoomVariableUpdate:
+				iTer->second->OnSmartFoxRoomVariableUpdate(ptrContext, ptrEvent);
+				break;
+			case tag_EventRoomPasswordStateChange:
+				iTer->second->OnSmartFoxRoomPasswordStateChange(ptrContext, ptrEvent);
+				break;
+			case tag_EventRoomPasswordStateChangeError:
+				iTer->second->OnSmartFoxRoomPasswordStateChangeError(ptrContext, ptrEvent);
+				break;
+			case tag_EventPublicMessage:
+				iTer->second->OnSmartFoxPublicMessage(ptrContext, ptrEvent);
+				break;
+			case tag_EventUserVariableUpdate:
+				iTer->second->OnSmartFoxUserVariableUpdate(ptrContext, ptrEvent);
+				break;
+			case tag_EventUserCountChange:
+				iTer->second->OnSmartFoxUserCountChange(ptrContext, ptrEvent);
+				break;
+			case tag_EventUserEnterRoom:
+				iTer->second->OnSmartFoxUserEnterRoom(ptrContext, ptrEvent);
+				break;
+			case tag_EventUserExitRoom:
+				iTer->second->OnSmartFoxUserExitRoom(ptrContext, ptrEvent);
+				break;
+			case tag_EventSpectatorToPlayerError:
+				iTer->second->OnSmartFoxSpectatorToPlayerError(ptrContext, ptrEvent);
+				break;
+			case tag_EventPlayerToSpectatorError:
+				iTer->second->OnSmartFoxPlayerToSpectatorError(ptrContext, ptrEvent);
+				break;
+			case tag_EventInvitation:
+				iTer->second->OnSmartFoxInvitation(ptrContext, ptrEvent);
+				break;
+			case tag_EventExtensionResponse:
+				iTer->second->OnExtensionResponse(ptrContext, ptrEvent);
+				break;
+			};
+			if( lenOfMap != mCallBack.size() )
+				break;
+// 			if( iTer==NULL ||  iTer->second==NULL )
+// 				break;
+		}
+	}catch(...){
+
+	}
 }
 
 void GameServer::OnDebugMessage( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )

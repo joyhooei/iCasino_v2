@@ -211,6 +211,13 @@ bool SceneManager::init() {
 	hideLayerChatWindow();
 	gotoLogin();
 
+	//Layer always on top screen
+	layerOnTop = CCLayer::create();
+	layerOnTop->setContentSize( CCSizeMake(800, 480) );
+	layerOnTop->setAnchorPoint(ccp(0.5, 0.5));
+	layerOnTop->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
+	this->addChild(layerOnTop, 1001);
+
 	return true;
 }
 
@@ -392,17 +399,32 @@ void SceneManager::updateEvent(float dt) {
 }
 
 void SceneManager::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+
 	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];
 	boost::shared_ptr<string> ptrNotifiedCmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
 
 	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
 
 	if(strcmp("hbc", ptrNotifiedCmd->c_str())==0){
 		//        boost::shared_ptr<ISFSObject> parameter (new SFSObject());
 		//        //sendRequest
 		//        boost::shared_ptr<IRequest> request (new ExtensionRequest("ghbres",parameter));
 		//        GameServer::getSingleton().getSmartFox()->Send(request);
+	}else if(strcmp("nem_ntf", ptrNotifiedCmd->c_str())==0){//EXT_EVENT_NOT_ENOUGH_MONEY_NTF = "nem_ntf";
+		//
+		Chat *toast = new Chat("Bạn không đủ tiền chơi tiếp!\nHãy nạp tiền để tiếp tục chơi.", -1);
+		layerOnTop->addChild(toast);
+	}else if(strcmp("kkntf", ptrNotifiedCmd->c_str())==0){ ////EXT_EVENT_USER_KICKED_NOTIF    = "kkntf";
+		if( strcmp(myself->Name()->c_str(), param->GetUtfString("uid")->c_str() )==0 ){
+			Chat *toast = new Chat("Bạn đã bị đá ra khỏi phòng!", -1);
+			layerOnTop->addChild(toast);
+		}else{
+			Chat *toast = new Chat( CCString::createWithFormat("Người chơi %s đã bị đá ra khỏi phòng!", param->GetUtfString("uid")->c_str())->getCString(), -1);
+			layerOnTop->addChild(toast);
+		}
 	}
 }
 

@@ -91,6 +91,8 @@ private:
 	XiTo *mGameXiTo;
 	LayerChanGame *mGameChan;
 
+	CCLayer* layerOnTop;
+
 	LayerChatWindow* mLayerChatWindow;
 
 	TomCuaCa *mGameTomCuaCa;

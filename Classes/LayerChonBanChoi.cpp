@@ -498,19 +498,19 @@ void LayerChonBanChoi::OnExtensionResponse(unsigned long long ptrContext, boost:
 	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
 	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
 	//
-	if(strcmp("nem_ntf", cmd->c_str())==0){//EXT_EVENT_NOT_ENOUGH_MONEY_NTF = "nem_ntf";
-		//
-		Chat *toast = new Chat("Bạn không đủ tiền chơi tiếp!\nHãy nạp tiền để tiếp tục chơi.", -1);
-		this->addChild(toast);
-	}else if(strcmp("kkntf", cmd->c_str())==0){ ////EXT_EVENT_USER_KICKED_NOTIF    = "kkntf";
-		if( strcmp(myself->Name()->c_str(), param->GetUtfString("uid")->c_str() )==0 ){
-			Chat *toast = new Chat("Bạn đã bị đá ra khỏi phòng!", -1);
-			this->addChild(toast);
-		}else{
-			Chat *toast = new Chat( CCString::createWithFormat("Người chơi %s đã bị đá ra khỏi phòng!", param->GetUtfString("uid")->c_str())->getCString(), -1);
-			this->addChild(toast);
-		}
-	}
+// 	if(strcmp("nem_ntf", cmd->c_str())==0){//EXT_EVENT_NOT_ENOUGH_MONEY_NTF = "nem_ntf";
+// 		//
+// 		Chat *toast = new Chat("Bạn không đủ tiền chơi tiếp!\nHãy nạp tiền để tiếp tục chơi.", -1);
+// 		this->addChild(toast);
+// 	}else if(strcmp("kkntf", cmd->c_str())==0){ ////EXT_EVENT_USER_KICKED_NOTIF    = "kkntf";
+// 		if( strcmp(myself->Name()->c_str(), param->GetUtfString("uid")->c_str() )==0 ){
+// 			Chat *toast = new Chat("Bạn đã bị đá ra khỏi phòng!", -1);
+// 			this->addChild(toast);
+// 		}else{
+// 			Chat *toast = new Chat( CCString::createWithFormat("Người chơi %s đã bị đá ra khỏi phòng!", param->GetUtfString("uid")->c_str())->getCString(), -1);
+// 			this->addChild(toast);
+// 		}
+// 	}
 }
 
 void LayerChonBanChoi::notificationCallBack( bool isOK, int tag )

@@ -81,10 +81,18 @@ void LayerPlayerInfo::onButtonUnFriend(CCObject* pSender)
 void LayerPlayerInfo::onButtonKick(CCObject* pSender)
 {
 	CCLOG("onButtonKick");
+	//Get uid for kick
+	boost::shared_ptr<User> user = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(mFriendID);
+	if( user==NULL )
+		return;
+
+	//
 	boost::shared_ptr<ISFSObject> params (new SFSObject());
 	params->PutUtfString("uid", mFriendID.c_str());
 	params->PutUtfString("id", mFriendID.c_str());
-	boost::shared_ptr<IRequest> request (new ExtensionRequest("kckrq", params));
+	params->PutInt( "id", user->Id() );
+	//kckrq: Kick player for TLMB, TLMN, XITO
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("kckrq", params, GameServer::getSingleton().getSmartFox()->LastJoinedRoom()));
 	GameServer::getSingleton().getSmartFox()->Send(request);
 	//
 	this->removeFromParentAndCleanup(true);

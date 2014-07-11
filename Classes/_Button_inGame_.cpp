@@ -46,6 +46,9 @@ bool LayerButtonInGame::init() {
 	this->addWidget(btnSetting);
 	this->addWidget(btnChat);
 	this->addWidget(btnCoin);
+	//Save game ID
+
+	gameID = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId();
 
 	return true;
 }
@@ -96,7 +99,6 @@ void LayerButtonInGame::eventTouchBtnBack(CCObject *pObject, TouchEventType pTyp
 			SceneManager::getSingleton().gotoMain();
 			return;
 		} 
-		boost::shared_ptr<string> gameID = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId();
 		if (gameID == NULL) {
 			return;
 		}

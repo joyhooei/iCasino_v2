@@ -22,6 +22,8 @@ using namespace cocos2d::ui;
 
 class LayerButtonInGame : public UILayer
 {
+private:
+	boost::shared_ptr<string>  gameID;
 public:
 	virtual bool init();
 	CREATE_FUNC(LayerButtonInGame);
