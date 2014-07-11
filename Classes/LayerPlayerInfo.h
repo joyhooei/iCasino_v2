@@ -14,6 +14,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "GameServer.h"
+#include "ImageDownloader.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -38,6 +39,8 @@ private:
 	CCNode* nodeAvatar;
 
 	string mFriendID;
+
+	ImageDownloader* imageDownloader;
 public:
     LayerPlayerInfo();
 	virtual ~LayerPlayerInfo();
@@ -48,6 +51,7 @@ public:
 
 	void setFriendId(string friendID);
 	void setAvatarImage(CCSprite*);
+	void setAvatarUrl(string url);
 	void reloadAllDatas();
 	void setIsBossRoom(bool isBoss);
     

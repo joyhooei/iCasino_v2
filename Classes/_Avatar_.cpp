@@ -232,14 +232,9 @@ void Avatar::onTouch(CCObject *pObject, TouchEventType pType) {
 				layerPlayerInfo = (LayerPlayerInfo *)ccbReader->readNodeGraphFromFile( "LayerPlayerInfo.ccbi" );
 				ccbReader->release();
 			}
-			//Get avatar
-			CCSprite* a = (CCSprite*)layerWidget->getChildByTag(tagIcon);
 			//
 			layerPlayerInfo->setFriendId(this->nameString);
-			if( a!=NULL ){
-				CCSprite* pRet = CCSprite::createWithTexture(a->getTexture());
-				layerPlayerInfo->setAvatarImage(pRet);
-			}
+			layerPlayerInfo->setAvatarUrl(urlAvatar);
 			layerPlayerInfo->setIsBossRoom( meIsBoss );
 			layerPlayerInfo->reloadAllDatas();
 			this->getParent()->getParent()->addChild(layerPlayerInfo, 10000);
@@ -291,6 +286,7 @@ void Avatar::setIcon(string url){
 // 		}
 	imagedownloader->setPointerNodeImage( nodeIcon );
 	imagedownloader->downLoadImage(url);
+	urlAvatar = url;
 }
 
 void Avatar::setFlag(bool isShow){

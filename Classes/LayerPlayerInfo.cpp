@@ -16,6 +16,8 @@ using namespace cocos2d;
 
 LayerPlayerInfo::LayerPlayerInfo()
 {
+	imageDownloader = new ImageDownloader();
+
 	lblAMF=NULL;
 	lblName=NULL;
 	lblSex = NULL;
@@ -42,6 +44,8 @@ LayerPlayerInfo::~LayerPlayerInfo()
 	CC_SAFE_RELEASE(btnKick);
 
 	CC_SAFE_RELEASE(nodeAvatar);
+
+	CC_SAFE_RELEASE(imageDownloader);
 }
 
 // CCBSelectorResolver interface
@@ -184,4 +188,11 @@ void LayerPlayerInfo::setIsBossRoom( bool isBoss )
 	btnInviteFriend->setPositionX( isBoss?85:151 );
 	btnUnFriend->setPositionX( isBoss?85:151 );
 	btnKick->setVisible( isBoss );
+}
+
+void LayerPlayerInfo::setAvatarUrl( string url )
+{
+	imageDownloader->setPointerNodeImage( nodeAvatar );
+	imageDownloader->downLoadImage(url);
+	//nodeAvatar->setVisible(true);
 }

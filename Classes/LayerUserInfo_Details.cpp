@@ -20,11 +20,15 @@ using namespace cocos2d;
 
 LayerUserInfo_Details::LayerUserInfo_Details()
 {
+	imageDownloader = new ImageDownloader();
+
     lblName = NULL;
     lblAMF = NULL;
     lblAM = NULL;
     lblID = NULL;
     lblLevel = NULL;
+
+	nodeAvatar = NULL;
     
     nodeTableHistory = NULL;
     tblHistory = NULL;
@@ -52,6 +56,8 @@ LayerUserInfo_Details::~LayerUserInfo_Details()
     CC_SAFE_RELEASE(lblLevel);
     
     CC_SAFE_RELEASE(nodeTableHistory);
+
+	CC_SAFE_RELEASE(imageDownloader);
 }
 
 void LayerUserInfo_Details::loadAllMyDatas(){
@@ -64,13 +70,16 @@ void LayerUserInfo_Details::loadAllMyDatas(){
     }
     am = myself->GetVariable("am")->GetDoubleValue();
     amf = myself->GetVariable("amf")->GetDoubleValue();
+	boost::shared_ptr<string> aal= myself->GetVariable("aal")->GetStringValue();
+	//setAvatar
+	imageDownloader->setPointerNodeImage( nodeAvatar );
+	imageDownloader->downLoadImage(*aal);
     //Set Name
     lblName->setString( GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("aN")->GetStringValue()->c_str() );
     lblAMF->setString( mUtils::convertMoneyEx(*amf).c_str() );
     lblAM->setString( mUtils::convertMoneyEx(*am).c_str() );
     lblID->setString( boost::to_string(myself->Id()).c_str() );
-    //Get histories
-    //Send request
+    //Get histories - Send request
     boost::shared_ptr<ISFSObject> params (new SFSObject());
     params->PutUtfString("aI", myself->Name());
     boost::shared_ptr<IRequest> request (new ExtensionRequest("rghba", params));
@@ -118,7 +127,8 @@ bool LayerUserInfo_Details::onAssignCCBMemberVariable(CCObject *pTarget, const c
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblAMF", CCLabelTTF *, lblAMF);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblID", CCLabelTTF *, lblID);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblName", CCLabelTTF *, lblName);
-    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblLevel", CCLabelTTF *, lblLevel);
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblLevel", CCLabelTTF *, lblLevel);
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "nodeAvatar", CCNode *, nodeAvatar);
     
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "nodeTableHistory", CCNode *, nodeTableHistory);
     return true;

@@ -199,13 +199,13 @@ void LayerLogin::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 	chkSaveInfo->addEventListenerCheckBox(this, checkboxselectedeventselector(LayerLogin::selectedStateEvent));
 	uiLayer->addWidget(chkSaveInfo);
 	//Create label for checkbox
-	CCLabelTTF* lblSaveInfo = CCLabelTTF::create();
-	lblSaveInfo->setString("Lưu thông tin");
-	lblSaveInfo->setFontSize(14);
-	lblSaveInfo->setFontName("Roboto-Bold");
-	lblSaveInfo->setAnchorPoint(ccp(0,0.5));
-	lblSaveInfo->setPosition(ccp( 275, 27 ));
-	this->addChild(lblSaveInfo);
+// 	CCLabelTTF* lblSaveInfo = CCLabelTTF::create();
+// 	lblSaveInfo->setString("Lưu thông tin");
+// 	lblSaveInfo->setFontSize(14);
+// 	lblSaveInfo->setFontName("Roboto-Bold");
+// 	lblSaveInfo->setAnchorPoint(ccp(0,0.5));
+// 	lblSaveInfo->setPosition(ccp( 275, 27 ));
+// 	this->addChild(lblSaveInfo);
     //
 	readInfo();
 	//
@@ -221,6 +221,11 @@ void LayerLogin::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 	pItem->setAnchorPoint(ccp(1, 1));
 	pItem->setPosition(ccp( txtPassword->getContentSize().width/2 + txtPassword->getPositionX() , 37));
 	m_pItemMenu->addChild(pItem, 10);
+
+	CCMenuItemFont* pItemSaveInfo = CCMenuItemFont::create("Lưu thông tin", this, menu_selector(LayerLogin::onButtonSaveInfo));
+	pItemSaveInfo->setAnchorPoint(ccp(0,0.5));
+	pItemSaveInfo->setPosition(ccp( 275, 27 ));
+	m_pItemMenu->addChild(pItemSaveInfo, 10);
 
 	this->addChild( m_pItemMenu );
     return;
@@ -414,4 +419,9 @@ void LayerLogin::onButtonForgotPassword( CCObject *pSender )
 		mLayer = (LayerForgotPassword *)ccbReader->readNodeGraphFromFile( "LayerForgotPassword.ccbi" );
 		this->addChild(mLayer, 1, 1);
 	}
+}
+
+void LayerLogin::onButtonSaveInfo( CCObject *pSender )
+{
+	chkSaveInfo->setSelectedState( !chkSaveInfo->getSelectedState() );
 }

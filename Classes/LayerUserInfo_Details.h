@@ -15,6 +15,7 @@
 
 #include "StructHistory.h"
 #include "GameServer.h"
+#include "ImageDownloader.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -44,8 +45,12 @@ private:
     
     CCNode* nodeTableHistory;
     CCTableView* tblHistory;
+
+	CCNode* nodeAvatar;
     
     StructHistory historys[11];
+
+	ImageDownloader* imageDownloader;
 public:
     LayerUserInfo_Details();
     virtual ~LayerUserInfo_Details();

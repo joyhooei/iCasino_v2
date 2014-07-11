@@ -70,6 +70,7 @@ private:
 	bool meIsBoss;
 	string aI;
 	string nameString;
+	string urlAvatar;
     CCSize sizeThis;
     CCSize sizeIcon;
 	CCNode* nodeIcon;
