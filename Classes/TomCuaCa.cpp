@@ -15,7 +15,7 @@
 #include "SceneManager.h"
 #include "LayerBet_TomCuaCa.h"
 #include "SliderCustomLoader.h"
-
+#include "ImageDownloader.h"
 
 enum TCC_REPONSE {
 	EXT_EVENT_USER_JOIN_NOTIF,      // jrntf
@@ -93,7 +93,8 @@ TomCuaCa::TomCuaCa(){
 
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
-	
+		imagedownloader4Red = new ImageDownloader();
+		imagedownloader4Black = new ImageDownloader();
 		uLayer = UILayer::create();
 		uLayer->addWidget(GUIReader::shareReader()->widgetFromJsonFile("TomCuaCa/scroll/TomCuaCa_1_1.json"));
 
@@ -265,7 +266,7 @@ void TomCuaCa::updateUser(string list){
 
 		int _money = 0;
 		string _name = "";
-		string _url = "imagizer.imageshack.us/v2/96x96q90/822/2u66.jpg";
+		string _url = "";
 		
 
 		boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("aN")->GetStringValue();
@@ -277,10 +278,30 @@ void TomCuaCa::updateUser(string list){
 		if(money != NULL){
 			_money = (int)*money;
 		}
-		if (url != NULL)
-		{
-			//_url = url->c_str();
-			CCLOG("Avatar: %s",url->c_str());
+		if (url != NULL) {
+			CCLog("Avatar link %s", url->c_str());
+			string urlString = url->c_str();
+			vector<string> arr  = TCCsplit(urlString, '/');
+			string iconname = "iconname.png";
+			if (arr.size() > 0) {
+				iconname = arr.at(arr.size() - 1);
+			} 
+
+			//
+			iconname = "black_" + iconname;
+			std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
+			writablePath.append(iconname);
+
+			//
+			CCSprite *avatar = CCSprite::create(writablePath.c_str());
+			if (avatar == NULL) {
+				CCLog("avatar downLoadImage");
+				//downLoadImage(url->c_str(), iconname);
+			}
+			else {
+				CCLog("avatar from device");
+				//setAvatarBySprite(nodeAvatarBlack, avatar);
+			}
 		}
 
 		if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
@@ -554,6 +575,8 @@ void TomCuaCa::whenGameEnd(){
 	 TomCuaCa::~TomCuaCa(){
 	GameServer::getSingleton().removeListeners(this);
 	this->removeAllChildren();
+	CC_SAFE_DELETE(imagedownloader4Red);
+	CC_SAFE_DELETE(imagedownloader4Black);
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 
 }

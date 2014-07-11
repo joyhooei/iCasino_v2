@@ -17,6 +17,7 @@
 #include "FrameBet.h"
 #include "_Number_inGame_.h"
 #include "_Chat_inGame_.h"
+#include "ImageDownloader.h"
 
 //ket qua
 #define _kqNai 100
@@ -77,6 +78,9 @@ public:
 	FrameBet* betGa;
 	FrameBet* betRuou;
 	FrameBet* betNai;
+
+	ImageDownloader* imagedownloader4Red;
+	ImageDownloader* imagedownloader4Black;
 
 	TomCuaCa();
 	~TomCuaCa();

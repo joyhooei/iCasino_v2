@@ -14,7 +14,7 @@
 #include "mUtils.h"
 #include "LayerInviteFriends.h"
 #include "LayerInviteFriendsFacebook.h"
-
+#include "platform/android/jni/Android.h"
 #include "SceneManager.h"
 
 using namespace cocos2d;
@@ -82,7 +82,7 @@ void LayerFriend::gotoFriendDetails(){
 
 void LayerFriend::gotoInviteFriends(){
     //removeOldView();
-	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+	/*CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	LayerInviteFriends* mLayer;
@@ -94,6 +94,12 @@ void LayerFriend::gotoInviteFriends(){
 		mLayer->setZOrder(INT_MAX);
 	}
     //currNodeView = mLayer;
+    //*/
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+	inviteFB();
+#else
+	CCLog("Khong ho tro nen tang nay");
+#endif
 }
 
 // CCBSelectorResolver interface
