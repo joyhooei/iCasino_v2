@@ -242,12 +242,13 @@ void GameServer::OnExtensionResponse(unsigned long long ptrContext, boost::share
  */
 
 void GameServer::OnSmartFoxNtf(eEventTags tag, unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    PlayerCallBackMapIter iTer = mCallBack.begin();
-	int lenOfMap = mCallBack.size();
+    PlayerCallBackMapIter _iTer = mCallBack.begin();
 	try{
-		for ( ; iTer != mCallBack.end() ; iTer ++ ){
+		while ( _iTer != mCallBack.end()  ){
 			// 		if( iTer->second == 0x0e0e0e0e )
 			// 			continue;
+			PlayerCallBackMapIter iTer = _iTer;
+			_iTer++;
 			switch(tag)
 			{
 			case tag_EventConnection:
@@ -321,10 +322,6 @@ void GameServer::OnSmartFoxNtf(eEventTags tag, unsigned long long ptrContext, bo
 				iTer->second->OnExtensionResponse(ptrContext, ptrEvent);
 				break;
 			};
-			if( lenOfMap != mCallBack.size() )
-				break;
-// 			if( iTer==NULL ||  iTer->second==NULL )
-// 				break;
 		}
 	}catch(...){
 

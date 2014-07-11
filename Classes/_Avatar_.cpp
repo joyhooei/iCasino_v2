@@ -454,7 +454,7 @@ string Avatar::convertMoney(int money){
 // 		return;
 // 	}
 // 
-// 	CCSprite* pSprite = CCSprite::create("icon_default.png");
+// 	CCSprite* pSprite = CCSprite::createWithSpriteFrameName("assest/icon_default.png");
 // 	setAvatarBySprite(pSprite);
 // }
 // 

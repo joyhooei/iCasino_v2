@@ -837,12 +837,10 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
     createChess();
 
 	CCSize sizeTable = nodeTableChess->getContentSize();
-    tag2 = CCSprite::create("tag_phom_1.png");
-    //nodeTableChess->addChild(tag2);
-    chieuTuongRed = CCSprite::create("chess/attack1.png");
+    chieuTuongRed = CCSprite::createWithSpriteFrameName("CC/attack1.png");
 	chieuTuongRed->setPosition(ccp(sizeTable.width / 2, sizeTable.height / 2 - 100));
 	chieuTuongRed->setVisible(false);
-	chieuTuongBlack = CCSprite::create("chess/attack2.png");
+	chieuTuongRed = CCSprite::createWithSpriteFrameName("CC/attack1.png");
 	chieuTuongBlack->setPosition(ccp(sizeTable.width / 2, sizeTable.height / 2 + 100));
 	chieuTuongBlack->setVisible(false);
 	nodeTableChess->addChild(chieuTuongRed, 100);
@@ -1639,7 +1637,7 @@ void LayerPlayGameChinessChess::loadDefaultImage(CCNode *nodeContainer){
 		return;
 	}
 
-	CCSprite* pSprite = CCSprite::create("icon_default.png");
+	CCSprite* pSprite = CCSprite::createWithSpriteFrameName("assest/icon_default.png");
 	//pSprite->setTag(tagIcon);
 	pSprite->setAnchorPoint(ccp(0, 0));
 	CCSize sizeSprite = pSprite->getContentSize();

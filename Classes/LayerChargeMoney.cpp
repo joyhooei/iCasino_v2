@@ -13,6 +13,7 @@
 #include "mUtils.h"
 #include "SceneManager.h"
 #include "_Chat_.h"
+#include "LayerCurrencyExchange.h"
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
@@ -108,15 +109,13 @@ void LayerChargeMoney::onButtonCloseClick( CCObject* pSender )
 void LayerChargeMoney::onButtonExchangeClick(CCObject* pSender){
 	CCLOG("onButtonExchangeClick");
 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
-	ccNodeLoaderLibrary->unregisterCCNodeLoader("LayerSMS");
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerSMS",   LayerTyGiaLoader::loader());
 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	LayerTyGia* mLayer;
+	LayerCurrencyExchange* mLayer;
 	if (ccbReader)
 	{
-		mLayer = (LayerTyGia *)ccbReader->readNodeGraphFromFile( "LayerSMS.ccbi" );
+		mLayer = (LayerCurrencyExchange *)ccbReader->readNodeGraphFromFile( "LayerPopupExchange.ccbi" );
+		mLayer->setIsPopup(true);
 		this->addChild(mLayer, 1, 1);
-		//        SceneManager::getSingleton().showLayer(mLayer);
 		ccbReader->release();
 	}
 }
@@ -227,6 +226,7 @@ void LayerChargeMoney::initTextField(CCEditBox* txt, const char* hintText){
     txt->setReturnType(kKeyboardReturnTypeDefault);
 	txt->setPlaceHolder(hintText);
 	txt->setInputMode(kEditBoxInputModeAny);
+	txt->setInputFlag(kEditBoxInputFlagSensitive);
 	txt->setTouchPriority(-128);
 }
 

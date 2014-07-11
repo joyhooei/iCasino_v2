@@ -164,7 +164,8 @@ void LayerCreateAccount::initTextField(CCEditBox* txt, const char* hintText){
     txt->setFontColor(ccBLACK);
     txt->setPlaceholderFontColor(ccBLACK);
     txt->setFont("fonts/Roboto-Regular.ttf", 18);
-    txt->setReturnType(kKeyboardReturnTypeDefault);
+	txt->setReturnType(kKeyboardReturnTypeDefault);
+	txt->setInputFlag(kEditBoxInputFlagSensitive);
 	txt->setPlaceHolder(hintText);
 	txt->setTouchPriority(-128);
 	txt->setInputMode(kEditBoxInputModeAny);

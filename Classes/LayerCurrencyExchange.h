@@ -37,16 +37,24 @@ private:
     CCControlSlider* sliderMoney;
     CCSprite* spriteMoney;
     
-    int rate;
+	int rate;
+
+	bool isPopup;
 public:
     LayerCurrencyExchange();
 	virtual ~LayerCurrencyExchange();
+	virtual void registerWithTouchDispatcher(void);
+	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void onEnter();
+	virtual void onExit();
 
 	void notificationCallBack(bool isOK, int tag);
     
     void loadAllMyDatas();
     
-    void loadMinMaxMoney();
+	void loadMinMaxMoney();
+
+	void setIsPopup(bool b);
     
     CREATE_FUNC(LayerCurrencyExchange);
     

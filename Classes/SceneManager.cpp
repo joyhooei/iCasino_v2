@@ -166,6 +166,7 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerLichSuGiaoDich",   LayerLichSuGiaoDichLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChargeMoney",   LayerChargeMoneyLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPopupChargeMoney",   LayerChargeMoneyLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPopupExchange",   LayerCurrencyExchangeLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUserInfo_Details",   LayerUserInfo_DetailsLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerChangeAvatar",   LayerChangeAvatarLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerBuyAvatar",   LayerBuyAvatarLoader::loader());
@@ -365,8 +366,8 @@ void SceneManager::gotoGameByTag(int typeGame) {
 		CCLog("TCC");
 		break;
 	}
-	
-
+	//back LayerMain to services
+	layerMain->gotoServices();
 	hideLayer(layerMain);
 }
 

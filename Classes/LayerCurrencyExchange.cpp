@@ -74,7 +74,8 @@ void LayerCurrencyExchange::loadMinMaxMoney(){
 // CCBSelectorResolver interface
 SEL_MenuHandler LayerCurrencyExchange::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, const char *pSelectorName)
 {
-    CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnUpdateInfo", LayerCurrencyExchange::onButtonCreate);
+	CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnUpdateInfo", LayerCurrencyExchange::onButtonCreate);
+	CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnClose", LayerCurrencyExchange::onButtonClose);
     return NULL;
 }
 
@@ -93,7 +94,8 @@ void LayerCurrencyExchange::onButtonCreate(CCObject* pSender)
 
 void LayerCurrencyExchange::onButtonClose(CCObject* pSender)
 {
-    CCLOG("onButtonClose");
+	CCLOG("onButtonClose");
+	this->removeFromParentAndCleanup(true);
 }
 
 void LayerCurrencyExchange::valueChanged(CCObject *sender, CCControlEvent controlEvent){
@@ -132,6 +134,7 @@ void LayerCurrencyExchange::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeL
     sliderMoney->setMinimumValue(100);
     sliderMoney->setMaximumValue(1000);
     sliderMoney->setValue(100);
+	sliderMoney->setTouchPriority(-128);
     return;
 }
 
@@ -179,3 +182,35 @@ void LayerCurrencyExchange::notificationCallBack( bool isOK, int tag )
 {
 
 }
+
+void LayerCurrencyExchange::setIsPopup( bool b )
+{
+	isPopup = b;
+}
+
+void LayerCurrencyExchange::registerWithTouchDispatcher( void )
+{
+	if( isPopup ){
+		CCLOG("isPopup: %s", isPopup?"true":"false");
+		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -128, true);
+	}
+}
+
+bool LayerCurrencyExchange::ccTouchBegan( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )
+{
+	return true;
+}
+
+void LayerCurrencyExchange::onEnter()
+{
+	CCLayer::onEnter();
+	//
+	if( isPopup )
+		this->runAction(mUtils::getActionOpenPopup());
+}
+
+void LayerCurrencyExchange::onExit()
+{
+	CCLayer::onExit();
+}
+

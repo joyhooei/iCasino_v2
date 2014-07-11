@@ -337,7 +337,7 @@ void LayerFriendDetails::OnExtensionResponse( unsigned long long ptrContext, boo
 	if( strcmp( cmd->c_str(), "rgif" )==0 ){ //Friend info
 		lblName->setString( param->GetUtfString("aN")->c_str() );
 		lblSex->setString( CCString::createWithFormat("Giới tính: %s", param->GetInt("aS")==0?"Nữ": "Nam")->getCString() );
-		lblXu->setString( CCString::createWithFormat("Xu: %s", mUtils::convertMoneyEx( *param->GetDouble("amf") ).c_str() )->getCString() );
+		lblXu->setString( CCString::createWithFormat("Xu: %s", mUtils::convertMoneyEx( *param->GetLong("amf") ).c_str() )->getCString() );
 	}else if( strcmp( cmd->c_str(), "rghba" )==0 ){ //History
 		vector<string> lstHis;
 		lstHis = mUtils::splitString(*param->GetUtfString("rghba"), '|');

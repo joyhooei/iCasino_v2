@@ -60,7 +60,17 @@ void LayerChonBanChoi::setGameID(int gID){
     m_gID = gID;
     CCLOG("setGameID: gId: %d", gID);
     lblTitle->setString( CCString::createWithFormat("CHỌN BÀN - %s", mUtils::getGameNameUpperCaseByID(gID)->getCString())->getCString() );
+	//Init for table List Room
+	tblListRooms = CCTableView::create(this, nodeTableListRooms->getContentSize());
+	tblListRooms->setDirection(kCCScrollViewDirectionVertical);
+	tblListRooms->setAnchorPoint(ccp(0, 0));
+	tblListRooms->setPosition(ccp(0, 0));
+	tblListRooms->setDelegate(this);
+	tblListRooms->setVerticalFillOrder(kCCTableViewFillTopDown);
+	tblListRooms->setTag(tagListPlay);
+	nodeTableListRooms->addChild(tblListRooms);
     tblListRooms->reloadData();
+	CCLOG("AFTER SHIT LayerChonBanChoi::setGameID()");
 	//
 	boost::shared_ptr<vector<boost::shared_ptr<UserVariable> > > collectionUserVariable (new vector<boost::shared_ptr<UserVariable> >());
 	boost::shared_ptr<SFSUserVariable> variable (new SFSUserVariable ("cvg", boost::make_shared<int>(gID), VARIABLETYPE_INT));
@@ -160,15 +170,7 @@ bool LayerChonBanChoi::onAssignCCBMemberVariable(CCObject *pTarget, const char *
 
 void LayerChonBanChoi::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
-    //Init for table List Room
-    tblListRooms = CCTableView::create(this, nodeTableListRooms->getContentSize());
-    tblListRooms->setDirection(kCCScrollViewDirectionVertical);
-    tblListRooms->setAnchorPoint(ccp(0, 0));
-    tblListRooms->setPosition(ccp(0, 0));
-    tblListRooms->setDelegate(this);
-    tblListRooms->setVerticalFillOrder(kCCTableViewFillTopDown);
-    tblListRooms->setTag(tagListPlay);
-    nodeTableListRooms->addChild(tblListRooms);
+    
     //Init for table List Room
     tblRooms = CCTableView::create(this, nodeTableRooms->getContentSize());
     tblRooms->setDirection(kCCScrollViewDirectionVertical);
