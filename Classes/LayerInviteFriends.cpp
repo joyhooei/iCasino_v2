@@ -10,7 +10,7 @@
 #include "GameServer.h"
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
-#include "Android.h"
+#include "platform/android/jni/Android.h"
 
 using namespace Sfs2X;
 using namespace cocos2d;
@@ -42,7 +42,7 @@ SEL_MenuHandler LayerInviteFriends::onResolveCCBCCMenuItemSelector(cocos2d::CCOb
 void LayerInviteFriends::onButtonFacebook(CCObject* pSender){
 	CCLOG("onButtonFacebook");
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-	shareFB();
+	inviteFB();
 #else
 	CCLog("Ko ho tro nen tang nay !");
 #endif

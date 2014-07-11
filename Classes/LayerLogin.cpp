@@ -14,7 +14,7 @@
 #include "SceneManager.h"
 #include "_Chat_.h"
 #include "mUtils.h"
-#include "Android.h"
+#include "platform/android/jni/Android.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
