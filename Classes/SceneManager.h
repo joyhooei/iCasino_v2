@@ -126,6 +126,10 @@ public:
 		return mCurrentLayerTag;
 	}
 
+	CCLayer* getLayerOnTop(){
+		return layerOnTop;
+	}
+
 	LayerChatWindow* getLayerChatWindow(){
 		return mLayerChatWindow;
 	}

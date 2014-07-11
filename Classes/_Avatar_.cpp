@@ -41,7 +41,7 @@ timer(NULL)
 		CCSprite *time = CCSprite::create("frame_time_2.png");
 		timer = CCProgressTimer::create(time);
 		timer->setType(kCCProgressTimerTypeRadial);
-		timer->setPosition(ccp(getSizeThis().width / 2, getSizeThis().height / 2));
+		timer->setPosition(ccp(getSizeThis().width / 2, getSizeThis().height / 2+1.68));
 		this->addChild(timer);
 
 		// widget

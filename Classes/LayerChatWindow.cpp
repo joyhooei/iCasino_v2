@@ -1,6 +1,7 @@
 ﻿#include "LayerChatWindow.h"
 #include "SceneManager.h"
 #include "mUtils.h"
+#include "platform/android/jni/Android.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -16,7 +17,6 @@ CCScene* LayerChatWindow::scene()
 
 	// add layer as a child to scene
 	scene->addChild(layer);
-
 	// return the scene
 	return scene;
 }
@@ -87,9 +87,8 @@ bool LayerChatWindow::init()
 		armature->getAnimation()->playByIndex(i-1);
 		RichElementCustomNode* recustom = RichElementCustomNode::create(1, ccWHITE, 255, armature);
 		RichText* _richText = RichText::create();
-
 		_richText->setContentSize( armature->getContentSize() );
-		_richText->pushBackElement(recustom);
+		_richText->pushBackElement(recustom); 
 		if( col> numOfCols ){
 			row++;
 			col = 1;
@@ -139,6 +138,12 @@ void LayerChatWindow::onButtonSend( CCObject* pSender, TouchEventType type )
 		SceneManager::getSingleton().hideLayerChatWindow();
 		txtChat->setText("");
 		txtChat->setDetachWithIME(false);
+		//hide keyboard
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+		hideKeyboard();
+#else
+		CCLog("Khong ho tro nen tang nay");
+#endif
 	}
 }
 

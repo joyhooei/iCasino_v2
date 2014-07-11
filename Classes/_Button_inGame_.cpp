@@ -125,7 +125,7 @@ void LayerButtonInGame::eventTouchBtnSetting(CCObject *pObject, TouchEventType p
 		if (ccbReader)
 		{
 			mLayerSettings = (LayerSettings *)ccbReader->readNodeGraphFromFile( "LayerSettings.ccbi" );
-			this->addChild(mLayerSettings, 1, 1);
+			SceneManager::getSingleton().getLayerOnTop()->addChild(mLayerSettings, 1, 1);
 			ccbReader->release();
 		}
 	}
