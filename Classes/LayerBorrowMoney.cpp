@@ -114,10 +114,10 @@ void LayerBorrowMoney::OnExtensionResponse(unsigned long long ptrContext, boost:
     boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
     if(strcmp("clbi", cmd->c_str())==0){ //clbi response
         //aMLBl
-        long aMLBl = *param->GetDouble("aMLBl");
+        long aMLBl = *param->GetLong("aMLBl");
         //aLBl
-        long aLBl = *param->GetDouble("aLBl");
-        CCLOG("clbi aMLBl=%lf aLBl=%ld", *param->GetDouble("aMLBl"), aLBl);
+        long aLBl = *param->GetLong("aLBl");
+        CCLOG("clbi aMLBl=%lf aLBl=%ld", *param->GetLong("aMLBl"), aLBl);
         //set to slider
         sliderMoney->setMinimumValue(0);
         sliderMoney->setMaximumValue(aMLBl);

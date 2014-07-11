@@ -418,6 +418,10 @@ void LayerMain::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
 	CCLOG("LayerMain - onNodeLoaded");
 	this->setKeypadEnabled(true);
+	//
+	nodeAvatar->setContentSize(ccp(nodeAvatar->getContentSize().width+4, nodeAvatar->getContentSize().height+1.8));
+	nodeAvatar->setPositionY(nodeAvatar->getPositionY()+1);
+	nodeAvatar->setPositionX(nodeAvatar->getPositionX()-2);
     return;
 }
 

@@ -33,6 +33,8 @@ LayerMoiChoi::~LayerMoiChoi()
 
 void LayerMoiChoi::loadAllDatas(){
 	//get game id
+	if( GameServer::getSingleton().getSmartFox()->LastJoinedRoom()==NULL )
+		return;
 	int gid = atoi( GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str() );
 	//
 	boost::shared_ptr<ISFSObject> params (new SFSObject());

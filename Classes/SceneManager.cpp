@@ -216,6 +216,7 @@ bool SceneManager::init() {
 	layerOnTop->setContentSize( CCSizeMake(800, 480) );
 	layerOnTop->setAnchorPoint(ccp(0.5, 0.5));
 	layerOnTop->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
+	layerOnTop->setTouchEnabled(true);
 	this->addChild(layerOnTop, 1001);
 
 	return true;
