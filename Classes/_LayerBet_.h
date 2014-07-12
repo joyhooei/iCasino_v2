@@ -18,7 +18,20 @@ using namespace std;
 class BetGame3Cay : public CCLayer
 {
 private:
+	float leftMe;
+	float leftLeft;
+	float leftRight;
+	float leftTop;
+	float bottomMe;
+	float bottomLeft;
+	float bottomTop;
 
+	float h_card_me;
+	float h_card_notme;
+	float w_card_me;
+	float w_card_notme;
+
+	CCLayer *layerResuilt;
 public:
 	~BetGame3Cay();
 	virtual void onExit();
@@ -27,5 +40,7 @@ public:
 
 	FrameBet* getFrameBetByPos(int pos);
 	void setVisibleAllFrameBet();
+	void setResuit4AllUser(int pos, string resuilt, string score);
+	CCLayer* getLayerResuilt();
 };
 #endif
