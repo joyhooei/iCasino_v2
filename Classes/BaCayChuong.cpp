@@ -540,7 +540,6 @@ void BaCayChuong::whenResuiltGame(string rg){
 		vector<string> info = mUtils::splitString(resuilt[i], '|');
 
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
-			//layerChat->showChatByPos(kUserMe,(info[1] +" Điểm"));
 			layerNumbers->showNumberByPos(kUserMe, info[4]);
 			layerBet->setResuit4AllUser(kUserMe, "1", info[1]);
 		}
@@ -549,17 +548,14 @@ void BaCayChuong::whenResuiltGame(string rg){
 			int pos = layerAvatars->getPosByName(info[0]);
 			switch (pos) {
 			case kUserLeft:
-				//layerChat->showChatByPos(kUserLeft,(info[1] +" Điểm"));
 				layerBet->setResuit4AllUser(kUserLeft, "1", info[1]);
 				layerNumbers->showNumberByPos(kUserLeft, info[4]);
 				break;
 			case kUserRight:
-				//layerChat->showChatByPos(kUserRight,(info[1] +" Điểm"));
 				layerBet->setResuit4AllUser(kUserRight, "1", info[1]);
 				layerNumbers->showNumberByPos(kUserRight, info[4]);
 				break;
 			case kUserTop:
-				//layerChat->showChatByPos(kUserTop,(info[1] +" Điểm"));
 				layerBet->setResuit4AllUser(kUserTop, "1", info[1]);
 				layerNumbers->showNumberByPos(kUserTop, info[4]);
 				break;

@@ -90,7 +90,8 @@ enum{
 	dTag_btnQuatar,
 	dTag_btnDouble,
 	dTag_btnAll,
-	dTag_btnGive
+	dTag_btnGive,
+	dTag_Complete
 };
 
 enum{

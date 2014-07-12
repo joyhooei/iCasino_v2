@@ -62,6 +62,7 @@ public:
 	void displayListCard_Winner(string listcard);
 
 	void onButtonXemNoc(CCObject* pSender);
+	void closePopUp();
 
 	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 

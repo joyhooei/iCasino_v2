@@ -54,6 +54,8 @@ private:
     
     bool flagChiaBai;
     bool real;
+	bool flag_Complete_Click;
+
     string currentTo;
     string currentBetal;
     int minBet;
@@ -95,6 +97,8 @@ public:
     void whenGameEnd();
 	void whenUserBet(string uid, long gameBet);
     
+	void deleteResuiltGame();
+
 	Button* createButtonWithTitle_Pos(const char *pName, CCPoint pPoint);
 	Button* getButtonByTag(int pTag);
 
@@ -106,6 +110,7 @@ public:
     void btn_To_click(CCObject *sender, TouchEventType type);
     void btn_Up_click(CCObject *sender, TouchEventType type);
     void btn_Theo_click(CCObject *sender, TouchEventType type);
+	void btn_Complete_click(CCObject *sender, TouchEventType type);
     
 	void callBackFunction_LatBai(CCNode *pSend);
 	void callBackFuntion_Endgive(CCNode *pSend);

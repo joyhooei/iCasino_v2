@@ -49,6 +49,8 @@ Lieng::Lieng()
     
     flagChiaBai = false;
     real = false;
+	flag_Complete_Click = false;
+
     currentTo = "";
     currentBetal = "";
     
@@ -138,6 +140,7 @@ void Lieng::createButtons(){
 
 	Button* btn_Ready = createButtonWithTitle_Pos("Sẵn Sàng",ccp(WIDTH_DESIGN - w_Button - 20, 10));
 	Button* btn_Unready	= createButtonWithTitle_Pos("Hủy SS",ccp(WIDTH_DESIGN - w_Button - 20, 10));
+	Button* btn_Complete = createButtonWithTitle_Pos("Xong",ccp(WIDTH_DESIGN - w_Button - 20, 10));
 
 	Button* btn_View = createButtonWithTitle_Pos("Xem Bài", ccp(WIDTH_DESIGN - w_Button - 20, 10));
 	Button* btn_Squeezing = createButtonWithTitle_Pos("Nặn Bài", ccp(WIDTH_DESIGN - w_Button - 20, h_Button + 20));
@@ -148,6 +151,7 @@ void Lieng::createButtons(){
 
 	btn_Ready->addTouchEventListener(this, toucheventselector(Lieng::btn_ready_click));
 	btn_Unready->addTouchEventListener(this, toucheventselector(Lieng::btn_Unready_click));
+	btn_Complete->addTouchEventListener(this, toucheventselector(Lieng::btn_Complete_click));
 
 	btn_View->addTouchEventListener(this, toucheventselector(Lieng::btn_XemBai_click));
 	btn_Squeezing->addTouchEventListener(this, toucheventselector(Lieng::btn_NanBai_click));
@@ -163,6 +167,7 @@ void Lieng::createButtons(){
 	btn_Fold->setTag(dTag_btnFold);
 	btn_Bet->setTag(dTag_btnBet);
 	btn_Follow->setTag(dTag_btnFollow);
+	btn_Complete->setTag(dTag_Complete);
 
 	btn_Ready->setEnabled(false);
 	btn_Unready->setEnabled(false);
@@ -171,6 +176,7 @@ void Lieng::createButtons(){
 	btn_Fold->setEnabled(false);
 	btn_Bet->setEnabled(false);
 	btn_Follow->setEnabled(false);
+	btn_Complete->setEnabled(false);
 
 	layerButtons->addWidget(btn_Ready);
 	layerButtons->addWidget(btn_Unready);
@@ -179,6 +185,7 @@ void Lieng::createButtons(){
 	layerButtons->addWidget(btn_Fold);
 	layerButtons->addWidget(btn_Follow);
 	layerButtons->addWidget(btn_Bet);
+	layerButtons->addWidget(btn_Complete);
 }
 
 Button* Lieng::createButtonWithTitle_Pos(const char *pName, CCPoint pPoint)
@@ -585,15 +592,14 @@ void Lieng::whenUserUnready(string uid){
 void Lieng::whenGameStart(){
 	getButtonByTag(dTag_btnReady)->setEnabled(false);
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
-
+	flag_Complete_Click = false;
 	layerAvatars->setUnReadyAllUser();
 }
 
 void Lieng::whenGameEnd(){
 
-	layerCards->resetGame();
+	getButtonByTag(dTag_Complete)->setEnabled(true);
 
-	getButtonByTag(dTag_btnReady)->setEnabled(true);
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
 	getButtonByTag(dTag_btnView)->setEnabled(false);
 	getButtonByTag(dTag_btnSqueez)->setEnabled(false);
@@ -606,12 +612,23 @@ void Lieng::whenGameEnd(){
 	string Bet = *GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
 	string strBet = mUtils::splitString(Bet, '@')[0];
 	minBet = atoi(strBet.c_str());
-    
-	layerBet->getLayerResuilt()->removeAllChildrenWithCleanup(true);
 
-    flagChiaBai = false;
-    _list_cards = "";
-    real = false;
+	flagChiaBai = false;
+	_list_cards = "";
+	real = false;
+	flag_Complete_Click = true;
+	//this->runAction(CCSequence::create(CCDelayTime::create(15),CCCallFunc::create(this, callfunc_selector(Lieng::deleteResuiltGame)),NULL));
+}
+
+void Lieng::deleteResuiltGame(){
+	//if (flag_Complete_Click == false && checkPlaying(_list_user) == false)
+	{
+		getButtonByTag(dTag_Complete)->setEnabled(false);
+		getButtonByTag(dTag_btnReady)->setEnabled(true);
+
+		layerCards->resetGame();
+		layerBet->getLayerResuilt()->removeAllChildrenWithCleanup(true);
+	}
 }
 
 void Lieng::whenResuiltGame(string rg){
@@ -802,4 +819,11 @@ void Lieng::btn_Theo_click(CCObject *sender, TouchEventType type){
             boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_GAME_BET_REQ,params,lastRoom));
             GameServer::getSingleton().getSmartFox()->Send(request);
     }
+}
+
+void Lieng::btn_Complete_click(CCObject *sender, TouchEventType type){
+	if (type == TOUCH_EVENT_ENDED)
+	{
+		deleteResuiltGame();
+	}
 }
