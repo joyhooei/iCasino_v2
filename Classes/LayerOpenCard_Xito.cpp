@@ -68,12 +68,6 @@ void LayerOpenCard_Xito::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoad
 {
 	CCLOG("Imhere onNodeLoaded");
 	CCLOG("Nhay vao day dau tien");
-	UILoadingBar *loading = UILoadingBar::create();
-	loading->loadTexture("TomCuaCa/loading.png");
-	loading->setPosition(ccp(400, btnCard1->getPositionY() + btnCard1->getContentSize().height - 10));
-	loading->setPercent(100);
-	this->addChild(loading);
-	
 	btnCard1->setOpacity(0);
 	btnCard2->setOpacity(0);
 	CCLOG("%f %f",btnCard2->getContentSize().width,btnCard2->getContentSize().height);

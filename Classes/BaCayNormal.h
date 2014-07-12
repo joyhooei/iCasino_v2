@@ -14,7 +14,6 @@
 #include "GameServer.h"
 #include "LayerAvatar_BaCay.h"
 #include "_CardBaCay_.h"
-#include "_LayerBet_.h"
 #include "_Button_inGame_.h"
 #include "_Chat_inGame_.h"
 
@@ -51,7 +50,6 @@ private:
 	LayerButtonInGame *layerbutton;
 	CardBaCay *layerCards;
 	LayerChatInGame *layerChat;
-	BetGame3Cay *layerBet;
 	
 public:
 	BaCayNormal();

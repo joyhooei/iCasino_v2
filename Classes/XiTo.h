@@ -56,7 +56,6 @@ private:
     float h_card_notme;
     
 	CCLayer *layerFrameBet;
-	CCLayer *layerLabelVictype;
 
     UIImageView *frameBetTotal;
     UILabel *labelBetTotal;
@@ -140,8 +139,6 @@ public:
     void setVictoryType(string uid,long vicType, string lc);
     void setMoneyAnimate(string uid, string amf);
     
-	void createLabelVictype(int pos, long vicType);
-
     void sendOpenCard();
     void sendBetNTF(int typeBet);
     

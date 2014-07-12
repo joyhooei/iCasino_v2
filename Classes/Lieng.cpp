@@ -607,8 +607,6 @@ void Lieng::whenGameEnd(){
 	string strBet = mUtils::splitString(Bet, '@')[0];
 	minBet = atoi(strBet.c_str());
     
-	layerBet->getLayerResuilt()->removeAllChildrenWithCleanup(true);
-
     flagChiaBai = false;
     _list_cards = "";
     real = false;
@@ -644,7 +642,6 @@ void Lieng::whenResuiltGame(string rg){
 
 		int pos = layerAvatars->getPosByName(info[0]);
 		layerNumbers->showNumberByPos(pos, money);
-		layerBet->setResuit4AllUser(pos, info[1],info[2]);
 	}
 }
 

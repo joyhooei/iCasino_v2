@@ -75,14 +75,6 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     CARD_RIGHT_BOTTOM->retain();
     CARD_RIGHT_TOP->retain();
 
-// 	Label *addLabel = Label::create();
-// 	addLabel->setFontName("Marker Felt.ttf");
-// 	addLabel->setText("Thùng Phá Sảnh");
-// 	addLabel->setColor(ccc3(239,235,117));
-// 	addLabel->setFontSize(20);
-// 	addLabel->setPosition(ccp(460, 200));
-// 	this->addChild(addLabel);
-
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
 }
@@ -248,19 +240,11 @@ void XiTo::createFrameBets(){
 	float bottom_TOP = 432;
 	float bottom_BOTTOM = 282;
 
-	//Layer frame bet
 	layerFrameBet = CCLayer::create();
 	layerFrameBet->setAnchorPoint(ccp(0, 0));
 	layerFrameBet->setPosition(ccp(0, 0));
-	layerFrameBet->setTouchEnabled(false);
+	layerFrameBet->setTouchEnabled(true);
 	this->addChild(layerFrameBet);
-
-	//layer victory type
-	layerLabelVictype = CCLayer::create();
-	layerLabelVictype->setAnchorPoint(ccp(0, 0));
-	layerLabelVictype->setPosition(ccp(0, 0));
-	layerLabelVictype->setTouchEnabled(false);
-	this->addChild(layerLabelVictype);
 
 	frameBetTotal = UIImageView::create();
 	frameBetTotal->loadTexture("theo.png");
@@ -303,11 +287,11 @@ void XiTo::createFrameBets(){
 int XiTo::getPosUserByName(string uid, string _list_user){
     int vt = -1;
     vector<string> list;
-    if(_list_user != ""){
+    if(_list_user!=""){
         list = mUtils::splitString(_list_user, ';');
     }
     //Tìm vị trí của mình trong list user
-    for(int i = 0; i < list.size(); i++){
+    for(int i=0;i<list.size();i++){
         string _id = mUtils::splitString(list[i], '_')[1];
         if(strcmp(_id.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
             vt = i;
@@ -316,14 +300,14 @@ int XiTo::getPosUserByName(string uid, string _list_user){
     }
     
     //Tìm vị trí các người chơi
-    for(int k = 0; k < list.size(); k++){
+    for(int k=0;k<list.size();k++){
         if(strcmp(list[k].c_str(), "")==0){
             continue;
         }
         string player = list[k];
         vector<string> n = mUtils::splitString(player, '_');
         if(strcmp(n[1].c_str(), uid.c_str())==0){
-            if(k == vt){
+            if(k==vt){
                 return 0;
             }
             else if(k == (vt+1) % 5){
@@ -912,11 +896,11 @@ void XiTo::openAllCard(string uid, string lc){
                 break;
             case user_rightBottom:
                 setIDListCard(CARD_RIGHT_BOTTOM, lc);
-				setListCards(CARD_RIGHT_BOTTOM, strCards);
+                setListCards(CARD_RIGHT_BOTTOM, strCards);
                 break;
             case user_rightTop:
                 setIDListCard(CARD_RIGHT_TOP, lc);
-				setListCards(CARD_RIGHT_TOP, strCards);
+                setListCards(CARD_RIGHT_TOP, strCards);
                 break;
             default:
                 break;
@@ -978,109 +962,25 @@ void XiTo::setDisplayValueListCard(CCArray *P,string lc){
 void XiTo::setVictoryType(string uid,long vicType, string lc){
     if(strcmp(uid.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
         setDisplayValueListCard(CARD_ME, lc);
-		createLabelVictype(user_me, vicType);
     }else
     {
         switch (getPosUserByName(uid, _list_user)) {
             case user_leftBottom:
-				setDisplayValueListCard(CARD_LEFT_BOTTOM, lc);
-				createLabelVictype(user_leftBottom, vicType);
+                setDisplayValueListCard(CARD_LEFT_BOTTOM, lc);
                 break;
             case user_leftTop:
-				setDisplayValueListCard(CARD_LEFT_TOP, lc);
-				createLabelVictype(user_leftTop, vicType);
+                setDisplayValueListCard(CARD_LEFT_TOP, lc);
                 break;
             case user_rightBottom:
-				setDisplayValueListCard(CARD_RIGHT_BOTTOM, lc);
-				createLabelVictype(user_rightBottom, vicType);
+                setDisplayValueListCard(CARD_RIGHT_BOTTOM, lc);
                 break;
             case user_rightTop:
-				setDisplayValueListCard(CARD_RIGHT_TOP, lc);
-				createLabelVictype(user_rightTop, vicType);
+                setDisplayValueListCard(CARD_RIGHT_TOP, lc);
                 break;
             default:
                 break;
         }
     }
-}
-
-void XiTo::createLabelVictype(int pos, long vicType){
-	if (pos != user_me)
-	{
-		getFrameBetByTag(pos)->setVisible(false);
-	}
-	// set Pos
-	float x = -1, y = -1;
-	switch(pos){
-	case user_me:
-		x = lf_card_me - w_card_me / 2;
-		y = bt_card_me + h_card_me/2 + 4;
-		break;
-
-	case user_leftTop:
-		x = lf_card_left_top - w_card_notme / 2;
-		y = bt_card_top + h_card_notme/2 + 4;
-		break;
-
-	case user_leftBottom:
-		x = lf_card_left_bottom - w_card_notme / 2;
-		y = bt_card_bottom + h_card_notme/2 + 4;
-		break;
-
-	case user_rightTop:
-		x = lf_card_right_top - w_card_notme / 2;
-		y = bt_card_top + h_card_notme/2 + 4;
-		break;
-
-	case user_rightBottom:
-		x = lf_card_right_bottom - w_card_notme / 2;
-		y = bt_card_bottom + h_card_notme/2 + 4;
-		break;
-
-	default:
-		break;
-	}
-
-	//Settext
-	string txt = "";
-	switch(vicType){
-	case 1:
-		txt = "Mậu thầu";
-		break;
-	case 2:
-		txt = "Đôi";
-		break;
-	case 3:
-		txt = "Thú";
-		break;
-	case 4:
-		txt = "Sám Cô";
-		break;
-	case 5:
-		txt = "Sảnh";
-		break;
-	case 6:
-		txt = "Thùng";
-		break;
-	case 7:
-		txt = "Cũ Lũ";
-		break;
-	case 8:
-		txt = "Tứ Quý";
-		break;
-	case 9:
-		txt = "Thùng Phá Sảnh";
-		break;
-	}
-
-	Label *vic = Label::create();
-	vic->setFontName("Marker Felt.ttf");
-	vic->setText(txt);
-	vic->setColor(ccc3(239,235,117));
-	vic->setFontSize(22);
-	vic->setAnchorPoint(ccp(0,0));
-	vic->setPosition(ccp(x, y));
-	layerLabelVictype->addChild(vic);
 }
 
 void XiTo::setMoneyAnimate(string uid, string amf){
@@ -1502,8 +1402,6 @@ void XiTo::whenEndGame(){
     
     getButtonByTag(dTag_btnReady)->setEnabled(true);
     
-	layerLabelVictype->removeAllChildrenWithCleanup(true);
-
     luotChiathem = 2;
     chooseCard = true;
     luotChia = 0;

@@ -39,9 +39,6 @@ BaCayNormal::BaCayNormal(){
     createButtons();
 	createCards();
 
-	layerBet = BetGame3Cay::create();
-	this->addChild(layerBet);
-
 	layerChat = LayerChatInGame::create();
 	this->addChild(layerChat);
 
@@ -501,12 +498,13 @@ void BaCayNormal::whenResuiltGame(string rg){
     LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
 	this->addChild(layerNumbers);
 
+
     vector<string> resuilt = mUtils::splitString(rg, ';');
 
     for(int i = 0; i < resuilt.size(); i++){
         vector<string> info = mUtils::splitString(resuilt[i], '|');
         if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-            layerBet->setResuit4AllUser(kUserMe, "1", info[1]);
+            layerChat->showChatByPos(kUserMe,(info[1]+" Điểm"));
 			layerNumbers->showNumberByPos(kUserMe, info[4]);
         }
         else{
@@ -514,17 +512,17 @@ void BaCayNormal::whenResuiltGame(string rg){
 
             switch (pos) {
                 case kUserLeft:
-					layerBet->setResuit4AllUser(kUserLeft, "1", info[1]);
+					layerChat->showChatByPos(kUserLeft,(info[1]+" Điểm"));
                     layerNumbers->showNumberByPos(kUserLeft, info[4]);
                     break;
 
                 case kUserRight:
-					layerBet->setResuit4AllUser(kUserRight, "1", info[1]);
+					layerChat->showChatByPos(kUserRight,(info[1]+" Điểm"));
                     layerNumbers->showNumberByPos(kUserRight, info[4]);
                     break;
 
                 case kUserTop:
-					layerBet->setResuit4AllUser(kUserTop, "1", info[1]);
+					layerChat->showChatByPos(kUserTop,(info[1]+" Điểm"));
                     layerNumbers->showNumberByPos(kUserTop, info[4]);
                     break;
 
@@ -537,10 +535,8 @@ void BaCayNormal::whenResuiltGame(string rg){
 
 void BaCayNormal::whenGameEnd(){
 	layerCards->resetGame();
-    layerBet->getLayerResuilt()->removeAllChildrenWithCleanup(true);
-
-	getButtonByTag(dTag_btnReady)->setEnabled(true);
-
+    getButtonByTag(dTag_btnReady)->setEnabled(true);
+    
     flagChiaBai = false;
     _list_cards = "";
 }
