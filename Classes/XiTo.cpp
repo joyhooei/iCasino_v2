@@ -354,8 +354,6 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
         boost::shared_ptr<string> lu = param->GetUtfString("lu");
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
         if(lu != NULL){
-            CCLOG("list user update: %s",lu->c_str());
-            CCLOG("Nguoi ra khoi phong: %s",uid->c_str());
             _list_user = *lu;
             updateUsers(_list_user);
         }
@@ -364,7 +362,6 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     //user ready
     else if (strcmp("rdyntf", cmd->c_str())==0){
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
-        CCLOG("user ready: %s",uid->c_str());
         when_userReady(*uid);
     }
     
@@ -1161,6 +1158,7 @@ void XiTo::popupXito(string myDealCard){
         popUp = (LayerOpenCard_Xito *)ccbReader->readNodeGraphFromFile( "LayerOpenCard_Xito.ccbi" );
         popUp->setPosition(ccp(10,10));
         popUp->setDealCards(myDealCard);
+		popUp->setTag(444);
         this->addChild(popUp);
         ccbReader->release();
     }
@@ -1168,6 +1166,11 @@ void XiTo::popupXito(string myDealCard){
 
 void XiTo::OpenOneDealCards(string uid,string crdvl){
     if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
+		if (this->getChildByTag(444) != NULL)
+		{
+			this->removeChildByTag(444);
+			CCLOG("Jumpe to here and remove !");
+		}
         moveDealCard_Me(crdvl);
     }
     else{

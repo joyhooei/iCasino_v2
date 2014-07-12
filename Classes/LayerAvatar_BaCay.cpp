@@ -210,8 +210,6 @@ int LayerBaCayAvatar::getPosByName(string name)
 		}
 	}
 
-	CCLOG("vt = %d",vt);
-
 	for (int i = 0; i < list.size(); i++)
 	{
 		if (strcmp(list[i].c_str(), "") == 0)

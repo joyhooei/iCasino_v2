@@ -260,7 +260,7 @@ void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr
 		}
 	}
 // 
-    else if(strcmp("nt",cmd->c_str())==0){
+    else if(strcmp("nt", cmd->c_str()) == 0){
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
         boost::shared_ptr<long> mb = param->GetInt("mb");
         boost::shared_ptr<string> betal = param->GetUtfString("betal");
@@ -320,8 +320,6 @@ void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr
             _list_cards = _lc;
         }
 
-		CCLOG("List card: %s",_lc.c_str() );
-		CCLOG("flagChiaBai: %d",flagChiaBai);
         if(flagChiaBai){
 			action_LatBai(_lc, _uid, _tua);
         }
@@ -522,6 +520,10 @@ void Lieng::action_LatBai(string listCard,string uid, bool tua)
 {
 	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
 	{
+		if (this->getChildByTag(123) != NULL)
+		{
+			this->removeChildByTag(123);
+		}
 		getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 		getButtonByTag(dTag_btnView)->setEnabled(false);
 	}
@@ -613,6 +615,16 @@ void Lieng::whenGameEnd(){
 void Lieng::whenResuiltGame(string rg){
 	////"rg":"dautv5|1|8|3|2|1000;dautv3|1|8|7|3|1000"
 	layerAvatars->stopAllTimer();
+	if (this->getChildByTag(234) != NULL)
+	{
+		this->removeChildByTag(234);
+	}
+
+	if (this->getChildByTag(123) != NULL)
+	{
+		this->removeChildByTag(123);
+	}
+
 	LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
 	this->addChild(layerNumbers);
 
@@ -665,6 +677,10 @@ void Lieng::action_To(string uid,string betal){
     }
 
     else{
+		if (this->getChildByTag(234) != NULL)
+		{
+			this->removeChildByTag(234);
+		}
 		getButtonByTag(dTag_btnBet)->setEnabled(false);
 		getButtonByTag(dTag_btnFold)->setEnabled(false);
 		getButtonByTag(dTag_btnFollow)->setEnabled(false);
@@ -716,6 +732,7 @@ void Lieng::btn_NanBai_click(CCObject *sender, TouchEventType type){
 		Nan3Cay *BaCay = Nan3Cay::create();
 		BaCay->setCallbackFunc(this,callfuncN_selector(Lieng::callBackFunction_LatBai));
 		BaCay->initListCardHand(_list_cards);
+		BaCay->setTag(123);
 		this->addChild(BaCay);
     }
 }
@@ -756,6 +773,7 @@ void Lieng::btn_To_click(CCObject *sender, TouchEventType type){
 			CCLOG("Min bet Lieng: %d",minBet);
 			CCLOG("My Bet Lieng: %d",my_To);
 			betLieng_Layer->setInfoBet(minBet,my_To);
+			betLieng_Layer->setTag(234);
 			this->addChild(betLieng_Layer);
 			ccbReader->release();
 		}

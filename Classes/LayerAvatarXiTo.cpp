@@ -186,7 +186,6 @@ void LayerAvatarXiTo::showNunberByPos(int pos, string numberString){
 }
 
 Avatar* LayerAvatarXiTo::getUserByPos(int pos){
-	CCLOG("get user by pos = %d", pos);
 	if (pos == -1)
 	{
 		return NULL;

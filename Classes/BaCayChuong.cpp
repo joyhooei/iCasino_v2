@@ -496,6 +496,9 @@ void BaCayChuong::action_UserRejoinGame(string lsUser){
 void BaCayChuong::action_LatBai(string listCard,string uid, bool tua){
 	if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
 		if(tua){
+			if(this->getChildByTag(123) !=NULL){
+				this->removeChildByTag(123);
+			}
 			layerCard->turnUpAllCards(listCard, kUserMe);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 			getButtonByTag(dTag_btnView)->setEnabled(false);
@@ -524,6 +527,11 @@ void BaCayChuong::whenGameStart(){
 
 void BaCayChuong::whenResuiltGame(string rg){
 	//thanhhv3|3|3|2|1000;dautv3|2|1|1|-1000
+	if (this->getChildByTag(123) != NULL)
+	{
+		this->removeChildByTag(123);
+	}
+
 	LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
 	this->addChild(layerNumbers);
 
@@ -640,6 +648,7 @@ void BaCayChuong::btn_NanBai_click(CCObject *sender, TouchEventType type){
 		Nan3Cay *BaCay = Nan3Cay::create();
 		BaCay->setCallbackFunc(this,callfuncN_selector(BaCayChuong::callBackFunction_LatBai));
 		BaCay->initListCardHand(_list_cards);
+		BaCay->setTag(123);
 		this->addChild(BaCay);
 	}
 }

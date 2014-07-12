@@ -619,7 +619,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		boost::shared_ptr<string> lc = param->GetUtfString("lc");
 
 		CCLOG("nguoi U: %s", usrn->c_str());
-		CCLOG("Bai tren tay: %s", lc->c_str());
+		CCLOG("Bài trên tay người Ù: %s", lc->c_str());
 	}
 
 	//Bài còn trong nọc
@@ -627,7 +627,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		boost::shared_ptr<string> nocdetl = param->GetUtfString("nocdetl");
 		if (nocdetl != NULL)
 		{
-			CCLOG("noc detail: %s", nocdetl->c_str());
+			CCLOG("Các lá bài còn trong nọc: %s", nocdetl->c_str());
 		}
 	}
 
@@ -2058,7 +2058,6 @@ void LayerChanGame::resuiltGame(string resuilt)
 	{
 		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
 		this->addChild(mLayer, 1, 1);
-		//        SceneManager::getSingleton().showLayer(mLayer);
 		ccbReader->release();
 	}
 }
@@ -2113,9 +2112,11 @@ void LayerChanGame::setEndGame(){
 }
 
 void LayerChanGame::deleteAllCardFromArray(CCArray *P){
-	while(P->count()>0){
-		CardChan *uu = (CardChan*)P->objectAtIndex(P->count()-1);
-		P->removeObject(uu);
+	while(P->count() > 0){
+		CardChan *pCard = (CardChan*)P->lastObject();
+		P->removeLastObject();
+// 		CardChan *uu = (CardChan*)P->objectAtIndex(P->count()-1);
+// 		P->removeObject(uu);
 	}
 }
 
