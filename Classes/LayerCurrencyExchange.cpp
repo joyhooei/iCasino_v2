@@ -27,6 +27,8 @@ LayerCurrencyExchange::LayerCurrencyExchange()
     nodeMoney = NULL;
     
     rate = 1;
+
+	isPopup = false;
     //
     GameServer::getSingleton().addListeners(this);
 }

@@ -47,6 +47,7 @@ LayerChonBanChoi::LayerChonBanChoi()
 
 LayerChonBanChoi::~LayerChonBanChoi()
 {
+	this->stopAllActions();
     GameServer::getSingleton().removeListeners(this);
 	//
 	CC_SAFE_RELEASE(nodeTableRooms);
@@ -69,7 +70,8 @@ void LayerChonBanChoi::setGameID(int gID){
 	tblListRooms->setVerticalFillOrder(kCCTableViewFillTopDown);
 	tblListRooms->setTag(tagListPlay);
 	nodeTableListRooms->addChild(tblListRooms);
-    tblListRooms->reloadData();
+	this->runAction(CCSequence::create(CCDelayTime::create(0.3),CCCallFunc::create(this, callfunc_selector(LayerChonBanChoi::autoReloadData)),NULL));
+    //tblListRooms->reloadData();
 	CCLOG("AFTER SHIT LayerChonBanChoi::setGameID()");
 	//
 	boost::shared_ptr<vector<boost::shared_ptr<UserVariable> > > collectionUserVariable (new vector<boost::shared_ptr<UserVariable> >());
@@ -532,4 +534,9 @@ void LayerChonBanChoi::joinRoomByID( int rID )
 {
 	boost::shared_ptr<IRequest> request (new JoinRoomRequest(rID,""));
 	GameServer::getSingleton().getSmartFox()->Send(request);
+}
+
+void LayerChonBanChoi::autoReloadData()
+{
+	tblListRooms->reloadData();
 }

@@ -85,7 +85,8 @@ void LayerUpdateInfo::onButtonUpdate(CCObject* pSender)
     boost::shared_ptr<ISFSObject> params (new SFSObject());
     params->PutUtfString("aI", myself->Name());
     params->PutUtfString("aN", txtName->getText());
-    params->PutUtfString("aMo", txtEmail->getText());
+	params->PutUtfString("aM", txtEmail->getText());
+	params->PutUtfString("aMo", txtPhoneNumber->getText());
     params->PutInt("aSt", 1);
     params->PutInt("aT", 1);
     params->PutInt("aS", btnSex->getPositionX()==198);
