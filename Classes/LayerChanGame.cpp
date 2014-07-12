@@ -612,6 +612,25 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		CCLOG("EXT_EVENT_RES_DISCARD");
 	}
 
+	//Bài trên tay người Ù
+	else if (strcmp("ntfttdetl", cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+		boost::shared_ptr<string> lc = param->GetUtfString("lc");
+
+		CCLOG("nguoi U: %s", usrn->c_str());
+		CCLOG("Bai tren tay: %s", lc->c_str());
+	}
+
+	//Bài còn trong nọc
+	else if(strcmp("ntfnocdetl", cmd->c_str()) == 0){
+		boost::shared_ptr<string> nocdetl = param->GetUtfString("nocdetl");
+		if (nocdetl != NULL)
+		{
+			CCLOG("noc detail: %s", nocdetl->c_str());
+		}
+	}
+
 	//Resuilt game
 	else if (strcmp(EXT_EVENT_GAME_RESULT.c_str(),cmd->c_str())==0){
 		boost::shared_ptr<string> rg = param->GetUtfString("rg");
