@@ -594,7 +594,10 @@ void LayerPlayGameTLMN::event_EXT_EVENT_AMF_TEST_NOTIF(){
     boost::shared_ptr<string> name = param->GetUtfString("uid");
     int money = (int) (*(param->GetDouble("amf")));
 	int resson = -1;
-	if ((param->GetInt("cbt")) != NULL) resson = (int) (*(param->GetInt("cbt")));
+	if ((param->GetInt("cbt")) != NULL){
+		resson = (int) (*(param->GetInt("cbt")));
+		CCLog("resson = %d", resson);
+	}
     
     CCLog("event_EXT_EVENT_AMF_TEST_NOTIF");
     if (name != NULL && money != NULL) {
