@@ -31,12 +31,14 @@ LayerBuyAvatar::~LayerBuyAvatar()
 void LayerBuyAvatar::loadAllMyDatas(){
     tblAvatar->reloadData();
     //Send request
-//    boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-//    //
-//    boost::shared_ptr<ISFSObject> params (new SFSObject());
-//    params->PutUtfString("aI", myself->Name());
-//    boost::shared_ptr<IRequest> request (new ExtensionRequest("rgaci", params));
-//    GameServer::getSingleton().getSmartFox()->Send(request);
+   boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+   //
+   boost::shared_ptr<ISFSObject> params (new SFSObject());
+   params->PutUtfString("aI", myself->Name());
+   params->PutInt("startR", 0);
+   params->PutInt("endR", 100);
+   boost::shared_ptr<IRequest> request (new ExtensionRequest("aGLA", params)); //
+   GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 // CCBSelectorResolver interface
@@ -49,6 +51,11 @@ SEL_MenuHandler LayerBuyAvatar::onResolveCCBCCMenuItemSelector(cocos2d::CCObject
 void LayerBuyAvatar::onButtonBuy(CCObject* pSender)
 {
     CCLOG("onButtonBuy");
+	//aBA: Buy Avatar
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutInt("aId", 1);
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("aBA", params)); //
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 // CCBMemberVariableAssigner interface
@@ -129,7 +136,10 @@ void LayerBuyAvatar::OnExtensionResponse(unsigned long long ptrContext, boost::s
     
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
     boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
-//    if(strcmp("gaic", cmd->c_str())==0){
+
+	CCLOG("LayerBuyAvatar::OnExtensionResponse() - cmd=%s", cmd);
+    if(strcmp("aGLA", cmd->c_str())==0){
+		CCLOG("aGLR=%s", param->GetUtfString("aGLR")->c_str());
 //        //Insert datas to textfield
 //        txtName->setText( param->GetUtfString("aN")->c_str() );
 //        txtPhoneNumber->setText( param->GetUtfString("aMo")->c_str() );
@@ -137,5 +147,7 @@ void LayerBuyAvatar::OnExtensionResponse(unsigned long long ptrContext, boost::s
 //        txtFavour->setText( "" );
 //        txtStatus->setText( "" );
 //        btnSex->setPosition(ccp(*param->GetBool("aS")==true ? 198 : 140, btnSex->getPositionY()));
-//    }
+	}else if(strcmp("aBA", cmd->c_str())==0){
+		
+	}
 }

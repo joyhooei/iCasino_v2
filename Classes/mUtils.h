@@ -199,13 +199,13 @@ public:
          Liquit:		TT accountID pass money// Thanh toán
          Unregister:	HT accountID pass// Hủy đăng ký
          */
-        if( strcmp( fmt, "VT" ) ){
+        if( strcmp( fmt, "VT" )==0 ){
             return "Vay tiền";
-        }else if( strcmp( fmt, "CT" ) ){
+        }else if( strcmp( fmt, "CT" )==0 ){
             return "Chuyển tiền";
-        }else if( strcmp( fmt, "TT" ) ){
+        }else if( strcmp( fmt, "TT" )==0 ){
             return "Thanh toán khoản vay";
-        }else if( strcmp( fmt, "NT" ) ){
+        }else if( strcmp( fmt, "NT" )==0 ){
             return "Nạp/Nhận tiền";
         }
         return "Unknown";

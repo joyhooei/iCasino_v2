@@ -141,11 +141,11 @@ void LayerInbox::loadAllMyDatas(){
     //Send request
     boost::shared_ptr<ISFSObject> params (new SFSObject());
     params->PutUtfString("aI", myself->Name());
-    params->PutUtfString("startT", "24/02/2014 08:30:59");
-    params->PutUtfString("endT", mUtils::getCurrentDateTime("%d/%m/%Y %I:%M:%S").c_str());
+    params->PutUtfString("startT", "24/02/2013 08:30:59");
+    params->PutUtfString("endT", "12/7/2014 13:39:10");//mUtils::getCurrentDateTime("%d/%m/%Y %I:%M:%S").c_str());
     params->PutInt("startR", 0);
     params->PutInt("endR", 100);
-    boost::shared_ptr<IRequest> request (new ExtensionRequest("rglsim", params));
+    boost::shared_ptr<IRequest> request (new ExtensionRequest("glmi", params));
     GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
@@ -156,9 +156,10 @@ void LayerInbox::OnExtensionResponse(unsigned long long ptrContext, boost::share
     
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
     boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
-    if(strcmp("rglsim", cmd->c_str())==0){ //rglsim response
-//        boost::shared_ptr<string> emails = param->GetUtfString("rglsim");
-//        CCLOG("rglsim: %s", emails->c_str());
+	CCLOG("cmd=%s", cmd->c_str());
+    if(strcmp("glmi", cmd->c_str())==0){ //rglsim response
+       boost::shared_ptr<string> emails = param->GetUtfString("glmi");
+       CCLOG("glmi: %s", emails->c_str());
 //        vector<string> lstEmail = mUtils::splitString(*emails, "$#");
     }
 }

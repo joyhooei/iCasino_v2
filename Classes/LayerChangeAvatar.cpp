@@ -77,6 +77,7 @@ void LayerChangeAvatar::onButtonCapture(CCObject* pSender){
 // CCBMemberVariableAssigner interface
 bool LayerChangeAvatar::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemberVariableName, cocos2d::CCNode *pNode)
 {
+	CCLOG("LayerChangeAvatar::onAssignCCBMemberVariable, %s", pMemberVariableName);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "nodeListAvatar", CCNode*, nodeListAvatar);
     return true;
 }

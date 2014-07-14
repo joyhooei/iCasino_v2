@@ -122,7 +122,8 @@ void LayerTransferMoney::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoad
     txtTransferTo->setMaxLength(17);
     txtTransferTo->setFont("fonts/Roboto-Regular.ttf", 18);
     txtTransferTo->setReturnType(kKeyboardReturnTypeDone);
-    txtTransferTo->setPlaceHolder("Người nhận");
+	txtTransferTo->setPlaceHolder("Người nhận");
+	txtTransferTo->setInputFlag(kEditBoxInputFlagSensitive);
     //
     loadMinMaxMoney();
     return;

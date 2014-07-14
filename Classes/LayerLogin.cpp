@@ -15,6 +15,7 @@
 #include "_Chat_.h"
 #include "mUtils.h"
 #include "platform/android/jni/Android.h"
+#include <boost/format.hpp>
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -113,6 +114,11 @@ void LayerLogin::onButtonLogin(CCObject* pSender){
 }
 
 void LayerLogin::onButtonLoginWithFacebook(CCObject* pSender){
+	//+1.67337e+006
+// 	char ch[100];
+// 	sprintf(ch, "%.0f", +1.67337e+006);
+// 	float myFloat = 1000;
+// 	CCLOG("*****%s", boost::str(boost::format("%lf%")%myFloat).c_str());
 //	SceneManager::getSingleton().showLayerChatWindow();
 //    ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 //    * mLayer;

@@ -837,10 +837,10 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
     createChess();
 
 	CCSize sizeTable = nodeTableChess->getContentSize();
-    chieuTuongRed = CCSprite::createWithSpriteFrameName("CC/attack1.png");
+    chieuTuongRed = CCSprite::create("chess/attack1.png");
 	chieuTuongRed->setPosition(ccp(sizeTable.width / 2, sizeTable.height / 2 - 100));
 	chieuTuongRed->setVisible(false);
-	chieuTuongRed = CCSprite::createWithSpriteFrameName("CC/attack1.png");
+	chieuTuongBlack = CCSprite::create("chess/attack2.png");
 	chieuTuongBlack->setPosition(ccp(sizeTable.width / 2, sizeTable.height / 2 + 100));
 	chieuTuongBlack->setVisible(false);
 	nodeTableChess->addChild(chieuTuongRed, 100);

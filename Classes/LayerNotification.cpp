@@ -21,6 +21,7 @@ LayerNotification::LayerNotification()
     lblTitle = NULL;
     btnCancel = NULL;
     btnOK = NULL;
+	mnuParent = NULL;
 
 	currTag = -1;
 }
@@ -82,6 +83,7 @@ void LayerNotification::onButtonCancelClick(CCObject* pSender){
 	for ( ; iTer != mCallBack.end() ; iTer ++ ){
 		iTer->second->notificationCallBack(false, currTag);
 	}
+	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	//Hide this
 	SceneManager::getSingleton().hideNotification();
 }
@@ -91,6 +93,7 @@ void LayerNotification::onButtonOKClick(CCObject* pSender)
 	for ( ; iTer != mCallBack.end() ; iTer ++ ){
 		iTer->second->notificationCallBack(true, currTag);
 	}
+	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 
 	SceneManager::getSingleton().hideNotification();
 }
@@ -98,20 +101,22 @@ void LayerNotification::onButtonOKClick(CCObject* pSender)
 // CCBMemberVariableAssigner interface
 bool LayerNotification::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemberVariableName, cocos2d::CCNode *pNode)
 {
-    //CCLOG("Imhere onAssignCCBMemberVariable: %s", pMemberVariableName);
+    CCLOG("Imhere onAssignCCBMemberVariable: %s", pMemberVariableName);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblCancel", CCLabelTTF *, lblCancel);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblOK", CCLabelTTF *, lblOK);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblDetails", CCLabelTTF *, lblDetails);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "lblTitle", CCLabelTTF *, lblTitle);
     
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnOK", CCMenuItem *, btnOK);
-    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnCancel", CCMenuItem *, btnCancel);
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnCancel", CCMenuItem *, btnCancel);
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "mnuParent", CCMenu *, mnuParent);
     return true;
 }
 
 void LayerNotification::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
     CCLOG("Imhere onNodeLoaded");
+	mnuParent->setTouchPriority(-201);
     return;
 }
 
@@ -128,11 +133,14 @@ void LayerNotification::setNotificationOptions( const char* title, const char* m
 	setButtonOkTitle(titleButtonOK);
 	setTag(tag);
 	addListeners(callBack);
+	this->setTouchEnabled( true );
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -200, true);
 }
 
 void LayerNotification::registerWithTouchDispatcher( void )
 {
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -128, true);
+	CCLOG("LayerNotification::registerWithTouchDispatcher( void )");
+	//CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -200, true);
 }
 
 bool LayerNotification::ccTouchBegan( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )

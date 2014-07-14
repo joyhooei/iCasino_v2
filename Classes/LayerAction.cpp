@@ -69,6 +69,7 @@ void LayerAction::onButtonBuyAvatar(CCObject* pSender)
     CCLOG("onButtonBuyAvatar");
     layerChangePassword->setVisible(false);
     layerBuyAvatar->setVisible(true);
+	layerBuyAvatar->loadAllMyDatas();
     layerChangeAvatar->setVisible(false);
 }
 
@@ -84,7 +85,7 @@ bool LayerAction::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemb
 void LayerAction::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
     layerChangeAvatar->loadAllMyDatas();
-    layerBuyAvatar->loadAllMyDatas();
+    //layerBuyAvatar->loadAllMyDatas();
     //
     layerChangePassword->setVisible(true);
     layerBuyAvatar->setVisible(false);

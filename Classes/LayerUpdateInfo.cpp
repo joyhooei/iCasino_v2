@@ -142,6 +142,7 @@ void LayerUpdateInfo::initTextField(CCEditBox* txt, const char* hintText){
     txt->setReturnType(kKeyboardReturnTypeDefault);
 	txt->setPlaceHolder(hintText);
 	txt->setInputMode(kEditBoxInputModeAny);
+	txt->setInputFlag(kEditBoxInputFlagSensitive);
 	txt->setTouchPriority(-128);
 }
 

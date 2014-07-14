@@ -116,6 +116,7 @@ void LayerChargeMoney::onButtonExchangeClick(CCObject* pSender){
 		mLayer = (LayerCurrencyExchange *)ccbReader->readNodeGraphFromFile( "LayerPopupExchange.ccbi" );
 		mLayer->setIsPopup(true);
 		mLayer->loadAllMyDatas();
+		mLayer->setTouchEnabled(true);
 		this->addChild(mLayer, 1, 1);
 		ccbReader->release();
 	}

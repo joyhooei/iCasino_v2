@@ -37,6 +37,8 @@ private:
     CCMenuItem* btnOK;
     CCMenuItem* btnCancel;
 
+	CCMenu* mnuParent;
+
 	NotificationCallBackMap mCallBack;
 	int mCallBackIndex;
 

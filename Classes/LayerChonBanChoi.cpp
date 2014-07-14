@@ -538,5 +538,7 @@ void LayerChonBanChoi::joinRoomByID( int rID )
 
 void LayerChonBanChoi::autoReloadData()
 {
+	CCLOG("LayerChonBanChoi::autoReloadData() - BEGIN");
 	tblListRooms->reloadData();
+	CCLOG("LayerChonBanChoi::autoReloadData() - END");
 }
