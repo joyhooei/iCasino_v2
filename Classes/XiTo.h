@@ -60,6 +60,8 @@ private:
 
     UIImageView *frameBetTotal;
     UILabel *labelBetTotal;
+	UIImageView *frameBet_Me;
+	UILabel *labelBet_Me;
     
     
     LayerAvatarXiTo *layerAvatar;
@@ -126,6 +128,8 @@ public:
     void addCardsForUser(CCArray *P,float _width,float _height,float _top,float _left,string _img,int l);
     void restoreListCard_Reconnected(CCArray *P, string lc, bool _state, float _left, float _bottom, float _width, float _height);
     
+	void setHide_AllFrameBet();
+
     void moveDealCard(Card *c,float _left, float _bottom);
     void moveDealCard_Me(string _lc);
 	void moveDealCard_NotMe(int pos, string listcards);
@@ -139,7 +143,9 @@ public:
     void setDisplayValueListCard(CCArray *P,string lc);
     void setVictoryType(string uid,long vicType, string lc);
     void setMoneyAnimate(string uid, string amf);
-    
+    void displayPosWinner(int pos);
+
+
 	void createLabelVictype(int pos, long vicType);
 
     void sendOpenCard();

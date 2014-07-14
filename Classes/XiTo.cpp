@@ -265,7 +265,7 @@ void XiTo::createFrameBets(){
 	frameBetTotal = UIImageView::create();
 	frameBetTotal->loadTexture("theo.png");
 	frameBetTotal->setAnchorPoint(ccp(0,0));
-	frameBetTotal->setPosition(ccp(WIDTH_DESIGN/2 - frameBetTotal->getContentSize().width/2,HEIGHT_DESIGN/2));
+	frameBetTotal->setPosition(ccp(WIDTH_DESIGN/2 - frameBetTotal->getContentSize().width/2,280));
 	labelBetTotal = UILabel::create();
 	labelBetTotal->setFontSize(15);
 	labelBetTotal->setColor(ccWHITE);
@@ -273,6 +273,20 @@ void XiTo::createFrameBets(){
 	frameBetTotal->addChild(labelBetTotal);
 	frameBetTotal->setVisible(false);
 	layerFrameBet->addChild(frameBetTotal);
+
+	frameBet_Me = UIImageView::create();
+	frameBet_Me->loadTexture("theo.png");
+	frameBet_Me->setAnchorPoint(ccp(0,0));
+	frameBet_Me->setPosition(ccp(WIDTH_DESIGN / 2 - frameBet_Me->getContentSize().width/2, frameBetTotal->getPositionY() - HEIGHT_DESIGN / 15));
+	
+	labelBet_Me = UILabel::create();
+	labelBet_Me->setFontSize(15);
+	labelBet_Me->setColor(ccWHITE);
+	labelBet_Me->setPosition(ccp(frameBet_Me->getContentSize().width/2, frameBet_Me->getContentSize().height/2));
+	frameBet_Me->addChild(labelBet_Me);
+	frameBet_Me->setVisible(false);
+	layerFrameBet->addChild(frameBet_Me);
+
 
 	FrameBet* frameBet_Right_Top = FrameBet::create();
 	FrameBet* frameBet_Right_Bottom = FrameBet::create();
@@ -298,6 +312,14 @@ void XiTo::createFrameBets(){
 	layerFrameBet->addChild(frameBet_Right_Top);
 	layerFrameBet->addChild(frameBet_Left_Top);
 	layerFrameBet->addChild(frameBet_Left_Bottom);
+}
+
+void XiTo::setHide_AllFrameBet(){
+	frameBet_Me->setVisible(false);
+	getFrameBetByTag(user_leftBottom)->setVisible(false);
+	getFrameBetByTag(user_leftTop)->setVisible(false);
+	getFrameBetByTag(user_rightBottom)->setVisible(false);
+	getFrameBetByTag(user_rightTop)->setVisible(false);
 }
 
 int XiTo::getPosUserByName(string uid, string _list_user){
@@ -562,14 +584,22 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
             _uid = uid->c_str();
         }
         if(amf != NULL){
-            _amf = boost::to_string(*amf);
-            if(*amf > 0){
-                _amf = "+"+boost::to_string(*amf);
-            }
+
+			char ch[100];
+			sprintf(ch, "%.0f", *amf);
+			_amf = string(ch);
+			if(*amf > 0){
+				_amf = "+" + boost::to_string(*amf);
+				_amf = "+" + string(ch);
+			}
+			if(*amf > 0){
+				int pos = getPosUserByName(_uid,_list_user);
+				displayPosWinner(pos);
+			}
         }
         CCLOG("uid %s, amf %s",_uid.c_str(),_amf.c_str());
         setMoneyAnimate(_uid,_amf);
-        CCLOG("App.EXT_EVENT_AMF_TEST_NOTIF");
+        CCLOG("App.EXT_EVENT_AMF_TEST_NOTIF %s",_amf.c_str());
     }
     
     // co nguoi vao lai phong
@@ -853,7 +883,7 @@ void XiTo::when_playerBet(string uid, long bet, long betValue, long betTotal){
     }
 
     if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        
+        setBet_Inpos(user_me, CARD_ME, bet, betValue);
     }
     else{
         switch (getPosUserByName(uid, _list_user)) {
@@ -877,22 +907,79 @@ void XiTo::when_playerBet(string uid, long bet, long betValue, long betTotal){
 
 void XiTo::setBet_Inpos(int pos, CCArray *P, long bet, long betValue)
 {
-	if (pos == -1 || pos == user_me)
+
+	if (pos == -1)
 	{
 		return;
 	}
 
-	if (bet == 0)
+	if (pos == user_me)
 	{
-		for (int i = 0; i < P->count(); i++) {
-			Card* pCard = (Card*)P->objectAtIndex(i);
-			pCard->initWithFile("card_back.png");
-		}
-		getFrameBetByTag(pos)->setVisible(false);
-	} else {
-		getFrameBetByTag(pos)->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
-		getFrameBetByTag(pos)->setVisible(true);
+		labelBet_Me->setText(("Theo "+mUtils::convertMoneyEx((int)betValue)+" $").c_str());
+		frameBet_Me->setVisible(true);
 	}
+	else
+	{
+		if (bet == 0)
+		{
+			for (int i = 0; i < P->count(); i++) {
+				Card* pCard = (Card*)P->objectAtIndex(i);
+				pCard->initWithFile("card_back.png");
+			}
+			getFrameBetByTag(pos)->setVisible(false);
+		} else {
+			getFrameBetByTag(pos)->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
+			getFrameBetByTag(pos)->setVisible(true);
+		}
+	}
+}
+
+void XiTo::displayPosWinner(int pos){
+
+	float fromX = -1;
+	float fromY = -1;
+	float toX = -1;
+
+	switch(pos){
+	case user_me:
+		fromX = lf_card_me - h_card_me;
+		fromY = bt_card_me;
+		toX = fromX + (w_card_me/ 3 * 2) * 5 + h_card_me;
+		break;
+	case user_leftBottom:
+		fromX = layerAvatar->getUserByPos(user_leftBottom)->getPositionX() + w_card_notme;
+		fromY = bt_card_bottom;
+		toX = fromX + (w_card_notme/ 3 * 2) * 5 + w_card_notme;
+		break;
+	case user_leftTop:
+		fromX = layerAvatar->getUserByPos(user_leftTop)->getPositionX() + w_card_notme;
+		fromY = bt_card_top;
+		toX = fromX + (w_card_notme/ 3 * 2) * 5 + w_card_notme;
+		break;
+	case user_rightBottom:
+		fromX = layerAvatar->getUserByPos(user_rightBottom)->getPositionX() + w_card_notme;
+		fromY = bt_card_bottom;
+		toX = fromX - (w_card_notme/ 3 * 2) * 5 - w_card_notme;
+		break;
+	case user_rightTop:
+		fromX = layerAvatar->getUserByPos(user_rightTop)->getPositionX() + w_card_notme;
+		fromY = bt_card_top;
+		toX = fromX - (w_card_notme/ 3 * 2) * 5 - w_card_notme;
+		break;
+	}
+
+	CCParticleFlower *m_emitter = CCParticleFlower::create();
+	m_emitter->retain();
+	m_emitter->setTexture( CCTextureCache::sharedTextureCache()->addImage("vicntf.png") );
+	m_emitter->setPosition(ccp(fromX, fromY));
+	m_emitter->setTag(333);
+	this->addChild(m_emitter);
+
+	CCActionInterval *moveto = CCMoveTo::create(0.9, ccp(toX,fromY));
+	CCActionInterval *moveBack = CCMoveTo::create(0.9, ccp(fromX, fromY));
+
+	m_emitter->runAction(CCSequence::create(moveto, moveBack, NULL));
+
 }
 
 void XiTo::openAllCard(string uid, string lc){
@@ -1353,6 +1440,9 @@ void XiTo::moveDealCard_Pos(CCArray *P, string listcards, float _left, float _wi
 }
 
 void XiTo::chiaThem1LaBai(){
+
+	setHide_AllFrameBet();
+
     string UID_BET = uidTo;
     string styleAllow_Bet = typeTo;
     //dautv_24-thanhhv3_12-dautv3_7-
@@ -1499,10 +1589,15 @@ void XiTo::whenEndGame(){
 	getFrameBetByTag(user_rightBottom)->setVisible(false);
 	getFrameBetByTag(user_rightTop)->setVisible(false);
     frameBetTotal->setVisible(false);
+	frameBet_Me->setVisible(false);
     
     getButtonByTag(dTag_btnReady)->setEnabled(true);
     
 	layerLabelVictype->removeAllChildrenWithCleanup(true);
+	if (this->getChildByTag(333) != NULL)
+	{
+		this->removeChildByTag(333);
+	}
 
     luotChiathem = 2;
     chooseCard = true;

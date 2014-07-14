@@ -91,7 +91,8 @@ enum{
 	dTag_btnDouble,
 	dTag_btnAll,
 	dTag_btnGive,
-	dTag_Complete
+	dTag_Complete,
+	dTag_VicNTF
 };
 
 enum{
