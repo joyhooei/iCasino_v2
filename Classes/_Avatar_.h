@@ -43,6 +43,7 @@ public:
     void setName(string name);
     void setMoney(string money);
 	void setMoney(int money);
+	void setMoney(double money);
     void setReady(bool isReady);
 	void setAI(string ai);
 	void setMeIsBoss( bool isBoss ); 
@@ -52,6 +53,8 @@ public:
     
     void callbackTimer(CCNode *pSender);
     string convertMoney(int money);
+	string convertMoneyFromDouble(double money);
+	string convertMoneyFromDouble_Detail(double money);
 
     // hoangdd
 //     void downLoadImage(string url, string fileName);

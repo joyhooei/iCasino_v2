@@ -317,6 +317,7 @@ void LayerBaCayAvatar::updateUsers()
 			Avatar *user = getUserByPos(pos);
 			user->setName(_name);
 			user->setFlag(i == 0);
+			user->setAI(info[0]);
 			//
 			bool meIsBoss = (i == 0);
 			if(pos == kUserMe){

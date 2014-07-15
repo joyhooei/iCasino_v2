@@ -102,6 +102,7 @@ private:
     // mảng lưu các tên và thông tin tương ứng để hiển thị
     vector<string> arrName;
     vector<int> arrMoney;
+	vector<double> arrMoneyDouble;
     
 	boost::shared_ptr<ISFSObject> param;
     LayerAvatarInGame   *layerAvatars;

@@ -23,6 +23,7 @@ class LayerNumberInGame : public CCLayer
 private:
     vector<int> arrPos;
     vector<string> arrNumberString;
+	vector<double> arrNumberDouble;
 	bool isRunning;
     
 public:
@@ -31,7 +32,9 @@ public:
     CREATE_FUNC(LayerNumberInGame);
     
     void showNumberByPos(int pos, string numberString);
+	void showNumberByPos(int pos, double numberDouble);
 	void runAction(float dt);
+	void runAction2(float dt);
     void callbackShowNumber(float dt);
 };
 

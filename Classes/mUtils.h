@@ -300,6 +300,17 @@ public:
 		return "";
 	}
 
+	static string convertMoneyFromDoubleToString(double money){
+		char ch[100];
+		sprintf(ch, "%.0f", money);
+		string _amf = string(ch);
+		if (money > 0) {
+			_amf = "+" + _amf;
+		}
+
+		return _amf;
+	}
+
 	static CCAction* getActionOpenPopup(){
 		return CCSequence::create(CCScaleTo::create(0.0, 0.0),
 			CCScaleTo::create(0.06f, 1.05f),
