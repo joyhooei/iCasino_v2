@@ -19,7 +19,7 @@
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
-std::string LayerFriend::changeStr =" ";
+
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include <jni.h>
 extern "C"
