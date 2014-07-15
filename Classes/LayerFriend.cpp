@@ -28,7 +28,7 @@ extern "C"
 	{
 		GameServer::getSingleton()->updateEvent();
 	}
-}
+} 
 #endif
 LayerFriend::LayerFriend()
 {
