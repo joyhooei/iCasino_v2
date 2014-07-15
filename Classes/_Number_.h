@@ -9,6 +9,7 @@
 #define __iCasinoCard__Number__
 
 #include "cocos2d.h"
+#include "mUtils.h"
 
 USING_NS_CC;
 using namespace std;
@@ -24,6 +25,7 @@ private:
 
 public:
     Number(string pNumberString);
+	Number(double pNumberDouble);
     ~Number();
     
     virtual bool init();

@@ -184,6 +184,7 @@ void LayerPlayGamePhom::onExit() {
 
 	arrName.clear();
 	arrMoney.clear();
+	arrMoneyDouble.clear();
 
 	//layerAvatars->removeFromParentAndCleanup(true);
 	/*
@@ -243,9 +244,34 @@ void LayerPlayGamePhom::createBackgrounds() {
 	bg->addChild(nameGame);
 }
 
+Avatar *avatarMe;
+vector<double> arrMoneyDoubleTest;
+int indexCount = 0;
+
 void LayerPlayGamePhom::createAvatars() {
     layerAvatars = LayerAvatarInGame::create();
     this->addChild(layerAvatars);
+
+	avatarMe = new Avatar(true);
+	layerAvatars->addChild(avatarMe);
+
+	avatarMe->setPosition(ccp(300, 300));
+	//avatarMe->setMoney(323123456789.0);
+
+	arrMoneyDoubleTest.push_back(12);
+	arrMoneyDoubleTest.push_back(3412);
+	arrMoneyDoubleTest.push_back(90123);
+	arrMoneyDoubleTest.push_back(122356);
+	arrMoneyDoubleTest.push_back(5435345);
+	arrMoneyDoubleTest.push_back(12123502);
+	arrMoneyDoubleTest.push_back(435670324);
+	arrMoneyDoubleTest.push_back(3450091231);
+	arrMoneyDoubleTest.push_back(11233242342);
+	arrMoneyDoubleTest.push_back(121231231231);
+	arrMoneyDoubleTest.push_back(1212312312314);
+	arrMoneyDoubleTest.push_back(12123123123176);
+	arrMoneyDoubleTest.push_back(121231231231234);
+
 }
 
 void LayerPlayGamePhom::createButtons() {
@@ -305,18 +331,6 @@ void LayerPlayGamePhom::createButtons() {
 void LayerPlayGamePhom::createNumbers() {
     layerNumbers = LayerNumberInGame::create();
     this->addChild(layerNumbers);
-    
-//    vector<string> data;
-//    data.push_back("1111324");
-//    data.push_back("22256");
-//    data.push_back("333");
-//    data.push_back("44413434344");
-//    data.push_back("55500000004");
-//    data.push_back("666104");
-//    data.push_back("777");
-//    for (int i = 0; i < data.size(); i++) {
-//        layerNumbers->showNumberByPos(kUserMe, data[i]);
-//    }
 }
 
 void LayerPlayGamePhom::createCards() {
@@ -336,10 +350,11 @@ void LayerPlayGamePhom::initGame() {
     
     // thông tin tiền hiện tại của Users
     for (int i = 0; i < arrName.size(); i++) {
-        layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoney[i]);
+        layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoneyDouble[i]);
     }
     arrName.clear();
 	arrMoney.clear();
+	arrMoneyDouble.clear();
 
     // unready all
     layerAvatars->setUnReadyAllUser();
@@ -386,7 +401,7 @@ Button* LayerPlayGamePhom::getButtonByTag(int tag) {
 
 void LayerPlayGamePhom::actionReady(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN){
-        CCLOG("clicked ready!");
+       
         layerCards->resetGame();
         
         boost::shared_ptr<ISFSObject> parameter (new SFSObject());
@@ -394,20 +409,12 @@ void LayerPlayGamePhom::actionReady(CCObject *pSender, TouchEventType pType) {
         boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_READY_REQ), parameter, lastRoom));
         GameServer::getSingleton().getSmartFox()->Send(request);
         
-//        vector<string> arr;
-//        arr.push_back("helo");
-//        arr.push_back(":D");
-//        arr.push_back("Xin chao!!!! Nuoc cong hoa xa hoi Viet Nam, Doc lap tu do hanh phuc.......... HI!");
-//        arr.push_back("Xin chờ người chơi khác");
-//        arr.push_back("Bỏ lượt");
-//        arr.push_back("Quân bài không hợp lệ");
-//        // test
-//        int rd = rand() % 4 - 1;
-//        //layerChats->showChatByPos(rd, arr[rand() % arr.size()]);
-//        
-//        Chat *toast = new Chat("Chờ người chơi khác", -1);
-//        layerChats->addChild(toast);
-        
+       /*indexCount++;
+	   if (indexCount == arrMoneyDoubleTest.size()) indexCount = 0;
+	   avatarMe->setMoney(arrMoneyDoubleTest.at(indexCount));
+       
+	   layerNumbers->showNumberByPos(-1, arrMoneyDoubleTest.at(indexCount));*/
+
     }
 }
 
@@ -698,17 +705,12 @@ void LayerPlayGamePhom::OnSmartFoxUserVariableUpdate(unsigned long long ptrConte
     boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
     
     int    money = (int) (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	double moneyDouble = (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
 	string name = boost::to_string(*ptrNotifiedUser->Name());
-	
-	CCLOG("Update User Variables size of arrName=%d", arrName.size());
-    CCLOG("name=%s, money=%d", name.c_str(), money);
    
-	if (arrName.size() > 4) {
-		//arrName.clear();
-		//arrMoney.clear();
-	}
     arrName.push_back(name);
     arrMoney.push_back(money);
+	arrMoneyDouble.push_back(moneyDouble);
 }
 
 void LayerPlayGamePhom::sendRequestJoinGame(float dt) {
@@ -792,12 +794,13 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_PLAYER_LIST() {
 			for (int i = 0; i < arrName.size(); i++) {
 				int pos = layerAvatars->getPosByName(arrName[i]);
 				if (pos > -1){
-					layerAvatars->setMoney(pos, arrMoney[i]);
+					layerAvatars->setMoney(pos, arrMoneyDouble[i]);
 				}
 			}
 
 			arrName.clear();
 			arrMoney.clear();
+			arrMoneyDouble.clear();
 		}
 	}
     

@@ -33,6 +33,7 @@ public:
     void setName (int pos, string name);
     void setMoney(int pos, string money);
 	void setMoney(int pos, int money);
+	void setMoney(int pos, double money);
     void setReady(int pos, bool isReady);
 	void setVisibleLayerInvite(int pos, bool isShow);
     
@@ -50,9 +51,12 @@ public:
     Avatar* getUserByPos(int pos);
     
     int getIndexInArrByName(string name);
+	int getIndexInArrByAccountID(string aI);
     //
     int getPosByName(string name);
+	int getPosByAccountID(string aI);
     string getNameByPos(int pos);
+	string getAccountIDByPos(int pos);
     //
     void updateUsers();
     
@@ -69,6 +73,7 @@ private:
 	int typeGame;
 	bool isGuess;
 	string myName;
+	string myAI;
     string listUser;
     
     // mảng chứa
@@ -77,6 +82,7 @@ private:
     vector<string> arrURL;
 	vector<string> arrAI;
 	vector<int> arrMoney;
+	vector<double> arrMoneyDouble;
     UIImageView *chuong;
 };
 

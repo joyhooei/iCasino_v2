@@ -312,7 +312,11 @@ void Avatar::setMoney(string pMoney){
 }
 
 void Avatar::setMoney(int money) {
-	setMoney(convertMoney(money));
+	setMoney(convertMoney(money) + " xu");
+}
+
+void Avatar::setMoney(double money) {
+	setMoney(convertMoneyFromDouble_Detail(money));
 }
 
 void Avatar::setReady(bool isReady) {
@@ -372,7 +376,7 @@ string Avatar::convertMoney(int money){
 	if (money < 1000) {
 		oss.clear();
 		oss<<money;
-		return (oss.str() + " xu");
+		return (oss.str() + "");
 	}
 	else if (money >= 1000 && money <= 999999) {
 		string hangTram;
@@ -397,7 +401,7 @@ string Avatar::convertMoney(int money){
 		}
 		hangTram += oss2.str();
 
-		return (hangNghin + "," + hangTram + " xu");
+		return (hangNghin + "," + hangTram + "");
 	}
 	else if (money >= 1000000) {
 		string hangTrieu;
@@ -442,10 +446,74 @@ string Avatar::convertMoney(int money){
 		}
 		hangTram += oss3.str();
 
-		return (hangTrieu + "," + hangNghin + "," + hangTram + " xu");
+		return (hangTrieu + "," + hangNghin + "," + hangTram + "");
 	}
 
 	return "";
+}
+
+string Avatar::convertMoneyFromDouble(double money) {
+	// tiền tỷ
+	if (money >= 1000000000) {
+		int ti = money / 1000000000;
+		ostringstream os;
+		os<<ti;
+		return (os.str() + " tỷ");
+	} else if (money >= 1000000) {
+		// tiền triệu
+		int ti = money / 1000000;
+		ostringstream os;
+		os<<ti;
+		return (os.str() + " triệu");
+	} else if (money >= 1000) {
+		string hangTram;
+		string hangNghin;
+
+		// Nghin
+		ostringstream oss1;
+		oss1.clear();
+		oss1<<(int)(money / 1000);
+		hangNghin = oss1.str();
+
+		ostringstream oss2;
+		// tram
+		int hTram = ((int)money % 1000);
+		oss2.clear();
+		oss2<<hTram;
+		if (hTram < 10) {
+			hangTram = "00";
+		}
+		else if (hTram >= 10 && hTram < 100) {
+			hangTram = "0";
+		}
+		hangTram += oss2.str();
+
+		return (hangNghin + "," + hangTram + " xu");
+	} else {
+		ostringstream os;
+		os<<money;
+		return (os.str() + " xu");
+	}
+
+	return "!";
+}
+
+string Avatar::convertMoneyFromDouble_Detail(double money) {
+	if (money < 1000) {
+		ostringstream os;
+		os<<money;
+		return (os.str() + " xu");
+	}
+	else {
+		money = money / 1000;
+
+		if (money > 2000000000) {
+			return convertMoneyFromDouble(money * 1000);
+		}
+		else return (convertMoney((int)money) + "k xu");
+	}
+	
+
 }
 
 // hoangdd
