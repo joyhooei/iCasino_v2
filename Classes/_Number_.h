@@ -31,7 +31,8 @@ public:
     virtual bool init();
     
     void startRunAction();
-    
+    void startRunAction(float toY);
+
     CCSprite* getNumberWithChar(char a);
     void setNumbersWithString(string pNumberString);
     
@@ -39,6 +40,8 @@ public:
     void setSize(int wid, int hei);
     CCSize getSize();
     void setPositionStart(CCPoint pPointStart);
+	void setPositionStart(CCPoint pPointStart, float toY);
+
     CCPoint getPositionStart();
 };
 

@@ -75,6 +75,14 @@ void Number::startRunAction() {
 									   NULL));
 }
 
+void Number::startRunAction(float toY){
+	this->runAction(CCSequence::create(//CCDelayTime::create(0.7), 
+		CCMoveTo::create(0.5, ccp(this->pointStart.x, this->pointStart.y + toY)), 
+		CCDelayTime::create(3), 
+		CCRemoveSelf::create(), 
+		NULL));	
+}
+
 CCSprite* Number::getNumberWithChar(char a) {
     
 	CCSprite *numSprite =NULL;
@@ -132,6 +140,14 @@ void Number::setPositionStart(CCPoint pPointStart){
     
     this->setPosition(pPointStart);
     startRunAction();
+}
+
+void Number::setPositionStart(CCPoint pPointStart, float toY)
+{
+	this->pointStart = pPointStart;
+
+	this->setPosition(pPointStart);
+	startRunAction(toY);
 }
 
 CCPoint Number::getPositionStart() {

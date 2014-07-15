@@ -1176,30 +1176,30 @@ void XiTo::setMoneyAnimate(string uid, string amf){
      CCPoint point;
     
     if(strcmp(uid.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        point.setPoint(lf_card_me, bt_card_me);
+        point.setPoint(lf_card_me, layerAvatar->getUserByPos(user_me)->getPositionY());
     }else{
         switch (getPosUserByName(uid, _list_user)) {
             case user_rightTop:
-                point.setPoint((WIDTH_DESIGN-number->getSize().width - lf_card_left_top), bt_card_top);
+                point.setPoint((WIDTH_DESIGN-number->getSize().width - lf_card_left_top), layerAvatar->getUserByPos(user_rightTop)->getPositionY());
                 break;
                 
             case user_rightBottom:
-                point.setPoint(WIDTH_DESIGN - number->getSize().width - lf_card_left_bottom, bt_card_bottom);
+                point.setPoint(WIDTH_DESIGN - number->getSize().width - lf_card_left_bottom, layerAvatar->getUserByPos(user_rightBottom)->getPositionY());
                 break;
                 
             case user_leftTop:
-                point.setPoint(lf_card_left_top, bt_card_top);
+                point.setPoint(lf_card_left_top, layerAvatar->getUserByPos(user_leftTop)->getPositionY());
                 break;
                 
             case user_leftBottom:
-                point.setPoint(lf_card_left_bottom, bt_card_bottom);
+                point.setPoint(lf_card_left_bottom, layerAvatar->getUserByPos(user_leftBottom)->getPositionY());
                 break;
             default:
                 break;
         }
     }
     
-    number->setPositionStart(point);
+    number->setPositionStart(point, 90);
     this->addChild(number);
 }
 

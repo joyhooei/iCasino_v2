@@ -140,7 +140,7 @@ void LayerChatWindow::onButtonSend( CCObject* pSender, TouchEventType type )
 		txtChat->setDetachWithIME(false);
 		//hide keyboard
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-		hideKeyboard();
+		//hideKeyboard();
 #else
 		CCLog("Khong ho tro nen tang nay");
 #endif

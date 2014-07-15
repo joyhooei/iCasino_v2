@@ -137,7 +137,7 @@ void LayerBuyAvatar::OnExtensionResponse(unsigned long long ptrContext, boost::s
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
     boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
 
-	CCLOG("LayerBuyAvatar::OnExtensionResponse() - cmd=%s", cmd);
+	CCLOG("LayerBuyAvatar::OnExtensionResponse() - cmd=%s", cmd->c_str());
     if(strcmp("aGLA", cmd->c_str())==0){
 		CCLOG("aGLR=%s", param->GetUtfString("aGLR")->c_str());
 //        //Insert datas to textfield
