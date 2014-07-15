@@ -87,7 +87,7 @@ CCSprite* Number::getNumberWithChar(char a) {
     
 	CCSprite *numSprite =NULL;
     string url = "";
-	boolean isRight = true;
+	bool isRight = true;
     
     switch (a) {
         case '+':

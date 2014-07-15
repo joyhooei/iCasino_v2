@@ -110,7 +110,7 @@ public:
     int getPosUserByName(string uid, string _list_user);
 
     void updateUsers(string listUser);
-	void setInfoAvatar(int pos, string name, int money, int vt);
+	void setInfoAvatar(int pos, string name, int money, int vt, string aI, string avatar);
 
     void userReJoinGame(string roomInfo);
 	

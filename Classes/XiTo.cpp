@@ -85,6 +85,7 @@ XiTo::XiTo():luotChia(0),chiathem(0){
 
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
+	getButtonByTag(dTag_btnReady)->setEnabled(true);
 }
 
 XiTo::~XiTo(){
@@ -220,7 +221,7 @@ void XiTo::createButtons(){
 	B3->addObject(btnAll);
 	B3->addObject(btnDouble);
 
-	btnReady->setEnabled(true);
+	btnReady->setEnabled(false);
 	btnFold->setEnabled(false);
 	btnFollow->setEnabled(false);
 	btnGive->setEnabled(false);
@@ -630,7 +631,9 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     
     //End Game
     else if(strcmp("endntf", cmd->c_str())==0){
-        whenEndGame();
+        //whenEndGame();
+		setVisibleButtonPlay();
+		getButtonByTag(dTag_btnReady)->setEnabled(true);
     }
     
 }
@@ -717,14 +720,15 @@ void XiTo::updateUsers(string listUser){
 
         int money = 0;
         boost::shared_ptr<string> name;
-        
+        boost::shared_ptr<string> url;
 		if (GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1]) != NULL)
 		{
 			name =  GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1])->GetVariable("aN")->GetStringValue();
 			money = (int)*GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1])->GetVariable("amf")->GetDoubleValue();
-
+			url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[1])->GetVariable("aal")->GetStringValue();
+			
 			int pos = getPosUserByName(n[1], _list_user);
-			setInfoAvatar(pos, name->c_str(), money, i);
+			setInfoAvatar(pos, name->c_str(), money, i, n[1], url->c_str());
 
 			if (strcmp(n[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
 			{
@@ -740,12 +744,26 @@ void XiTo::updateUsers(string listUser){
     }
 }
 
-void XiTo::setInfoAvatar(int pos, string name, int money, int vt) {
+void XiTo::setInfoAvatar(int pos, string name, int money, int vt, string aI, string avatar)
+{
 	if (pos == -1)
 	{
 		return;
 	}
+
+	if (pos == user_me)
+	{
+		bool meIsBoss = (vt == 0);
+		layerAvatar->getUserByPos(user_leftTop)->setMeIsBoss(meIsBoss);
+		layerAvatar->getUserByPos(user_leftBottom)->setMeIsBoss(meIsBoss);
+		layerAvatar->getUserByPos(user_rightTop)->setMeIsBoss(meIsBoss);
+		layerAvatar->getUserByPos(user_rightBottom)->setMeIsBoss(meIsBoss);
+		layerAvatar->getUserByPos(user_me)->setMeIsBoss(false);
+	}
+
 	layerAvatar->getUserByPos(pos)->setVisibleLayerInvite(false);
+	layerAvatar->getUserByPos(pos)->setAI(aI);
+	layerAvatar->getUserByPos(pos)->setIcon(avatar);
 	layerAvatar->getUserByPos(pos)->setMoney(money);
 	layerAvatar->getUserByPos(pos)->setName(name);
 	layerAvatar->getUserByPos(pos)->setFlag(vt == 0);
@@ -876,6 +894,38 @@ void XiTo::when_userReady(string uid){
 }
 
 void XiTo::when_playerBet(string uid, long bet, long betValue, long betTotal){
+
+	string betTyleString = "";
+	switch( bet ){
+	case GAME_TABLE_STATUS_BET_FOLD:
+		betTyleString = "Úp bỏ";
+		break;
+	case GAME_TABLE_STATUS_BET_RAISE:
+		betTyleString = "Tố";
+		break;
+	case GAME_TABLE_STATUS_BET_NONE:
+		betTyleString = "Nhường tố";
+		break;
+	case GAME_TABLE_STATUS_BET_QUATER:
+		betTyleString = "Tố 1/4";
+		break;
+	case GAME_TABLE_STATUS_BET_HAFT:
+		betTyleString = "Tố một nửa";
+		break;
+	case GAME_TABLE_STATUS_BET_FOLLOW:
+		betTyleString = "Theo";
+		break;
+	case GAME_TABLE_STATUS_BET_DOUBLE:
+		betTyleString = "Tố gấp đôi";
+		break;
+	case GAME_TABLE_STATUS_BET_ALL:
+		betTyleString = "Tố tất cả";
+		break;
+	}
+
+	int pos = getPosUserByName(uid, _list_user);
+	layerAvatar->showChatByPos(pos, betTyleString);
+
     if(bet != 0 && bet != 2){
 		string t = mUtils::convertMoneyEx(betTotal);
         labelBetTotal->setText(("Tổng: "+t+" $").c_str());
@@ -1161,7 +1211,7 @@ void XiTo::createLabelVictype(int pos, long vicType){
 	}
 
 	Label *vic = Label::create();
-	vic->setFontName("Marker Felt.ttf");
+	vic->setFontName("fonts/UVNDaLat_R.TTF");
 	vic->setText(txt);
 	vic->setColor(ccc3(239,235,117));
 	vic->setFontSize(22);
@@ -1180,7 +1230,7 @@ void XiTo::setMoneyAnimate(string uid, string amf){
     }else{
         switch (getPosUserByName(uid, _list_user)) {
             case user_rightTop:
-                point.setPoint((WIDTH_DESIGN-number->getSize().width - lf_card_left_top), layerAvatar->getUserByPos(user_rightTop)->getPositionY());
+                point.setPoint((WIDTH_DESIGN-number->getSize().width - lf_card_left_top), layerAvatar->getUserByPos(user_rightTop)->getPositionY() - 10);
                 break;
                 
             case user_rightBottom:
@@ -1188,7 +1238,7 @@ void XiTo::setMoneyAnimate(string uid, string amf){
                 break;
                 
             case user_leftTop:
-                point.setPoint(lf_card_left_top, layerAvatar->getUserByPos(user_leftTop)->getPositionY());
+                point.setPoint(lf_card_left_top, layerAvatar->getUserByPos(user_leftTop)->getPositionY() - 10);
                 break;
                 
             case user_leftBottom:
@@ -1575,9 +1625,7 @@ void XiTo::setButtonBet(string uid, string lsBet){
 }
 
 void XiTo::whenEndGame(){
-    
-    setVisibleButtonPlay();
-    
+
     deleteAllCardFromArray(CARD_ME);
     deleteAllCardFromArray(CARD_LEFT_TOP);
     deleteAllCardFromArray(CARD_LEFT_BOTTOM);
@@ -1590,9 +1638,7 @@ void XiTo::whenEndGame(){
 	getFrameBetByTag(user_rightTop)->setVisible(false);
     frameBetTotal->setVisible(false);
 	frameBet_Me->setVisible(false);
-    
-    getButtonByTag(dTag_btnReady)->setEnabled(true);
-    
+
 	layerLabelVictype->removeAllChildrenWithCleanup(true);
 	if (this->getChildByTag(333) != NULL)
 	{
@@ -1625,6 +1671,9 @@ void XiTo::setVisibleButtonPlay(){
 
 void XiTo::btn_ready_click(CCObject *sender, TouchEventType type){
     if(type == TOUCH_EVENT_ENDED){
+
+		whenEndGame();
+
         boost::shared_ptr<ISFSObject> parameter (new SFSObject());
         boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
         boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_READY_REQ,parameter,lastRoom));
@@ -1715,15 +1764,18 @@ void XiTo::sendBetNTF(int typeBet){
 }
 
 Button* XiTo::createButtonWithTitle_Pos(const char *pName, CCPoint pPoint) {
+
 	Button* button = Button::create();
 	button->setTouchEnabled(true);
 	button->setScale9Enabled(false);
-	button->loadTextures("btnXiTo.png", "btnXiTo_press.png", "");
+	button->loadTextures("ready.png", "ready_selected.png", "");
 	button->setTitleText(pName);
 	button->setTitleColor(ccRED);
 	button->setTitleFontSize(20);
 	button->setTitleFontSize(button->getContentSize().height / 2);
 	button->setAnchorPoint(ccp(0, 0));
+	button->setScaleX(90 / button->getContentSize().width);
+
 	button->setPosition(pPoint);
 
 	return button;

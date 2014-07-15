@@ -138,22 +138,9 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
 	}
 
 	CCLabelTTF *ket =  CCLabelTTF::create(txt.c_str(), "fonts/UVNDaLat_R.TTF", 22.0);
-
-	//CCLabelTTF *ket = CCLabelTTF::create();
-	//ket->setFontName("UVNDaLat_R.TTF");
-	//ket->setString(txt.c_str());
 	ket->setColor(ccc3(239,235,117));
-	//ket->setFontSize(22);
 	ket->setPosition(ccp(x, y));
 	layerResuilt->addChild(ket);
-
-// 	Label *ketqua = Label::create();
-// 	ketqua->setFontName("UVNDaLat_R.TTF");
-// 	ketqua->setText(txt);
-// 	ketqua->setColor(ccc3(239,235,117));
-// 	ketqua->setFontSize(22);
-// 	ketqua->setPosition(ccp(x, y));
-// 	layerResuilt->addChild(ketqua);
 }
 
 CCLayer* BetGame3Cay::getLayerResuilt(){

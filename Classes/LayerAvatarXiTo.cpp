@@ -201,6 +201,10 @@ void LayerAvatarXiTo::runTimer(int pos)
 
 void LayerAvatarXiTo::showChatByPos(int pos, string mes)
 {
+	if (pos == -1)
+	{
+		return;
+	}
 	Chat *newMes = new Chat(mes, pos);
 	CCPoint point;
 
