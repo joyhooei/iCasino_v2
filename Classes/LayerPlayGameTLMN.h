@@ -41,6 +41,7 @@ private:
     
     vector<string> arrName;
     vector<int> arrMoney;
+	vector<double> arrMoneyDouble;
     vector<int> arrIDTurn;
     
     LayerAvatarInGame   *layerAvatars;

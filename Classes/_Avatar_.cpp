@@ -233,7 +233,7 @@ void Avatar::onTouch(CCObject *pObject, TouchEventType pType) {
 				ccbReader->release();
 			}
 			//
-			layerPlayerInfo->setFriendId(this->nameString);
+			layerPlayerInfo->setFriendId(this->aI);
 			layerPlayerInfo->setAvatarUrl(urlAvatar);
 			layerPlayerInfo->setIsBossRoom( meIsBoss );
 			layerPlayerInfo->reloadAllDatas();

@@ -140,6 +140,7 @@ LayerPlayGameTLMN::~LayerPlayGameTLMN() {
 
 	arrName.clear();
 	arrMoney.clear();
+	arrMoneyDouble.clear();
 	arrIDTurn.clear();
 }
 
@@ -150,6 +151,7 @@ void LayerPlayGameTLMN::onExit() {
 
 	arrName.clear();
 	arrMoney.clear();
+	arrMoneyDouble.clear();
 	arrIDTurn.clear();
 }
 
@@ -247,10 +249,11 @@ void LayerPlayGameTLMN::initGame() {
     
     // thông tin tiền hiện tại của Users
     for (int i = 0; i < arrName.size(); i++) {
-        layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoney[i]);
+        layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoneyDouble[i]);
     }
     arrName.clear();
 	arrMoney.clear();
+	arrMoneyDouble.clear();
 
     // unready all
     layerAvatars->setUnReadyAllUser();
@@ -438,12 +441,14 @@ void LayerPlayGameTLMN::OnSmartFoxUserVariableUpdate(unsigned long long ptrConte
     
     //string money = boost::to_string(*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
 	int    money = (int) (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
-    string name = boost::to_string(*ptrNotifiedUser->Name());
+	double moneyDouble = (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	string name = boost::to_string(*ptrNotifiedUser->Name());
     
 	CCLog("OnSmartFoxUserVariableUpdate: name= %s, money= %d", name.c_str(), money);
 
     arrName.push_back(name);
     arrMoney.push_back(money);
+	arrMoneyDouble.push_back(moneyDouble);
 }
 
 void LayerPlayGameTLMN::OnSmartFoxPublicMessage( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
@@ -482,7 +487,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_USER_JOIN_NOTIF(){
         
         // thông tin tiền hiện tại của Users
         for (int i = 0; i < arrName.size(); i++) {
-            layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoney[i]);
+            layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoneyDouble[i]);
         }
     }
 }
@@ -613,7 +618,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_AMF_TEST_NOTIF(){
 				ressonString = "thối 2";
 				break;
 			case 2:
-				ressonString = "người thua bị thối 2";
+				//ressonString = "người thua bị thối 2";
 				break;
 			case 3:
 				ressonString = "chặn được 2";
@@ -626,7 +631,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_AMF_TEST_NOTIF(){
 				break;
 		}
 		CCLog("resson=%d, ressonString=%s", resson, ressonString.c_str());
-		layerChats->showChatByPos(pos, ressonString);
+		if (ressonString.length() > 0) layerChats->showChatByPos(pos, ressonString);
     }
 }
 
@@ -645,6 +650,9 @@ void LayerPlayGameTLMN::event_EXT_EVENT_VICTORY_NOTIF(){
         
         string result = "";
         switch (*vicPos.get()) {
+			case -1:
+				result = "Thối 2!";
+				break;
             case 1:
                 result = "Hết bài- Nhất!";
 

@@ -252,7 +252,7 @@ void LayerPlayGamePhom::createAvatars() {
     layerAvatars = LayerAvatarInGame::create();
     this->addChild(layerAvatars);
 
-	avatarMe = new Avatar(true);
+	/*avatarMe = new Avatar(true);
 	layerAvatars->addChild(avatarMe);
 
 	avatarMe->setPosition(ccp(300, 300));
@@ -270,7 +270,7 @@ void LayerPlayGamePhom::createAvatars() {
 	arrMoneyDoubleTest.push_back(121231231231);
 	arrMoneyDoubleTest.push_back(1212312312314);
 	arrMoneyDoubleTest.push_back(12123123123176);
-	arrMoneyDoubleTest.push_back(121231231231234);
+	arrMoneyDoubleTest.push_back(121231231231234);*/
 
 }
 
