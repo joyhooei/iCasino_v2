@@ -19,8 +19,17 @@
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
-
-
+std::string LayerFriend::changeStr =" ";
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+#include <jni.h>
+extern "C"
+{
+	jstring Java_com_game_simple_Game3_UpdateConect(JNIEnv *env, jobject thiz)
+	{
+		GameServer::getSingleton()->updateEvent();
+	}
+}
+#endif
 LayerFriend::LayerFriend()
 {
     currTag = tag_friendInfoEnable;
@@ -37,6 +46,7 @@ LayerFriend::LayerFriend()
     currNodeView = NULL;
     nodeChild = NULL;
     //
+	
 }
 
 LayerFriend::~LayerFriend()

@@ -15,7 +15,7 @@
 #include "SceneManager.h"
 #include "LayerBet_TomCuaCa.h"
 #include "SliderCustomLoader.h"
-#include "ImageDownloader.h"
+#include "Requests/LeaveRoomRequest.h"
 
 enum TCC_REPONSE {
 	EXT_EVENT_USER_JOIN_NOTIF,      // jrntf
@@ -32,7 +32,8 @@ enum TCC_REPONSE {
 	EXT_EVENT_READY_REQ,            // = "rr";
 	EXT_EVENT_UNREADY_REQ,			// = "urr"
 	EXT_EVENT_GAME_RESULT,			// = "grs"
-	EXT_EVENT_GAME_BET_NTF			//= "gb_ntf"
+	EXT_EVENT_GAME_BET_NTF,			//= "gb_ntf"
+	EXT_REQUEST_TOKEN				// = "ire"
 };
 int TomCuaCa::convertResponseToInt(string inString) {
 	if (inString == "jrntf")    return EXT_EVENT_USER_JOIN_NOTIF;
@@ -44,11 +45,12 @@ int TomCuaCa::convertResponseToInt(string inString) {
 	if (inString == "urr")		return EXT_EVENT_UNREADY_REQ;
 	if (inString == "luu")      return EXT_EVENT_LIST_USER_UPDATE;
 	if (inString == "s")		return EXT_EVENT_START;
-	if (inString == "gb_ntf")		return EXT_EVENT_GAME_BET_NTF;
+	if (inString == "gb_ntf")	return EXT_EVENT_GAME_BET_NTF;
 
-	if (inString == "e")   return EXT_EVENT_END;
+	if (inString == "e")		return EXT_EVENT_END;
 	if (inString == "cblltf")   return EXT_EVENT_AMF_TEST_NOTIF;
 	if (inString == "vicntf")   return EXT_EVENT_VICTORY_NOTIF;
+	if (inString == "ire")		return EXT_REQUEST_TOKEN;
 
 	//
 	if (inString == "rr")       return EXT_EVENT_READY_REQ;
@@ -75,7 +77,7 @@ string TomCuaCa::convertResponseToString(int inInt) {
 	if (inInt == EXT_EVENT_READY_REQ)           return "rr";
 	if (inInt == EXT_EVENT_UNREADY_REQ)           return "urr";
 	if (inInt == EXT_EVENT_READY_NTF)           return "rntf";
-
+	if (inInt == EXT_REQUEST_TOKEN)           return "ire";
 
 	return "";
 }
@@ -93,8 +95,13 @@ TomCuaCa::TomCuaCa(){
 
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
-		imagedownloader4Red = new ImageDownloader();
-		imagedownloader4Black = new ImageDownloader();
+		
+		
+
+		getToken();
+
+
+
 		uLayer = UILayer::create();
 		uLayer->addWidget(GUIReader::shareReader()->widgetFromJsonFile("TomCuaCa/scroll/TomCuaCa_1_1.json"));
 
@@ -229,6 +236,7 @@ TomCuaCa::TomCuaCa(){
 	this->addChild(uLayer);
 	
 	 _id_me =((boost::shared_ptr<string>)(GameServer::getSingleton().getSmartFox()->MySelf()->Name()));
+	 
 }
 vector<string> TomCuaCa::TCCsplit(string &S,const char &str){
 		vector<string> arrStr;
@@ -279,29 +287,7 @@ void TomCuaCa::updateUser(string list){
 			_money = (int)*money;
 		}
 		if (url != NULL) {
-			CCLog("Avatar link %s", url->c_str());
-			string urlString = url->c_str();
-			vector<string> arr  = TCCsplit(urlString, '/');
-			string iconname = "iconname.png";
-			if (arr.size() > 0) {
-				iconname = arr.at(arr.size() - 1);
-			} 
-
-			//
-			iconname = "black_" + iconname;
-			std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
-			writablePath.append(iconname);
-
-			//
-			CCSprite *avatar = CCSprite::create(writablePath.c_str());
-			if (avatar == NULL) {
-				CCLog("avatar downLoadImage");
-				//downLoadImage(url->c_str(), iconname);
-			}
-			else {
-				CCLog("avatar from device");
-				//setAvatarBySprite(nodeAvatarBlack, avatar);
-			}
+			_url=url->c_str();
 		}
 
 		if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
@@ -514,7 +500,7 @@ void TomCuaCa::whenResuiltGame(string rg){
 
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 	this->unscheduleUpdate();
-	
+	loading->setPercent(0);
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
 		"sounds/game_tomcuaca/quay.mp3");
 	
@@ -574,9 +560,8 @@ void TomCuaCa::whenGameEnd(){
 }
 	 TomCuaCa::~TomCuaCa(){
 	GameServer::getSingleton().removeListeners(this);
-	this->removeAllChildren();
-	CC_SAFE_DELETE(imagedownloader4Red);
-	CC_SAFE_DELETE(imagedownloader4Black);
+	//this->removeAllChildren();
+
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 
 }
@@ -585,7 +570,6 @@ bool TomCuaCa::init(){
 		return false;
 	}
 	
-
 	return true;
 }
 void TomCuaCa::createBackgrounds(){
@@ -597,7 +581,7 @@ void TomCuaCa::createBackgrounds(){
 }
 void TomCuaCa::createButtons(){
 
-	LayerButtonInGame* lButton = LayerButtonInGame::create();
+	lButton = LayerButtonInGame::create();
 	uLayer->addChild(lButton);
 
 }
@@ -729,8 +713,14 @@ void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_
 				_aid =int(*oCuoc);
 				bet(_aid,_bet);
 
-
 				break;
+			}
+		case EXT_REQUEST_TOKEN:
+			{
+			boost::shared_ptr<string> token = param->GetUtfString("ire");
+			CCLog("----%s",token->c_str());
+
+			break;
 			}
 		default:
 			break;
@@ -746,6 +736,7 @@ void TomCuaCa::clickBtn(CCObject* obj, TouchEventType type)
 		case t_ready:
 			{
 					boost::shared_ptr<ISFSObject> parameter (new SFSObject());
+					
 					boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 					boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_READY_REQ),parameter,lastRoom));
 					GameServer::getSingleton().getSmartFox()->Send(request);
@@ -954,7 +945,8 @@ void TomCuaCa::hienOketqua()
 void TomCuaCa::onExit()
 {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
-		}
+		
+}
 void TomCuaCa::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueSender = (*ptrEventParams)["sender"];
@@ -970,4 +962,27 @@ void TomCuaCa::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::sha
 	}
 	lAvatar->showChatByPos(pos, ptrNotifiedMessage->c_str());
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/chat.mp3");
+}
+void TomCuaCa::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
+	
+	if( ptrNotifiedUser->IsItMe() ){
+		//close window - tricks by HoangDD
+		CCLog("im here");
+		//lButton->eventTouchBtnBack(NULL,TOUCH_EVENT_ENDED);
+	}
+		CCLog(" here");
+	
+	//CCLog("HERA");
+}
+void TomCuaCa::getToken()
+{
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("aI", GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
+	//boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_REQUEST_TOKEN),params));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+	CCLog("---%s",GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
 }

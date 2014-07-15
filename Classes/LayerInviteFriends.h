@@ -32,7 +32,7 @@ public:
 	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual void onEnter();
 	virtual void onExit();
-
+	
 	CREATE_FUNC(LayerInviteFriends);
 
 	// CCBSelectorResolver interfaces
@@ -47,6 +47,7 @@ public:
 	void onButtonGmail(CCObject* pSender);
 	void onButtonSMS(CCObject* pSender);
 	void onButtonClose(CCObject* pSender);
+
 };
 
 class LayerInviteFriendsLoader : public cocos2d::extension::CCLayerLoader

@@ -55,7 +55,7 @@ public:
     
     void gotoFriendDetails();
     void gotoInviteFriends();
-    
+  
     CREATE_FUNC(LayerFriend);
     
     // CCBSelectorResolver interfaces
@@ -65,6 +65,7 @@ public:
     virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, const char* pSelectorName){return NULL;};
     // selector callbacks
     void onButtonClick(CCObject* pSender);
+
 };
 
 class LayerFriendLoader : public cocos2d::extension::CCLayerLoader

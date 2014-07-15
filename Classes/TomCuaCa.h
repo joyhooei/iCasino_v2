@@ -18,6 +18,7 @@
 #include "_Number_inGame_.h"
 #include "_Chat_inGame_.h"
 #include "ImageDownloader.h"
+#include "_Button_inGame_.h"
 
 //ket qua
 #define _kqNai 100
@@ -71,6 +72,7 @@ private:
 	string kq2;
 	string kq3;
 	boost::shared_ptr<string> kq;
+	boost::shared_ptr<string>  gameID;
 public:
 	FrameBet* betTom;
 	FrameBet* betCua;
@@ -78,9 +80,8 @@ public:
 	FrameBet* betGa;
 	FrameBet* betRuou;
 	FrameBet* betNai;
+	LayerButtonInGame* lButton;
 
-	ImageDownloader* imagedownloader4Red;
-	ImageDownloader* imagedownloader4Black;
 
 	TomCuaCa();
 	~TomCuaCa();
@@ -94,6 +95,7 @@ public:
 
 	virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	vector<string> TCCsplit(string &S,const char &str);
 	void updateUser(string list);
 	string find_ChuPhong(string listUser);
@@ -119,6 +121,7 @@ public:
 	void hienKetQua();
 	void hienOketqua();
 	virtual void onExit();
+	void getToken();
 };
 
 #endif /* defined(__iCasino_v2__TomCuaCa__) */

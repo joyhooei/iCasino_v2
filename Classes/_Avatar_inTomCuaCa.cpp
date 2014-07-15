@@ -45,7 +45,7 @@ AvatarInTomCuaCa::~AvatarInTomCuaCa(){
 void AvatarInTomCuaCa::onExit() {
 	CCLOG("onExit: clean LayerAvatarInGame");
 	
-	/*arrName.clear();
+	arrName.clear();
 	arrFlag.clear();
 	arrURL.clear();
 	arrAI.clear();
@@ -53,7 +53,7 @@ void AvatarInTomCuaCa::onExit() {
 	if (chuong) {
 		chuong->release();
 		chuong=NULL;
-	}*/
+	}
 }
 
 bool AvatarInTomCuaCa::init() {
@@ -130,10 +130,6 @@ void AvatarInTomCuaCa::setMoney(int pos, string money){
 	this->getUserByPos(pos)->setMoney(money);
 }
 
-void AvatarInTomCuaCa::setMoney(int pos, int money) {
-	if (this->getUserByPos(pos) == NULL) return;
-	this->getUserByPos(pos)->setMoney(money);
-}
 
 void AvatarInTomCuaCa::setReady(int pos, bool isReady){
 	if (this->getUserByPos(pos) == NULL) return;

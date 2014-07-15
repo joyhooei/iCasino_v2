@@ -14,13 +14,14 @@
 
 using namespace Sfs2X;
 using namespace cocos2d;
-//using namespace CocosDenshion;
 
+//using namespace CocosDenshion;
 
 LayerInviteFriends::LayerInviteFriends()
 {
 	lblThongBao=NULL;
 	lblMoney=NULL;
+	
 }
 
 LayerInviteFriends::~LayerInviteFriends()
