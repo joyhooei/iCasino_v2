@@ -213,9 +213,16 @@ void LayerAvatarInGame::formatAndStore(const char &c1, const char &c2) {
         // url icon
         boost::shared_ptr<User> userInfo = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(name);
 		
-		if (userInfo == NULL)
+		if (userInfo == NULL){
+			arrAI.push_back(name);
+			arrName.push_back(name);
+			arrURL.push_back("");
+			arrMoney.push_back(0);
+			arrMoneyDouble.push_back(0);
 			continue;
+		}
 
+		// url
 		boost::shared_ptr<string> url = userInfo->GetVariable("aal")->GetStringValue();
         arrURL.push_back(url->c_str());
 

@@ -33,6 +33,7 @@ public:
 	void setName (int pos, string name);
 	void setMoney(int pos, string money);
 	void setMoney(int pos, int money);
+	void setMoney(int pos, double money);
 	void setReady(int pos, bool isReady);
 	void setVisibleLayerInvite(int pos, bool isShow);
 
@@ -47,12 +48,13 @@ public:
 	void formatAndStore(const char &c1, const char &c2);
 
 	Avatar* getUserByPos(int pos);
-
 	int getIndexInArrByName(string name);
-	//
+	int getIndexInArrByAccountID(string aI);
+	
+	int getPosByAccountID(string aI);
 	int getPosByName(string name);
 	string getNameByPos(int pos);
-	//
+	string getAccountIDByPos(int pos);
 	void updateUsers();
 	void showChatByPos(int pos, string mes);
 	// Time
@@ -65,6 +67,7 @@ private:
 	bool isGuess;
 	string myName;
 	string listUser;
+	string myAI;
 
 	// mảng chứa
 	vector<string> arrName;
@@ -72,6 +75,7 @@ private:
 	vector<string> arrURL;
 	vector<string> arrAI;
 	vector<int> arrMoney;
+	vector<double> arrMoneyDouble;
 	UIImageView *chuong;
 };
 

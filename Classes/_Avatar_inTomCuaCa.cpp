@@ -44,12 +44,13 @@ AvatarInTomCuaCa::~AvatarInTomCuaCa(){
 
 void AvatarInTomCuaCa::onExit() {
 	CCLOG("onExit: clean LayerAvatarInGame");
-	
+
 	arrName.clear();
 	arrFlag.clear();
 	arrURL.clear();
 	arrAI.clear();
 	arrMoney.clear();
+	arrMoneyDouble.clear();
 	if (chuong) {
 		chuong->release();
 		chuong=NULL;
@@ -64,6 +65,9 @@ bool AvatarInTomCuaCa::init() {
 
 	this->typeGame = 0;
 	this->myName = SceneManager::getSingleton().getMyName();
+	this->myAI   = SceneManager::getSingleton().getMyName();
+	
+	CCLog("this->myName = SceneManager::getSingleton().getMyName() = %s", this->myName.c_str());
 
 	Avatar *me = new Avatar(true);
 	Avatar *left = new Avatar(false);
@@ -130,6 +134,15 @@ void AvatarInTomCuaCa::setMoney(int pos, string money){
 	this->getUserByPos(pos)->setMoney(money);
 }
 
+void AvatarInTomCuaCa::setMoney(int pos, int money) {
+	if (this->getUserByPos(pos) == NULL) return;
+	this->getUserByPos(pos)->setMoney(money);
+}
+
+void AvatarInTomCuaCa::setMoney(int pos, double money) {
+	if (this->getUserByPos(pos) == NULL) return;
+	this->getUserByPos(pos)->setMoney(money);
+}
 
 void AvatarInTomCuaCa::setReady(int pos, bool isReady){
 	if (this->getUserByPos(pos) == NULL) return;
@@ -167,6 +180,7 @@ void AvatarInTomCuaCa::formatAndStore(const char &c1, const char &c2) {
 	arrURL.clear();
 	arrAI.clear();
 	arrMoney.clear();
+	arrMoneyDouble.clear();
 
 	for (int i = 0; i < arrUsers.size(); i++) {
 		vector<string> arr = getArrSplit1(arrUsers[i], c2);
@@ -179,7 +193,7 @@ void AvatarInTomCuaCa::formatAndStore(const char &c1, const char &c2) {
 		string flag = arr[2];
 
 
-		arrName.push_back(name);
+		
 		arrFlag.push_back(flag);
 
 		// url icon
@@ -194,12 +208,22 @@ void AvatarInTomCuaCa::formatAndStore(const char &c1, const char &c2) {
 
 		// Money
 		boost::shared_ptr<double> amf = userInfo->GetVariable("amf")->GetDoubleValue();
-		CCLog("--------money: %d", (int)(*amf));
+		arrMoneyDouble.push_back(*amf);
 		arrMoney.push_back(((int)(*amf)));
 
-		//boost::shared_ptr<string> aI = userInfo->GetVariable("aI")->GetStringValue();
-		//arrAI.push_back(aI->c_str());
-		arrAI.push_back("aI");
+		// account ID
+		boost::shared_ptr<string> aI = userInfo->Name();
+		if (aI != NULL){
+			CCLog("---------aI= %s", aI->c_str());
+			arrAI.push_back(aI->c_str());
+		}
+
+		// account Name
+		boost::shared_ptr<string> aN = userInfo->GetVariable("aN")->GetStringValue();
+		if (aN != NULL) {
+			CCLog("---------aN= %s", aN->c_str());
+			arrName.push_back(aN->c_str());
+		}
 	}
 
 	updateUsers();
@@ -216,8 +240,14 @@ int AvatarInTomCuaCa::getIndexInArrByName(string name) {
 	}
 	return -1;
 }
-
+int AvatarInTomCuaCa::getIndexInArrByAccountID(string aI) {
+	for (int i = 0; i < arrAI.size(); i++) {
+		if (arrAI[i] == aI) return i;
+	}
+	return -1;
+}
 int AvatarInTomCuaCa::getPosByName(string pName) {
+	return getPosByAccountID(pName);
 	int pos = getIndexInArrByName(this->myName);
 
 	if (pos == -1)
@@ -280,9 +310,39 @@ string AvatarInTomCuaCa::getNameByPos(int pPos) {
 
 	return "";
 }
+string AvatarInTomCuaCa::getAccountIDByPos(int pPos) {
+	int pos = getIndexInArrByAccountID(this->myAI);
 
+	if (pos == -1) {
+		this->isGuess = true;
+		if (pPos < arrAI.size() && pPos >= 0) return arrAI.at(pPos);
+	}
+	else {
+		this->isGuess = false;
+		int countUser = arrAI.size();
+		switch (pPos) {
+		case kUserMe:
+			return this->myAI;
+			break;
+
+		case kUserRight:
+			return arrAI[(pPos + 1) % countUser];
+			break;
+
+		case kUserTop:
+			return arrAI[(pPos + 2) % countUser];
+			break;
+
+		case kUserLeft:
+			return arrAI[(pPos + 3) % countUser];
+			break;
+		}
+	}
+
+	return "";
+}
 void AvatarInTomCuaCa::updateUsers() {
-	if (arrName.size() != arrFlag.size() || arrName.size() != arrURL.size() || arrURL.size() !=arrAI.size()) {
+	if (arrName.size() != arrFlag.size() || arrName.size() != arrURL.size() || arrURL.size() != arrAI.size()) {
 		return;
 	}
 
@@ -349,8 +409,10 @@ void AvatarInTomCuaCa::updateUsers() {
 		string url  = arrURL[i];
 		string aI = arrAI[i];
 		int money = arrMoney[i];
+		double moneyDouble = arrMoneyDouble.at(i);
 
-		int pos = getPosByName(name);
+		int pos = getPosByAccountID(aI);
+		CCLog("------pos=%d", pos);
 		if (pos < 0)
 			break;
 		if (!isGuess){
@@ -369,6 +431,7 @@ void AvatarInTomCuaCa::updateUsers() {
 		user->setIcon(url);
 		user->setAI(aI);
 		user->setMoney(money);
+		user->setMoney(moneyDouble);
 
 		if (pos == kUserMe)
 		{
@@ -476,4 +539,36 @@ void AvatarInTomCuaCa::showChatByPos(int pos, string mes)
 
 	newMes->setPosition(point);
 	this->addChild(newMes);
+}
+int AvatarInTomCuaCa::getPosByAccountID(string aI) {
+	int pos = getIndexInArrByAccountID(this->myAI);
+	//CCLog("getPosByAccountID aI=%s, myAI=%s, pos=%d", aI.c_str(), myAI.c_str(), pos);
+
+	if (pos == -1)
+	{
+		isGuess = true;
+		return (getIndexInArrByAccountID(aI));
+	}
+	// tra lai vi tri
+	else{
+		isGuess = false;
+		int countUser = arrAI.size();
+		for (int i = 0; i < countUser; i++) {
+			if (arrAI[i] == aI) {
+				if (i == pos) {
+					return kUserMe;
+				} else if (i == (pos + 1) % countUser) {
+					return kUserRight;
+				} else if (i == (pos + 2) % countUser) {
+					return kUserTop;
+				} else if (i == (pos + 3) % countUser) {
+					return kUserLeft;
+				}
+
+				break;
+			}
+		}
+	}
+
+	return -1;
 }

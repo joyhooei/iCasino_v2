@@ -21,7 +21,15 @@ bool NumberInTomCuaCa::init() {
     
     return true;
 }
+void NumberInTomCuaCa::showNumberByPos(int pos, double numberDouble) {
+	arrPos.push_back(pos);
+	arrNumberDouble.push_back(numberDouble);
 
+	if (!isRunning) {
+		isRunning = true;
+		this->scheduleOnce(schedule_selector(NumberInTomCuaCa::runAction2), 1);
+	}
+}
 void NumberInTomCuaCa::showNumberByPos(int pos, string numberString) {
 	arrPos.push_back(pos);
 	arrNumberString.push_back(numberString);
@@ -83,7 +91,54 @@ void NumberInTomCuaCa::runAction(float dt) {
 	this->isRunning = false;
 	//this->scheduleOnce(schedule_selector(LayerNumberInGame::callbackShowNumber), 3);
 }
+void NumberInTomCuaCa::runAction2(float dt) {
+	int demMe = 0;
+	int demLeft = 0;
+	int demRight = 0;
+	int demTop = 0;
 
+	for (int i = 0; i < arrPos.size(); i++)
+	{
+		int pos = arrPos.at(i);
+		double numberDouble = arrNumberDouble.at(i);
+
+		Number *number = new Number(numberDouble);
+		CCPoint point;
+
+		switch (pos) {
+		case kUserLeft:
+			point.setPoint(650, 250 + demLeft * number->getSize().height);
+			demLeft++;
+			break;
+
+		case kUserRight:
+			point.setPoint(700-number->getSize().width/2, 80 + demRight * number->getSize().height);
+			demRight++;
+			break;
+
+		case kUserTop:
+			point.setPoint(50, 250 + demTop * number->getSize().height);
+			demTop++;
+			break;
+
+		case kUserBot:
+			point.setPoint(30, 80 + demTop * number->getSize().height);
+			demMe++;
+			break;
+		case kUserMe:
+			point.setPoint((WIDTH_DESIGN - number->getSize().width) / 2, 70 + demMe * number->getSize().height);
+			demMe++;
+			break;
+		}
+		number->setPositionStart(point);
+		this->addChild(number);
+	}
+
+	arrPos.clear();
+	arrNumberDouble.clear();
+
+	this->isRunning = false;
+}
 void NumberInTomCuaCa::callbackShowNumber(float dt) {
 	isRunning = false;
 }

@@ -24,6 +24,7 @@ private:
     vector<int> arrPos;
     vector<string> arrNumberString;
 	bool isRunning;
+	vector<double> arrNumberDouble;
     
 public:
 	~NumberInTomCuaCa();
@@ -31,8 +32,10 @@ public:
     CREATE_FUNC(NumberInTomCuaCa);
     
     void showNumberByPos(int pos, string numberString);
+	void showNumberByPos(int pos, double numberDouble);
 	void runAction(float dt);
     void callbackShowNumber(float dt);
+	void runAction2(float dt);
 };
 
 #endif /* defined(__iCasino_v2___Number_inGame___) */
