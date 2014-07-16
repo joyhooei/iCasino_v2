@@ -22,6 +22,8 @@ LayerGameChan_KetQua::LayerGameChan_KetQua()
 	lblThongBao=NULL;
 	lblMoney=NULL;
 
+	list_noc = "";
+
 	CARD_NOC = CCArray::create();
 	CARD_NOC->retain();
 	CARD_WINNER = CCArray::create();
@@ -53,9 +55,10 @@ SEL_MenuHandler LayerGameChan_KetQua::onResolveCCBCCMenuItemSelector(cocos2d::CC
 void LayerGameChan_KetQua::onButtonXemNoc(CCObject* pSender)
 {
 	CCLOG("onButtonXemNoc");
-	//this->removeFromParentAndCleanup(true);
-	setCard_Noc("95:9:2:0:0;94:9:2:1:0;70:7:2:0:0;71:7:2:0:0;94:9:2:1:0;70:7:2:0:0;71:7:2:0:0;71:7:2:0:0;54:6:1:0:0;53:6:1:0:0;70:7:2:0:0;71:7:2:0:0;54:6:1:0:0;53:6:1:0:0;70:7:2:0:0;71:7:2:0:0;54:6:1:0:0;53:6:1:0:0");
-
+	if (list_noc != "")
+	{
+		setCard_Noc(list_noc);
+	}
 }
 
 // CCBMemberVariableAssigner interface
@@ -67,17 +70,22 @@ bool LayerGameChan_KetQua::onAssignCCBMemberVariable(CCObject *pTarget, const ch
 	return true;
 }
 
+void LayerGameChan_KetQua::setValueNoc(string _list){
+	this->list_noc = _list;
+}
+
 void LayerGameChan_KetQua::closePopUp(){
 	this->removeFromParentAndCleanup(true);
+}
+
+void LayerGameChan_KetQua::setPlayer_U(string uid){
+	lblThongBao->setString((uid + " đã báo Ù con bài này \n Chờ nhà này xướng !").c_str());
 }
 
 void LayerGameChan_KetQua::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
 	CCLOG("Imhere onNodeLoaded");
-	//this->runAction(CCSequence::create(CCDelayTime::create(15),CCCallFunc::create(this, callfunc_selector(LayerGameChan_KetQua::closePopUp)),NULL));
-	lblThongBao->setString("dautv da bao u con bai nay \n cho nha nay xuong");
 	lblMoney->setString("");
-	setListCard_WinnerUser("95:9:2:0:0;94:9:2:1:0;70:7:2:0:0;71:7:2:0:0;94:9:2:1:0;70:7:2:0:0;71:7:2:0:0;71:7:2:0:0;54:6:1:0:0;53:6:1:0:0;70:7:2:0:0;71:7:2:0:0;54:6:1:0:0;53:6:1:0:0;70:7:2:0:0;71:7:2:0:0;54:6:1:0:0;53:6:1:0:0");
 	this->setTouchEnabled(true);
 }
 
@@ -197,6 +205,18 @@ void LayerGameChan_KetQua::OnExtensionResponse(unsigned long long ptrContext, bo
 	if (strcmp("rntf",cmd->c_str()) == 0)
 	{
 		this->removeFromParentAndCleanup(true);
+	}
+	else if (strcmp("ntfnocdetl",cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<string> nocdetl = param->GetUtfString("nocdetl");
+		if (nocdetl != NULL)
+		{
+			list_noc = nocdetl->c_str();
+		}
+	}
+	else if (strcmp("grs", cmd->c_str()) == 0)
+	{
+
 	}
 }
 

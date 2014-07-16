@@ -308,6 +308,7 @@ void LayerChanGame::createButtons(){
 	layerButtons->addWidget(btnChiu);
 
 }
+
 void LayerChanGame::createAvatars(){
 	layerAvatars = LayerAvatarInGame::create();
 	layerAvatars->resetAll();
@@ -618,8 +619,17 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
 		boost::shared_ptr<string> lc = param->GetUtfString("lc");
 
+		if (usrn == NULL || lc == NULL)
+		{
+			return;
+		}
+
 		CCLOG("nguoi U: %s", usrn->c_str());
 		CCLOG("Bài trên tay người Ù: %s", lc->c_str());
+		if (strcmp(usrn->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) != 0)
+		{
+			waitPlayer_ReqU(usrn->c_str(), lc->c_str());
+		}
 	}
 
 	//Bài còn trong nọc
@@ -628,6 +638,11 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if (nocdetl != NULL)
 		{
 			CCLOG("Các lá bài còn trong nọc: %s", nocdetl->c_str());
+			LayerGameChan_KetQua *KQ = (LayerGameChan_KetQua*)this->getChildByTag(666);
+			if (KQ != NULL)
+			{
+				KQ->setValueNoc(nocdetl->c_str());
+			}
 		}
 	}
 
@@ -2021,7 +2036,6 @@ void LayerChanGame::whenConguoi_Chiu(string uid){
 	}
 }
 
-
 //Xuong U
 void LayerChanGame::XuongU(){
 	cocos2d::extension::CCBReader * ccbReader = NULL;
@@ -2049,6 +2063,20 @@ void LayerChanGame::XuongU(){
 
 void LayerChanGame::resuiltGame(string resuilt)
 {
+// 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+// 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+// 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
+// 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+// 	LayerGameChan_KetQua* mLayer;
+// 	if (ccbReader)
+// 	{
+// 		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
+// 		this->addChild(mLayer, 1, 1);
+// 		ccbReader->release();
+// 	}
+}
+
+void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
@@ -2057,7 +2085,10 @@ void LayerChanGame::resuiltGame(string resuilt)
 	if (ccbReader)
 	{
 		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
-		this->addChild(mLayer, 1, 1);
+		mLayer->setPlayer_U(uid);
+		mLayer->setListCard_WinnerUser(lc);
+		mLayer->setTag(666);
+		this->addChild(mLayer);
 		ccbReader->release();
 	}
 }
