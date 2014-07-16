@@ -235,7 +235,7 @@ void LayerCardInGame::ccTouchesMoved(cocos2d::CCSet *pTouches, cocos2d::CCEvent 
 void LayerCardInGame::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
 {
     if (indexCardCurrent >= 0) {
-        Card *card = (Card*) arrCardOnHand->objectAtIndex(indexCardCurrent);
+        Card *cardCurrent = (Card*) arrCardOnHand->objectAtIndex(indexCardCurrent);
         
         CCSetIterator iterator = pTouches->begin();
         CCTouch *touch;
@@ -245,8 +245,8 @@ void LayerCardInGame::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent 
         
         // clicked
         if (getDisPoint(tap, pointTouchBegan) < 10) {
-            card->setZOrder(indexCardCurrent);
-            setCardClick(card);
+            cardCurrent->setZOrder(indexCardCurrent);
+            setCardClick(cardCurrent);
         }
         // moved
         else {
@@ -281,9 +281,8 @@ void LayerCardInGame::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent 
                 arrCardCopy->release();
             }
             
-            bool isRefreshTop = true;
-            refreshCardOnHand(isRefreshTop);
-        }
+            refreshCardOnHand(false);
+		}
     }
 }
 
@@ -387,7 +386,7 @@ void LayerCardInGame::refreshCardOnHand(bool isRefreshTop) {
         else{
 			// nếu quân bài đang được click thì top giữ nguyên
 			// ngược lại top cần được đặt lại vị trí khởi tạo topCard
-			if (card->getClicked()) top = card->getPositionY();
+			if (card->getClicked()) top = topCard + card->getSize().height / 4;
 			else top = topCard;
 		}
         
