@@ -24,11 +24,8 @@ using namespace cocos2d;
 #include <jni.h>
 extern "C"
 {
-	jstring Java_com_game_simple_Game3_UpdateConect(JNIEnv *env, jobject thiz)
-	{
-		GameServer::getSingleton()->updateEvent();
-	}
-} 
+	
+}
 #endif
 LayerFriend::LayerFriend()
 {
