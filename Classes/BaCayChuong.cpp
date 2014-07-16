@@ -433,8 +433,15 @@ void BaCayChuong::eventListUser(string listusers)
 	{
 		vector<string> info = mUtils::splitString(list[i],'|');
 		int pos = layerAvatars->getPosByName(info[0]);
-		layerBet->getFrameBetByPos(pos)->setValueBet(info[2]+" $");
-		layerBet->getFrameBetByPos(pos)->setVisible(true);
+
+		if(strcmp(info[0].c_str(), find_Chuong(_list_users).c_str()) == 0){
+			layerBet->getFrameBetByPos(pos)->setVisible(false);
+		}
+		else
+		{
+			layerBet->getFrameBetByPos(pos)->setValueBet(info[2]+" $");
+			layerBet->getFrameBetByPos(pos)->setVisible(true);
+		}
 	}
 }
 
@@ -539,8 +546,10 @@ void BaCayChuong::whenResuiltGame(string rg){
 	for(int i = 0; i < resuilt.size(); i++){
 		vector<string> info = mUtils::splitString(resuilt[i], '|');
 
+		string strScore = atoi(info[4].c_str()) > 0 ? ("+" + info[4]) : info[4];
+
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
-			layerNumbers->showNumberByPos(kUserMe, info[4]);
+			layerNumbers->showNumberByPos(kUserMe, strScore);
 			layerBet->setResuit4AllUser(kUserMe, "1", info[1]);
 		}
 		else
@@ -549,15 +558,15 @@ void BaCayChuong::whenResuiltGame(string rg){
 			switch (pos) {
 			case kUserLeft:
 				layerBet->setResuit4AllUser(kUserLeft, "1", info[1]);
-				layerNumbers->showNumberByPos(kUserLeft, info[4]);
+				layerNumbers->showNumberByPos(kUserLeft, strScore);
 				break;
 			case kUserRight:
 				layerBet->setResuit4AllUser(kUserRight, "1", info[1]);
-				layerNumbers->showNumberByPos(kUserRight, info[4]);
+				layerNumbers->showNumberByPos(kUserRight, strScore);
 				break;
 			case kUserTop:
 				layerBet->setResuit4AllUser(kUserTop, "1", info[1]);
-				layerNumbers->showNumberByPos(kUserTop, info[4]);
+				layerNumbers->showNumberByPos(kUserTop, strScore);
 				break;
 			default:
 				break;
