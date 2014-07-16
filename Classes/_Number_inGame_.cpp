@@ -38,7 +38,7 @@ void LayerNumberInGame::showNumberByPos(int pos, double numberDouble) {
 
 	if (!isRunning) {
 		isRunning = true;
-		this->scheduleOnce(schedule_selector(LayerNumberInGame::runAction2), 1);
+		this->scheduleOnce(schedule_selector(LayerNumberInGame::runAction2), 0.5);
 	}
 }
 
