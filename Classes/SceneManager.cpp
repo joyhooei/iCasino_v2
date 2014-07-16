@@ -492,6 +492,7 @@ bool SceneManager::showLayerChatWindow()
 	//layerNotification->setPosition(ccp(SIZE_SCREEN.width/2, SIZE_SCREEN.width/2));
 	mLayerChatWindow->setVisible(true);
 	mLayerChatWindow->setTouchEnabled(true);
+	mLayerChatWindow->resumeAllAnimations();
 	return true;
 }
 
@@ -500,6 +501,7 @@ bool SceneManager::hideLayerChatWindow()
 	mLayerChatWindow->setPosition(ccp(SIZE_SCREEN.width, mLayerChatWindow->getPositionY()));
 	mLayerChatWindow->setVisible(false);
 	mLayerChatWindow->setTouchEnabled(false);
+	mLayerChatWindow->pauseAllAnimations();
 
 	return true;
 }

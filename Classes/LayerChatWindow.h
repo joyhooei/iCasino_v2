@@ -21,6 +21,7 @@ private:
 	SEL_CallFuncND m_callbackListener;
 
 	vector<string> lstStringMessage;
+	vector<CCArmature*> lstEmo;
 public:
 	~LayerChatWindow();
 	virtual void registerWithTouchDispatcher(void);
@@ -29,6 +30,10 @@ public:
 	virtual void onExit();
 
 	void setCallbackFunc(CCObject* target, SEL_CallFuncND callfun);
+
+	void pauseAllAnimations();
+
+	void resumeAllAnimations();
 
 	virtual bool init(); 
 	void dataLoaded(float percent);
