@@ -729,7 +729,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_NEAD_PLAY_NOTIF(){
                 layerCards->getCardByID(id)->setVisible(false);
             }
             
-            doTogether->releaseVector(arrIDTurn);
+			arrIDTurn.clear();
         }
     }
 }

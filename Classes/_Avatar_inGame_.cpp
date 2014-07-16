@@ -250,6 +250,7 @@ void LayerAvatarInGame::formatAndStore(const char &c1, const char &c2) {
 }
 
 Avatar* LayerAvatarInGame::getUserByPos(int pos){
+	if (pos < 0) return NULL;
     if (this->getChildByTag(pos) == NULL) return NULL;
     return (Avatar*) this->getChildByTag(pos);
 }
