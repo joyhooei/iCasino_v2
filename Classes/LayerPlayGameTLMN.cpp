@@ -812,15 +812,15 @@ void LayerPlayGameTLMN::event_EXT_EVENT_GAME_CHANGE_NOTIF(){
             string isfr = arrList[2];
             string listUser_Card = arrList[4];
             
-            vector<string> arrInfo =layerCards->split(listUser_Card, ';');
+            vector<string> arrInfo = split(listUser_Card, ';');
             //doTogether->split(listUser_Card, ';');
             //
             for (int i = 0; i < arrInfo.size(); i++) {
-                vector<string> arr = layerCards->split(arrInfo[i], '_');
+                vector<string> arr = split(arrInfo[i], '_');
                 //doTogether->split(arrInfo[i], '_');
                 //
                 
-                if (arr.size() < 3) break;
+                if (arr.size() < 4) break;
                 
                 string name = arr[1];
                 string flag = arr[2];
