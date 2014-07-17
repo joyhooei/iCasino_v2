@@ -2176,6 +2176,7 @@ void LayerChanGame::btn_take_click(CCObject *sender, TouchEventType type){
 				params->PutByte("cardsu", pCard->getSuite());
 				boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_REQ_DISCARD,params,lastRoom));
 				GameServer::getSingleton().getSmartFox()->Send(request);
+				break;
 			}
 		}
 		if (count == 0) {
@@ -2226,6 +2227,7 @@ void LayerChanGame::btn_eate_click(CCObject *sender, TouchEventType type){
 				params->PutByte("cardsu", pCard->getSuite());
 				boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_REQ_TAKE_CARD,params,lastRoom));
 				GameServer::getSingleton().getSmartFox()->Send(request);
+				break;
 			}
 		}
 		if (count == 0) {
@@ -2265,6 +2267,7 @@ void LayerChanGame::btn_Chiu_Click(CCObject *sender, TouchEventType type){
 				params->PutByte("cardsu", pCard->getSuite());
 				boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_REQ_CHIU_CARD,params,lstRoom));
 				GameServer::getSingleton().getSmartFox()->Send(request);
+				break;
 			}
 		}
 		if (count == 0)

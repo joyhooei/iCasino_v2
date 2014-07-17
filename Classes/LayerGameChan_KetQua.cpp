@@ -216,8 +216,91 @@ void LayerGameChan_KetQua::OnExtensionResponse(unsigned long long ptrContext, bo
 	}
 	else if (strcmp("grs", cmd->c_str()) == 0)
 	{
-
+		boost::shared_ptr<string> rg = param->GetUtfString("rg");
+		if(rg != NULL)
+		{
+			string strs = rg->c_str();
+			CCLOG("reruilt in Layer Ket qua: %s",rg->c_str());
+			vector<string> listResuilt = mUtils::splitString(strs,';');
+			CCLOG("Winner: %s", listResuilt[2].c_str());
+			CCLOG("Den lang: %s", listResuilt[3].c_str());
+			CCLOG("Win cuoc sac: %s", listResuilt[4].c_str());
+			CCLOG("Den lang cuoc sac: %s", listResuilt[5].c_str());
+			CCLOG("Tong diem: %s", listResuilt[6].c_str());
+		}
 	}
+	else if (strcmp("ntfcurpu", cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+		if (strcmp(usrn->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
+		{
+			this->removeFromParentAndCleanup(true);
+		}
+	}
+}
+
+// format: gameid;gameEndReason;winnerUserName;denLangUserName;winCuocSacList;denLangCuocSacList;totalScore;danhSáchTínhTiền
+// trong đó winCuocSacList hoặc denLangCuocSacList có định dạng: cuoc1:cuoc2:cuocN:...
+// danhSáchTínhTiền: cộng trừ tiền cho các player, thông tin mỗi player có format username:coinReason:coinChange, thông tin mỗi player cách nhau bởi kí tự '/'
+// mẫu: 1;1;phanpc;;2:6;;6;phanpc:0:27000/phanpc1:6:-30000
+
+string LayerGameChan_KetQua::identifyCuoc_sac(string _cuoc){
+	int cuoc = atoi(_cuoc.c_str());
+	switch(cuoc){
+	case 0:
+		return "Xuông";
+	case 1:
+		return "Thông";
+	case 2:
+		return "Chì";
+	case 3:
+		return "Thiên Ù";
+	case 4:
+		return "Địa Ù";
+	case 5:
+		return "Tôm";
+	case 6:
+		return "Lèo";
+	case 7:
+		return "Bạch Định";
+	case 8:
+		return "Tám Đỏ";
+	case 9:
+		return " Kính Tứ Chi";
+	case 10:
+		return " Thập thành";
+	case 11:
+		return "Có Thiên Khai";
+	case 12:
+		return "Ăn Bòn";
+	case 13:
+		return "Ù Bòn";
+	case 14:
+		return "Có Chíu";
+	case 15:
+		return "Chíu Ù";
+	case 16:
+		return "Bạch Thủ";
+	case 17:
+		return "Hoa Rơi cửa phật";
+	case 18:
+		return "Nhà lầu xe hơi, hoa rơi cửa phật";
+	case 19:
+		return "Cá lội sân đình";
+	case 20:
+		return "Cá nhảy đầu thuyền";
+	case 21:
+		return "Chùa đổ nát hoa";
+	case 22:
+		return "Đôi Lèo";
+	case 23:
+		return "Đôi tám đỏ";
+	case 24:
+		return "Đôi Tôm";
+	case 25:
+		return "Bạch thủ Chi";
+	}
+	return "";
 }
 
 void LayerGameChan_KetQua::registerWithTouchDispatcher( void )

@@ -49,6 +49,8 @@ public:
 
 	void setPlayer_U(string uid);
 	void setValueNoc(string _list);
+
+	string identifyCuoc_sac(string _cuoc);
 	// CCBSelectorResolver interfaces
 	virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, const char* pSelectorName);
 	virtual bool onAssignCCBMemberVariable(CCObject* pTarget, const char* pMemberVariableName, cocos2d::CCNode* pNode);
