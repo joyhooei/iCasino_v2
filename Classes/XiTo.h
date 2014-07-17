@@ -67,6 +67,8 @@ private:
     LayerAvatarXiTo *layerAvatar;
     LayerButtonInGame *layerButtons;
 
+	Label *suggest;
+
     int luotChia;
     int chiathem;
     int luotChiathem;
@@ -145,6 +147,8 @@ public:
     void setMoneyAnimate(string uid, string amf);
     void displayPosWinner(int pos);
 
+	string getTypeListCards(long type);
+	void displaySuggestions();
 
 	void createLabelVictype(int pos, long vicType);
 

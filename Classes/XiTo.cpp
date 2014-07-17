@@ -75,14 +75,6 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     CARD_RIGHT_BOTTOM->retain();
     CARD_RIGHT_TOP->retain();
 
-// 	Label *addLabel = Label::create();
-// 	addLabel->setFontName("Marker Felt.ttf");
-// 	addLabel->setText("Thùng Phá Sảnh");
-// 	addLabel->setColor(ccc3(239,235,117));
-// 	addLabel->setFontSize(20);
-// 	addLabel->setPosition(ccp(460, 200));
-// 	this->addChild(addLabel);
-
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
 	getButtonByTag(dTag_btnReady)->setEnabled(true);
@@ -263,6 +255,15 @@ void XiTo::createFrameBets(){
 	layerLabelVictype->setTouchEnabled(false);
 	this->addChild(layerLabelVictype);
 
+	suggest = Label::create();
+	suggest->setFontName("fonts/UVNDaLat_R.TTF");
+	suggest->setText("eeeee");
+	suggest->setColor(ccc3(239,235,117));
+	suggest->setFontSize(22);
+	suggest->setPosition(ccp(lf_card_me - w_card_me / 2 + 10, bt_card_me - h_card_me / 2 - 32));
+	suggest->setVisible(false);
+	this->addChild(suggest);
+
 	frameBetTotal = UIImageView::create();
 	frameBetTotal->loadTexture("theo.png");
 	frameBetTotal->setAnchorPoint(ccp(0,0));
@@ -435,7 +436,11 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
         setDeal = false;
 
         if(!setDeal){
-            list_dealCards_allUser+=*uid+"_"+*lc+"-";
+            list_dealCards_allUser += *uid + "_" + *lc + "-";
+			if(strcmp(uid->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
+			{
+				suggest->setVisible(false);
+			}
         }
         if(chooseCard == true && strcmp(uid->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
             my_DealCards = *lc;
@@ -475,7 +480,7 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
         typeTo = *typeAllow;
         
         if(!setDeal){
-            chiaThem1LaBai();
+			this->runAction(CCSequence::create(CCDelayTime::create(1.0),CCCallFunc::create(this, callfunc_selector(XiTo::chiaThem1LaBai)),NULL));
         }
         else{
             setButtonBet(*uid, *typeAllow);
@@ -527,6 +532,17 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
         CCLOG("EXT_EVENT_RAISE_NOTIF");
     }
     
+	else if (strcmp("hvntf", cmd->c_str()) == 0)
+	{
+		CCLOG("Gia tri bo bai !");
+		boost::shared_ptr<long> vttp = param->GetInt("vttp");
+		if(vttp != NULL){
+			CCLOG("Values myself: %s", getTypeListCards(*vttp).c_str());
+			suggest->setText(getTypeListCards(*vttp).c_str());
+			this->runAction(CCSequence::create(CCDelayTime::create(1.5),CCCallFunc::create(this, callfunc_selector(XiTo::displaySuggestions)),NULL));
+		}
+	}
+
     // Open All Card
     else if(strcmp("opaltf", cmd->c_str())==0){
         boost::shared_ptr<string> uid = param->GetUtfString("uid");
@@ -630,11 +646,24 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     }
     
     //End Game
-    else if(strcmp("endntf", cmd->c_str())==0){
+    else if(strcmp("endntf", cmd->c_str()) == 0){
         //whenEndGame();
 		setVisibleButtonPlay();
 		getButtonByTag(dTag_btnReady)->setEnabled(true);
     }
+
+	else if (strcmp("expmntf", cmd->c_str()) ==  0)
+	{
+		CCLOG("User not enought money !");
+		boost::shared_ptr<string> uid = param->GetUtfString("uid");
+		if (uid != NULL)
+		{
+			if (strcmp(uid->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
+			{
+				layerButtons->eventTouchBtnBack(NULL, TOUCH_EVENT_ENDED);
+			}
+		}
+	}
     
 }
 
@@ -933,7 +962,7 @@ void XiTo::when_playerBet(string uid, long bet, long betValue, long betTotal){
     }
 
     if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-        setBet_Inpos(user_me, CARD_ME, bet, betValue);
+		setBet_Inpos(user_me, CARD_ME, bet, betValue);
     }
     else{
         switch (getPosUserByName(uid, _list_user)) {
@@ -965,8 +994,24 @@ void XiTo::setBet_Inpos(int pos, CCArray *P, long bet, long betValue)
 
 	if (pos == user_me)
 	{
-		labelBet_Me->setText(("Theo "+mUtils::convertMoneyEx((int)betValue)+" $").c_str());
-		frameBet_Me->setVisible(true);
+		if (bet == 0)
+		{
+			for (int i = 0; i < P->count(); i++)
+			{
+				Card *pCard = (Card*)P->objectAtIndex(i);
+				pCard->setOpacity(180);
+			}
+			frameBet_Me->setVisible(false);
+		}
+		else if (bet == GAME_TABLE_STATUS_BET_NONE)
+		{
+			frameBet_Me->setVisible(false);
+		}
+		else{
+			labelBet_Me->setText(("Theo "+mUtils::convertMoneyEx((int)betValue)+" $").c_str());
+			frameBet_Me->setVisible(true);
+			CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/chip_moving.mp3");
+		}
 	}
 	else
 	{
@@ -977,9 +1022,18 @@ void XiTo::setBet_Inpos(int pos, CCArray *P, long bet, long betValue)
 				pCard->initWithFile("card_back.png");
 			}
 			getFrameBetByTag(pos)->setVisible(false);
-		} else {
+		} 
+		
+		else if (bet == GAME_TABLE_STATUS_BET_NONE)
+		{
+			getFrameBetByTag(pos)->setVisible(false);
+		}
+		
+		else 
+		{
 			getFrameBetByTag(pos)->setValueBet((mUtils::convertMoneyEx((int)betValue)+" $").c_str());
 			getFrameBetByTag(pos)->setVisible(true);
+			CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/chip_moving.mp3");
 		}
 	}
 }
@@ -1113,6 +1167,7 @@ void XiTo::setDisplayValueListCard(CCArray *P,string lc){
 }
 
 void XiTo::setVictoryType(string uid,long vicType, string lc){
+	CCLOG("Victye %s", uid.c_str());
     if(strcmp(uid.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
         setDisplayValueListCard(CARD_ME, lc);
 		createLabelVictype(user_me, vicType);
@@ -1141,11 +1196,24 @@ void XiTo::setVictoryType(string uid,long vicType, string lc){
     }
 }
 
+void XiTo::displaySuggestions(){
+	if (CARD_ME->count() != 0)
+	{
+		float X = lf_card_me - w_card_me / 2 + (CARD_ME->count() * (w_card_me / 3 * 2)) / 2;
+		suggest->setPosition(ccp(X, bt_card_me - h_card_me / 2 - 10));
+	}
+	suggest->setVisible(true);
+}
+
 void XiTo::createLabelVictype(int pos, long vicType){
+	suggest->setVisible(false);
 	if (pos != user_me)
 	{
 		getFrameBetByTag(pos)->setVisible(false);
+	} else {
+		frameBet_Me->setVisible(false);	
 	}
+
 	// set Pos
 	float x = -1, y = -1;
 	switch(pos){
@@ -1178,9 +1246,29 @@ void XiTo::createLabelVictype(int pos, long vicType){
 		break;
 	}
 
-	//Settext
+	CCLOG("Values end of game: %s", getTypeListCards(vicType).c_str());
+
+	Label *vic = Label::create();
+	vic->setFontName("fonts/UVNDaLat_R.TTF");
+	vic->setText(getTypeListCards(vicType).c_str());
+
+// 	if(vicType == 0){
+// 		vic->setText("Úp bỏ");
+// 	}
+
+	vic->setColor(ccc3(239,235,117));
+	vic->setFontSize(22);
+	vic->setAnchorPoint(ccp(0,0));
+	vic->setPosition(ccp(x, y));
+	layerLabelVictype->addChild(vic);
+}
+
+string XiTo::getTypeListCards(long type){
 	string txt = "";
-	switch(vicType){
+	switch(type){
+	case 0:
+		txt = "Mậu thầu";
+		break;
 	case 1:
 		txt = "Mậu thầu";
 		break;
@@ -1209,15 +1297,7 @@ void XiTo::createLabelVictype(int pos, long vicType){
 		txt = "Thùng Phá Sảnh";
 		break;
 	}
-
-	Label *vic = Label::create();
-	vic->setFontName("fonts/UVNDaLat_R.TTF");
-	vic->setText(txt);
-	vic->setColor(ccc3(239,235,117));
-	vic->setFontSize(22);
-	vic->setAnchorPoint(ccp(0,0));
-	vic->setPosition(ccp(x, y));
-	layerLabelVictype->addChild(vic);
+	return txt;
 }
 
 void XiTo::setMoneyAnimate(string uid, string amf){
@@ -1309,29 +1389,33 @@ void XiTo::chiaBai(){
     listUser_vitural+=";"+_list_user;
     vector<string> data = mUtils::splitString(listUser_vitural, ';');
     int num = (int)data.size();
-    
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
+
     vector<string> info = mUtils::splitString(data[luotChia], '_');
     if(strcmp(info[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
         luotChia++;
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
         giveDealCardsForPlayer(CARD_ME, lf_card_me, w_card_me, h_card_me, bt_card_me, num);
     }
     else{
         switch(getPosUserByName(info[1], _list_user)){
             case user_leftBottom:
                 luotChia++;
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
                 giveDealCardsForPlayer(CARD_LEFT_BOTTOM, lf_card_left_bottom, w_card_notme, h_card_notme, bt_card_bottom, num);
                 break;
             case user_leftTop:
                 luotChia++;
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
                 giveDealCardsForPlayer(CARD_LEFT_TOP, lf_card_left_top, w_card_notme, h_card_notme, bt_card_top, num);
                 break;
             case user_rightBottom:
                 luotChia++;
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
                 giveDealCardsForPlayer(CARD_RIGHT_BOTTOM, lf_card_right_bottom, w_card_notme, h_card_notme, bt_card_bottom, num);
                 break;
             case user_rightTop:
                 luotChia++;
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
                 giveDealCardsForPlayer(CARD_RIGHT_TOP, lf_card_right_top, w_card_notme, h_card_notme, bt_card_top, num);
                 break;
         }
@@ -1509,27 +1593,31 @@ void XiTo::chiaThem1LaBai(){
     string url = findTypeCard(convertCard(info[1]));
     
     if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
         addCardsForUser(CARD_ME, w_card_me, h_card_me, bt_card_me, lf_card_me, url, realUser);
     }
     else{
         switch (getPosUserByName(info[0], _list_user)) {
             case user_leftBottom:
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
                 addCardsForUser(CARD_LEFT_BOTTOM, w_card_notme, h_card_notme, bt_card_bottom, lf_card_left_bottom, url, realUser);
                 break;
             case user_leftTop:
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
                 addCardsForUser(CARD_LEFT_TOP, w_card_notme, h_card_notme, bt_card_top, lf_card_left_top, url, realUser);
                 break;
             case user_rightBottom:
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
                 addCardsForUser(CARD_RIGHT_BOTTOM, w_card_notme, h_card_notme, bt_card_bottom, lf_card_right_bottom, url, realUser);
                 break;
             case user_rightTop:
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
                 addCardsForUser(CARD_RIGHT_TOP, w_card_notme, h_card_notme, bt_card_top, lf_card_right_top, url, realUser);
                 break;
             default:
                 break;
         }
     }
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
 }
 
 void XiTo::addCardsForUser(CCArray *P,float _width,float _height,float _bottom,float _left,string _img,int l){
@@ -1550,7 +1638,7 @@ void XiTo::addCardsForUser(CCArray *P,float _width,float _height,float _bottom,f
     P->addObject(pCard);
 
     if(chiathem < l){
-        this->runAction(CCSequence::create(CCDelayTime::create(0.3),CCCallFunc::create(this, callfunc_selector(XiTo::chiaThem1LaBai)),NULL));
+        this->runAction(CCSequence::create(CCDelayTime::create(0.4),CCCallFunc::create(this, callfunc_selector(XiTo::chiaThem1LaBai)),NULL));
     }
     else{
         luotChiathem++;

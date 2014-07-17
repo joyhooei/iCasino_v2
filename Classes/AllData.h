@@ -32,10 +32,10 @@ enum{
 // User
 enum{
     kUserLeft = 0,
-    kUserRight,
-    kUserTop,
-    kUserBot,
-    kUserMe
+    kUserRight, // 1
+    kUserTop,   // 2
+    kUserBot,   // 3
+    kUserMe     // 4
 };
 
 // Button tag

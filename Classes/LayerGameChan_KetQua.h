@@ -35,6 +35,8 @@ private:
 
 	string EXT_EVENT_REQ_TRENTAY_DETAIL;
 	string EXT_EVENT_REQ_NOC_DETAIL;// = "rqnocdtl";
+
+	string list_noc;
 public:
 	LayerGameChan_KetQua();
 	virtual ~LayerGameChan_KetQua();
@@ -45,6 +47,10 @@ public:
 
 	CREATE_FUNC(LayerGameChan_KetQua);
 
+	void setPlayer_U(string uid);
+	void setValueNoc(string _list);
+
+	string identifyCuoc_sac(string _cuoc);
 	// CCBSelectorResolver interfaces
 	virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, const char* pSelectorName);
 	virtual bool onAssignCCBMemberVariable(CCObject* pTarget, const char* pMemberVariableName, cocos2d::CCNode* pNode);

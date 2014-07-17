@@ -20,7 +20,6 @@
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
-
 LayerFriend::LayerFriend()
 {
     currTag = tag_friendInfoEnable;

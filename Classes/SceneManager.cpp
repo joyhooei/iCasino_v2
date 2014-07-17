@@ -82,7 +82,7 @@ CCScene* SceneManager::createScene()
 	float sTop  = (sizeScreen.height - scaleMin * HEIGHT_DESIGN) / 2;
 
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.7", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.10", "", 16);
 	nameVersion->setColor(ccWHITE);
 	nameVersion->setPosition(ccp(-WIDTH_DESIGN/2 + 10 + nameVersion->getContentSize().width / 2, -HEIGHT_DESIGN/2 - sTop + 20));
 	layer->addChild(nameVersion, 1001);
@@ -503,6 +503,7 @@ bool SceneManager::showLayerChatWindow()
 	//layerNotification->setPosition(ccp(SIZE_SCREEN.width/2, SIZE_SCREEN.width/2));
 	mLayerChatWindow->setVisible(true);
 	mLayerChatWindow->setTouchEnabled(true);
+	mLayerChatWindow->resumeAllAnimations();
 	return true;
 }
 
@@ -511,6 +512,7 @@ bool SceneManager::hideLayerChatWindow()
 	mLayerChatWindow->setPosition(ccp(SIZE_SCREEN.width, mLayerChatWindow->getPositionY()));
 	mLayerChatWindow->setVisible(false);
 	mLayerChatWindow->setTouchEnabled(false);
+	mLayerChatWindow->pauseAllAnimations();
 
 	return true;
 }

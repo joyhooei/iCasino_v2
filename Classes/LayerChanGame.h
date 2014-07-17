@@ -207,6 +207,9 @@ public:
 	void whenConguoi_ChoU(string uid);
 	void whenConguoi_Chiu(string uid);
 	void XuongU();
+
+	void waitPlayer_ReqU(string uid, string lc);
+
 	void resuiltGame(string resuilt);
 
 	void deleteAllCardFromArray(CCArray *P);

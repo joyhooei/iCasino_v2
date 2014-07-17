@@ -81,7 +81,7 @@ bool LayerChatWindow::init()
 	int widthOfImage = 50;
 	int startPosX = widthOfPage/2 - (widthOfImage+space)*numOfCols/2;
 	int startPosY = space;
-	CCLOG("numOfCols = %d", numOfCols);
+	lstEmo.clear();
 	for( int i = 1; i<=16; i++ ){
 		CCArmature *armature = CCArmature::create(CCString::createWithFormat("onion%d", 1)->getCString());
 		armature->getAnimation()->playByIndex(i-1);
@@ -97,6 +97,8 @@ bool LayerChatWindow::init()
 		_richText->setPosition(ccp( startPosX + 60*(col-1)
 			, -1*row*50 - startPosY - (row+1)*space ));
 		_richText->addTouchEventListener(this,(SEL_TouchEvent)&LayerChatWindow::OnEmoClick);
+
+		lstEmo.push_back( armature );
 
 		UIButton* b = UIButton::create();
 		b->setPosition(ccp( startPosX + 60*(col-1)
@@ -223,5 +225,19 @@ void LayerChatWindow::textFieldEvent( CCObject *pSender, TextFiledEventType type
 		break;
 	default:
 		break;
+	}
+}
+
+void LayerChatWindow::pauseAllAnimations()
+{
+	for( int i = 0; i<lstEmo.size(); i++ ){
+		lstEmo.at(i)->getAnimation()->pause();
+	}
+}
+
+void LayerChatWindow::resumeAllAnimations()
+{
+	for( int i = 0; i<lstEmo.size(); i++ ){
+		lstEmo.at(i)->getAnimation()->resume();
 	}
 }
