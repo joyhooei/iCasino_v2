@@ -68,7 +68,11 @@ void LayerBet_TomCuaCa::valueChanged(CCObject *sender, CCControlEvent controlEve
 	float posX =pSlider->getPositionX();
 	float sliderWidth =pSlider->getContentSize().width;
 	spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
-	lblMoney->setString( CCString::createWithFormat("%.0f xu", ceil(pSlider->getValue()))->getCString() );
+	//lblMoney->setString( CCString::createWithFormat("%.0f xu", ceil(pSlider->getValue()))->getCString() );
+	float myTien = floor(pSlider->getValue());
+	float myTien2 = floor((myTien/1000));
+	lblMoney->setString( CCString::createWithFormat("%.0f xu", myTien2*1000)->getCString() );
+	CCLog("--%f",pSlider->getValue());
 }
 
 // CCBMemberVariableAssigner interface

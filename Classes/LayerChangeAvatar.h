@@ -14,6 +14,7 @@
 #include "cocos-ext.h"
 #include "GameServer.h"
 
+
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
@@ -33,9 +34,8 @@ private:
 public:
     LayerChangeAvatar();
     virtual ~LayerChangeAvatar();
-    
+   boost::shared_ptr<string> token;
     void loadAllMyDatas();
-    
     void initTextField(CCEditBox* txt, const char* hintText);
     
     CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(LayerChangeAvatar, create);
@@ -61,7 +61,9 @@ public:
     virtual cocos2d::extension::CCTableViewCell* tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
     virtual unsigned int numberOfCellsInTableView(cocos2d::extension::CCTableView *table);
     //Server
-    void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+    
+	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	void getToken();
 };
 
 class LayerChangeAvatarLoader : public cocos2d::extension::CCLayerLoader

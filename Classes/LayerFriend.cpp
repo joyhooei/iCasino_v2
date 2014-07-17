@@ -20,16 +20,7 @@
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-#include <jni.h>
-extern "C"
-{
-	jstring Java_com_game_simple_Game3_UpdateConect(JNIEnv *env, jobject thiz)
-	{
-		GameServer::getSingleton()->updateEvent();
-	}
-} 
-#endif
+
 LayerFriend::LayerFriend()
 {
     currTag = tag_friendInfoEnable;
@@ -91,8 +82,8 @@ void LayerFriend::gotoFriendDetails(){
 }
 
 void LayerFriend::gotoInviteFriends(){
-    //removeOldView();
-	/*CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+   
+	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	LayerInviteFriends* mLayer;
@@ -103,13 +94,8 @@ void LayerFriend::gotoInviteFriends(){
 		ccbReader->release();
 		mLayer->setZOrder(INT_MAX);
 	}
-    //currNodeView = mLayer;
-    //*/
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-	inviteFB();
-#else
-	CCLog("Khong ho tro nen tang nay");
-#endif
+   
+
 }
 
 // CCBSelectorResolver interface

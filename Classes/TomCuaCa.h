@@ -49,7 +49,11 @@ private:
 	float _count;
 	boost::shared_ptr<string> _id_me;
 	string _list_user;
+	vector<string> arrName;
+	vector<int> arrMoney;
+	vector<double> arrMoneyDouble;
 	//Các button trong game
+	
 
 	UILayer *uLayer;
 	UIButton *btnReady;
@@ -96,6 +100,7 @@ public:
 	virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	 virtual void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	vector<string> TCCsplit(string &S,const char &str);
 	void updateUser(string list);
 	string find_ChuPhong(string listUser);
@@ -107,7 +112,7 @@ public:
 	void whenResuiltGame(string rg);
 	void whenGameEnd();
 	int getPosUserByName(string uid,string _list_user);
-
+	void playSound(string soundPath);
 	void clickBtn(CCObject* obj, TouchEventType type);
 
 

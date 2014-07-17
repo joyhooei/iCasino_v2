@@ -22,14 +22,7 @@
         </activity>
           <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
         <activity android:name="com.facebook.LoginActivity" android:label="@string/app_name"></activity>
-        <activity android:name="com.game.simple.InviteFriends" 
-            		android:label="@string/app_name"
-            		></activity> 
-            		<activity android:name="com.game.simple.Facebook_fragment" 
-            android:label="@string/app_name" 
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen"/> 
-       
+
     </application>
     <supports-screens android:largeScreens="true"
                       android:smallScreens="true"

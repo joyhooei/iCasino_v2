@@ -11,9 +11,34 @@
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
 #include "platform/android/jni/Android.h"
+
+
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+#include <jni.h>
+extern "C"
+{
+	void Java_com_game_simple_Game3_setlinkAvata(JNIEnv *env,jobject thiz,jstring link)
+	{
+
+		const char* str;
+		str = env->GetStringUTFChars(link, false);
+		std::string tempStr(str);
+		
+		if(tempStr.compare(" ")!=0)
+		{
+			boost::shared_ptr<ISFSObject> params (new SFSObject());
+			params->PutUtfString("aal", tempStr.c_str());
+			boost::shared_ptr<IRequest> request (new ExtensionRequest("ruali",params));
+			GameServer::getSingleton().getSmartFox()->Send(request);	
+		}
+		else
+			CCLog("Upload fail!");
+	}
+} 
+#endif
 
 LayerChangeAvatar::LayerChangeAvatar()
 {
@@ -21,6 +46,12 @@ LayerChangeAvatar::LayerChangeAvatar()
 	tblAvatar = NULL;
     //
     GameServer::getSingleton().addListeners(this);
+	getToken();
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+	startTimer();
+#else
+	CCLog("Ko ho tro nen tang nay !");
+#endif
 }
 
 LayerChangeAvatar::~LayerChangeAvatar()
@@ -28,6 +59,11 @@ LayerChangeAvatar::~LayerChangeAvatar()
     GameServer::getSingleton().removeListeners(this);
     //
     CC_SAFE_RELEASE(nodeListAvatar);
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+	stopTimer();
+#else
+	CCLog("Ko ho tro nen tang nay !");
+#endif
 }
 
 void LayerChangeAvatar::loadAllMyDatas(){
@@ -47,7 +83,15 @@ SEL_MenuHandler LayerChangeAvatar::onResolveCCBCCMenuItemSelector(cocos2d::CCObj
 
 void LayerChangeAvatar::onButtonUpdate(CCObject* pSender){
     CCLOG("onButtonUpdate");
-    
+	
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+{
+		uploadAvatar(token->c_str());
+		getToken();
+		
+}
+#endif
+
 }
 void LayerChangeAvatar::onButtonDefault(CCObject* pSender){
     CCLOG("onButtonDefault");
@@ -104,6 +148,7 @@ void LayerChangeAvatar::tableCellTouched(cocos2d::extension::CCTableView *table,
 // Hàm set giá trị width height cho 1 cell table view
 CCSize LayerChangeAvatar::tableCellSizeForIndex(cocos2d::extension::CCTableView *table, unsigned int idx){
     return CCSizeMake(120, 123);
+	//return CCSizeMake(100, 100);
 }
 
 // Hàm này tạo 1 tableview Row để add vào table view
@@ -147,7 +192,13 @@ void LayerChangeAvatar::OnExtensionResponse(unsigned long long ptrContext, boost
     
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
     boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
-//    if(strcmp("gaic", cmd->c_str())==0){
+	if(strcmp("ire", cmd->c_str())==0)
+		{
+				token = param->GetUtfString("ire");
+				
+				CCLog("--%s",token->c_str());
+			}
+//   if(strcmp("gaic", cmd->c_str())==0){
 //        //Insert datas to textfield
 //        txtName->setText( param->GetUtfString("aN")->c_str() );
 //        txtPhoneNumber->setText( param->GetUtfString("aMo")->c_str() );
@@ -156,4 +207,13 @@ void LayerChangeAvatar::OnExtensionResponse(unsigned long long ptrContext, boost
 //        txtStatus->setText( "" );
 //        btnSex->setPosition(ccp(*param->GetBool("aS")==true ? 198 : 140, btnSex->getPositionY()));
 //    }
+}
+void LayerChangeAvatar::getToken()
+{
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("aI", GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
+	//boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("ire",params));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+	CCLog("---%s",GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
 }

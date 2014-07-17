@@ -21,12 +21,21 @@ LayerInviteFriends::LayerInviteFriends()
 {
 	lblThongBao=NULL;
 	lblMoney=NULL;
-	
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+	startTimer();
+#else
+	CCLog("Ko ho tro nen tang nay !");
+#endif
 }
 
 LayerInviteFriends::~LayerInviteFriends()
 {
 	CCLOG("LayerInviteFriends::~LayerInviteFriends()");
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+	stopTimer();
+#else
+	CCLog("Ko ho tro nen tang nay !");
+#endif
 }
 
 // CCBSelectorResolver interface

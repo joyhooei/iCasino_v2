@@ -21,15 +21,6 @@ bool NumberInTomCuaCa::init() {
     
     return true;
 }
-void NumberInTomCuaCa::showNumberByPos(int pos, double numberDouble) {
-	arrPos.push_back(pos);
-	arrNumberDouble.push_back(numberDouble);
-
-	if (!isRunning) {
-		isRunning = true;
-		this->scheduleOnce(schedule_selector(NumberInTomCuaCa::runAction2), 1);
-	}
-}
 void NumberInTomCuaCa::showNumberByPos(int pos, string numberString) {
 	arrPos.push_back(pos);
 	arrNumberString.push_back(numberString);
@@ -37,6 +28,15 @@ void NumberInTomCuaCa::showNumberByPos(int pos, string numberString) {
 	if (!isRunning) {
 		isRunning = true;
 		this->scheduleOnce(schedule_selector(NumberInTomCuaCa::runAction), 1);
+	}
+}
+void NumberInTomCuaCa::showNumberByPos(int pos, double numberDouble) {
+	arrPos.push_back(pos);
+	arrNumberDouble.push_back(numberDouble);
+
+	if (!isRunning) {
+		isRunning = true;
+		this->scheduleOnce(schedule_selector(NumberInTomCuaCa::runAction2), 1);
 	}
 }
 

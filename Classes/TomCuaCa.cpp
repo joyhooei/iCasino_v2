@@ -201,6 +201,7 @@ TomCuaCa::TomCuaCa(){
 		//frame bet
 		betTom = FrameBet::create();
 		betTom->setPosition(218,238);
+		
 		betTom->setValueBet("  Cược");
 		uLayer->addChild(betTom);
 		
@@ -569,14 +570,43 @@ bool TomCuaCa::init(){
 	if(!CCLayer::init()){
 		return false;
 	}
-	
+	for (int i = 0; i < arrName.size(); i++) {
+		lAvatar->setMoney(lAvatar->getPosByName(arrName[i]), arrMoneyDouble[i]);
+	}
+	arrName.clear();
+	arrMoney.clear();
+	arrMoneyDouble.clear();
 	return true;
+	lAvatar->setUnReadyAllUser();
 }
 void TomCuaCa::createBackgrounds(){
 
 	CCSprite *bg = CCSprite::create("back.png");
 	bg->setPosition(ccp(WIDTH_DESIGN/2,HEIGHT_DESIGN/2-20));
 	this->addChild(bg);
+	// thông tin bàn chơi và mức cược
+	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
+	boost::shared_ptr<string> param = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
+	string paramString = param->c_str();
+	vector<string> arrInfo = TCCsplit(paramString, '@');
+	string money = arrInfo.at(0);
+
+	mUtils mu;
+	CCString *name = mUtils::getGameNameByID(id);
+	//string name = "TLMN";
+	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
+
+	string result = "";
+	if (name->length() > 0 && moneyConvert.length() > 0)
+	{
+		result = name->getCString();
+		result += (" - cược:" + moneyConvert);
+	}
+	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	nameGame->setPosition(ccp(400, 222));
+	nameGame->setColor(ccWHITE);
+	nameGame->setOpacity(150);
+	uLayer->addChild(nameGame);
 	
 }
 void TomCuaCa::createButtons(){
@@ -985,4 +1015,26 @@ void TomCuaCa::getToken()
 	boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_REQUEST_TOKEN),params));
 	GameServer::getSingleton().getSmartFox()->Send(request);
 	CCLog("---%s",GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
+}
+void TomCuaCa::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent) {
+	CCLOG("Update User Variables");
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
+	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
+
+	//string money = boost::to_string(*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	int    money = (int) (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	double moneyDouble = (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	string name = boost::to_string(*ptrNotifiedUser->Name());
+
+	CCLog("OnSmartFoxUserVariableUpdate: name= %s, money= %d", name.c_str(), money);
+
+	arrName.push_back(name);
+	arrMoney.push_back(money);
+	arrMoneyDouble.push_back(moneyDouble);
+}
+void TomCuaCa::playSound( string soundPath )
+{
+	if( mUtils::isSoundOn() )
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
 }

@@ -33,6 +33,17 @@
 #include "LayerCreateAccount.h"
 
 template<> SceneManager* SingLeton<SceneManager>::mSingleton = 0;
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+#include <jni.h>
+extern "C"
+{
+	void Java_com_game_simple_Game3_Update(JNIEnv *env,jobject thiz)
+	{
+		GameServer::getSingleton().updateEvent();
+
+	}
+} 
+#endif
 SceneManager* SceneManager::getSingletonPtr(void)
 {
 	return mSingleton;
