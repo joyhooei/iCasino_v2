@@ -410,7 +410,8 @@ void LayerAvatarInGame::updateUsers() {
 
 	// Mỗi khi nhảy tới đây thì cần làm 2 việc sau:
 	// 1. Làm "sạch" toàn bộ các Avatar: 
-	//   1.1 Avatar của mình: ẩn đi, trạng thái ready=false, BtnReady -> title="Sẵn sàng", -> visible=false
+	//   1.1 Avatar của mình: ẩn đi, 
+	//						  trạng thái ready=false, BtnReady -> title="Sẵn sàng", -> visible=false???
 	//                        ai="";
 	//	 1.2 Avatar user khác hiện lên các InviteUser, ready=false
 	//   1.3 Toàn bộ thông tin về tiền được reset
@@ -429,11 +430,11 @@ void LayerAvatarInGame::updateUsers() {
 
 	avaMe->setVisible(false);
 	avaMe->setTouchEnabled(false);
-	avaMe->setReady(false);
+	//avaMe->setReady(false);
 	avaMe->setName("");
 	avaMe->setMoney("");
 	avaMe->setAI("");
-	Button *btnReady=NULL;
+	/*Button *btnReady=NULL;
 	LayerPlayGamePhom *layerGamePhom;
 	LayerPlayGameTLMN *layerGameTLMN;
 	switch (this->typeGame) {
@@ -448,7 +449,7 @@ void LayerAvatarInGame::updateUsers() {
 	}
 	if (btnReady == NULL) return;
 	btnReady->setTitleText("Sẵn sàng");
-	btnReady->setEnabled(false);
+	btnReady->setEnabled(false);*/
 
 	avaLeft->setVisibleLayerInvite(true);
 	avaLeft->setReady(false);
@@ -518,7 +519,7 @@ void LayerAvatarInGame::updateUsers() {
 			{
 				user->setVisible(true);
 				user->setTouchEnabled(true);
-				btnReady->setEnabled(true);
+				//btnReady->setEnabled(true);
 			}
 			else {
 				user->setVisibleLayerInvite(false);
