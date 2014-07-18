@@ -6,6 +6,7 @@
 //
 //
 #include "TomCuaCa.h"
+#include "_Avatar_.h"
 #include "_Background_inGame_.h"
 #include "_Button_inGame_.h"
 #include "Requests/ExtensionRequest.h"
@@ -92,16 +93,10 @@ float TomCuaCa::convertResult(string rs)
 	return -1;
 }
 TomCuaCa::TomCuaCa(){
-
+	if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
 		
-		
-
-		getToken();
-
-
-
 		uLayer = UILayer::create();
 		uLayer->addWidget(GUIReader::shareReader()->widgetFromJsonFile("TomCuaCa/scroll/TomCuaCa_1_1.json"));
 
@@ -272,7 +267,7 @@ void TomCuaCa::updateUser(string list){
 		if(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])==NULL){
 			continue;
 		}
-
+		double mon;
 		int _money = 0;
 		string _name = "";
 		string _url = "";
@@ -286,6 +281,7 @@ void TomCuaCa::updateUser(string list){
 		}
 		if(money != NULL){
 			_money = (int)*money;
+			mon= (int)*money;
 		}
 		if (url != NULL) {
 			_url=url->c_str();
@@ -294,7 +290,7 @@ void TomCuaCa::updateUser(string list){
 		if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
 			
 			lAvatar->setName(kUserMe, _name.c_str());
-			lAvatar->getUserByPos(kUserMe)->setMoney(_money);
+			lAvatar->getUserByPos(kUserMe)->setMoney(mon);
 			lAvatar->getUserByPos(kUserMe)->setIcon(_url);
 
 
@@ -314,7 +310,7 @@ void TomCuaCa::updateUser(string list){
 			case kUserLeft:
 				lAvatar->getUserByPos(kUserLeft)->setVisibleLayerInvite(false);
 				lAvatar->setName(kUserLeft, _name.c_str());
-				lAvatar->getUserByPos(kUserLeft)->setMoney(_money);
+				lAvatar->getUserByPos(kUserLeft)->setMoney(mon);
 				lAvatar->getUserByPos(kUserLeft)->setIcon(_url);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserLeft, true);
@@ -325,7 +321,7 @@ void TomCuaCa::updateUser(string list){
 			case kUserRight:
 				lAvatar->getUserByPos(kUserRight)->setVisibleLayerInvite(false);
 				lAvatar->setName(kUserRight, _name.c_str());
-				lAvatar->getUserByPos(kUserRight)->setMoney(_money);
+				lAvatar->getUserByPos(kUserRight)->setMoney(mon);
 				lAvatar->getUserByPos(kUserRight)->setIcon(_url);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserRight, true);
@@ -336,7 +332,7 @@ void TomCuaCa::updateUser(string list){
 			case kUserTop:
 				lAvatar->getUserByPos(kUserTop)->setVisibleLayerInvite(false);
 				lAvatar->setName(kUserTop, _name.c_str());
-				lAvatar->getUserByPos(kUserTop)->setMoney(_money);
+				lAvatar->getUserByPos(kUserTop)->setMoney(mon);
 				lAvatar->getUserByPos(kUserTop)->setIcon(_url);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserTop, true);
@@ -347,7 +343,7 @@ void TomCuaCa::updateUser(string list){
 			case kUserBot:
 				lAvatar->getUserByPos(kUserBot)->setVisibleLayerInvite(false);
 				lAvatar->setName(kUserBot, _name.c_str());
-				lAvatar->getUserByPos(kUserBot)->setMoney(_money);
+				lAvatar->getUserByPos(kUserBot)->setMoney(mon);
 				lAvatar->getUserByPos(kUserBot)->setIcon(_url);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserBot, true);
@@ -357,6 +353,7 @@ void TomCuaCa::updateUser(string list){
 			}
 		}
 	}
+	
 }
 string TomCuaCa::find_ChuPhong(string listUser){
 	vector<string> arrUser = TCCsplit(listUser,';');
@@ -502,8 +499,7 @@ void TomCuaCa::whenResuiltGame(string rg){
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 	this->unscheduleUpdate();
 	loading->setPercent(0);
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
-		"sounds/game_tomcuaca/quay.mp3");
+	playSound("sounds/game_tomcuaca/quay.mp3");
 	
 	vector<string> resuilt = TCCsplit(rg, '_');
 	
@@ -557,19 +553,22 @@ void TomCuaCa::whenGameEnd(){
 	lAvatar->setReady(kUserLeft,false);
 	lAvatar->setReady(kUserRight,false);
 	lAvatar->setReady(kUserBot,false);
+	if(mUtils::isSoundOn())
+		{
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
+	}
 }
 	 TomCuaCa::~TomCuaCa(){
 	GameServer::getSingleton().removeListeners(this);
 	//this->removeAllChildren();
-
+	if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
-
 }
 bool TomCuaCa::init(){
 	if(!CCLayer::init()){
 		return false;
 	}
+	CCLog("on init");
 	for (int i = 0; i < arrName.size(); i++) {
 		lAvatar->setMoney(lAvatar->getPosByName(arrName[i]), arrMoneyDouble[i]);
 	}
@@ -593,7 +592,7 @@ void TomCuaCa::createBackgrounds(){
 
 	mUtils mu;
 	CCString *name = mUtils::getGameNameByID(id);
-	//string name = "TLMN";
+	
 	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
 
 	string result = "";
@@ -627,7 +626,7 @@ void TomCuaCa::createAvatars(){
 	lAvatar->getUserByPos(kUserMe)->setFlag(true);
 	lAvatar->getUserByPos(kUserMe)->setMoney(*inv);
 	uLayer->addChild(lAvatar);
-
+	
 }
 
 void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -874,24 +873,28 @@ void TomCuaCa::clickBet(int _tag)
 }
 void TomCuaCa::bet(int aid, string tienBet)
 {
+
+	double mon = atoi(tienBet.c_str());
+	string bet_ = convertMoneyFromDouble_Detail(mon);
+	CCLog("-----%s",bet_.c_str());
 	switch (aid) {
 	case 1:
-		betNai->setValueBet((tienBet+" $").c_str());
+		betNai->setValueBet((bet_+" $").c_str());
 		break;
 	case 2:
-		betRuou->setValueBet((tienBet+" $").c_str());
+		betRuou->setValueBet((bet_+" $").c_str());
 		break;
 	case 3:
-		betGa->setValueBet((tienBet+" $").c_str());
+		betGa->setValueBet((bet_+" $").c_str());
 		break;
 	case 4:
-		betCa->setValueBet((tienBet+" $").c_str());
+		betCa->setValueBet((bet_+" $").c_str());
 		break;
 	case 5:
-		betCua->setValueBet((tienBet+" $").c_str());
+		betCua->setValueBet((bet_+" $").c_str());
 		break;
 	case 6:
-		betTom->setValueBet((tienBet+" $").c_str());
+		betTom->setValueBet((bet_+" $").c_str());
 		break;
 	default:
 		break;
@@ -911,11 +914,12 @@ void TomCuaCa::hienKetQua()
 	{
 		vector<string> info = TCCsplit(_kq[i], '@');
 		string _temp =info[1];
+		
+		//double mon =atoi(info[1].c_str());
 		string _money="";
-		string _dola="";
 
-			if(_temp[0]!='-'){_money="+"+info[1]+_dola;}
-			else{_money=info[1]+_dola;}
+			if(_temp[0]!='-'){_money="+"+info[1];}
+			else{_money=info[1];}
 
 		if(strcmp(info[0].c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0)
 		{
@@ -923,11 +927,11 @@ void TomCuaCa::hienKetQua()
 			layerNumbers->showNumberByPos(kUserMe, _money);
 			if(_temp[0]!='-'){
 				
-				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/win.mp3");
+				playSound("sounds/game_tomcuaca/win.mp3");
 			}
 			else{
 				
-				CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/lose.mp3");
+				playSound("sounds/game_tomcuaca/lose.mp3");
 			}
 			CCLog("me");
 		}
@@ -958,6 +962,7 @@ void TomCuaCa::hienKetQua()
 }//void
 void TomCuaCa::hienOketqua()
 {
+	CCActionInterval* action1 = CCBlink::create(2, 10);
 	CCLog("here");
 	if(kq1=="1" || kq2=="1" || kq3=="1")
 		btnNai->setBright(false);
@@ -1037,4 +1042,153 @@ void TomCuaCa::playSound( string soundPath )
 {
 	if( mUtils::isSoundOn() )
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
+}
+string TomCuaCa::convertMoney(int money){
+	//ostringstream oss;
+	//oss<<money;
+	//return oss.str();
+
+	ostringstream oss;
+	/// 
+	if (money < 1000) {
+		oss.clear();
+		oss<<money;
+		return (oss.str() + "");
+	}
+	else if (money >= 1000 && money <= 999999) {
+		string hangTram;
+		string hangNghin;
+
+		ostringstream oss1;
+		// Nghin
+		oss1.clear();
+		oss1<<(money / 1000);
+		hangNghin = oss1.str();
+
+		ostringstream oss2;
+		// tram
+		int hTram = (money % 1000);
+		oss2.clear();
+		oss2<<hTram;
+		if (hTram < 10) {
+			hangTram = "00";
+		}
+		else if (hTram >= 10 && hTram < 100) {
+			hangTram = "0";
+		}
+		hangTram += oss2.str();
+
+		return (hangNghin + "," + hangTram + "");
+	}
+	else if (money >= 1000000) {
+		string hangTrieu;
+		string hangNghin;
+		string hangTram;
+
+		ostringstream oss1;
+		// Trieu
+		oss1.clear();
+		oss1<<(money / 1000000);
+		hangTrieu = oss1.str();
+
+		// Nghin
+		int hNghin = (money - (money / 1000000) * 1000000) / 1000;
+		ostringstream oss2;
+		oss2.clear();
+		oss2<<hNghin;
+
+		if (hNghin < 10)
+		{
+			hangNghin = "00";
+		}
+		else if (hNghin >= 10 && hNghin < 100)
+		{
+			hangNghin = "0";
+		}
+		hangNghin += oss2.str();
+
+		// Tram
+		int hTram = (money % 1000);
+		ostringstream oss3;
+		oss3.clear();
+		oss3<<hTram;
+
+		if (hTram < 10)
+		{
+			hangTram = "00";
+		}
+		else if (hTram >= 10 && hTram < 100)
+		{
+			hangTram = "0";
+		}
+		hangTram += oss3.str();
+
+		return (hangTrieu + "," + hangNghin + "," + hangTram + "");
+	}
+
+	return "";
+}
+
+string TomCuaCa::convertMoneyFromDouble(double money) {
+	// tiền tỷ
+	if (money >= 1000000000) {
+		int ti = money / 1000000000;
+		ostringstream os;
+		os<<ti;
+		return (os.str() + " tỷ");
+	} else if (money >= 1000000) {
+		// tiền triệu
+		int ti = money / 1000000;
+		ostringstream os;
+		os<<ti;
+		return (os.str() + " triệu");
+	} else if (money >= 1000) {
+		string hangTram;
+		string hangNghin;
+
+		// Nghin
+		ostringstream oss1;
+		oss1.clear();
+		oss1<<(int)(money / 1000);
+		hangNghin = oss1.str();
+
+		ostringstream oss2;
+		// tram
+		int hTram = ((int)money % 1000);
+		oss2.clear();
+		oss2<<hTram;
+		if (hTram < 10) {
+			hangTram = "00";
+		}
+		else if (hTram >= 10 && hTram < 100) {
+			hangTram = "0";
+		}
+		hangTram += oss2.str();
+
+		return (hangNghin + "," + hangTram + " xu");
+	} else {
+		ostringstream os;
+		os<<money;
+		return (os.str() + " xu");
+	}
+
+	return "!";
+}
+
+string TomCuaCa::convertMoneyFromDouble_Detail(double money) {
+	if (money < 1000) {
+		ostringstream os;
+		os<<money;
+		return (os.str());
+	}
+	else {
+		money = money / 1000;
+
+		if (money > 2000000000) {
+			return convertMoneyFromDouble(money * 1000);
+		}
+		else return (convertMoney((int)money) + "k");
+	}
+
+
 }

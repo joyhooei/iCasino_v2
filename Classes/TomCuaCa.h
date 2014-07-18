@@ -127,6 +127,9 @@ public:
 	void hienOketqua();
 	virtual void onExit();
 	void getToken();
+	string convertMoney(int money);
+	string convertMoneyFromDouble(double money);
+	string convertMoneyFromDouble_Detail(double money);
 };
 
 #endif /* defined(__iCasino_v2__TomCuaCa__) */
