@@ -454,12 +454,18 @@ string Avatar::convertMoney(int money){
 
 string Avatar::convertMoneyFromDouble(double money) {
 	// tiền tỷ
+	string mString;
 	if (money >= 1000000000) {
 		int ti = money / 1000000000;
-		ostringstream os;
-		os<<ti;
-		return (os.str() + " tỷ");
-	} else if (money >= 1000000) {
+		mString = convertMoney(ti);
+		return (mString + " tỷ");
+	} else {
+		return (convertMoney((int)money));
+	}
+		
+		
+		
+		/*if (money >= 1000000) {
 		// tiền triệu
 		int ti = money / 1000000;
 		ostringstream os;
@@ -493,13 +499,30 @@ string Avatar::convertMoneyFromDouble(double money) {
 		ostringstream os;
 		os<<money;
 		return (os.str() + " xu");
-	}
+	}*/
 
 	return "!";
 }
 
 string Avatar::convertMoneyFromDouble_Detail(double money) {
-	if (money < 1000) {
+	// nếu tiền nhỏ hơn hàng tỉ: hiển thị => 123,456,789 xu 
+	// nếu tiền lên tới hàng tỉ: 
+	//		hàng nghìn tỷ: dùng chữ => 2000 tỷ
+	//		dưới hàng nghìn tỷ: => 123,456,789k (~123 tỷ...)
+
+	if (money < 1000000000) {
+		return convertMoney(money) + " xu";
+	}
+	else {
+		money = money / 1000;
+
+		if (money > 1000000000) {
+			return convertMoneyFromDouble(money * 1000);
+		}
+		else return (convertMoney((int)money) + "k");
+	}
+
+	/*if (money < 1000) {
 		ostringstream os;
 		os<<money;
 		return (os.str() + " xu");
@@ -511,7 +534,7 @@ string Avatar::convertMoneyFromDouble_Detail(double money) {
 			return convertMoneyFromDouble(money * 1000);
 		}
 		else return (convertMoney((int)money) + "k xu");
-	}
+	}*/
 	
 
 }

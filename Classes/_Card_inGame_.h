@@ -133,7 +133,7 @@ public:
     CCPoint getStartPositionCardUserTop_Hit_TienLen();
     CCPoint getStartPositionCardUserBot_Hit_TienLen();
     CCPoint getStartPositionCardByPos_TienLen(int pos);
-    
+    // số quân bài còn lại trên tay
     void setCountCardByPos(int pos, int count);
 
 	void showCardOnHandAll();

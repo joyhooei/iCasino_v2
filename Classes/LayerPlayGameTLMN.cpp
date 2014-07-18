@@ -250,13 +250,17 @@ void LayerPlayGameTLMN::initGame() {
     // thông tin tiền hiện tại của Users
     for (int i = 0; i < arrName.size(); i++) {
         layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoneyDouble[i]);
-    }
-    arrName.clear();
+    
+		// hiển thị số bài trên tay của mỗi người (default=13)
+		layerCards->setCountCardByPos(layerAvatars->getPosByName(arrName[i]), 13);
+	}
+	arrName.clear();
 	arrMoney.clear();
 	arrMoneyDouble.clear();
 
     // unready all
     layerAvatars->setUnReadyAllUser();
+
 }
 
 

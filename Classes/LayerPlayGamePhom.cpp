@@ -252,11 +252,11 @@ void LayerPlayGamePhom::createAvatars() {
     layerAvatars = LayerAvatarInGame::create();
     this->addChild(layerAvatars);
 
-	/*avatarMe = new Avatar(true);
-	layerAvatars->addChild(avatarMe);
+	avatarMe = new Avatar(false);
+	avatarMe->setVisibleLayerInvite(false);
+	//layerAvatars->addChild(avatarMe);
 
 	avatarMe->setPosition(ccp(300, 300));
-	//avatarMe->setMoney(323123456789.0);
 
 	arrMoneyDoubleTest.push_back(12);
 	arrMoneyDoubleTest.push_back(3412);
@@ -265,12 +265,12 @@ void LayerPlayGamePhom::createAvatars() {
 	arrMoneyDoubleTest.push_back(5435345);
 	arrMoneyDoubleTest.push_back(12123502);
 	arrMoneyDoubleTest.push_back(435670324);
-	arrMoneyDoubleTest.push_back(3450091231);
-	arrMoneyDoubleTest.push_back(11233242342);
-	arrMoneyDoubleTest.push_back(121231231231);
-	arrMoneyDoubleTest.push_back(1212312312314);
-	arrMoneyDoubleTest.push_back(12123123123176);
-	arrMoneyDoubleTest.push_back(121231231231234);*/
+	arrMoneyDoubleTest.push_back(3450091231); // hơn 3 tỷ
+	arrMoneyDoubleTest.push_back(11233242342); // hơn 11 tỷ
+	arrMoneyDoubleTest.push_back(121231231231); // 121 tỷ
+	arrMoneyDoubleTest.push_back(1212312312314); // 1212 tỷ
+	arrMoneyDoubleTest.push_back(12123123123176); // 12123 tỷ
+	arrMoneyDoubleTest.push_back(121231231231234); // 121231 tỷ
 
 }
 

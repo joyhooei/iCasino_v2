@@ -106,9 +106,6 @@ bool LayerAvatarInGame::init() {
     chuong->setAnchorPoint(ccp(0,0));
     chuong->setPosition(ccp(0,0));
     this->addChild(chuong);
-    
-	
-
 
     return true;
 }

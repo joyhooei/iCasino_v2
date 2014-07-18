@@ -859,10 +859,12 @@ void LayerCardInGame::actionSortCard(vector<int> arrCardID) {
 void LayerCardInGame::actionSortCardByTienLen() {
     
     int length = arrCardOnHand->count();
+	Card *cardi, *cardj;
+
     for (int i = 0; i < length - 1; i++) {
         for (int j = i + 1; j < length; j++) {
-            Card *cardi = (Card*) arrCardOnHand->objectAtIndex(i);
-            Card *cardj = (Card*) arrCardOnHand->objectAtIndex(j);
+            cardi = (Card*) arrCardOnHand->objectAtIndex(i);
+            cardj = (Card*) arrCardOnHand->objectAtIndex(j);
             
             if (cardi->getID() > cardj->getID()) {
                 arrCardOnHand->removeObjectAtIndex(i);
@@ -873,7 +875,10 @@ void LayerCardInGame::actionSortCardByTienLen() {
             }
         }
     }
-    
+
+	cardi->release();
+    cardj->release();
+
     refreshCardOnHand();
 }
 
@@ -1750,6 +1755,17 @@ void LayerCardInGame::showCardOnHandByPos_List(int kUser, string lc) {
 		int id = atoi(arrIDString.at(i).c_str());
 		if (id > 0) arrID.push_back(id);
 	}
+
+	// xep lai
+	int i, j, tg;
+	for (i = 0; i < arrID.size() - 1; i++) 
+		for (j = i + 1; j < arrID.size(); j++) {
+			if (arrID.at(j) > arrID.at(i)) {
+				tg = arrID.at(i);
+				arrID.at(i) = arrID.at(j);
+				arrID.at(j) = tg;
+			}
+		}
 
 	showCardOnHandByPos_Arr(kUser, arrID);
 }
