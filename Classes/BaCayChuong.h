@@ -17,7 +17,7 @@
 #include "_LayerBet_.h"
 #include "_Chat_inGame_.h"
 #include "_Button_inGame_.h"
- 
+
 using namespace cocos2d;
 using namespace cocos2d::ui;
 using namespace Sfs2X; 
@@ -74,7 +74,7 @@ public:
 	void createLayerChat();
 
 	void eventListUser(string listusers);
-	void eventGameBet_NTF(string uid, string gbv);
+	void eventGameBet_NTF(string uid, int gbv);
 
 	void action_UserRejoinGame(string lsUser);
 	void action_LatBai(string listCard,string uid, bool tua);

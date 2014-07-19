@@ -52,12 +52,12 @@ private:
 	CardBaCay *layerCards;
 	LayerChatInGame *layerChat;
 	BetGame3Cay *layerBet;
-	
+
 public:
 	BaCayNormal();
 	~BaCayNormal();
 	void onExit();
-	
+
 	void createBackgrounds();
 	void createAvatars();
 	void createButtons();
@@ -67,9 +67,9 @@ public:
 	//Reconnect
 	void eventListUserUpdate(string listusers);
 	void whenUserRejoinOrGuess(string listUser);
-	
+
 	void LatBai(string listCard,string uid, bool tua);
-	
+
 	void whenUserReady(string uid);
 	void whenUserUnready(string uid);
 	void whenGameStart();

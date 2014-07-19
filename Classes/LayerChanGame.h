@@ -17,26 +17,26 @@
 #include "CardChan.h"
 #include "NotificationCallback.h"
 #include "_Button_inGame_.h"
+#include "_Layer_CardChan_.h"
 
-#define PI 3.141592653589
 using namespace cocos2d;
 using namespace cocos2d::ui;
 using namespace Sfs2X;
 
-enum{
-	CARD_ORIGINATION_CHIA_BAI = 0,
-	CARD_ORIGINATION_BOC_NOC,
-	CARD_ORIGINATION_AN_CUA_TREN,
-	CARD_ORIGINATION_AN_CUA_TRI,
-	CARD_ORIGINATION_CHIU,
-	CARD_ORIGINATION_TRA_CUA,
-	CARD_ORIGINATION_BY_DISCARD,
-	// discard
-	CARD_ORIGINATION_BY_DUOI,
-	// đánh đi cây bài vừa bốc nọc ở cửa trì
-	CARD_ORIGINATION_BY_AN_DUOI,
-	CARD_ORIGINATION_BY_TRANSFER_TREN_2_DUOI
-};
+// enum{
+// 	CARD_ORIGINATION_CHIA_BAI = 0,
+// 	CARD_ORIGINATION_BOC_NOC,
+// 	CARD_ORIGINATION_AN_CUA_TREN,
+// 	CARD_ORIGINATION_AN_CUA_TRI,
+// 	CARD_ORIGINATION_CHIU,
+// 	CARD_ORIGINATION_TRA_CUA,
+// 	CARD_ORIGINATION_BY_DISCARD,
+// 	// discard
+// 	CARD_ORIGINATION_BY_DUOI,
+// 	// đánh đi cây bài vừa bốc nọc ở cửa trì
+// 	CARD_ORIGINATION_BY_AN_DUOI,
+// 	CARD_ORIGINATION_BY_TRANSFER_TREN_2_DUOI
+// };
 
 enum{
 	ANBAO_REASON_NO_PROBLEM = 0,
@@ -153,6 +153,8 @@ private:
 	LayerAvatarInGame *layerAvatars;
 	LayerButtonInGame *layerButtons;
 
+	_Layer_CardChan_ *layerCardChan;
+
 	UILayer *uLayer;
 	UILabel *lblDetail;
 
@@ -199,6 +201,7 @@ public:
 	void animateCards(CCArray *P, float _left, float _bottom, float _kc);
 	string findTypeCard(string number,string suite);
 	string getNameCard(int number, int suite);
+
 	void whenUserTakeCards(long rscode);
 	void setCurrentPlayer(string uid,int _count);
 	void setUserReady(string uid);
@@ -213,6 +216,8 @@ public:
 	void resuiltGame(string resuilt);
 
 	void deleteAllCardFromArray(CCArray *P);
+
+	void eventTakeCards(string f_user, string t_user, string cardnu, string cardsu, int crdorg);
 
 	void takeCards(string f_user, string t_user, string cardnu, string cardsu, int crdorg);
 	void action_BocNoc(string t_user,string cardnu, string cardsu);
@@ -252,6 +257,8 @@ public:
 	void hideAllButton();
 	void resetPositionButton();
 
+	void playSounds(string url);
+
 	Button* createButtonWithTitle_Pos(const char *pName, CCPoint pPoint);
 	Button* getButtonByTag(int pTag);
 
@@ -263,6 +270,8 @@ public:
 	void OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
+
+	void callBackFunction_LatBai(CCNode *pSend);
 };
 
 #endif /* defined(__iCasinov2__LayerChanGame__) */

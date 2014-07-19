@@ -301,24 +301,24 @@ void BaCayChuong::OnExtensionResponse(unsigned long long ptrContext, boost::shar
 			whenResuiltGame(*rg);
 		}
 	}
-	
+
 	else if(strcmp("gb_ntf", cmd->c_str())==0){
 		CCLOG("Dat cuoc");
 		//gbv":1000,"uid":"thanhhv3
 		boost::shared_ptr<long> gbv = param->GetInt("gbv");
 		boost::shared_ptr<string> uid = param->GetUtfString("uid");
 
-		string _gbv = "";
+		int _gbv = 0;
 		string _uid = "";   
 
 		if(gbv != NULL){
-			_gbv = boost::to_string(*gbv);
+			_gbv = *gbv;
 		}
 		if( uid != NULL){
 			_uid = uid->c_str();
 		}
 
-        eventGameBet_NTF(_uid, _gbv);
+		eventGameBet_NTF(_uid, _gbv);
 	}
 }
 
@@ -390,26 +390,28 @@ void BaCayChuong::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::s
 
 // // //Tìm chương
 string BaCayChuong::find_Chuong(string listUser){
-    string chuong = ""; 
-    if(_list_users != ""){
-        vector<string> arrUser = mUtils::splitString(listUser, ';');
-        for(int i=0;i<arrUser.size();i++){
-            if(arrUser[i]=="")
-                continue;
-            vector<string> info = mUtils::splitString(arrUser[i], '|');
-            if(info[1] == "0"){
-                chuong = info[0];
-                break;
-            }
-        }
-    }
-    return chuong;
+	string chuong = ""; 
+	if(_list_users != ""){
+		vector<string> arrUser = mUtils::splitString(listUser, ';');
+		for(int i=0;i<arrUser.size();i++){
+			if(arrUser[i]=="")
+				continue;
+			vector<string> info = mUtils::splitString(arrUser[i], '|');
+			if(info[1] == "0"){
+				chuong = info[0];
+				break;
+			}
+		}
+	}
+	return chuong;
 }
 
 // //******* Xử lý sự kiện nhận được ************///
 
 void BaCayChuong::eventListUser(string listusers)
 {
+	action_UserRejoinGame(listusers);
+
 	layerAvatars->setListUserForBaCay(listusers);
 	layerAvatars->setPosChuong(layerAvatars->getPosByName(find_Chuong(listusers)));
 	layerCard->setListUser(listusers);
@@ -423,11 +425,11 @@ void BaCayChuong::eventListUser(string listusers)
 		getButtonByTag(dTag_btnBet)->setEnabled(true);
 		getButtonByTag(dTag_btnReady)->setTitleText("Sẵn Sàng");
 	}
-	action_UserRejoinGame(listusers);
-	
+
+
 	//Hiển thị các FrameBet của người chơi
 	layerBet->setVisibleAllFrameBet();
-	
+
 	vector<string> list = mUtils::splitString(listusers,';');
 	for (int i = 0; i< list.size(); i++)
 	{
@@ -439,19 +441,23 @@ void BaCayChuong::eventListUser(string listusers)
 		}
 		else
 		{
-			layerBet->getFrameBetByPos(pos)->setValueBet(info[2]+" $");
+			string _bet = mUtils::convertMoneyEx(atoi(info[2].c_str()));
+			layerBet->getFrameBetByPos(pos)->setValueBet(_bet + " $");
 			layerBet->getFrameBetByPos(pos)->setVisible(true);
 		}
 	}
 }
 
-void BaCayChuong::eventGameBet_NTF(string uid, string gbv)
+void BaCayChuong::eventGameBet_NTF(string uid, int gbv)
 {
 	int pos = layerAvatars->getPosByName(uid);
-	layerBet->getFrameBetByPos(pos)->setValueBet(gbv + " $");
+	string _gbv = mUtils::convertMoneyEx(gbv);
+	layerBet->getFrameBetByPos(pos)->setValueBet(_gbv + " $");
 }
 
 void BaCayChuong::action_UserRejoinGame(string lsUser){
+	CCLOG("list user rejoin game %s",lsUser.c_str());
+
 	vector<string> list = mUtils::splitString(lsUser, ';');
 
 	if(strcmp(mUtils::splitString(list[0], '|')[3].c_str(), "1") == 0){
@@ -645,6 +651,9 @@ void BaCayChuong::btn_btn_Latat(CCObject *sender, TouchEventType type){
 
 void BaCayChuong::btn_XemBai_click(CCObject *sender, TouchEventType type){
 	if(type == TOUCH_EVENT_ENDED){
+		if(this->getChildByTag(123) !=NULL){
+			this->removeChildByTag(123);
+		}
 		if(_list_cards != ""){
 			layerCard->turnUpAllCards(_list_cards, kUserMe);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(false);

@@ -56,8 +56,8 @@ bool Nan3Cay::init(){
 	vt = -1;
 
 	bottomCard = 68;
-	leftCard = 267;
-	rightCard = 267;
+	leftCard = 267 + (267 / 2);
+	rightCard = leftCard;
 
 	widthCard = 267;
 	heightCard = 344;
@@ -167,51 +167,51 @@ void Nan3Cay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 	iterator = pTouches->begin();
 	touch = (CCTouch*)(*iterator);
 	tap = convertPoint(touch->getLocation());
-	 if (isTouched)
-	 {
-		 deltaX = sX - tap.x;
-		 deltaY = sY - tap.y;
-		 sX = tap.x;
-		 sY = tap.y;
+	if (isTouched)
+	{
+		deltaX = sX - tap.x;
+		deltaY = sY - tap.y;
+		sX = tap.x;
+		sY = tap.y;
 
-		 if(deltaX > 0 && tap.x < xcu){
-			 count_move++;
-			 if (count_move == 1){
-				 flag_left = 0;
-			 }else{
+		if(deltaX > 0 && tap.x < xcu){
+			count_move++;
+			if (count_move == 1){
+				flag_left = 0;
+			}else{
 				count_move++;
-			 }
-		 }
+			}
+		}
 
-		 if (deltaX < 0 && tap.x > xcu)
-		 {
-			 count_move--;
-			 if (count_move == -1)
-			 {
-				 flag_right = 0;
-			 }
-			 else
-			 {
+		if (deltaX < 0 && tap.x > xcu)
+		{
+			count_move--;
+			if (count_move == -1)
+			{
+				flag_right = 0;
+			}
+			else
+			{
 				count_move++;
-			 }
-		 }
+			}
+		}
 
-		 tap.x -= disTouchBegan.width;
-		 tap.y -= disTouchBegan.height;
+		tap.x -= disTouchBegan.width;
+		tap.y -= disTouchBegan.height;
 
-		 if (flag_left == 0)
-		 {
-			 CardChan *pCard = (CardChan*)cardOnhand->objectAtIndex(cardIndex);
-			 pCard->setPosition(tap);
-		 }
-		 
-		 if (flag_right == 0)
-		 {
-			 CardChan *pCard = (CardChan*)cardOnhand->objectAtIndex(cardIndex_under);
-			 pCard->setPosition(tap);
-		 }
+		if (flag_left == 0)
+		{
+			CardChan *pCard = (CardChan*)cardOnhand->objectAtIndex(cardIndex);
+			pCard->setPosition(tap);
+		}
 
-	 }
+		if (flag_right == 0)
+		{
+			CardChan *pCard = (CardChan*)cardOnhand->objectAtIndex(cardIndex_under);
+			pCard->setPosition(tap);
+		}
+
+	}
 }
 
 void Nan3Cay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){

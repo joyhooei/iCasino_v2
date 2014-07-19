@@ -65,7 +65,17 @@ void LayerBet_BaCayChuong::valueChanged(CCObject *sender, CCControlEvent control
 	float posX =pSlider->getPositionX();
 	float sliderWidth =pSlider->getContentSize().width;
 	spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
-	lblMoney->setString( CCString::createWithFormat("%.0f xu", ceil(pSlider->getValue()))->getCString() );
+	lblMoney->setString( CCString::createWithFormat("%.0f xu", ceil(pSlider->getValue())*1000)->getCString() );
+
+	// 	CCControlSlider* pSlider = (CCControlSlider*)sender;
+	// 	float percent =pSlider->getValue()-pSlider->getMinimumValue();
+	// 	float max = pSlider->getMaximumValue() - pSlider->getMinimumValue();
+	// 	float delta = max;
+	// 	float posX =pSlider->getPositionX();
+	// 	float sliderWidth =pSlider->getContentSize().width;
+	// 	spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
+	// 	//HoangDD comment
+	// 	lblMoney->setString( CCString::createWithFormat("%.0f xu", floor(pSlider->getValue())*1000)->getCString() );
 }
 
 // CCBMemberVariableAssigner interface
@@ -82,7 +92,7 @@ bool LayerBet_BaCayChuong::onAssignCCBMemberVariable(CCObject *pTarget, const ch
 void LayerBet_BaCayChuong::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
 	CCLOG("Imhere onNodeLoaded");
-	int max = 0;
+	double max = 0;
 	int minBet = 0;
 
 	if (GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("amf")->GetDoubleValue() != NULL) {
@@ -93,14 +103,11 @@ void LayerBet_BaCayChuong::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLo
 		minBet =atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue()->c_str());
 	}
 
-	CCLOG("max  = %d", max);
-	CCLOG("min bet: %d", minBet);
-
 	//sliderMoney
 	sliderMoney->addTargetWithActionForControlEvents(this, cccontrol_selector(LayerBet_BaCayChuong::valueChanged), CCControlEventValueChanged);
-	sliderMoney->setMinimumValue(minBet);
-	sliderMoney->setMaximumValue(max);
-	sliderMoney->setValue(1000);
+	sliderMoney->setMinimumValue(1);
+	sliderMoney->setMaximumValue(floor(max/1000));
+	sliderMoney->setValue(1);
 
 	sliderMoney->setTouchPriority(-128);
 

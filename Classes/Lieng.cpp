@@ -23,45 +23,45 @@
 
 Lieng::Lieng()
 {
-    EXT_EVENT_LISTCARD_NTF = "lcntf";
-    EXT_EVENT_START = "s";
-    EXT_EVENT_END = "e";
-    EXT_EVENT_READY_REQ = "rr";
-    EXT_EVENT_READY_RES = "rdres";
-    EXT_EVENT_UNREADY_REQ = "urr";
-    EXT_EVENT_ERROR_READY_NTF = "e_rntf";
-    EXT_EVENT_READY_NTF = "rntf";
-    EXT_EVENT_UNREADY_NTF = "urntf";
-    EXT_EVENT_TURNUP_CARD = "tuc";
-    EXT_EVENT_LIST_USER_UPDATE = "luu";
-    EXT_EVENT_GAME_RESULT = "grs";
-    EXT_EVENT_GAME_BET_REQ = "gbr";
-    EXT_EVENT_GAME_BET_ERROR_NOTIFY = "e_bntf";
-    EXT_EVENT_GAME_BET_NTF = "gb_ntf";
-    EXT_EVENT_DEAL_CARD_REQ = "dcrq";
-    EXT_EVENT_DEAL_CARD_RES = "dcrs";
-    EXT_EVENT_SELECT_OPEN_CARD_REQ = "slstrq";
-    EXT_EVENT_SELECT_OPEN_CARD_RES = "slsrrs";
-    EXT_EVENT_RAISE_REQ = "rsrq";
-    EXT_EVENT_RAISE_RES = "rsrs";
-    EXT_EVENT_FOLD_REQ = "fdrq";
-    EXT_EVENT_FOLD_RES = "fdrs";
-    
-    flagChiaBai = false;
-    real = false;
+	EXT_EVENT_LISTCARD_NTF = "lcntf";
+	EXT_EVENT_START = "s";
+	EXT_EVENT_END = "e";
+	EXT_EVENT_READY_REQ = "rr";
+	EXT_EVENT_READY_RES = "rdres";
+	EXT_EVENT_UNREADY_REQ = "urr";
+	EXT_EVENT_ERROR_READY_NTF = "e_rntf";
+	EXT_EVENT_READY_NTF = "rntf";
+	EXT_EVENT_UNREADY_NTF = "urntf";
+	EXT_EVENT_TURNUP_CARD = "tuc";
+	EXT_EVENT_LIST_USER_UPDATE = "luu";
+	EXT_EVENT_GAME_RESULT = "grs";
+	EXT_EVENT_GAME_BET_REQ = "gbr";
+	EXT_EVENT_GAME_BET_ERROR_NOTIFY = "e_bntf";
+	EXT_EVENT_GAME_BET_NTF = "gb_ntf";
+	EXT_EVENT_DEAL_CARD_REQ = "dcrq";
+	EXT_EVENT_DEAL_CARD_RES = "dcrs";
+	EXT_EVENT_SELECT_OPEN_CARD_REQ = "slstrq";
+	EXT_EVENT_SELECT_OPEN_CARD_RES = "slsrrs";
+	EXT_EVENT_RAISE_REQ = "rsrq";
+	EXT_EVENT_RAISE_RES = "rsrs";
+	EXT_EVENT_FOLD_REQ = "fdrq";
+	EXT_EVENT_FOLD_RES = "fdrs";
+
+	flagChiaBai = false;
+	real = false;
 	flag_Complete_Click = false;
 
-    currentTo = "";
-    currentBetal = "";
-    
-    string Bet = *GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
-    string strBet = mUtils::splitString(Bet, '@')[0];
-    minBet = atoi(strBet.c_str());
+	currentTo = "";
+	currentBetal = "";
+
+	string Bet = *GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
+	string strBet = mUtils::splitString(Bet, '@')[0];
+	minBet = atoi(strBet.c_str());
 	my_To = 0;
-    
-    createBackgrounds();
-    createAvatars();
-    createButtons();
+
+	createBackgrounds();
+	createAvatars();
+	createButtons();
 	createLayerBet();
 	createCards();
 
@@ -86,8 +86,8 @@ void Lieng::onExit()
 }
 
 void Lieng::createBackgrounds(){
-    BackgroundInGame *bg = BackgroundInGame::create();
-    this->addChild(bg);
+	BackgroundInGame *bg = BackgroundInGame::create();
+	this->addChild(bg);
 	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
 	boost::shared_ptr<string> param = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
 	string paramString = param->c_str();
@@ -125,15 +125,15 @@ void Lieng::createCards()
 }
 
 void Lieng::createAvatars(){
-    layerAvatars = LayerBaCayAvatar::create();
+	layerAvatars = LayerBaCayAvatar::create();
 	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
-    layerAvatars->resetAll();
-    this->addChild(layerAvatars);
+	layerAvatars->resetAll();
+	this->addChild(layerAvatars);
 }
 
 void Lieng::createButtons(){
-    layerButtons = LayerButtonInGame::create();
-    this->addChild(layerButtons);
+	layerButtons = LayerButtonInGame::create();
+	this->addChild(layerButtons);
 
 	int w_Button = 129;
 	int h_Button = 44;
@@ -212,48 +212,48 @@ Button* Lieng::getButtonByTag(int pTag)
 
 
 void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
-    boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];
-    boost::shared_ptr<string> cmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
-    
-    boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
-    boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
-    if(strcmp("hbc", cmd->c_str())==0){
-        return;
-    }
-    CCLOG("cmd = %s",cmd->c_str());
-    
-    if(strcmp(EXT_EVENT_LIST_USER_UPDATE.c_str(), cmd->c_str()) == 0){
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];
+	boost::shared_ptr<string> cmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
+
+	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
+	if(strcmp("hbc", cmd->c_str())==0){
+		return;
+	}
+	CCLOG("cmd = %s",cmd->c_str());
+
+	if(strcmp(EXT_EVENT_LIST_USER_UPDATE.c_str(), cmd->c_str()) == 0){
 		layerCards->setMyName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
-        boost::shared_ptr<string> lu = param->GetUtfString("lu");
-        CCLOG("List user: %s", lu->c_str());
+		boost::shared_ptr<string> lu = param->GetUtfString("lu");
+		CCLOG("List user: %s", lu->c_str());
 		if (lu != NULL)
 		{
 			_list_user = lu->c_str();
 			action_UpdateListUser(_list_user);
 		}
-    }
-    
-    else if(strcmp(EXT_EVENT_READY_NTF.c_str(), cmd->c_str())==0){
-        boost::shared_ptr<string> uid = param->GetUtfString("uid");
+	}
+
+	else if(strcmp(EXT_EVENT_READY_NTF.c_str(), cmd->c_str())==0){
+		boost::shared_ptr<string> uid = param->GetUtfString("uid");
 		string _uid = "";
 		if (uid != NULL)
 		{
 			_uid = uid->c_str();
 		}
-        whenUserReady(_uid);
-    }
-    
-    else if(strcmp("urntf", cmd->c_str())==0){
-        boost::shared_ptr<string> uid = param->GetUtfString("uid");
+		whenUserReady(_uid);
+	}
+
+	else if(strcmp("urntf", cmd->c_str())==0){
+		boost::shared_ptr<string> uid = param->GetUtfString("uid");
 		string _uid = "";
 		if (uid != NULL)
 		{
 			_uid = uid->c_str();
 		}
-        whenUserUnready(_uid);
-    }
-    
+		whenUserUnready(_uid);
+	}
+
 	else if (strcmp(EXT_EVENT_ERROR_READY_NTF.c_str(),cmd->c_str()) == 0)
 	{
 		boost::shared_ptr<long> errc = param->GetInt("errc");
@@ -266,16 +266,16 @@ void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr
 			}
 		}
 	}
-// 
-    else if(strcmp("nt", cmd->c_str()) == 0){
-        boost::shared_ptr<string> uid = param->GetUtfString("uid");
-        boost::shared_ptr<long> mb = param->GetInt("mb");
-        boost::shared_ptr<string> betal = param->GetUtfString("betal");
+	// 
+	else if(strcmp("nt", cmd->c_str()) == 0){
+		boost::shared_ptr<string> uid = param->GetUtfString("uid");
+		boost::shared_ptr<long> mb = param->GetInt("mb");
+		boost::shared_ptr<string> betal = param->GetUtfString("betal");
 
-        if (uid != NULL)
-        {
+		if (uid != NULL)
+		{
 			currentTo = uid->c_str();
-        }
+		}
 		if (betal != NULL)
 		{
 			currentBetal = betal->c_str();
@@ -284,26 +284,26 @@ void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr
 		{
 			minBet = (int)*mb;
 		}
-        
-        if(!real){
-            layerCards->givePocker();
-        }
-        else{
-            action_To(currentTo, currentBetal);
-        }
-        real = true;
-    }
-    
-    // Game Start
-    else if(strcmp(EXT_EVENT_START.c_str(), cmd->c_str())==0){
+
+		if(!real){
+			layerCards->givePocker();
+		}
+		else{
+			action_To(currentTo, currentBetal);
+		}
+		real = true;
+	}
+
+	// Game Start
+	else if(strcmp(EXT_EVENT_START.c_str(), cmd->c_str())==0){
 		whenGameStart();
-    }
-    
-    // List Card NTF
-    else if(strcmp(EXT_EVENT_LISTCARD_NTF.c_str(), cmd->c_str())==0){
-        boost::shared_ptr<string> uid = param->GetUtfString("uid");
-        boost::shared_ptr<string> lc = param->GetUtfString("lc");
-        boost::shared_ptr<bool> tua = param->GetBool("tua");
+	}
+
+	// List Card NTF
+	else if(strcmp(EXT_EVENT_LISTCARD_NTF.c_str(), cmd->c_str())==0){
+		boost::shared_ptr<string> uid = param->GetUtfString("uid");
+		boost::shared_ptr<string> lc = param->GetUtfString("lc");
+		boost::shared_ptr<bool> tua = param->GetBool("tua");
 
 		string _uid = "";
 		string _lc = "";
@@ -322,26 +322,26 @@ void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr
 			_tua = *tua;
 		}
 
-        //_list_cards
-        if(strcmp(_uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-            _list_cards = _lc;
-        }
+		//_list_cards
+		if(strcmp(_uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+			_list_cards = _lc;
+		}
 
-        if(flagChiaBai){
+		if(flagChiaBai){
 			action_LatBai(_lc, _uid, _tua);
-        }
-		
+		}
+
 		CCLOG("EXT_EVENT_LISTCARD_NTF");
-    }
-//     
-    // Game End
-    else if(strcmp(EXT_EVENT_END.c_str(), cmd->c_str())==0){
-        this->whenGameEnd();
+	}
+	//     
+	// Game End
+	else if(strcmp(EXT_EVENT_END.c_str(), cmd->c_str())==0){
+		this->whenGameEnd();
 		CCLOG("EXT_EVENT_END");
-    }
-    
-    // Game Resuilt
-    else if(strcmp(EXT_EVENT_GAME_RESULT.c_str(), cmd->c_str())==0){
+	}
+
+	// Game Resuilt
+	else if(strcmp(EXT_EVENT_GAME_RESULT.c_str(), cmd->c_str())==0){
 		//"rg":"dautv5|1|8|3|2|1000;dautv3|1|8|7|3|1000"
 		boost::shared_ptr<string> rg = param->GetUtfString("rg");
 		string _resuilt = "";
@@ -351,12 +351,12 @@ void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr
 		}
 		whenResuiltGame(_resuilt);
 		CCLOG("EXT_EVENT_GAME_RESULT");
-    }
-    
-    //Game Bet NTF
-    else if(strcmp("gb_ntf", cmd->c_str())==0){
-        boost::shared_ptr<long> gbv = param->GetInt("gbv");
-        boost::shared_ptr<string> uid = param->GetUtfString("uid");
+	}
+
+	//Game Bet NTF
+	else if(strcmp("gb_ntf", cmd->c_str())==0){
+		boost::shared_ptr<long> gbv = param->GetInt("gbv");
+		boost::shared_ptr<string> uid = param->GetUtfString("uid");
 
 		long _gbv = 0;
 		string _uid = "";
@@ -373,10 +373,10 @@ void Lieng::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr
 		{
 			my_To = (int)_gbv;
 		}
-		
+
 		whenUserBet(_uid, _gbv);
 		CCLOG("uid %s, gameBet %ld",_uid.c_str(),_gbv);
-    }
+	}
 
 }
 
@@ -386,31 +386,31 @@ void Lieng::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::s
 	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
 	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
 
-// 	boost::shared_ptr<double> money = ptrNotifiedUser->GetVariable("amf")->GetDoubleValue();
-// 	boost::shared_ptr<string> uid = (ptrNotifiedUser->Name());
-// 
-// 	if(uid == NULL || money == NULL)
-// 		return;
-// 
-// 	int _money = (int)(*money);
-// 	string _uid = uid->c_str();
-// 
-// 	switch (getPosUserByName(_uid, _list_user)) {
-// 	case kUserMe:
-// 		layerAvatars->getUserByPos(kUserMe)->setMoney(_money);
-// 		break;
-// 	case kUserLeft:
-// 		layerAvatars->getUserByPos(kUserLeft)->setMoney(_money);
-// 		break;
-// 	case kUserRight:
-// 		layerAvatars->getUserByPos(kUserRight)->setMoney(_money);
-// 		break;
-// 	case kUserTop:
-// 		layerAvatars->getUserByPos(kUserTop)->setMoney(_money);
-// 		break;
-// 	default:
-// 		break;
-// 	}
+	// 	boost::shared_ptr<double> money = ptrNotifiedUser->GetVariable("amf")->GetDoubleValue();
+	// 	boost::shared_ptr<string> uid = (ptrNotifiedUser->Name());
+	// 
+	// 	if(uid == NULL || money == NULL)
+	// 		return;
+	// 
+	// 	int _money = (int)(*money);
+	// 	string _uid = uid->c_str();
+	// 
+	// 	switch (getPosUserByName(_uid, _list_user)) {
+	// 	case kUserMe:
+	// 		layerAvatars->getUserByPos(kUserMe)->setMoney(_money);
+	// 		break;
+	// 	case kUserLeft:
+	// 		layerAvatars->getUserByPos(kUserLeft)->setMoney(_money);
+	// 		break;
+	// 	case kUserRight:
+	// 		layerAvatars->getUserByPos(kUserRight)->setMoney(_money);
+	// 		break;
+	// 	case kUserTop:
+	// 		layerAvatars->getUserByPos(kUserTop)->setMoney(_money);
+	// 		break;
+	// 	default:
+	// 		break;
+	// 	}
 }
 
 void Lieng::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -430,7 +430,7 @@ void Lieng::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared
 }
 
 void Lieng::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-    
+
 }
 
 void Lieng::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -574,10 +574,10 @@ void Lieng::resetButtonLocation(){
 void Lieng::whenUserReady(string uid){
 	layerAvatars->setReady(layerAvatars->getPosByName(uid), true);
 
-    if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
+	if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
 		getButtonByTag(dTag_btnReady)->setEnabled(false);
 		getButtonByTag(dTag_btnUnready)->setEnabled(true);
-    }
+	}
 }
 
 void Lieng::whenUserUnready(string uid){
@@ -606,7 +606,7 @@ void Lieng::whenGameEnd(){
 	getButtonByTag(dTag_btnFold)->setEnabled(false);
 	getButtonByTag(dTag_btnFollow)->setEnabled(false);
 	getButtonByTag(dTag_btnBet)->setEnabled(false);
-    
+
 	resetButtonLocation();
 
 	string Bet = *GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetVariable("params")->GetStringValue();
@@ -675,28 +675,28 @@ void Lieng::whenUserBet(string uid, long gameBet){
 void Lieng::action_To(string uid,string betal){
 	layerAvatars->stopAllTimer();
 
-    if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
+	if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
 		layerAvatars->getUserByPos(kUserMe)->startTimer();
 
 		getButtonByTag(dTag_btnBet)->setEnabled(false);
 		getButtonByTag(dTag_btnFold)->setEnabled(false);
 		getButtonByTag(dTag_btnFollow)->setEnabled(false);
-        
-        vector<string> typeBet = mUtils::splitString(betal, ',');
-        for(int i = 0; i < typeBet.size(); i++){
-            if(typeBet[i] == "1"){
-				getButtonByTag(dTag_btnBet)->setEnabled(true);
-            }
-            else if (typeBet[i] == "2"){
-                getButtonByTag(dTag_btnFold)->setEnabled(true);
-            }
-            else if (typeBet[i] == "3"){
-                getButtonByTag(dTag_btnFollow)->setEnabled(true);
-            }
-        }
-    }
 
-    else{
+		vector<string> typeBet = mUtils::splitString(betal, ',');
+		for(int i = 0; i < typeBet.size(); i++){
+			if(typeBet[i] == "1"){
+				getButtonByTag(dTag_btnBet)->setEnabled(true);
+			}
+			else if (typeBet[i] == "2"){
+				getButtonByTag(dTag_btnFold)->setEnabled(true);
+			}
+			else if (typeBet[i] == "3"){
+				getButtonByTag(dTag_btnFollow)->setEnabled(true);
+			}
+		}
+	}
+
+	else{
 		if (this->getChildByTag(234) != NULL)
 		{
 			this->removeChildByTag(234);
@@ -704,7 +704,7 @@ void Lieng::action_To(string uid,string betal){
 		getButtonByTag(dTag_btnBet)->setEnabled(false);
 		getButtonByTag(dTag_btnFold)->setEnabled(false);
 		getButtonByTag(dTag_btnFollow)->setEnabled(false);
-        //Count Down
+		//Count Down
 		switch(layerAvatars->getPosByName(uid)){
 		case kUserLeft:
 			layerAvatars->getUserByPos(kUserLeft)->startTimer();
@@ -716,45 +716,49 @@ void Lieng::action_To(string uid,string betal){
 			layerAvatars->getUserByPos(kUserTop)->startTimer();
 			break;
 		}
-    }
+	}
 }
 
 void Lieng::btn_ready_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
-        boost::shared_ptr<ISFSObject> parameter (new SFSObject());
-        boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-        boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_READY_REQ,parameter,lastRoom));
-        GameServer::getSingleton().getSmartFox()->Send(request);
-    }
+	if(type == TOUCH_EVENT_ENDED){
+		boost::shared_ptr<ISFSObject> parameter (new SFSObject());
+		boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+		boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_READY_REQ,parameter,lastRoom));
+		GameServer::getSingleton().getSmartFox()->Send(request);
+	}
 }
 
 void Lieng::btn_Unready_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
-        boost::shared_ptr<ISFSObject> params (new SFSObject());
-        boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-        boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_UNREADY_REQ,params,lastRoom));
-        GameServer::getSingleton().getSmartFox()->Send(request);
-    }
+	if(type == TOUCH_EVENT_ENDED){
+		boost::shared_ptr<ISFSObject> params (new SFSObject());
+		boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+		boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_UNREADY_REQ,params,lastRoom));
+		GameServer::getSingleton().getSmartFox()->Send(request);
+	}
 }
 void Lieng::btn_XemBai_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
+	if(type == TOUCH_EVENT_ENDED){
+		if(this->getChildByTag(123) !=NULL){
+			this->removeChildByTag(123);
+		}
+
 		if(_list_cards != ""){
 			layerCards->turnUpAllCards(_list_cards, kUserMe);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 			getButtonByTag(dTag_btnView)->setEnabled(false);
 			moveButtonRight();
 		}
-    }
+	}
 }
 
 void Lieng::btn_NanBai_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
+	if(type == TOUCH_EVENT_ENDED){
 		Nan3Cay *BaCay = Nan3Cay::create();
 		BaCay->setCallbackFunc(this,callfuncN_selector(Lieng::callBackFunction_LatBai));
 		BaCay->initListCardHand(_list_cards);
 		BaCay->setTag(123);
 		this->addChild(BaCay);
-    }
+	}
 }
 
 void Lieng::callBackFunction_LatBai(CCNode *pSend){
@@ -776,7 +780,7 @@ void Lieng::callBackFuntion_Endgive(CCNode *pSend)
 }
 
 void Lieng::btn_To_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
+	if(type == TOUCH_EVENT_ENDED){
 		cocos2d::extension::CCBReader * ccbReader = NULL;
 		CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, SliderCustom);
@@ -797,28 +801,28 @@ void Lieng::btn_To_click(CCObject *sender, TouchEventType type){
 			this->addChild(betLieng_Layer);
 			ccbReader->release();
 		}
-    }
+	}
 }
 
 void Lieng::btn_Up_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
-        boost::shared_ptr<ISFSObject> params (new SFSObject());
-        boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-        params->PutInt("gbv", minBet);
-        params->PutInt("bet", 2);
-        boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_GAME_BET_REQ,params,lastRoom));
-        GameServer::getSingleton().getSmartFox()->Send(request);
-    }
+	if(type == TOUCH_EVENT_ENDED){
+		boost::shared_ptr<ISFSObject> params (new SFSObject());
+		boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+		params->PutInt("gbv", minBet);
+		params->PutInt("bet", 2);
+		boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_GAME_BET_REQ,params,lastRoom));
+		GameServer::getSingleton().getSmartFox()->Send(request);
+	}
 }
 
 void Lieng::btn_Theo_click(CCObject *sender, TouchEventType type){
-    if(type == TOUCH_EVENT_ENDED){
-            boost::shared_ptr<ISFSObject> params (new SFSObject());
-            boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-            params->PutInt("bet", 3);
-            boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_GAME_BET_REQ,params,lastRoom));
-            GameServer::getSingleton().getSmartFox()->Send(request);
-    }
+	if(type == TOUCH_EVENT_ENDED){
+		boost::shared_ptr<ISFSObject> params (new SFSObject());
+		boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+		params->PutInt("bet", 3);
+		boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_GAME_BET_REQ,params,lastRoom));
+		GameServer::getSingleton().getSmartFox()->Send(request);
+	}
 }
 
 void Lieng::btn_Complete_click(CCObject *sender, TouchEventType type){

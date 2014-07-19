@@ -44,7 +44,7 @@ void CardChan::setID(int n){
 }
 
 void CardChan::setSizeCard(float toWidth, float toHeight){
-	this->setAnchorPoint(ccp(0,0));
+	this->setAnchorPoint(ccp(0.5,0));
 	float oldWidth = this->getContentSize().width;
 	float oldHeight = this->getContentSize().height;
 	this->setScaleX(toWidth/oldWidth);

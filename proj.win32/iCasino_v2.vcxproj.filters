@@ -255,9 +255,11 @@
     <ClCompile Include="..\Classes\LayerInviteFriends.cpp" />
     <ClCompile Include="..\Classes\_CardBaCay_.cpp" />
     <ClCompile Include="..\Classes\_LayerBet_.cpp" />
-    <ClCompile Include="..\Classes\_Layer_CardChan_.cpp" />
     <ClCompile Include="..\Classes\_Number_inTomCuaCa.cpp" />
     <ClCompile Include="..\Classes\ImageDownloader.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\_Layer_CardChan_.cpp">
       <Filter>Classes\Children</Filter>
     </ClCompile>
   </ItemGroup>
@@ -523,9 +525,11 @@
     <ClInclude Include="..\Classes\LayerInviteFriends.h" />
     <ClInclude Include="..\Classes\_CardBaCay_.h" />
     <ClInclude Include="..\Classes\_LayerBet_.h" />
-    <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
     <ClInclude Include="..\Classes\_Number_inTomCuaCa.h" />
     <ClInclude Include="..\Classes\ImageDownloader.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Layer_CardChan_.h">
       <Filter>Classes\Children</Filter>
     </ClInclude>
   </ItemGroup>
