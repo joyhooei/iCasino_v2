@@ -291,6 +291,7 @@ void LayerBaCayAvatar::updateUsers()
 	//
 	avaBot->setVisibleLayerInvite(true);
 	avaBot->setReady(false);
+	avaBot->setPositionY(-200);
 	avaBot->setName("");
 	avaBot->setMoney("");
 	avaBot->setAI("");

@@ -119,7 +119,9 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
 
 	if (atoi(resuilt.c_str()) == 1)
 	{
-		txt = score + " Điểm";
+		vector<string> arr = mUtils::splitString(score,'|');
+
+		txt = arr[0] + " - " + arr[1] + " " + getTricks(arr[2]);
 	} else {
 		switch(atoi(resuilt.c_str())){
 		case 2:
@@ -145,4 +147,20 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
 
 CCLayer* BetGame3Cay::getLayerResuilt(){
 	return this->layerResuilt;
+}
+
+string BetGame3Cay::getTricks(string trick){
+	switch(atoi(trick.c_str())){
+	case 0:
+		return "Bích";
+	case 1:
+		return "Tép";
+	case 2:
+		return "Cơ";
+	case 3:
+		return "Dô";
+	default:
+		return "";
+	}
+	return "";
 }

@@ -633,6 +633,7 @@ void Lieng::deleteResuiltGame(){
 
 void Lieng::whenResuiltGame(string rg){
 	////"rg":"dautv5|1|8|3|2|1000;dautv3|1|8|7|3|1000"
+	CCLOG("resuilt %s", rg.c_str());
 	layerAvatars->stopAllTimer();
 	if (this->getChildByTag(234) != NULL)
 	{
@@ -652,6 +653,7 @@ void Lieng::whenResuiltGame(string rg){
 	{
 		vector<string> info = mUtils::splitString(resuilt[i],'|');
 		string money = "";
+		string strResuilt = info[2] + "|" + info[3] + "|" + info[4];
 		if(i == 0)
 		{
 			money = ("+"+info[5]);
@@ -661,7 +663,7 @@ void Lieng::whenResuiltGame(string rg){
 
 		int pos = layerAvatars->getPosByName(info[0]);
 		layerNumbers->showNumberByPos(pos, money);
-		layerBet->setResuit4AllUser(pos, info[1],info[2]);
+		layerBet->setResuit4AllUser(pos, info[1],strResuilt);
 	}
 }
 

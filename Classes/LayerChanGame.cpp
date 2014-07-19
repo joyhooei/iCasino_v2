@@ -2180,29 +2180,7 @@ void LayerChanGame::btn_ready_click(CCObject *sender, TouchEventType type){
 //btn Take Cards
 void LayerChanGame::btn_take_click(CCObject *sender, TouchEventType type){
 	if(type == TOUCH_EVENT_ENDED){
-		CCLOG("Btn Take Click");
-		boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-		int count = 0;
-		for (int i = 0; i < CARD_ME->count(); i++) {
-			CardChan *pCard = (CardChan*)CARD_ME->objectAtIndex(i);
-			if (pCard->getFlag()) {
-				count++;
-				boost::shared_ptr<ISFSObject> params (new SFSObject());
-				params->PutByte("cardnu", pCard->getNumber());
-				params->PutByte("cardsu", pCard->getSuite());
-				boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_REQ_DISCARD,params,lastRoom));
-				GameServer::getSingleton().getSmartFox()->Send(request);
-				break;
-			}
-		}
-		if (count == 0) {
-			CCLOG("Chọn 1 lá bài để đánh");
-			Chat *toast = new Chat("Chọn 1 lá bài để đánh",-1);
-			this->addChild(toast);
-		}
-		else{
-			count = 0;
-		}
+		layerCardChan->doDisCards();
 	}
 }
 

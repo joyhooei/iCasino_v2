@@ -115,6 +115,7 @@ void BaCayChuong::createAvatars(){
 	layerAvatars = LayerBaCayAvatar::create();
 	layerAvatars->resetAll();
 	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
+	layerAvatars->getUserByPos(kUserBot)->setTouchEnabled(false);
 	this->addChild(layerAvatars);
 }
 
@@ -225,6 +226,7 @@ void BaCayChuong::OnExtensionResponse(unsigned long long ptrContext, boost::shar
 			{
 				flagDatCuoc = true;
 				getButtonByTag(dTag_btnReady)->setEnabled(false);
+				getButtonByTag(dTag_btnBet)->setEnabled(false);
 				getButtonByTag(dTag_btnUnready)->setEnabled(true);
 			}
 		}else{
@@ -238,8 +240,9 @@ void BaCayChuong::OnExtensionResponse(unsigned long long ptrContext, boost::shar
 			if (strcmp(uid->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
 			{
 				flagDatCuoc = false;
-				getButtonByTag(dTag_btnReady)->setEnabled(true);
 				getButtonByTag(dTag_btnUnready)->setEnabled(false);
+				getButtonByTag(dTag_btnReady)->setEnabled(true);
+				getButtonByTag(dTag_btnBet)->setEnabled(true);
 			}
 		}else{
 		}
@@ -539,6 +542,7 @@ void BaCayChuong::whenGameStart(){
 }
 
 void BaCayChuong::whenResuiltGame(string rg){
+	CCLOG("resuilt game: %s",rg.c_str());
 	//thanhhv3|3|3|2|1000;dautv3|2|1|1|-1000
 	if (this->getChildByTag(123) != NULL)
 	{
@@ -554,24 +558,26 @@ void BaCayChuong::whenResuiltGame(string rg){
 
 		string strScore = atoi(info[4].c_str()) > 0 ? ("+" + info[4]) : info[4];
 
+		string strResuilt = info[1] + "|" + info[2] + "|" + info[3];
+
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
 			layerNumbers->showNumberByPos(kUserMe, strScore);
-			layerBet->setResuit4AllUser(kUserMe, "1", info[1]);
+			layerBet->setResuit4AllUser(kUserMe, "1", strResuilt);
 		}
 		else
 		{
 			int pos = layerAvatars->getPosByName(info[0]);
 			switch (pos) {
 			case kUserLeft:
-				layerBet->setResuit4AllUser(kUserLeft, "1", info[1]);
+				layerBet->setResuit4AllUser(kUserLeft, "1", strResuilt);
 				layerNumbers->showNumberByPos(kUserLeft, strScore);
 				break;
 			case kUserRight:
-				layerBet->setResuit4AllUser(kUserRight, "1", info[1]);
+				layerBet->setResuit4AllUser(kUserRight, "1", strResuilt);
 				layerNumbers->showNumberByPos(kUserRight, strScore);
 				break;
 			case kUserTop:
-				layerBet->setResuit4AllUser(kUserTop, "1", info[1]);
+				layerBet->setResuit4AllUser(kUserTop, "1", strResuilt);
 				layerNumbers->showNumberByPos(kUserTop, strScore);
 				break;
 			default:

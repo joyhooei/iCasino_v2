@@ -42,5 +42,6 @@ public:
 	void setVisibleAllFrameBet();
 	void setResuit4AllUser(int pos, string resuilt, string score);
 	CCLayer* getLayerResuilt();
+	string getTricks(string trick);
 };
 #endif

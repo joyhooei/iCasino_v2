@@ -143,6 +143,9 @@ public:
 
 	CardChan* getCardFromPos_take(int pos);
 
+	void doDisCards();
+	void doChiuCard();
+
 	void playSounds(string url);
 	void setCallbackFunc(CCObject* target, SEL_CallFuncN callfun);
 };

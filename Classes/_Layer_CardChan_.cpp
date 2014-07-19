@@ -2,8 +2,12 @@
 #include "_Layer_CardChan_.h"
 #include "mUtils.h"
 #include "AllData.h"
+#include "GameServer.h"
+#include "_Chat_.h"
+#include "Requests/ExtensionRequest.h"
 
 #define PI 3.141592653589
+using namespace Sfs2X;
 
 _Layer_CardChan_::_Layer_CardChan_(){
 
@@ -72,7 +76,7 @@ bool _Layer_CardChan_::init()
 	w_cardhand = 34;
 	h_cardhand = 125;
 	w_card = 25;
-	h_card = 75;
+	h_card = 98;
 	goc = float(250/19);
 	_coutZorder = 0;
 
@@ -328,6 +332,7 @@ void _Layer_CardChan_::CardTouch(CCObject *pSender,TouchEventType type){
 void _Layer_CardChan_::resortCard_CuaTri_Alluser(int pos){
 	switch(pos){
 	case kUserMe:
+		CCLOG("CARD_ME count %d", CARD_C_ME->count());
 		if (CARD_C_ME->count() > 8)
 		{
 			kc_me = (w_card * 8) / (CARD_C_ME->count());
@@ -1035,6 +1040,62 @@ CardChan* _Layer_CardChan_::getCardFromPos_take(int pos){
 		break;
 	}
 	return fcard;
+}
+
+void _Layer_CardChan_::doDisCards(){
+	CCLOG("Btn Take Click");
+	//EXT_EVENT_REQ_DISCARD = "rqhofc";
+	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	int count = 0;
+	for (int i = 0; i < CARD_ME->count(); i++) {
+		CardChan *pCard = (CardChan*)CARD_ME->objectAtIndex(i);
+		if (pCard->getFlag()) {
+			count++;
+			boost::shared_ptr<ISFSObject> params (new SFSObject());
+			params->PutByte("cardnu", pCard->getNumber());
+			params->PutByte("cardsu", pCard->getSuite());
+			boost::shared_ptr<IRequest> request (new ExtensionRequest("rqhofc",params,lastRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			break;
+		}
+	}
+	if (count == 0) {
+		CCLOG("Chọn 1 lá bài để đánh");
+		Chat *toast = new Chat("Chọn 1 lá bài để đánh",-1);
+		this->addChild(toast);
+	}
+	else{
+		count = 0;
+	}
+}
+
+void _Layer_CardChan_::doChiuCard(){
+	//EXT_EVENT_REQ_CHIU_CARD = "rqchiuc";
+	boost::shared_ptr<Room> lstRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	int count = 0;
+	for(int i = 0; i < (int)CARD_ME->count(); i++)
+	{
+		CardChan *pCard = (CardChan*)CARD_ME->objectAtIndex(i);
+		if (pCard->getFlag())
+		{
+			count++;
+			boost::shared_ptr<ISFSObject> params (new SFSObject());
+			params->PutByte("cardnu", pCard->getNumber());
+			params->PutByte("cardsu", pCard->getSuite());
+			boost::shared_ptr<IRequest> request (new ExtensionRequest("rqchiuc",params,lstRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			break;
+		}
+	}
+	if (count == 0)
+	{
+		Chat *toast = new Chat("Chọn 1 lá bài để chíu", -1);
+		this->addChild(toast);
+	}
+	else
+	{
+		count == 0;
+	}
 }
 
 void _Layer_CardChan_::playSounds(string url){
