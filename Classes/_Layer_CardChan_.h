@@ -71,6 +71,14 @@ private:
 	int count_chiu_right;
 	int count_chiu_top;
 
+	float posCard_LeftX;
+	float posCard_RightX;
+	float posCard_TopX;
+
+	float posCard_LeftY;
+	float posCard_RightY;
+	float posCard_TopY;
+
 	CCArray *CARD_ME;
 
 	CCArray *CARD_C_ME;
@@ -145,6 +153,8 @@ public:
 
 	void doDisCards();
 	void doChiuCard();
+	void doEateCard();
+	void doDuoiCard();
 
 	void playSounds(string url);
 	void setCallbackFunc(CCObject* target, SEL_CallFuncN callfun);

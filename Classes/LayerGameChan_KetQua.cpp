@@ -219,14 +219,14 @@ void LayerGameChan_KetQua::OnExtensionResponse(unsigned long long ptrContext, bo
 		boost::shared_ptr<string> rg = param->GetUtfString("rg");
 		if(rg != NULL)
 		{
-			string strs = rg->c_str();
-			CCLOG("reruilt in Layer Ket qua: %s",rg->c_str());
-			vector<string> listResuilt = mUtils::splitString(strs,';');
-			CCLOG("Winner: %s", listResuilt[2].c_str());
-			CCLOG("Den lang: %s", listResuilt[3].c_str());
-			CCLOG("Win cuoc sac: %s", listResuilt[4].c_str());
-			CCLOG("Den lang cuoc sac: %s", listResuilt[5].c_str());
-			CCLOG("Tong diem: %s", listResuilt[6].c_str());
+// 			string strs = rg->c_str();
+// 			CCLOG("reruilt in Layer Ket qua: %s",rg->c_str());
+// 			vector<string> listResuilt = mUtils::splitString(strs,';');
+// 			CCLOG("Winner: %s", listResuilt[2].c_str());
+// 			CCLOG("Den lang: %s", listResuilt[3].c_str());
+// 			CCLOG("Win cuoc sac: %s", listResuilt[4].c_str());
+// 			CCLOG("Den lang cuoc sac: %s", listResuilt[5].c_str());
+			//CCLOG("Tong diem: %s", listResuilt[6].c_str());
 		}
 	}
 	else if (strcmp("ntfcurpu", cmd->c_str()) == 0)
