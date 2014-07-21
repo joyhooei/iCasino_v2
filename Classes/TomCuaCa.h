@@ -76,7 +76,7 @@ private:
 	string kq2;
 	string kq3;
 	boost::shared_ptr<string> kq;
-	boost::shared_ptr<string>  gameID;
+	
 public:
 	FrameBet* betTom;
 	FrameBet* betCua;
@@ -126,7 +126,7 @@ public:
 	void hienKetQua();
 	void hienOketqua();
 	virtual void onExit();
-	void getToken();
+
 	string convertMoney(int money);
 	string convertMoneyFromDouble(double money);
 	string convertMoneyFromDouble_Detail(double money);

@@ -270,6 +270,8 @@ int AvatarInTomCuaCa::getPosByName(string pName) {
 					return kUserTop;
 				} else if (i == (pos + 3) % countUser) {
 					return kUserLeft;
+				} else if (i == (pos + 4) % countUser) {
+					return kUserBot;
 				}
 
 				break;
@@ -306,6 +308,9 @@ string AvatarInTomCuaCa::getNameByPos(int pPos) {
 		case kUserLeft:
 			return arrName[(pPos + 3) % countUser];
 			break;
+		case kUserBot:
+			return arrName[(pPos + 4) % countUser];
+			break;
 		}
 	}
 
@@ -336,6 +341,10 @@ string AvatarInTomCuaCa::getAccountIDByPos(int pPos) {
 
 		case kUserLeft:
 			return arrAI[(pPos + 3) % countUser];
+			break;
+
+		case kUserBot:
+			return arrAI[(pPos + 4) % countUser];
 			break;
 		}
 	}
@@ -506,6 +515,8 @@ void AvatarInTomCuaCa::resetAll(){
 	setMoney(kUserTop, "");
 	setMoney(kUserBot, "");
 
+	
+
 	this->getUserByPos(kUserLeft)->setVisibleLayerInvite(true);
 	this->getUserByPos(kUserRight)->setVisibleLayerInvite(true);
 	this->getUserByPos(kUserTop)->setVisibleLayerInvite(true);
@@ -570,6 +581,8 @@ int AvatarInTomCuaCa::getPosByAccountID(string aI) {
 					return kUserTop;
 				} else if (i == (pos + 3) % countUser) {
 					return kUserLeft;
+				} else if (i == (pos + 4) % countUser) {
+					return kUserBot;
 				}
 
 				break;

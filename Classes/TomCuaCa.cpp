@@ -232,7 +232,7 @@ TomCuaCa::TomCuaCa(){
 	this->addChild(uLayer);
 	
 	 _id_me =((boost::shared_ptr<string>)(GameServer::getSingleton().getSmartFox()->MySelf()->Name()));
-	 
+	
 }
 vector<string> TomCuaCa::TCCsplit(string &S,const char &str){
 		vector<string> arrStr;
@@ -272,7 +272,8 @@ void TomCuaCa::updateUser(string list){
 		string _name = "";
 		string _url = "";
 		
-
+		
+		
 		boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("aN")->GetStringValue();
 		boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("amf")->GetDoubleValue();
 		boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("aal")->GetStringValue();
@@ -286,13 +287,14 @@ void TomCuaCa::updateUser(string list){
 		if (url != NULL) {
 			_url=url->c_str();
 		}
-
+	
 		if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
 			
 			lAvatar->setName(kUserMe, _name.c_str());
 			lAvatar->getUserByPos(kUserMe)->setMoney(mon);
 			lAvatar->getUserByPos(kUserMe)->setIcon(_url);
-
+			lAvatar->getUserByPos(kUserMe)->setAI(n[0]);
+			
 
 			if(n[0]==find_ChuPhong(_list_user)){
 				lAvatar->setPosChuong(kUserMe);
@@ -306,12 +308,15 @@ void TomCuaCa::updateUser(string list){
 			}
 		}
 		else{
+			
 			switch (getPosUserByName(n[0], _list_user)) {
 			case kUserLeft:
 				lAvatar->getUserByPos(kUserLeft)->setVisibleLayerInvite(false);
 				lAvatar->setName(kUserLeft, _name.c_str());
 				lAvatar->getUserByPos(kUserLeft)->setMoney(mon);
 				lAvatar->getUserByPos(kUserLeft)->setIcon(_url);
+				lAvatar->getUserByPos(kUserLeft)->setAI(n[0]);
+				
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserLeft, true);
 					lAvatar->setPosChuong(kUserLeft);
@@ -323,6 +328,7 @@ void TomCuaCa::updateUser(string list){
 				lAvatar->setName(kUserRight, _name.c_str());
 				lAvatar->getUserByPos(kUserRight)->setMoney(mon);
 				lAvatar->getUserByPos(kUserRight)->setIcon(_url);
+				lAvatar->getUserByPos(kUserRight)->setAI(n[0]);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserRight, true);
 					lAvatar->setPosChuong(kUserRight);
@@ -334,6 +340,7 @@ void TomCuaCa::updateUser(string list){
 				lAvatar->setName(kUserTop, _name.c_str());
 				lAvatar->getUserByPos(kUserTop)->setMoney(mon);
 				lAvatar->getUserByPos(kUserTop)->setIcon(_url);
+				lAvatar->getUserByPos(kUserTop)->setAI(n[0]);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserTop, true);
 					lAvatar->setPosChuong(kUserTop);
@@ -345,6 +352,7 @@ void TomCuaCa::updateUser(string list){
 				lAvatar->setName(kUserBot, _name.c_str());
 				lAvatar->getUserByPos(kUserBot)->setMoney(mon);
 				lAvatar->getUserByPos(kUserBot)->setIcon(_url);
+				lAvatar->getUserByPos(kUserBot)->setAI(n[0]);
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserBot, true);
 					lAvatar->setPosChuong(kUserBot);
@@ -487,6 +495,7 @@ void TomCuaCa::whenGameStart(){
 			}
 
 	this->scheduleUpdate();
+	
 
 	Chat *toast = new Chat("Đặt cược đê các bác...", -1);
 	this->addChild(toast);
@@ -559,10 +568,12 @@ void TomCuaCa::whenGameEnd(){
 	}
 }
 	 TomCuaCa::~TomCuaCa(){
+		 if(mUtils::isSoundOn())
+			 CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 	GameServer::getSingleton().removeListeners(this);
-	//this->removeAllChildren();
-	if(mUtils::isSoundOn())
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
+	this->removeAllChildren();
+	this->removeAllComponents();
+	
 }
 bool TomCuaCa::init(){
 	if(!CCLayer::init()){
@@ -619,12 +630,7 @@ void TomCuaCa::createAvatars(){
 
 	lAvatar = AvatarInTomCuaCa::create();
 	
-	boost::shared_ptr<User> mySelf = GameServer::getSingleton().getSmartFox()->MySelf();
-	boost::shared_ptr<double> inv = mySelf->GetVariable("am")->GetDoubleValue();
-	lAvatar->getUserByPos(kUserMe)->setName(mySelf->Name()->c_str());
-	lAvatar->getUserByPos(kUserMe)->setMeIsBoss(true);
-	lAvatar->getUserByPos(kUserMe)->setFlag(true);
-	lAvatar->getUserByPos(kUserMe)->setMoney(*inv);
+lAvatar->resetAll();
 	uLayer->addChild(lAvatar);
 	
 }
@@ -847,7 +853,7 @@ void TomCuaCa::clickBet(int _tag)
 		uLayer->addChild(popUp);
 		ccbReader->release();
 		
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/datcuoc.mp3");
+		playSound("sounds/game_tomcuaca/datcuoc.mp3");
 	}
 	switch(_tag)
 		{
@@ -962,7 +968,7 @@ void TomCuaCa::hienKetQua()
 }//void
 void TomCuaCa::hienOketqua()
 {
-	CCActionInterval* action1 = CCBlink::create(2, 10);
+
 	CCLog("here");
 	if(kq1=="1" || kq2=="1" || kq3=="1")
 		btnNai->setBright(false);
@@ -979,8 +985,11 @@ void TomCuaCa::hienOketqua()
 }
 void TomCuaCa::onExit()
 {
+	if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
-		
+	GameServer::getSingleton().removeListeners(this);
+	this->removeAllComponents();
+	
 }
 void TomCuaCa::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
@@ -996,47 +1005,35 @@ void TomCuaCa::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::sha
 		return;
 	}
 	lAvatar->showChatByPos(pos, ptrNotifiedMessage->c_str());
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/game_tomcuaca/chat.mp3");
+	playSound("sounds/game_tomcuaca/chat.mp3");
 }
 void TomCuaCa::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+	CCLOG("User ExitRoom On Room");
 	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
 	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
-	
+	//
 	if( ptrNotifiedUser->IsItMe() ){
 		//close window - tricks by HoangDD
-		CCLog("im here");
-		//lButton->eventTouchBtnBack(NULL,TOUCH_EVENT_ENDED);
+		lButton->eventTouchBtnBack(NULL, TOUCH_EVENT_ENDED);
+		CCLog("im exit");
 	}
-		CCLog(" here");
-	
-	//CCLog("HERA");
 }
-void TomCuaCa::getToken()
-{
-	boost::shared_ptr<ISFSObject> params (new SFSObject());
-	params->PutUtfString("aI", GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
-	//boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-	boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_REQUEST_TOKEN),params));
-	GameServer::getSingleton().getSmartFox()->Send(request);
-	CCLog("---%s",GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
-}
+
 void TomCuaCa::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent) {
-	CCLOG("Update User Variables");
-	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
-	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
-	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
+	//CCLOG("Update User Variables");
+	//boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	//boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
+	//boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
 
-	//string money = boost::to_string(*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
-	int    money = (int) (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
-	double moneyDouble = (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
-	string name = boost::to_string(*ptrNotifiedUser->Name());
-
-	CCLog("OnSmartFoxUserVariableUpdate: name= %s, money= %d", name.c_str(), money);
-
-	arrName.push_back(name);
-	arrMoney.push_back(money);
-	arrMoneyDouble.push_back(moneyDouble);
+	////string money = boost::to_string(*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	//int    money = (int) (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	//double moneyDouble = (*ptrNotifiedUser->GetVariable("amf")->GetDoubleValue());
+	//string name = boost::to_string(*ptrNotifiedUser->Name());
+	//CCLog("OnSmartFoxUserVariableUpdate: name= %s, money= %d", name.c_str(), money);
+	//arrName.push_back(name);
+	//arrMoney.push_back(money);
+	//arrMoneyDouble.push_back(moneyDouble);
 }
 void TomCuaCa::playSound( string soundPath )
 {
@@ -1044,9 +1041,6 @@ void TomCuaCa::playSound( string soundPath )
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
 }
 string TomCuaCa::convertMoney(int money){
-	//ostringstream oss;
-	//oss<<money;
-	//return oss.str();
 
 	ostringstream oss;
 	/// 
