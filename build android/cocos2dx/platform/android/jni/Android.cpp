@@ -131,5 +131,66 @@ extern "C"
 				// call the method, with arguments
 				t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		}
-}
+	}
+	void hideKeyboard()
+ {
+  JniMethodInfo t;
+
+  if (JniHelper::getStaticMethodInfo(t,
+   "com/game/simple/Game3",    // fully qualified class name
+   "hideKeyboard",                              // method name
+   "()V")) {             // data type of argument
+
+    // jstring - C++ representation of Java String
+
+    // call the method, with arguments
+    t.env->CallStaticVoidMethod(t.classID, t.methodID);
+  }
+ }
+ void uploadAvatar(const char* token)
+ {
+ JniMethodInfo t;
+
+  if (JniHelper::getStaticMethodInfo(t,
+   "com/game/simple/Game3",    // fully qualified class name
+   "uploadAvatar",                              // method name
+   "(Ljava/lang/String;)V")) {             // data type of argument
+
+    // jstring - C++ representation of Java String
+
+    // call the method, with arguments
+	jstring _token = t.env->NewStringUTF(token);
+    t.env->CallStaticVoidMethod(t.classID, t.methodID,_token);
+  }
+ }
+ void stopTimer()
+	{
+		JniMethodInfo t;
+
+		if (JniHelper::getStaticMethodInfo(t,
+			"com/game/simple/Game3",    // fully qualified class name
+			"stopTimer",                              // method name
+			"()V")) {             // data type of argument
+
+				// jstring - C++ representation of Java String
+
+				// call the method, with arguments
+				t.env->CallStaticVoidMethod(t.classID, t.methodID);
+		}
+	}
+	void startTimer()
+	{
+		JniMethodInfo t;
+
+		if (JniHelper::getStaticMethodInfo(t,
+			"com/game/simple/Game3",    // fully qualified class name
+			"startTimer",                              // method name
+			"()V")) {             // data type of argument
+
+				// jstring - C++ representation of Java String
+
+				// call the method, with arguments
+				t.env->CallStaticVoidMethod(t.classID, t.methodID);
+		}
+	}
 }

@@ -18,6 +18,10 @@ extern "C"
 	extern void loginFB();
 	extern void shareFB();
 	extern void inviteFB();
+	extern void hideKeyboard();
+	extern void uploadAvatar(const char* token);
+	extern void stopTimer();
+	extern void startTimer();
 }
  
 #endif /* ANDROID_H_ */ 
