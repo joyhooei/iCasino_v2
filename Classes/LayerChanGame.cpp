@@ -379,12 +379,17 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	//Bao chiu thanh cong
 	else if(strcmp(EXT_EVENT_RES_CHIU_CARD.c_str(),cmd->c_str()) == 0)
 	{
+		CCLOG("Chiu thanh cong ! current user %s",currentPlayer.c_str());
+		//Nếu mình là người chíu mình sẽ nhận được bản tin này.
 		boost::shared_ptr<long> rscode = param->GetInt("rscode");
 		if (rscode != NULL)
 		{
 			if (*rscode == 0)
 			{
 				getButtonByTag(cTag_btnChiu)->setEnabled(false);
+				getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+				getButtonByTag(cTag_btnBoc)->setEnabled(false);
+				getButtonByTag(cTag_btnEate)->setEnabled(false);
 				getButtonByTag(cTag_btnTake)->setEnabled(true);
 			}
 		}
@@ -542,7 +547,7 @@ int LayerChanGame::getPosUserByName(string uid,string _list_user){
 			break;
 		}
 	}
-	return vt;
+	return -1;
 }
 
 //Update list user
@@ -680,6 +685,7 @@ void LayerChanGame::whenUserTakeCards(long rscode){
 
 // set current player
 void LayerChanGame::setCurrentPlayer(string uid,int _count){
+	CCLOG("Current user %s", uid.c_str());
 	layerAvatars->stopAllTimer();
 	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0) {
 		getButtonByTag(cTag_btnReady)->setEnabled(false);

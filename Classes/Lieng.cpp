@@ -634,6 +634,11 @@ void Lieng::deleteResuiltGame(){
 void Lieng::whenResuiltGame(string rg){
 	////"rg":"dautv5|1|8|3|2|1000;dautv3|1|8|7|3|1000"
 	CCLOG("resuilt %s", rg.c_str());
+
+	getButtonByTag(dTag_btnBet)->setEnabled(false);
+	getButtonByTag(dTag_btnFollow)->setEnabled(false);
+	getButtonByTag(dTag_btnFold)->setEnabled(false);
+
 	layerAvatars->stopAllTimer();
 	if (this->getChildByTag(234) != NULL)
 	{

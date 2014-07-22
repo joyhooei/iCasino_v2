@@ -147,6 +147,9 @@ public:
 	void action_ChuyenBai_NOTME(int pos, string cardnu, string cardsu);
 	void action_ChuyenBai_Chiu(int pos, string cardnu, string cardsu);
 
+	void action_ChuyenBai_ChiuME(string cardnu, string cardsu);
+	void action_ChuyenBai_ChiuNotMe(int pos, string cardnu, string cardsu);
+
 	void action_An_U(int f_user, int t_user, string cardnu, string cardsu);
 
 	CardChan* getCardFromPos_take(int pos);

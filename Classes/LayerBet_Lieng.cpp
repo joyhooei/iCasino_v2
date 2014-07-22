@@ -67,14 +67,16 @@ void LayerBet_Lieng::onButtonClose(CCObject* pSender)
 }
 
 void LayerBet_Lieng::valueChanged(CCObject *sender, CCControlEvent controlEvent){
-    CCControlSlider* pSlider = (CCControlSlider*)sender;
-    float percent =pSlider->getValue()-pSlider->getMinimumValue();
-    float max = pSlider->getMaximumValue() - pSlider->getMinimumValue();
-    float delta = max;
-    float posX =pSlider->getPositionX();
-    float sliderWidth =pSlider->getContentSize().width;
-    spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
-    lblMoney->setString( CCString::createWithFormat("%.0f xu", ceil(pSlider->getValue()))->getCString() );
+
+	 	CCControlSlider* pSlider = (CCControlSlider*)sender;
+	 	float percent =pSlider->getValue()-pSlider->getMinimumValue();
+	 	float max = pSlider->getMaximumValue() - pSlider->getMinimumValue();
+	 	float delta = max;
+	 	float posX =pSlider->getPositionX();
+	 	float sliderWidth =pSlider->getContentSize().width;
+	 	spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
+	 	lblMoney->setString( CCString::createWithFormat("%.0f xu", floor(pSlider->getValue())*1000)->getCString() );
+
 }
 
 // CCBMemberVariableAssigner interface
@@ -103,18 +105,29 @@ void LayerBet_Lieng::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 
 void LayerBet_Lieng::setInfoBet(int _minBet,int _myBet){
 	sliderMoney->addTargetWithActionForControlEvents(this, cccontrol_selector(LayerBet_Lieng::valueChanged), CCControlEventValueChanged);
-	int max;
+	float max;
 	if (GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("amf")->GetDoubleValue() != NULL) {
-		max = (int) *GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("amf")->GetDoubleValue();
+		max =  *GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("amf")->GetDoubleValue();
 	}
 
 	lblTitle1->setString(("Mức tố hiện tại: "+boost::to_string(_minBet)).c_str());
 	lblTitle2->setString(("Lượt tố trước của bạn: "+boost::to_string(_myBet)).c_str());
 	lblTitle3->setString(("Bạn cần tố thêm: "+boost::to_string(_minBet-_myBet)).c_str());
 
-	sliderMoney->setMinimumValue(_minBet);
-	sliderMoney->setMaximumValue(max);
-	sliderMoney->setValue(1000);
+// 	sliderMoney->setMinimumValue(_minBet);
+// 	sliderMoney->setMaximumValue(max);
+// 	sliderMoney->setValue(1000);
+
+	sliderMoney->setMinimumValue(_minBet/1000);
+	sliderMoney->setMaximumValue(floor(max/1000));
+	sliderMoney->setValue(1);
+	sliderMoney->setTouchPriority(-128);
+
+// 	sliderMoney->setMinimumValue(1);
+// 	sliderMoney->setMaximumValue(floor(max/1000));
+// 	sliderMoney->setValue(1);
+// 
+// 	sliderMoney->setTouchPriority(-128);
 }
 
 void LayerBet_Lieng::registerWithTouchDispatcher( void )
