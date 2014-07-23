@@ -42,10 +42,11 @@ SEL_MenuHandler LayerBet_Lieng::onResolveCCBCCMenuItemSelector(cocos2d::CCObject
 void LayerBet_Lieng::onButtonCreate(CCObject* pSender)
 {
     CCLOG("mTip: %s", lblMoney->getString());
+	CCLOG("am value: %lf", ceil(sliderMoney->getValue()) );
 	int gameBet = 1000;
 	if (strcmp(lblMoney->getString(),"") != 0)
 	{
-		gameBet = atoi(lblMoney->getString());
+		gameBet = atoi(lblMoney->getString()) * 1000;
 	}
 
 	CCLOG("Game Bet = %d", gameBet);
@@ -75,7 +76,9 @@ void LayerBet_Lieng::valueChanged(CCObject *sender, CCControlEvent controlEvent)
 	 	float posX =pSlider->getPositionX();
 	 	float sliderWidth =pSlider->getContentSize().width;
 	 	spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
-	 	lblMoney->setString( CCString::createWithFormat("%.0f xu", floor(pSlider->getValue())*1000)->getCString() );
+	 	//lblMoney->setString( CCString::createWithFormat("%.0f xu", floor(pSlider->getValue())*1000)->getCString() );
+
+		lblMoney->setString( CCString::createWithFormat("%s", mUtils::convertMoneyEx(ceil(pSlider->getValue())*1000).c_str() )->getCString() );
 
 }
 
@@ -110,24 +113,14 @@ void LayerBet_Lieng::setInfoBet(int _minBet,int _myBet){
 		max =  *GameServer::getSingleton().getSmartFox()->MySelf()->GetVariable("amf")->GetDoubleValue();
 	}
 
-	lblTitle1->setString(("Mức tố hiện tại: "+boost::to_string(_minBet)).c_str());
-	lblTitle2->setString(("Lượt tố trước của bạn: "+boost::to_string(_myBet)).c_str());
-	lblTitle3->setString(("Bạn cần tố thêm: "+boost::to_string(_minBet-_myBet)).c_str());
-
-// 	sliderMoney->setMinimumValue(_minBet);
-// 	sliderMoney->setMaximumValue(max);
-// 	sliderMoney->setValue(1000);
+	lblTitle1->setString(("Mức tố hiện tại: " + mUtils::convertMoneyEx(_minBet)).c_str());
+	lblTitle2->setString(("Lượt tố trước của bạn: " + mUtils::convertMoneyEx(_myBet)).c_str());
+	lblTitle3->setString(("Bạn cần tố thêm: " + mUtils::convertMoneyEx(_minBet - _myBet)).c_str());
 
 	sliderMoney->setMinimumValue(_minBet/1000);
 	sliderMoney->setMaximumValue(floor(max/1000));
 	sliderMoney->setValue(1);
 	sliderMoney->setTouchPriority(-128);
-
-// 	sliderMoney->setMinimumValue(1);
-// 	sliderMoney->setMaximumValue(floor(max/1000));
-// 	sliderMoney->setValue(1);
-// 
-// 	sliderMoney->setTouchPriority(-128);
 }
 
 void LayerBet_Lieng::registerWithTouchDispatcher( void )

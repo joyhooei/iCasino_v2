@@ -413,7 +413,7 @@ string BaCayChuong::find_Chuong(string listUser){
 
 void BaCayChuong::eventListUser(string listusers)
 {
-	action_UserRejoinGame(listusers);
+	
 
 	layerAvatars->setListUserForBaCay(listusers);
 	layerAvatars->setPosChuong(layerAvatars->getPosByName(find_Chuong(listusers)));
@@ -429,6 +429,7 @@ void BaCayChuong::eventListUser(string listusers)
 		getButtonByTag(dTag_btnReady)->setTitleText("Sẵn Sàng");
 	}
 
+	action_UserRejoinGame(listusers);
 
 	//Hiển thị các FrameBet của người chơi
 	layerBet->setVisibleAllFrameBet();

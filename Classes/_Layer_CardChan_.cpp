@@ -1148,9 +1148,11 @@ void _Layer_CardChan_::action_ChuyenBai_Chiu(int pos, string cardnu, string card
 			{
 				cards->setTouchEnabled(false);
 				float rotation = -(cards->getRotation());
+				cards->setRotation(rotation);
 				cards->setVisible(false);
 				pCard = (CardChan *)CARD_ME->objectAtIndex(i);
-				pCard->setRotation(rotation);
+				pCard = cards;
+				//pCard->setRotation(rotation);
 				CARD_ME->removeObjectAtIndex(i);
 				CCLOG("Rotation %f", rotation);
 				break;

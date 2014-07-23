@@ -122,6 +122,10 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
 		vector<string> arr = mUtils::splitString(score,'|');
 
 		txt = arr[0] + " - " + arr[1] + " " + getTricks(arr[2]);
+		if (atoi(arr[1].c_str()) == 1)
+		{
+			txt = arr[0] + " - Át " + getTricks(arr[2]);
+		}
 	} else {
 		switch(atoi(resuilt.c_str())){
 		case 2:

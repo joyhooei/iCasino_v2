@@ -468,7 +468,8 @@ void Lieng::action_UpdateListUser(string lsUser)
 	{
 		vector<string> info = mUtils::splitString(list[i],'|');
 		int pos = layerAvatars->getPosByName(info[0]);
-		layerBet->getFrameBetByPos(pos)->setValueBet(boost::to_string(minBet) + " $");
+		string _minbet = mUtils::convertMoneyEx(minBet);
+		layerBet->getFrameBetByPos(pos)->setValueBet(_minbet + " $");
 		layerBet->getFrameBetByPos(pos)->setVisible(true);
 	}
 }
@@ -673,7 +674,7 @@ void Lieng::whenResuiltGame(string rg){
 }
 
 void Lieng::whenUserBet(string uid, long gameBet){
-	string _gameBet = boost::to_string(gameBet);
+	string _gameBet = mUtils::convertMoneyEx((int)gameBet);
 	int pos = layerAvatars->getPosByName(uid);
 
 	layerBet->getFrameBetByPos(pos)->setValueBet(_gameBet + " $");
