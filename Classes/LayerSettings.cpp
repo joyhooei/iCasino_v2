@@ -8,9 +8,11 @@
 
 #include "LayerSettings.h"
 #include "mUtils.h"
+#include "cocos-ext.h"
+#include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
-//using namespace CocosDenshion;
+using namespace cocos2d::extension;
 
 
 LayerSettings::LayerSettings()
@@ -58,6 +60,8 @@ void LayerSettings::onButtonSound(CCObject* pSender)
     }else{
         //else
         btn->setPosition(ccp(211, btn->getPositionY()));
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->stopAllEffects();
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
     }
 	//
 	CCUserDefault *def=CCUserDefault::sharedUserDefault();

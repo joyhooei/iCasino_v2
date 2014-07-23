@@ -346,7 +346,7 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
 		//Lock
 		if( rooms->at(idx)->IsPasswordProtected() ){
 			if( cell->getChildByTag( tag_Lock ) ==NULL ){
-				CCSprite* sLock = CCSprite::create("lockk.png");
+				CCSprite* sLock = CCSprite::create("lock.png");
 				sLock->setTag( tag_Lock );
 				sLock->setPosition(ccp(0, 0));
 				sLock->setAnchorPoint(ccp(0, 0));
