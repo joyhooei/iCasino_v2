@@ -49,6 +49,7 @@ enum{
     kTagButtonHaPhom,
     kTagButtonPush,
     kTagButtonU,
+	kTagButtonPushMulti, // cac button nay cho phep User lua chon gui vao phom nao
     //tienlen
     kTagButtonNextTurn,
 	// CoTuong

@@ -1296,35 +1296,16 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 		//4 black
 		imagedownloader4Black->setPointerNodeImage( nodeAvatarBlack );
 		imagedownloader4Black->downLoadImage( *url );
-// 		if (url != NULL) {
-// 			CCLog("Avatar link %s", url->c_str());
-// 			string urlString = url->c_str();
-// 			vector<string> arr  = split(urlString, '/');
-// 			string iconname = "iconname.png";
-// 			if (arr.size() > 0) {
-// 				iconname = arr.at(arr.size() - 1);
-// 			} 
-// 			
-// 			//
-// 			iconname = "black_" + iconname;
-// 			std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
-// 			writablePath.append(iconname);
-// 
-// 			//
-// 			CCSprite *avatar = CCSprite::create(writablePath.c_str());
-// 			if (avatar == NULL) {
-// 				CCLog("avatar downLoadImage");
-// 				downLoadImage(url->c_str(), iconname);
-// 			}
-// 			else {
-// 				CCLog("avatar from device");
-// 				setAvatarBySprite(nodeAvatarBlack, avatar);
-// 			}
-// 		}
-
 
 		// enemy
-		if (nameEnemy.length() < 2) return;
+		if (nameEnemy.length() < 2){
+			lblNameRed->setString("--");
+			lblMoneyRed->setString("--");
+			lblWinRateRed->setString("--");
+			imagedownloader4Red->setPointerNodeImage(nodeAvatarRed);
+			imagedownloader4Red->downLoadImage("");
+			return;
+		}
 		lblNameRed->setString(nameEnemy.c_str());
 		boost::shared_ptr<User> userInfoEnemy = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(nameEnemy);
 		boost::shared_ptr<double> amfEnemy = userInfoEnemy->GetVariable("amf")->GetDoubleValue();
@@ -1335,29 +1316,6 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 		//4 black
 		imagedownloader4Red->setPointerNodeImage( nodeAvatarRed );
 		imagedownloader4Red->downLoadImage( *urlEnemy );
-// 		if (urlEnemy != NULL) {
-// 			CCLog("Avatar link %s", urlEnemy->c_str());
-// 			string urlString = urlEnemy->c_str();
-// 			vector<string> arr  = split(urlString, '/');
-// 			string iconname = "iconname.png";
-// 			if (arr.size() > 0) {
-// 				iconname = arr.at(arr.size() - 1);
-// 			} 
-// 
-// 			//
-// 			iconname = "red_" + iconname;
-// 			std::string writablePath = CCFileUtils::sharedFileUtils()->getWritablePath();
-// 			writablePath.append(iconname);
-// 
-// 			//
-// 			CCSprite *avatar = CCSprite::create(writablePath.c_str());
-// 			if (avatar == NULL) {
-// 				downLoadImage(urlEnemy->c_str(), iconname);
-// 			}
-// 			else {
-// 				setAvatarBySprite(nodeAvatarRed, avatar);
-// 			}
-// 		}
     }
 }
 

@@ -64,6 +64,7 @@ private:
         EXT_SRVNTF_U_9,
         EXT_SRVNTF_COIN_CHANGE,
         EXT_EVENT_RES_ORDER_CARDS,
+		EXT_EVENT_RES_PUSH_CARD,
         //
         EXT_EVENT_REQ_JOIN_GAME,
         EXT_EVENT_REQ_ORDER_CARDS,
@@ -98,11 +99,14 @@ private:
     string myName;
     string currentPlaying;
 	string listID_HaPhom;
+	string dstphsString; // danh sach cac bo phom co the gui
+	int cardid_push;
     
     // mảng lưu các tên và thông tin tương ứng để hiển thị
     vector<string> arrName;
     vector<int> arrMoney;
 	vector<double> arrMoneyDouble;
+	vector<Button*> arrButtonCanPush; // luu tru va remove Button khi khong can thiet
     
 	boost::shared_ptr<ISFSObject> param;
     LayerAvatarInGame   *layerAvatars;
@@ -130,6 +134,7 @@ public:
     
     int    convertResponseToInt(string inString);
     string convertResponseToString(int inInt);
+	void createButton_PushMulti_By_CardId(int cardid);
     Button* createButtonWithTitle_Position(const char *title, CCPoint pPoint);
     Button* getButtonByTag(int tag);
     
@@ -144,6 +149,7 @@ public:
 	void callbackHaPhom_stepByStep(float dt);
     void actionPush(CCObject *pSender, TouchEventType pType);
     void actionUUU(CCObject *pSender, TouchEventType pType);
+	void actionPushMulti(CCObject *pSender, TouchEventType pType);
     
     // event server
     virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
@@ -178,6 +184,7 @@ public:
     void event_EXT_EVENT_RES_END_PLAYING();
     void event_EXT_EVENT_RES_SET_BET();
     void event_EXT_EVENT_RES_U();
+	void event_EXT_EVENT_RES_PUSH_CARD();
     void event_EXT_SRVNTF_CAN_TAKE();
     void event_EXT_SRVNTF_PLAYER_REPLAY();
     void event_EXT_SRVNTF_U_9();

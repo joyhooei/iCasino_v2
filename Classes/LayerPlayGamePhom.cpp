@@ -42,6 +42,7 @@ enum EXT_RESPONSE {
     EXT_SRVNTF_U_9,
     EXT_SRVNTF_COIN_CHANGE,
     EXT_EVENT_RES_ORDER_CARDS,
+	EXT_EVENT_RES_PUSH_CARD,
     //
     EXT_EVENT_REQ_JOIN_GAME,
     EXT_EVENT_REQ_ORDER_CARDS,
@@ -91,6 +92,7 @@ int LayerPlayGamePhom::convertResponseToInt(string inString) {
     if (inString == "ntfrpl") return  EXT_SRVNTF_PLAYER_REPLAY;
     if (inString == "ntfu9") return  EXT_SRVNTF_U_9;
     if (inString == "rsodrc") return  EXT_EVENT_RES_ORDER_CARDS;
+	if (inString == "rspusc") return EXT_EVENT_RES_PUSH_CARD;
     //
     if (inString == "rqjg") return EXT_EVENT_REQ_JOIN_GAME;
     if (inString == "rodrc") return EXT_EVENT_REQ_ORDER_CARDS;
@@ -134,6 +136,7 @@ string LayerPlayGamePhom::convertResponseToString(int inInt) {
     if (inInt == EXT_SRVNTF_PLAYER_REPLAY) return  "ntfrpl";
     if (inInt == EXT_SRVNTF_U_9) return  "ntfu9";
     if (inInt == EXT_EVENT_RES_ORDER_CARDS) return  "rsodrc";
+	if (inInt == EXT_EVENT_RES_PUSH_CARD) return "rspusc";
     //
     if (inInt == EXT_EVENT_REQ_JOIN_GAME) return  "rqjg";
     if (inInt == EXT_EVENT_REQ_ORDER_CARDS) return "rodrc";
@@ -162,8 +165,8 @@ LayerPlayGamePhom::LayerPlayGamePhom() {
     //
     createBackgrounds();
     createAvatars();
+	createCards();
     createButtons();
-    createCards();
     createNumbers();
     createChats();
     
@@ -378,6 +381,18 @@ void LayerPlayGamePhom::playSound( string soundPath )
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
 }
 
+void LayerPlayGamePhom::createButton_PushMulti_By_CardId(int cardid) {
+	Card *card = layerCards->getCardByID(cardid);
+	if (card==NULL) return;
+	Button *button = createButtonWithTitle_Position("Gửi", card->getPosition());
+	button->setAnchorPoint(ccp(0.5, 0.5));
+	button->setScale(0.5);
+	button->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionPushMulti));
+
+	layerButtons->addWidget(button);
+	arrButtonCanPush.push_back(button);
+}
+
 Button* LayerPlayGamePhom::createButtonWithTitle_Position(const char *title, CCPoint pPoint) {
     // Create the button
     Button* button = Button::create();
@@ -421,6 +436,16 @@ void LayerPlayGamePhom::actionReady(CCObject *pSender, TouchEventType pType) {
 void LayerPlayGamePhom::actionSortCards(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN){
         CCLOG("sort!");
+		int size = arrButtonCanPush.size();
+		if (size > 0) {
+			for (int i = size-1; i >= 0; i--)
+			{
+				layerButtons->removeWidget(arrButtonCanPush.at(i));
+				arrButtonCanPush.at(i)->release();
+			}
+			arrButtonCanPush.clear();
+		}
+		//
         boost::shared_ptr<ISFSObject> parameter (new SFSObject());
         boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
         boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_ORDER_CARDS), parameter, lastRoom));
@@ -432,7 +457,16 @@ void LayerPlayGamePhom::actionSortCards(CCObject *pSender, TouchEventType pType)
 
 void LayerPlayGamePhom::actionHitCards(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN){
-        
+		int size = arrButtonCanPush.size();
+		if (size > 0) {
+			for (int i = size-1; i >= 0; i--)
+			{
+				layerButtons->removeWidget(arrButtonCanPush.at(i));
+				arrButtonCanPush.at(i)->release();
+			}
+			arrButtonCanPush.clear();
+		}
+		//
         vector<int> arrID = layerCards->getIdCardByClicked();
         unsigned int length = arrID.size();
 
@@ -476,6 +510,16 @@ void LayerPlayGamePhom::actionEatCards(CCObject *pSender, TouchEventType pType) 
 
 void LayerPlayGamePhom::actionHaPhom(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN){
+
+		int size = arrButtonCanPush.size();
+		if (size > 0) {
+			for (int i = size-1; i >= 0; i--)
+			{
+					layerButtons->removeWidget(arrButtonCanPush.at(i));
+					arrButtonCanPush.at(i)->release();
+			}
+			arrButtonCanPush.clear();
+		}
        
 		// Phòng trường hợp "xấu" nhất, ta cứ gửi các quân bài đang được chọn
 		// rồi sau đó mới gừi các quân được xếp bởi sv
@@ -530,6 +574,18 @@ void LayerPlayGamePhom::callbackHaPhom_stepByStep(float dt){
 
 void LayerPlayGamePhom::actionPush(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN) {
+		//
+		int size = arrButtonCanPush.size();
+		if (size > 0) {
+			for (int i = size-1; i >= 0; i--)
+			{
+				layerButtons->removeWidget(arrButtonCanPush.at(i));
+				arrButtonCanPush.at(i)->release();
+			}
+			arrButtonCanPush.clear();
+		}
+		//
+
         vector<int> arrID = layerCards->getIdCardByClicked();
         unsigned int length = arrID.size();
         
@@ -539,6 +595,7 @@ void LayerPlayGamePhom::actionPush(CCObject *pSender, TouchEventType pType) {
         if (length == 1) {
             CCLOG("Danh quan gui co id = %d", arrID[0]);
             
+			this->cardid_push = arrID[0];
             boost::shared_ptr<ISFSObject> params (new SFSObject());
             params->PutByte("cardidx", arrID[0]);
             boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
@@ -559,6 +616,53 @@ void LayerPlayGamePhom::actionUUU(CCObject *pSender, TouchEventType pType) {
         
         GameServer::getSingleton().getSmartFox()->Send(request);
     }
+}
+
+void LayerPlayGamePhom::actionPushMulti(CCObject *pSender, TouchEventType pType) {
+	if (pType == TOUCH_EVENT_BEGAN) {
+		CCLog("actionPushMulti");
+
+		// Clicked vào 1 bộ phỏm để gửi tới đó
+		CCPoint positionBt = ((Button*) pSender)->getPosition();
+
+		int size = arrButtonCanPush.size();
+		if (size == 0) return;
+		for (int i = size-1; i >= 0; i--)
+		{
+			arrButtonCanPush.at(i)->setVisible(false);
+			arrButtonCanPush.at(i)->setTouchEnabled(false);
+			layerButtons->removeChild(arrButtonCanPush.at(i), true);
+			CCLog("layerButtons->removeChild %d", i);
+		}
+		arrButtonCanPush.clear();
+
+		
+		//
+		vector<string> arrPlayerPhom = mUtils::splitString(this->dstphsString, '/');
+		for (int i = 0; i < arrPlayerPhom.size(); i++)
+		{
+			vector<string> arr = mUtils::splitString(arrPlayerPhom.at(i), ';');
+			if (arr.size() < 2) return;
+			int idx1 = atoi(arr.at(0).c_str());
+			Card *card = layerCards->getCardByID(idx1);
+			if (card->getPosition().equals(positionBt)) {
+				boost::shared_ptr<ISFSObject> params (new SFSObject());
+				params->PutByte("cardidx", this->cardid_push);
+				CCLog("this->cardid_push %d", this->cardid_push);
+				string phomidString = arr.at(arr.size()-2);
+				params->PutByte("phomid", atoi(phomidString.c_str()));
+				params->PutUtfString("userName", arr.at(arr.size() - 1));
+				CCLog("userName=%s", (arr.at(arr.size() - 1)).c_str());
+				boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+				boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_PUSH_CARD), params, lastRoom));
+
+				GameServer::getSingleton().getSmartFox()->Send(request);
+
+				break;
+			}
+		}
+
+	}
 }
 
 void LayerPlayGamePhom::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent) {
@@ -672,13 +776,10 @@ void LayerPlayGamePhom::OnExtensionResponse(unsigned long long ptrContext, boost
         case EXT_EVENT_RES_U:
             this->event_EXT_EVENT_RES_U();
             break;
-//
-//        case  EXT_EVENT_RES_PUSH_CARD:
-////            var rscode = params.rscode;
-////            if (rscode != 0) {
-////                 g_mLog.addLog( LOG_ERROR, "cmd = EXT_EVENT_RES_PUSH_CARD ERROR rscode:" + rscode);
-////            }
-//            break;
+
+       case EXT_EVENT_RES_PUSH_CARD:
+		   this->event_EXT_EVENT_RES_PUSH_CARD();
+           break;
         case EXT_SRVNTF_CAN_TAKE:
             this->event_EXT_SRVNTF_CAN_TAKE();
             break;
@@ -1183,6 +1284,41 @@ void LayerPlayGamePhom::event_EXT_EVENT_RES_SET_BET() {
 
 void LayerPlayGamePhom::event_EXT_EVENT_RES_U() {
     
+}
+
+void LayerPlayGamePhom::event_EXT_EVENT_RES_PUSH_CARD() {
+	boost::shared_ptr<unsigned char> localChar = param->GetByte("rscode");
+	if (localChar==NULL) return;
+	int rscode = *(localChar.get());
+	CCLog("event_EXT_EVENT_RES_PUSH_CARD rscode = %d", rscode);
+	if (rscode == 0) {
+		// Gui thanh cong
+	} else if (rscode == 29) {
+		// co nhieu bo phom thoa man quan bai gui di
+		// EXT_FIELD_DESTINATION_PHOMS = "dstphs";      // ds các phỏm có thể gửi bài
+		boost::shared_ptr<string> dstphs = param->GetUtfString("dstphs");
+		if (dstphs==NULL) return;
+		this->dstphsString = (string)dstphs->c_str();
+		// dstphs = playerphom1/playerphom2/.../playerphomN
+		// playerphom = idx1:idx2:idxn;phomID;userName
+		CCLog("dstphsString= | %s |", dstphsString.c_str());
+
+		/*
+			Ở đây khi đã xác định được nhưng nơi có thể đc gửi tới,
+			ta đặt ở đó những Button mà khi nhấn vào Button đó, 
+			tương ứng dữ liệu sẽ được gửi đi
+		*/
+		vector<string> arrPlayerPhom = mUtils::splitString(this->dstphsString, '/');
+		for (int i = 0; i < arrPlayerPhom.size(); i++)
+		{
+			vector<string> arr = mUtils::splitString(arrPlayerPhom.at(i), ';');
+			if (arr.size() == 0) return;
+			int idx1 = atoi(arr.at(0).c_str());
+			createButton_PushMulti_By_CardId(idx1);
+		}
+	}
+	
+	
 }
 
 void LayerPlayGamePhom::event_EXT_SRVNTF_CAN_TAKE() {

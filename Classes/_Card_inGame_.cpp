@@ -463,16 +463,16 @@ string LayerCardInGame::getURL_byID(int pID) {
     
     switch (type) {
         case 1:
-            url += "h.png";
+            url += "h.png"; // cơ
             break;
         case 2:
-            url += "d.png";
+            url += "d.png"; // rô
             break;
         case 3:
-            url += "s.png";
+            url += "s.png"; // bích
             break;
         case 4:
-            url += "c.png";
+            url += "c.png"; // tép
             break;
             
         default:
@@ -843,11 +843,17 @@ void LayerCardInGame::actionSortCard(vector<int> arrCardID) {
     
     int length = arrCardID.size();
     
+	Card *card;
+	for (int i = 0; i < arrCardOnHand->count(); i++)
+	{
+		card = (Card*)arrCardOnHand->objectAtIndex(i);
+		card->setVisible(false);
+	}
     arrCardOnHand->removeAllObjects();
     
     for (int i = 0; i < length; i++) {
         int id = (int) arrCardID[i];
-        Card *card = getCardByID(id);
+        card = getCardByID(id);
         card->setVisible(true);
         arrCardOnHand->addObject(card);
     }
