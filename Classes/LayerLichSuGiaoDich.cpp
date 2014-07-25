@@ -34,7 +34,7 @@ void LayerLichSuGiaoDich::loadAllDatas(){
     boost::shared_ptr<ISFSObject> params (new SFSObject());
     params->PutUtfString("aI", myself->Name());
     params->PutUtfString("startT", "24/02/2014 08:30:59");
-    params->PutUtfString("endT", mUtils::getCurrentDateTime("%d/%m/%Y %I:%M:%S").c_str());
+    params->PutUtfString("endT", mUtils::getCurrentDateTime("%d/%m/%Y 23:%M:%S").c_str());
     params->PutInt("maqp", 20);
     boost::shared_ptr<IRequest> request (new ExtensionRequest("glts", params));
     GameServer::getSingleton().getSmartFox()->Send(request);

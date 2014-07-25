@@ -39,9 +39,8 @@ void LayerBet_BaCayChuong::onButtonCreate(CCObject* pSender)
 {
 	CCLOG("mTip: %s", lblMoney->getString());
 	int gameBet = 1000;
-	if(strcmp(lblMoney->getString(), "") != 0){
-		gameBet = atoi(lblMoney->getString());
-	}
+	float sliderWidth =sliderMoney->getContentSize().width;
+	gameBet = ceil(sliderMoney->getValue())*1000;
 	//EXT_EVENT_GAME_BET_REQ = "gbr";
 	boost::shared_ptr<ISFSObject> params (new SFSObject());
 	params->PutInt("gbv", gameBet);
@@ -65,7 +64,7 @@ void LayerBet_BaCayChuong::valueChanged(CCObject *sender, CCControlEvent control
 	float posX =pSlider->getPositionX();
 	float sliderWidth =pSlider->getContentSize().width;
 	spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
-	lblMoney->setString( CCString::createWithFormat("%.0f xu", ceil(pSlider->getValue())*1000)->getCString() );
+	lblMoney->setString( CCString::createWithFormat("%s xu", mUtils::convertMoneyEx(ceil(pSlider->getValue())*1000).c_str())->getCString() );
 
 	// 	CCControlSlider* pSlider = (CCControlSlider*)sender;
 	// 	float percent =pSlider->getValue()-pSlider->getMinimumValue();

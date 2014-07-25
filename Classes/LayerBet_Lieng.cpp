@@ -44,10 +44,8 @@ void LayerBet_Lieng::onButtonCreate(CCObject* pSender)
     CCLOG("mTip: %s", lblMoney->getString());
 	CCLOG("am value: %lf", ceil(sliderMoney->getValue()) );
 	int gameBet = 1000;
-	if (strcmp(lblMoney->getString(),"") != 0)
-	{
-		gameBet = atoi(lblMoney->getString()) * 1000;
-	}
+	float sliderWidth =sliderMoney->getContentSize().width;
+	gameBet = ceil(sliderMoney->getValue())*1000;
 
 	CCLOG("Game Bet = %d", gameBet);
 	boost::shared_ptr<ISFSObject> params (new SFSObject());

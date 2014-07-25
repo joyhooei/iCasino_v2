@@ -82,7 +82,7 @@ CCScene* SceneManager::createScene()
 	float sTop  = (sizeScreen.height - scaleMin * HEIGHT_DESIGN) / 2;
 
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.11", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.0.12", "", 16);
 	nameVersion->setColor(ccWHITE);
 	nameVersion->setPosition(ccp(-WIDTH_DESIGN/2 + 10 + nameVersion->getContentSize().width / 2, -HEIGHT_DESIGN/2 - sTop + 20));
 	layer->addChild(nameVersion, 1001);
@@ -428,14 +428,14 @@ void SceneManager::OnExtensionResponse(unsigned long long ptrContext, boost::sha
 		//        GameServer::getSingleton().getSmartFox()->Send(request);
 	}else if(strcmp("nem_ntf", ptrNotifiedCmd->c_str())==0){//EXT_EVENT_NOT_ENOUGH_MONEY_NTF = "nem_ntf";
 		//
-		Chat *toast = new Chat("Bạn không đủ tiền chơi tiếp!\nHãy nạp tiền để tiếp tục chơi.", -1);
+		Chat *toast = new Chat("Bạn không đủ tiền chơi tiếp!\nHãy nạp tiền để tiếp tục!", -1);
 		layerOnTop->addChild(toast);
 	}else if(strcmp("kkntf", ptrNotifiedCmd->c_str())==0){ ////EXT_EVENT_USER_KICKED_NOTIF    = "kkntf";
 		if( strcmp(myself->Name()->c_str(), param->GetUtfString("uid")->c_str() )==0 ){
 			Chat *toast = new Chat("Bạn đã bị đá ra khỏi phòng!", -1);
 			layerOnTop->addChild(toast);
 		}else{
-			Chat *toast = new Chat( CCString::createWithFormat("Người chơi %s đã bị đá ra khỏi phòng!", param->GetUtfString("uid")->c_str())->getCString(), -1);
+			Chat *toast = new Chat( CCString::createWithFormat("Người chơi %s bị đá ra khỏi phòng!", param->GetUtfString("uid")->c_str())->getCString(), -1);
 			layerOnTop->addChild(toast);
 		}
 	}

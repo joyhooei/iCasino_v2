@@ -39,10 +39,8 @@ void LayerBet_TomCuaCa::onButtonCreate(CCObject* pSender)
 {
 	
 	CCLOG("mTip: %s", lblMoney->getString());
-	int gameBet = 1000;
-	if(strcmp(lblMoney->getString(), "") != 0){
-		gameBet = atoi(lblMoney->getString());
-	}
+	float myTien = floor(sliderMoney->getValue());
+	double gameBet = floor(sliderMoney->getValue()/1000)*1000;
 	//EXT_EVENT_GAME_BET_REQ = "gbr";
 	boost::shared_ptr<ISFSObject> params (new SFSObject());
 	params->PutInt("aid",_tag);
@@ -71,7 +69,7 @@ void LayerBet_TomCuaCa::valueChanged(CCObject *sender, CCControlEvent controlEve
 	//lblMoney->setString( CCString::createWithFormat("%.0f xu", ceil(pSlider->getValue()))->getCString() );
 	float myTien = floor(pSlider->getValue());
 	float myTien2 = floor((myTien/1000));
-	lblMoney->setString( CCString::createWithFormat("%.0f xu", myTien2*1000)->getCString() );
+	lblMoney->setString( CCString::createWithFormat("%s xu", mUtils::convertMoneyEx(myTien2*1000).c_str())->getCString() );
 	CCLog("--%f",pSlider->getValue());
 }
 

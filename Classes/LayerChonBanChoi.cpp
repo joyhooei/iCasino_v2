@@ -22,8 +22,7 @@
 #include "Entities/Invitation/Invitation.h"
 #include "SceneManager.h"
 #include "_Chat_.h"
-
-#include <boost/make_shared.hpp>
+#include "boost/smart_ptr/make_shared.hpp"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -43,6 +42,7 @@ LayerChonBanChoi::LayerChonBanChoi()
 
 	mRoomID4Invite = -1;
 	mCurrentRoomIndex = 0;
+	mCurrentRoomIDJoin = -1;
 }
 
 LayerChonBanChoi::~LayerChonBanChoi()
@@ -222,6 +222,7 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 			this->addChild(toast);
 			return;
 		}
+		mCurrentRoomIDJoin = ro->Id();
 		if( ro->IsPasswordProtected() ){
 			//load popup password
 			CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
@@ -296,7 +297,7 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
     
     boost::shared_ptr<RoomVariable> rv = rooms->at(idx)->GetVariable("params");
 	vector<string> lstBet = mUtils::splitString( *rv->GetStringValue(), '@' );
-    
+    CCLOG("RoomID: %d & RoomName: %s", rooms->at(idx)->Id(), rooms->at(idx)->Name()->c_str());
     if(!cell){
         cell = new CustomTableViewCell(CCSizeMake(nodeTableListRooms->getContentSize().width, 40));
         cell->autorelease();
@@ -443,6 +444,7 @@ void LayerChonBanChoi::OnSmartFoxInvitation(unsigned long long ptrContext, boost
 
 void LayerChonBanChoi::OnSmartFoxRoomJoin(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     CCLOG("Join Room");
+	mCurrentRoomIDJoin = -1;
     SceneManager::getSingleton().gotoGameByTag(m_gID);
 	//Update, khong chap nhan loi moi nua
 	boost::shared_ptr<vector<boost::shared_ptr<UserVariable> > > collectionUserVariable (new vector<boost::shared_ptr<UserVariable> >());
@@ -457,10 +459,32 @@ void LayerChonBanChoi::OnSmartFoxRoomJoinError(unsigned long long ptrContext, bo
 	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueErrorMessage = (*ptrEventParams)["errorMessage"];
 	boost::shared_ptr<string> ptrErrorMessage = ((boost::static_pointer_cast<string>))(ptrEventParamValueErrorMessage);
-	boost::shared_ptr<string> message (new string("Join Room Failure: " +  *ptrErrorMessage));
 	//
+	boost::shared_ptr<void> ptrEventParamValueErrorCode = (*ptrEventParams)["errorCode"];
+	boost::shared_ptr<short> ptrErrorCode = ((boost::static_pointer_cast<short>))(ptrEventParamValueErrorCode);
+	//
+	CCLOG("OnSmartFoxRoomJoinError - errorCode: %d", *ptrErrorCode);
+	boost::shared_ptr<string> message (new string("Join Room Failure: " +  *ptrErrorMessage));
+	//Error code = 20 is Room is fulls
 	Chat *toast = new Chat(message->c_str(), -1);
 	this->addChild(toast);
+	//
+	switch( *ptrErrorCode ){
+	case 20:
+		//Room is full
+		if( mCurrentRoomIDJoin!=-1 ){
+			int a = -1;
+			if( GameServer::getSingleton().getSmartFox()->LastJoinedRoom() ){
+				a = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->Id();
+			}
+			boost::shared_ptr<long int> id2Left = boost::make_shared<long int>(a);
+			//
+			boost::shared_ptr<IRequest> request (new JoinRoomRequest(mCurrentRoomIDJoin, "", id2Left, true));
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			mCurrentRoomIDJoin = -1;
+		}
+		break;
+	}
 }
 
 void LayerChonBanChoi::OnSmartFoxRoomCreationError(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){

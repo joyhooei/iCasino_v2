@@ -60,7 +60,7 @@ void LayerCreateRoom::onButtonCreate(CCObject* pSender)
     CCLOG("Tạo bàn chơi mới");
     boost::shared_ptr<ISFSObject> roomConfig (new SFSObject());
 	//HoangDD comment
-    roomConfig->PutUtfString("params", CCString::createWithFormat("%.0f@", 1000*floor(sliderMoney->getValue()))->getCString());
+    roomConfig->PutUtfString("params", CCString::createWithFormat("%.0f@", 1000*ceil(sliderMoney->getValue()))->getCString());
 	roomConfig->PutUtfString("gid", CCString::createWithFormat("%d", m_gameID)->getCString());
 	roomConfig->PutUtfString("rpass", txtPassword->getText());
     //sendRequest
@@ -85,7 +85,7 @@ void LayerCreateRoom::valueChanged(CCObject *sender, CCControlEvent controlEvent
     float sliderWidth =pSlider->getContentSize().width;
     spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
 	//HoangDD comment
-    lblMoney->setString( CCString::createWithFormat("%.0f xu", floor(pSlider->getValue())*1000)->getCString() );
+	lblMoney->setString( CCString::createWithFormat("%s xu", mUtils::convertMoneyEx(ceil(pSlider->getValue())*1000).c_str())->getCString() );
 }
 
 // CCBMemberVariableAssigner interface
