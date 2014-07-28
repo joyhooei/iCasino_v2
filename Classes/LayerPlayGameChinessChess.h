@@ -140,6 +140,7 @@ private:
 // 	CCSprite *iconWin;
 // 	CCSprite *iconLose;
 	vector<Chess*> arrChess;
+	bool isSpector; // kiem tra xem minh la Guess(=true) hay Player(=false)?
 	bool isMaster;
 	bool isStartedGame;
 	bool isIamTheFirst;
@@ -147,6 +148,8 @@ private:
 
 	string myName;
 	string nameCurrentTurn;
+	string player1;
+	string player2;
 	int indexCurrent;
 	int indexTarget;
 	int timeRestBlack;

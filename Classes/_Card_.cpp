@@ -29,7 +29,7 @@ void Card::initialize() {
     this->setScaleCard(this->scaleX, this->scaleY);
     
     this->setOpacity(255);
-    
+    this->setColor(ccWHITE);
     // TienLen
     this->setRotation(0);
 }
@@ -113,6 +113,7 @@ float Card::getScaleCardY() {
 }
 
 void Card::setCardAte() {
-    this->setOpacity(180);
+    //this->setOpacity(180);
+	this->setColor(ccc3(70, 255, 180));
 }
 

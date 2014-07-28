@@ -55,6 +55,7 @@ void LayerCardInGame::onExit() {
 	arrIDCardOnHandLeft.clear();
 	arrIDCardOnHandRight.clear();
 	arrIDCardOnHandTop.clear();
+	arrIDCardOnTable.clear();
 
 	if (cardBackLeft)
 	{
@@ -351,9 +352,19 @@ bool LayerCardInGame::isTouchedCard_notTail(Card *card, CCPoint tap) {
 }
 
 void LayerCardInGame::refreshCardOnHand() {
+// 	if (!allowSortCard){
+// 		CCLog("Khong dc xep bai do allowSortCard=false !");
+// 		return;
+// 	}
+
+	// mỗi lần xếp đều "nghỉ" 3s
+	//this->allowSortCard = false;
+	//this->scheduleOnce(schedule_selector(LayerCardInGame::delayAllowSortCard), 3);
+
     float leftTheFirst = (WIDTH_DESIGN - (arrCardOnHand->count() - 1) * disCards - sizeCard.width) / 2;
     float top = topCard;
     
+	CCLog("arrCardOnHand->count()= %d", arrCardOnHand->count());
     for (int i = 0; i < arrCardOnHand->count(); i++) {
         Card *card = (Card*) arrCardOnHand->objectAtIndex(i);
         card->setZOrder(i);
@@ -362,17 +373,27 @@ void LayerCardInGame::refreshCardOnHand() {
 
         CCMoveTo *actionMove = CCMoveTo::create(0.5, ccp(leftTheFirst + i * disCards, top));
         if (i == arrCardOnHand->count() - 1) {
-            // nếu cần gợi ý hạ phỏm
+            // nếu cần gợi ý hạ phỏm, đồng bộ allowSortCard=true
             card->runAction(CCSequence::create(actionMove,
                                                CCCallFuncN::create(this, callfuncN_selector(LayerCardInGame::actionRecommendCard)),
                                                NULL));
         }
-        else
+        else{
             card->runAction(actionMove);
+		}
     }
 }
 
 void LayerCardInGame::refreshCardOnHand(bool isRefreshTop) {
+// 	if (!allowSortCard){
+// 		CCLog("Khong dc xep bai do allowSortCard=false !");
+// 		return;
+// 	}
+
+	// mỗi lần xếp đều "nghỉ" 3s
+	//this->allowSortCard = false;
+	//this->scheduleOnce(schedule_selector(LayerCardInGame::delayAllowSortCard), 3);
+
     float leftTheFirst = (WIDTH_DESIGN - (arrCardOnHand->count() - 1) * disCards - sizeCard.width) / 2;
     float top;
     
@@ -397,6 +418,15 @@ void LayerCardInGame::refreshCardOnHand(bool isRefreshTop) {
 }
 
 void LayerCardInGame::refreshCardOnHand(float delay) {
+// 	if (!allowSortCard){
+// 		CCLog("Khong dc xep bai do allowSortCard=false !");
+// 		return;
+// 	}
+
+	// mỗi lần xếp đều "nghỉ" 3s
+	//this->allowSortCard = false;
+	//this->scheduleOnce(schedule_selector(LayerCardInGame::delayAllowSortCard), 3);
+
 	// only Deal card
     float leftTheFirst = (WIDTH_DESIGN - (arrCardOnHand->count() - 1) * disCards - sizeCard.width) / 2;
     float top = topCard;
@@ -620,8 +650,8 @@ void LayerCardInGame::initGame() {
     //if (arrAllCard == NULL) {
         //
         ZORDER_PHOM = 0;
-        ZORDER_TAKE = 10;
-        ZORDER_HAND = 20;
+        ZORDER_TAKE = 31;
+        ZORDER_HAND = 40;
         
         topCard = 72;
         disCards = 55;
@@ -682,6 +712,7 @@ void LayerCardInGame::resetGame() {
 	arrIDCardOnHandLeft.clear();
 	arrIDCardOnHandRight.clear();
 	arrIDCardOnHandTop.clear();
+	arrIDCardOnTable.clear();
     
     int length = arrAllCard->count();
     
@@ -831,16 +862,7 @@ void LayerCardInGame::actionDealCard(vector<int> arrCardID) {
 
 void LayerCardInGame::actionSortCard(vector<int> arrCardID) {
     // tạm thôi!
-    
-    if (!allowSortCard){
-        CCLog("Khong dc xep bai do allowSortCard=false !");
-        return;
-    }
-    
-    // mỗi lần xếp đều "nghỉ" 3s
-    this->allowSortCard = false;
-    // this->scheduleOnce(schedule_selector(LayerCardInGame::delayAllowSortCard), 3);
-    
+ 
     int length = arrCardID.size();
     
 	Card *card;
@@ -863,9 +885,37 @@ void LayerCardInGame::actionSortCard(vector<int> arrCardID) {
 }
 
 void LayerCardInGame::actionSortCardByTienLen() {
-    
+// 	if (!this->allowSortCard){
+// 		CCLog("Khong dc xep qua nhanh!");
+// 		return;
+// 	}
+
     int length = arrCardOnHand->count();
-	Card *cardi, *cardj;
+	vector<int> arrIDCard;
+	Card *card;
+	int i, j, tg;
+	for ( i = 0; i < length; i++) {
+		card = (Card*) arrCardOnHand->objectAtIndex(i);
+		if (card==NULL) continue;
+		arrIDCard.push_back(card->getID());
+	}
+
+	length = arrIDCard.size();
+	if (length < 2) return;
+	for ( i = 0; i < length-1; i++) {
+		for (j = i + 1; j < length; j++)
+		{
+			if (arrIDCard.at(i) > arrIDCard.at(j)) {
+				tg = arrIDCard.at(i);
+				arrIDCard.at(i) = arrIDCard.at(j);
+				arrIDCard.at(j) = tg;
+			}
+		}
+	}
+
+	actionSortCard(arrIDCard);
+
+	/*Card *cardi, *cardj;
 
     for (int i = 0; i < length - 1; i++) {
         for (int j = i + 1; j < length; j++) {
@@ -885,10 +935,10 @@ void LayerCardInGame::actionSortCardByTienLen() {
 	cardi->release();
     cardj->release();
 
-    refreshCardOnHand();
+    refreshCardOnHand();*/
 }
 
-void LayerCardInGame::delayAllowSortCard() {
+void LayerCardInGame::delayAllowSortCard(float dt) {
     this->allowSortCard = true;
 }
 
@@ -901,8 +951,10 @@ void LayerCardInGame::actionHitCard(int kUser, int id) {
 
 	bool isPlaySound = true;
     if (length > 0){
+		CCPoint pointEnd;
         Card *card = getCardByID(id);
         
+		bool isHit = true;
         switch (kUser) {
             case kUserMe:
                 arrCardOnHand->removeObject(card);
@@ -927,7 +979,8 @@ void LayerCardInGame::actionHitCard(int kUser, int id) {
                 }
                 
                 card->setZOrder(ZORDER_TAKE + countCardLeft_Take);
-                card->runAction(CCMoveTo::create(0.3, ccp(125 + disCards / 2 * countCardLeft_Take, 214)));
+				pointEnd.setPoint(125 + disCards/2 * (countCardLeft_Take%5), 214 - countCardLeft_Take/5 * sizeCard.height/3);
+                card->runAction(CCMoveTo::create(0.3, pointEnd));
                 card->runAction(CCScaleTo::create(0.3, 0.5));
                 
                 countCardLeft_Take++;
@@ -941,7 +994,10 @@ void LayerCardInGame::actionHitCard(int kUser, int id) {
                 }
                 
                 card->setZOrder(ZORDER_TAKE + countCardRight_Take);
-                card->runAction(CCMoveTo::create(0.3, ccp(687 - (3 * disCards / 2 + card->getContentSize().width / 2) + disCards / 2 * countCardRight_Take, 214)));
+				pointEnd.setPoint(687 - (3 * disCards / 2 + card->getContentSize().width / 2) + disCards/2 * (countCardRight_Take%5), 
+					214 - countCardRight_Take/5 * sizeCard.height/3);
+				//CCLog("pointEnd.y = %.1f", );
+                card->runAction(CCMoveTo::create(0.3, pointEnd));
                 card->runAction(CCScaleTo::create(0.3, 0.5));
                 
                 countCardRight_Take++;
@@ -955,7 +1011,8 @@ void LayerCardInGame::actionHitCard(int kUser, int id) {
                 }
                 
                 card->setZOrder(ZORDER_TAKE + countCardTop_Take);
-                card->runAction(CCMoveTo::create(0.3, ccp(350 + disCards / 2 * countCardTop_Take, HEIGHT_DESIGN - 114 - sizeCard.height)));
+				pointEnd.setPoint(350 + disCards/2 * (countCardTop_Take%5), HEIGHT_DESIGN - 114 - sizeCard.height - countCardTop_Take/5 * sizeCard.height/3);
+                card->runAction(CCMoveTo::create(0.3, pointEnd));
                 card->runAction(CCScaleTo::create(0.3, 0.5));
                 
                 countCardTop_Take++;
@@ -969,7 +1026,8 @@ void LayerCardInGame::actionHitCard(int kUser, int id) {
                 }
                 
                 card->setZOrder(ZORDER_TAKE + countCardBot_Take);
-                card->runAction(CCMoveTo::create(0.3, ccp(350 + disCards / 2 * countCardBot_Take, 162)));
+				pointEnd.setPoint(350 + disCards/2 * (countCardBot_Take%5), 162 - countCardBot_Take/5 * sizeCard.height/3);
+                card->runAction(CCMoveTo::create(0.3, pointEnd));
                 card->runAction(CCScaleTo::create(0.3, 0.5));
                 
                 countCardBot_Take++;
@@ -977,10 +1035,12 @@ void LayerCardInGame::actionHitCard(int kUser, int id) {
                 break;
             default:
 				isPlaySound=false;
+				isHit = false;
                 break;
         }
         
 		if (isPlaySound) playSound("danh_bai.mp3");
+		if (isHit) arrIDCardOnTable.push_back(id);
     }
 }
 
@@ -1075,10 +1135,12 @@ void LayerCardInGame::callbackGiveCard(CCNode *pSender) {
 void LayerCardInGame::actionEatCard(int fromPosUser, int toPosUser, int pId) {
     int length = arrAllCard->count();
     if (pId >= 100) pId = length - 1;
+
+	if (arrIDCardOnTable.size() > 0 && pId == arrIDCardOnTable.at(arrIDCardOnTable.size()-1))
+		arrIDCardOnTable.pop_back();
     
     Card *card = getCardByID(pId);
     card->setCardAte();
-	//CCLog("Quan bai can tren tay can di chuyen la: id=%d, name=%s", card->getID(), card->getURL().c_str());
     
 	bool isPlaySound = true;
     switch (fromPosUser) {
@@ -1100,7 +1162,6 @@ void LayerCardInGame::actionEatCard(int fromPosUser, int toPosUser, int pId) {
             break;
     }
 	if (isPlaySound) playSound("an_bai.mp3");
-    
 	
     switch (toPosUser) {
         case kUserMe:
@@ -1266,10 +1327,12 @@ void LayerCardInGame::actionPushCard(int fromPosUser, int toPosUser, int pId) {
             break;
     }
     
-    actionHaPhomByPos(toPosUser, pId);
+    //actionHaPhomByPos(toPosUser, pId);
 }
 
 void LayerCardInGame::actionRecommendCard(CCNode *pSender) {
+	//this->allowSortCard = true;
+
     if (lcRecommendHaPhom.length() <= 2) {
         return;
     }
@@ -1333,12 +1396,12 @@ void LayerCardInGame::actionHaPhom(vector<int> arrID, vector<int> arrIDPhom) {
             
             card->setVisible(true);
             card->setPhom(true);
-            
-            card->setZOrder(ZORDER_PHOM + countCardMe_Phom);
+           
             int left = 10 + dem * disCards / 2;
             int top = topCard + (sizeCard.height - card->getContentSize().height / 2);
             top -= (orderPhom-1) * sizeCard.height / 3;
-            
+
+			card->setZOrder(ZORDER_PHOM + ((dem+1) * currentPhom));
             card->runAction(CCMoveTo::create(0.3, ccp(left, top)));
             card->runAction(CCScaleTo::create(0.3, 0.5));
             
@@ -1349,17 +1412,61 @@ void LayerCardInGame::actionHaPhom(vector<int> arrID, vector<int> arrIDPhom) {
     }
 }
 
-void LayerCardInGame::actionHaPhomFromListID(string listID) {
-	// index:number:suit:turnedUp:origination:phomID
-	/*	 8:9:1:1:4:1;
-		21:9:2:1:4:1;
-		34:9:3:1:2:1;
-		18:6:2:1:4:2;
-		19:7:2:1:4:2;
-		20:8:2:1:4:2;
-	*/
+void LayerCardInGame::actionHaPhomByPos(int pos, vector<int> arrID, vector<int> arrIDPhom) {
+	CCLog("ha phom kieu moi! arrID.size()=%d, arrIDPhom.size()=%d", arrID.size(), arrIDPhom.size());
+	if (arrID.size() != arrIDPhom.size()) return;
 
+	int dem = 0;
+	int currentPhom = 1;
+	int zOrder=0;
+	CCPoint pointStart;
+	CCPoint pointEnd;
 
+	for (int i = 0; i < arrID.size(); i++) {
+		int id = arrID.at(i);
+		int orderPhom = arrIDPhom.at(i);
+		if (currentPhom != orderPhom){
+			currentPhom = orderPhom;
+			dem=0;
+		}
+
+		Card *card = getCardByID(id);
+		if (card==NULL) continue;
+		card->setPhom(true);
+
+		switch (pos) {
+			case kUserLeft:
+				pointStart = getStartPositionCardUserLeft_Hit();
+				pointEnd = ccp(115 + dem * disCards / 2, 243 + (currentPhom-1) * sizeCard.height/3);
+				zOrder = (dem+1)*(4-currentPhom);
+				break;
+
+			case kUserRight:
+				pointStart = getStartPositionCardUserRight_Hit();
+				pointEnd = ccp(687 - ((dem+1) * disCards / 2), 243 + (currentPhom-1) * sizeCard.height/3);
+				zOrder = (10-dem)*(4-currentPhom);
+				break;
+
+			case kUserTop:
+				pointStart = getStartPositionCardUserTop_Hit();
+				pointEnd = ccp(457 + dem * disCards / 2, 403 - (currentPhom-1) * sizeCard.height/3);
+				zOrder = -(10-dem)*(4-currentPhom);
+				break;
+		}
+
+		if (!card->isVisible()) {
+			card->setPosition(pointStart);
+			card->setVisible(true);
+		}
+		// Chỉ thực hiện khi Card thỏa mãn: vị trí của nó khác so với vị trí cần tới/
+		if (card->getPositionX() != pointEnd.x || card->getPositionY() != pointEnd.y) {
+			card->setZOrder(zOrder);
+			card->runAction(CCMoveTo::create(0.3, pointEnd));
+			card->runAction(CCScaleTo::create(0.3, 0.5));
+		}
+
+		dem++;
+	}
 }
 
 void LayerCardInGame::actionHaPhomByPos(int pos, int pID) {
@@ -1449,6 +1556,7 @@ Card* LayerCardInGame::getCardByID(int pID) {
 
 void LayerCardInGame::eventListcardNTF(int posUser, string lc) {
     // lc = numberCardOnHand/id:xx:xx:xx:xx;id:xx:xx:xx:xx;...../
+	CCLog("eventListcardNTF");
     
     // ở đây chỉ thực hiện 2 nhiệm vụ nếu posUser=kUserMe
     // 1. Chia bài (gameStarted = false)
@@ -1498,6 +1606,7 @@ void LayerCardInGame::eventListcardNTF(int posUser, string lc) {
             
             // phỏm
 			if (lengArrPhom > countCardMe_Phom){
+				countCardMe_Phom = lengArrPhom;
 				actionHaPhom(arrID_Phom, arrID_PhomID);
 				isPlaySound=true;
 			}
@@ -1527,10 +1636,8 @@ void LayerCardInGame::eventListcardNTF(int posUser, string lc) {
             
             // phỏm
 			if (lengArrPhom > countCardLeft_Phom){
-				for (int i = 0; i < arrID_Phom.size(); i++) {
-					int id = arrID_Phom[i];
-					actionHaPhomByPos(kUserLeft, id);
-				}
+				countCardLeft_Phom = lengArrPhom;
+				actionHaPhomByPos(kUserLeft, arrID_Phom, arrID_PhomID);
 				isPlaySound=true;
 			}
             
@@ -1556,11 +1663,10 @@ void LayerCardInGame::eventListcardNTF(int posUser, string lc) {
         case kUserRight:
             
             // ha phom
+			CCLog("kUserRight: lengArrPhom=%d, countCardRight_Phom=%d", lengArrPhom, countCardRight_Phom);
 			if (lengArrPhom > countCardRight_Phom){
-				for (int i = 0; i < arrID_Phom.size(); i++) {
-					int id = arrID_Phom[i];
-					actionHaPhomByPos(kUserRight, id);
-				}
+				countCardRight_Phom = lengArrPhom;
+				actionHaPhomByPos(kUserRight, arrID_Phom, arrID_PhomID);
 				isPlaySound=true;
 			}
 
@@ -1587,10 +1693,8 @@ void LayerCardInGame::eventListcardNTF(int posUser, string lc) {
             
             // ha phom
 			if (lengArrPhom > countCardTop_Phom){
-				for (int i = 0; i < arrID_Phom.size(); i++) {
-					int id = arrID_Phom[i];
-					actionHaPhomByPos(kUserTop, id);
-				}
+				countCardTop_Phom = lengArrPhom;
+				actionHaPhomByPos(kUserTop, arrID_Phom, arrID_PhomID);
 				isPlaySound=true;
 			}
             
@@ -1739,6 +1843,20 @@ void LayerCardInGame::setCountCardByPos(int pos, int count) {
 }
 
 void LayerCardInGame::showCardOnHandAll() {
+	// ẩn đi các quân bài trên bàn
+	Card *card;
+	for (int i=0; i < arrIDCardOnTable.size(); i++)
+	{
+		card = getCardByID(arrIDCardOnTable.at(i));
+		if (card==NULL) continue;
+		card->setVisible(false);
+	}
+
+	countCardLeft_Take=0;
+	countCardRight_Take=0;
+	countCardTop_Take=0;
+	countCardBot_Take=0;
+
 	showCardOnHandByPos_Arr(kUserLeft, arrIDCardOnHandLeft);
 	showCardOnHandByPos_Arr(kUserRight, arrIDCardOnHandRight);
 	showCardOnHandByPos_Arr(kUserTop, arrIDCardOnHandTop);
@@ -1747,7 +1865,8 @@ void LayerCardInGame::showCardOnHandAll() {
 void LayerCardInGame::showCardOnHandByPos_Arr(int kUser, vector<int> arrID) {
 	for (int i = 0; i < arrID.size(); i++)
 	{
-		actionEatCard(-1, kUser, arrID.at(i));
+		//actionEatCard(-1, kUser, arrID.at(i));
+		actionHitCard(kUser, arrID.at(i));
 	}
 }
 

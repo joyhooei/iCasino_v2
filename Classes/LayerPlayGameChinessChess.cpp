@@ -194,7 +194,7 @@ void LayerPlayGameChinessChess::updateTimer(float dt) {
     }
 	else {
 		// 
-		if (timeToReady >= 0) {
+		if (timeToReady >= 0 && !isSpector) {
 			Chat *noti = new Chat("Bạn có 20 giây để sẵn sàng!", -1);
 			noti->setPositionY(70);
 			noti->setPositionX(nodeTableChess->getContentSize().width/2 - noti->getSize().width/2);
@@ -213,9 +213,6 @@ void LayerPlayGameChinessChess::updateTimer(float dt) {
 				CCRemoveSelf::create(), 
 				NULL));
 		}
-		else {
-		}
-
 		timeRestBlack = 900;
 		timeRestRed = 900;
 		lblTotalTimeBlack->setString(convertTimer(timeRestBlack).c_str());
@@ -306,11 +303,17 @@ CCPoint LayerPlayGameChinessChess::convertPoint_TableToLayer(CCPoint point) {
 }
 
 void LayerPlayGameChinessChess::ccTouchesEnded(CCSet *pTouches, CCEvent *event){
+	if (isSpector) {
+		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
+		this->addChild(noti);
+		return;
+	}
+
 	if (this->nameCurrentTurn != myName){
-		Chat *noti = new Chat("Chưa tới lượt!", -1);
-		noti->setPositionY(70);
-		noti->setPositionX(nodeTableChess->getContentSize().width/2 - noti->getSize().width/2);
-		nodeTableChess->addChild(noti, 100);
+// 		Chat *noti = new Chat("Chưa tới lượt!", -1);
+// 		noti->setPositionY(70);
+// 		noti->setPositionX(nodeTableChess->getContentSize().width/2 - noti->getSize().width/2);
+// 		nodeTableChess->addChild(noti, 100);
 		return; 
 	}
 
@@ -642,6 +645,13 @@ void LayerPlayGameChinessChess::callbackFromChatWindow( CCNode*, void* data )
 
 void LayerPlayGameChinessChess::onButtonLose(CCObject* pSender){
     /**/
+	if (isSpector)
+	{
+		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
+		this->addChild(noti);
+		return;
+	}
+
 	if (!isStartedGame) {
 		Chat *noti = new Chat("Chưa bắt đầu game!", -1);
 		this->addChild(noti, 100);
@@ -658,6 +668,13 @@ void LayerPlayGameChinessChess::onButtonLose(CCObject* pSender){
 		"Bạn chắc muốn XIN THUA chứ?", true, "Ok", DONG_Y_XIN_THUA, this);
 }
 void LayerPlayGameChinessChess::onButtonPeace(CCObject* pSender){
+	if (isSpector)
+	{
+		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
+		this->addChild(noti);
+		return;
+	}
+
 	if (!isStartedGame) {
 		Chat *noti = new Chat("Chưa bắt đầu game!", -1);
 		this->addChild(noti, 100);
@@ -729,6 +746,13 @@ void LayerPlayGameChinessChess::notificationCallBack( bool isOK, int tag )
 
 void LayerPlayGameChinessChess::onButtonRemove(CCObject* pSender){
 	CCLog("Undo button clicked");
+	if (isSpector)
+	{
+		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
+		this->addChild(noti);
+		return;
+	}
+
 	if (!isStartedGame) {
 		Chat *noti = new Chat("Chưa bắt đầu game!", -1);
 		this->addChild(noti, 100);
@@ -829,6 +853,18 @@ bool LayerPlayGameChinessChess::onAssignCCBMemberVariable(CCObject *pTarget, con
 
 void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
+	myName = SceneManager::getSingleton().getMyName();
+	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+	if (isSpector) {
+		CCLog("Minh la khach!");
+		btnReady->setEnabled(false);
+		btnReady->setVisible(false);
+
+		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
+		this->addChild(noti);
+	}
+	else CCLog("Minh la Player");
+
     logicChess = new ChessLogic();
     logicChess->loadNewGame();
     
@@ -847,8 +883,8 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
 	nodeTableChess->addChild(chieuTuongBlack, 100);
 
     // Khoi tao cac doi tuong o day
-    myName = SceneManager::getSingleton().getMyName();
-    indexCurrent = -1;
+	//
+	indexCurrent = -1;
     indexTarget = -1;
     
     isStartedGame = false;
@@ -1131,8 +1167,10 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_END(){
 	isIamTheFirst  = false;
 	isStartedGame = false;
     
-    btnReady->setEnabled(true);
-    btnReady->setVisible(true);
+	if (!isSpector) {
+		btnReady->setEnabled(true);
+		btnReady->setVisible(true);
+	}
     
     // reset
     indexCurrent = -1;
@@ -1245,6 +1283,64 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
         // Dựa vào ds này xác định xem mình là chủ phòng hay ko
         string ls = listUser->c_str();
         vector<string> arrInfo = split(ls, ';');
+
+		// nếu mình là khách (isSpector=true)
+		// Begin
+		if (isSpector) {
+			int sizeInfo = arrInfo.size();
+			if (sizeInfo < 1) return;
+
+			// người trước là "mình", 
+			vector<string> arr = split(arrInfo[0], '|');
+			int size = arr.size();
+			if(size < 2) return;
+			string name = arr.at(0);
+			string rateWin = arr.at(2);
+			string tile = "Tỉ lệ thắng: " + rateWin + "%";
+			lblWinRateBlack->setString(tile.c_str());
+			// name
+			lblNameBlack->setString(name.c_str());
+			boost::shared_ptr<User> userInfo = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(name);
+			boost::shared_ptr<double> amf = userInfo->GetVariable("amf")->GetDoubleValue();
+			int money = (int)(*amf);
+			// money
+			lblMoneyBlack->setString(mUtils::convertMoneyEx(money).c_str());
+			// avatar
+			boost::shared_ptr<string> url = userInfo->GetVariable("aal")->GetStringValue();
+			//4 black
+			imagedownloader4Black->setPointerNodeImage( nodeAvatarBlack );
+			imagedownloader4Black->downLoadImage( *url );
+			
+			// người sau là "địch"
+			lblNameRed->setString("--");
+			lblMoneyRed->setString("--");
+			lblWinRateRed->setString("--");
+			imagedownloader4Red->setPointerNodeImage(nodeAvatarRed);
+			imagedownloader4Red->downLoadImage("");
+			if (sizeInfo < 2) return;
+			arr = split(arrInfo[1], '|');
+			size = arr.size();
+			if(size < 2) return;
+			name = arr.at(0);
+			rateWin = arr.at(2);
+			tile = "Tỉ lệ thắng: " + rateWin + "%";
+			lblWinRateRed->setString(tile.c_str());
+			// name
+			lblNameRed->setString(name.c_str());
+			userInfo = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(name);
+			amf = userInfo->GetVariable("amf")->GetDoubleValue();
+			money = (int)(*amf);
+			// money
+			lblMoneyRed->setString(mUtils::convertMoneyEx(money).c_str());
+			// avatar
+			url = userInfo->GetVariable("aal")->GetStringValue();
+			//4 black
+			imagedownloader4Red->setPointerNodeImage( nodeAvatarRed );
+			imagedownloader4Red->downLoadImage( *url );
+
+			return;
+		}
+		// End
         
         int sizeInfo = arrInfo.size();
         for (int i = 0; i < sizeInfo; i++) {

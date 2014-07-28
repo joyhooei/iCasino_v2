@@ -49,7 +49,7 @@ public:
     // xep bai
     void actionSortCard(vector<int> arrCardID);
     void actionSortCardByTienLen(); // tam thoi
-    void delayAllowSortCard();
+    void delayAllowSortCard(float dt);
     
     // danh bai
     void actionHitCard(int posUser, int pId);
@@ -73,8 +73,8 @@ public:
     
     // hạ phỏm
     void actionHaPhom(vector<int> arrID, vector<int> arrIDPhom);
-	void actionHaPhomFromListID(string listID); // giữ nguyên cấu trúc của listID từ sv, id:number:suit:turnedUp:origination:phomID
-    void actionHaPhomByPos(int pos, int pID);
+	void actionHaPhomByPos(int pos, vector<int> arrID, vector<int> arrIDPhom);
+	void actionHaPhomByPos(int pos, int pID);
     
     // ----
     
@@ -145,6 +145,9 @@ private:
 	vector<int> arrIDCardOnHandLeft;
 	vector<int> arrIDCardOnHandRight;
 	vector<int> arrIDCardOnHandTop;
+
+	// lưu các ID-Card đang có trên bàn (để hết ván remove khỏi bàn)
+	vector<int> arrIDCardOnTable;
 
     float startLeft;
     float startTop;
