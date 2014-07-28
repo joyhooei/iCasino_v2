@@ -37,6 +37,8 @@ private:
 	int _coutZorder;
 
 	UILayer *uLayer;
+	UIButton *dianoc;
+	UILabel *countNoc;
 
 	//Khoảng cách các lá bài cửa trì khi đã bốc đủ 8 lá
 	//Ban đầu khoảng cách là w_card
@@ -98,8 +100,27 @@ private:
 
 	CCArray *ALL_CARDS;
 
+	CCArray *CARD_RESUITL;
+	CCLayer *layerCardResult;
+
 	CCObject* m_callback;
 	SEL_CallFuncN m_callbackListener;
+
+	//Drag Drop
+	CCSize sizeScreen;
+	CCSize disTouchBegan;
+	CCPoint pointTouchBegan;
+
+	float scaleApp;
+	float startLeft;
+	float startTop;
+
+	float pos_Left;
+	float pos_Right;
+	float pos_Bottom;
+	float pos_Top;
+	bool flag_DragDrop1;
+	bool flag_DragDrop2;
 
 public:
 	_Layer_CardChan_();
@@ -112,9 +133,10 @@ public:
 	void resetAllCards();
 
 	void setMyListCards(string listCards);
-	void rotateListCards();
+	void rotateListCards(CCArray *P);
 	void refreshListCard();
 	void CardTouch(CCObject *pSender,TouchEventType type);
+	void CardResuiltMove(CCObject *pSender,TouchEventType type);
 
 	void sortMyListCards(string listCards);
 	void resortCard_CuaTri_Alluser(int pos);
@@ -126,6 +148,7 @@ public:
 	void addCard_toDuoiTay_top(CCNode *sender, void *data);
 	void swapZorder(CCArray* P1, CCArray* P2, int _count, bool _state);
 
+	void setCountNoc(int count);
 
 	void removeAllCardFromArray(CCArray *P);
 
@@ -152,15 +175,28 @@ public:
 
 	void action_An_U(int f_user, int t_user, string cardnu, string cardsu);
 
+	void scaleCardsHand_whenU();
+	void setCardsResuilt(string listCards);
+
 	CardChan* getCardFromPos_take(int pos);
 
 	void doDisCards();
 	void doChiuCard();
 	void doEateCard();
 	void doDuoiCard();
+	void doViewNoc(string listnoc);
+
+	void btn_XemNoc_click(CCObject *sender, TouchEventType type);
 
 	void playSounds(string url);
 	void setCallbackFunc(CCObject* target, SEL_CallFuncN callfun);
+
+	// touches event
+	CCPoint convertPoint(CCPoint point);
+	float   getDisPoint(CCPoint p1, CCPoint p2);
+	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
+	virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
+	virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
 };
 
 #endif 

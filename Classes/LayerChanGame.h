@@ -93,6 +93,7 @@ private:
 	bool flagChiaBai;
 
 	int countDiscard;
+	int countUser;
 
 	LayerAvatarInGame *layerAvatars;
 	LayerButtonInGame *layerButtons;
@@ -115,6 +116,8 @@ public:
 
 	int getPosUserByName(string uid,string _list_user);
 	void updateUser(string list);
+	void updateUser2Player(vector<string> arrUser);
+
 	void setInfoAvatar(int pos,string aI,string name, int money, string url);
 
 	void whenUserTakeCards(long rscode);
@@ -127,6 +130,7 @@ public:
 	void XuongU();
 
 	void waitPlayer_ReqU(string uid, string lc);
+	void wait10s(CCObject *data);
 
 	void resuiltGame(string resuilt);
 
@@ -146,7 +150,7 @@ public:
 	void playSounds(string url);
 
 	Button* createButtonWithTitle_Pos(const char *pName, CCPoint pPoint);
-	Button* createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture);
+	Button* createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture,const char* pTextureSelect);
 	Button* getButtonByTag(int pTag);
 
 	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);

@@ -8,6 +8,8 @@
 #include "SimpleAudioEngine.h"
 
 #define PI 3.141592653589
+#define kTag_buttonNoc 123
+
 using namespace Sfs2X;
 
 _Layer_CardChan_::_Layer_CardChan_(){
@@ -56,6 +58,9 @@ _Layer_CardChan_::~_Layer_CardChan_()
 
 	ALL_CARDS->removeAllObjects();
 	ALL_CARDS->release();
+
+	CARD_RESUITL->removeAllObjects();
+	CARD_RESUITL->release();
 	CCLOG("Layer card Chan Deconstructor !");
 }
 
@@ -68,11 +73,43 @@ bool _Layer_CardChan_::init()
 
 	this->setAnchorPoint(ccp(0, 0));
 	this->setPosition(ccp(0, 0));
+	this->setTouchEnabled(true);
 
+	this->sizeScreen = CCDirector::sharedDirector()->getVisibleSize();
+	float scaleX = sizeScreen.width / WIDTH_DESIGN;
+	float scaleY = sizeScreen.height / HEIGHT_DESIGN;
+	float scaleMin = (scaleX < scaleY) ? scaleX : scaleY;
+	scaleApp = scaleMin;
+
+	startLeft = (sizeScreen.width - WIDTH_DESIGN) / 2;
+	startTop = (sizeScreen.height - HEIGHT_DESIGN) / 2;
+
+	//Drag drop cards of winner user !
+	pos_Left = (WIDTH_DESIGN - (h_cardhand / 3 + h_card * 2 + 10)) / 2;
+	pos_Right = WIDTH_DESIGN - (WIDTH_DESIGN - (h_cardhand / 3 + h_card * 2 + 10)) / 2;
+	pos_Bottom = HEIGHT_DESIGN / 2 + 50 - (h_card + 5) / 2;
+	pos_Top = HEIGHT_DESIGN / 2 + 55 + h_card;
+	flag_DragDrop1 = false;
+	flag_DragDrop1 = false;
+
+	// Cards
 	uLayer = UILayer::create();
 	uLayer->setAnchorPoint(ccp(0, 0));
 	uLayer->setPosition(ccp(0, 0));
 	this->addChild(uLayer);
+
+	dianoc = UIButton::create();
+	dianoc->loadTextures("dia_noc.png","dia_noc.png","");
+	dianoc->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 32.5));
+	dianoc->addTouchEventListener(this, toucheventselector(_Layer_CardChan_::btn_XemNoc_click));
+	dianoc->setTag(kTag_buttonNoc);
+	dianoc->setEnabled(false);
+	uLayer->addWidget(dianoc);
+	countNoc = UILabel::create();
+	countNoc->setText("");
+	countNoc->setFontSize(24);
+	countNoc->setColor(ccRED);
+	dianoc->addChild(countNoc);
 
 	w_cardhand = 34;
 	h_cardhand = 125;
@@ -83,9 +120,9 @@ bool _Layer_CardChan_::init()
 
 	// Vi tri cac la bai cua tri
 	left_chi_left = (123);
-	left_chi_right = (683);
+	left_chi_right = (680);
 	left_chi_me = (510 + w_card * 2);
-	left_chi_top = (363) - w_card;
+	left_chi_top = (365) - w_card;
 
 	bottom_chi_left = 206;
 	bottom_chi_right = 237;
@@ -164,6 +201,13 @@ bool _Layer_CardChan_::init()
 	CARD_D_TOP_bottom->retain();
 
 	CCLOG("Init success !");
+	CARD_RESUITL = CCArray::create();
+	CARD_RESUITL->retain();
+
+	layerCardResult = CCLayer::create();
+	this->addChild(layerCardResult);
+
+	CCLOG("Init success !");
 	return true;
 }
 
@@ -179,7 +223,6 @@ void _Layer_CardChan_::createAllCards(){
 		pCard->setTouchEnabled(false);
 		uLayer->addWidget(pCard);
 		ALL_CARDS->addObject(pCard);
-
 	}
 }
 
@@ -188,6 +231,7 @@ void _Layer_CardChan_::resetAllCards(){
 	for(int i = 0; i < (int)ALL_CARDS->count(); i++)
 	{
 		CardChan *pCard = (CardChan*)ALL_CARDS->objectAtIndex(i);
+		pCard->setOpacity(255);
 		pCard->setVisible(false);
 		pCard->setTouchEnabled(false);
 		pCard->setRotation(0);
@@ -213,6 +257,13 @@ void _Layer_CardChan_::resetAllCards(){
 	removeAllCardFromArray(CARD_D_RIGHT_top);
 	removeAllCardFromArray(CARD_D_ME_top);
 	removeAllCardFromArray(CARD_D_LEFT_top);
+
+	removeAllCardFromArray(CARD_RESUITL);
+	flag_DragDrop1 = false;
+	flag_DragDrop2 = false;
+	layerCardResult->removeAllChildrenWithCleanup(true);
+	countNoc->setText("");
+	dianoc->setEnabled(false);
 }
 
 void _Layer_CardChan_::setMyListCards(string listCards){
@@ -243,21 +294,23 @@ void _Layer_CardChan_::setMyListCards(string listCards){
 			_coutZorder++;
 			i++;
 		}else{
-			rotateListCards();
+			rotateListCards(CARD_ME);
+			dianoc->setEnabled(true);
+			dianoc->setTouchEnabled(false);
 			break;
 		}
 	}//end while
 }
 
-void _Layer_CardChan_::rotateListCards(){
+void _Layer_CardChan_::rotateListCards(CCArray *P){
 	CCObject *t;
 	int dem = 0;
-	float startX = (WIDTH_DESIGN - (CARD_ME->count() * w_cardhand / 3)) / 2;
-	float startAg =(float)(CARD_ME->count() - 1);
+	float startX = (WIDTH_DESIGN - (P->count() * w_cardhand / 3)) / 2;
+	float startAg =(float)(P->count() - 1);
 
 	playSounds("Xoe.mp3");
 
-	CCARRAY_FOREACH(CARD_ME, t){
+	CCARRAY_FOREACH(P, t){
 		CardChan *card = dynamic_cast<CardChan*>(t);
 
 		float xOld = card->getPositionX();
@@ -355,6 +408,21 @@ void _Layer_CardChan_::CardTouch(CCObject *pSender,TouchEventType type){
 				}
 			}
 		}
+	}
+}
+
+void _Layer_CardChan_::CardResuiltMove(CCObject *pSender,TouchEventType type){
+	if (type == TOUCH_EVENT_BEGAN)
+	{
+		CCLOG("touch start !");
+	}
+	else if(type == TOUCH_EVENT_MOVED)
+	{
+		CCLOG("touch move !");
+	}
+	else if (type == TOUCH_EVENT_ENDED)
+	{
+		CCLOG("touch end !");
 	}
 }
 
@@ -481,7 +549,6 @@ string _Layer_CardChan_::getNameCard(int number, int suite){
 	return str;
 }
 
-// Add thêm 1 lá bài vào cửa trì
 void _Layer_CardChan_::addCard_toCuaTri(CCNode* sender, void* data){
 	int *f = (int*) data; 
 	CardChan *pCard = (CardChan*) sender;
@@ -567,8 +634,6 @@ void _Layer_CardChan_::swapZorder(CCArray* P1, CCArray* P2, int _count, bool _st
 	}
 }
 
-
-
 void _Layer_CardChan_::removeAllCardFromArray(CCArray *P){
 	while(P->count() > 0){
 		CardChan *pCard = (CardChan*)P->lastObject();
@@ -630,7 +695,8 @@ void _Layer_CardChan_::action_BocNoc(int t_pos,string cardnu, string cardsu){
 	pCard->setNumber(atoi(cardnu.c_str()));
 	pCard->setSuite(atoi(cardsu.c_str()));
 	pCard->setSizeCard(w_card, h_card);
-	pCard->setPosition(ccp(WIDTH_DESIGN/2 - w_card/2, HEIGHT_DESIGN/2 - h_card/2));
+	pCard->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2));
+	pCard->setOpacity(200);
 	pCard->setVisible(true);
 
 	float toX = -1;
@@ -927,7 +993,6 @@ void _Layer_CardChan_::action_TraCua_NOTME(int fpos, int tpos, string cardnu, st
 	pCard->runAction(CCSequence::create(delay, moveTo, callfun, NULL));
 }
 
-
 void _Layer_CardChan_::action_DanhBai(int f_user, string cardnu, string cardsu){
 	CCLOG("Đánh bài");
 	if (f_user == kUserMe) {
@@ -1023,7 +1088,6 @@ void _Layer_CardChan_::action_DanhBai_NOTME(int pos,string cardnu,string cardsu)
 	CCDelayTime *delay = CCDelayTime::create(0.3);
 	pCard->runAction(CCSequence::create(delay,moveTo,callfun,NULL));
 }
-
 
 void _Layer_CardChan_::action_ChuyenBai(int f_user, int t_user, string cardnu, string cardsu){
 	CCLOG("Chuyển bài từ trên xuống dưới tay");
@@ -1231,7 +1295,6 @@ void _Layer_CardChan_::action_ChuyenBai_Chiu(int pos, string cardnu, string card
 	}
 }
 
-
 void _Layer_CardChan_::action_ChuyenBai_ChiuME(string cardnu, string cardsu){
 // 
 // 	CCObject *t;
@@ -1266,9 +1329,8 @@ void _Layer_CardChan_::action_ChuyenBai_ChiuNotMe(int pos, string cardnu, string
 	//Chuyen bai nhung nguoi khac
 }
 
-
 void _Layer_CardChan_::action_An_U(int f_user, int t_user, string cardnu, string cardsu){
-
+	action_AnCuaTren(f_user, t_user, cardnu, cardsu);
 }
 
 CardChan* _Layer_CardChan_::getCardFromPos_take(int pos){
@@ -1294,6 +1356,69 @@ CardChan* _Layer_CardChan_::getCardFromPos_take(int pos){
 		break;
 	}
 	return fcard;
+}
+
+void _Layer_CardChan_::scaleCardsHand_whenU(){
+	float countCard = (float)(CARD_ME->count() - 1);
+
+	float start = (-countCard / 2) * goc;
+	CCObject *t;
+	int cou = 0;
+	CCARRAY_FOREACH(CARD_ME, t){
+		CardChan *pCard = dynamic_cast<CardChan*>(t);
+		float xOld = 400;
+		float yOld = 90;
+
+		float rotate = start + cou * goc;
+		float oldAngle = pCard->getRotation();
+
+		float _newAngle = rotate;
+
+		float xNew = xOld + sin(_newAngle * PI / 180) * h_cardhand / 6;
+		float yNew = yOld - (h_cardhand / 6 - cos(_newAngle * PI / 180) * h_cardhand / 6);
+
+		pCard->setSizeCard(w_card + 5, h_card + 5);
+		CCActionInterval *mm = CCMoveTo::create(0.3, ccp(xNew, yNew));
+		pCard->runAction(mm);
+
+		cou++;
+	}
+}
+
+void _Layer_CardChan_::setCardsResuilt(string listCards){
+	vector<string> list = mUtils::splitString(listCards, ';');
+
+	dianoc->setTouchEnabled(true);
+
+	int i = 0;
+	int list_size = (int)list.size();
+
+	float posx = ((WIDTH_DESIGN - (list_size * (w_card + 5) / 3)) / 2);
+	flag_DragDrop1 = true;
+	while (i <= list.size()) {
+		if (i < list.size()) {
+			vector<string> info = mUtils::splitString(list[i], ':');
+			CardChan *pCard = CardChan::create();
+			pCard->loadTexture(findTypeCard(info[1], info[2]).c_str());
+			pCard->setSizeCard(w_card + 5, h_card + 5);
+			pCard->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 50));
+			float start = (list_size % 2 == 0) ? (float)list_size : (float)(list_size - 1);
+			pCard->setTouchEnabled(true);
+			pCard->setVisible(true);
+			pCard->addTouchEventListener(this, toucheventselector(_Layer_CardChan_::CardResuiltMove));
+			CARD_RESUITL->addObject(pCard);
+			layerCardResult->addChild(pCard);
+			i++;
+		}else{
+			rotateListCards(CARD_RESUITL);
+			break;
+		}
+	}//end while
+}
+
+void _Layer_CardChan_::setCountNoc(int count){
+	string _dem = boost::to_string(count);
+	this->countNoc->setText(_dem);
 }
 
 void _Layer_CardChan_::doDisCards(){
@@ -1386,6 +1511,10 @@ void _Layer_CardChan_::doDuoiCard(){
 	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
+void _Layer_CardChan_::doViewNoc(string listnoc){
+	CCLOG("Do View Noc !");
+}
+
 void _Layer_CardChan_::playSounds(string url){
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(("sounds/Chan/"+url).c_str());
 }
@@ -1393,4 +1522,101 @@ void _Layer_CardChan_::playSounds(string url){
 void _Layer_CardChan_::setCallbackFunc(CCObject* target, SEL_CallFuncN callfun){
 	m_callback = target;
 	m_callbackListener = callfun;
+}
+
+CCPoint _Layer_CardChan_::convertPoint(CCPoint pPoint) {
+
+	float xCenter = this->sizeScreen.width / 2;
+	float yCenter = this->sizeScreen.height / 2;
+
+	float xTap = pPoint.x;
+	float yTap = pPoint.y;
+
+	float x1, x2;
+	float y1, y2;
+
+	float A = ((powf(xCenter - xTap, 2) + powf(yCenter - yTap, 2))) / powf(scaleApp, 2);
+	float B = powf((yCenter - yTap) / (xCenter - xTap) , 2) + 1;
+
+	x1 = xCenter + sqrtf(A / B);
+	x2 = xCenter - sqrtf(A / B);
+
+	y1 = yCenter + (yCenter - yTap) * (x1 - xCenter) / (xCenter - xTap);
+	y2 = yCenter + (yCenter - yTap) * (x2 - xCenter) / (xCenter - xTap);
+
+	// "điểm cần convert" = A
+	// Bởi vì A và Tap nằm ở cùng 1 phía so với Center nên nếu xTap < xCenter thì xA < xCenter và ngược lại
+	if ((xTap < xCenter && x1 < xCenter) || (xTap > xCenter && x1 > xCenter)) {
+		x1 -= startLeft;
+		y1 -= startTop;
+
+		pPoint.x = x1;
+		pPoint.y = y1;
+	} else if ((xTap < xCenter && x2 < xCenter) || (xTap > xCenter && x2 > xCenter)) {
+		x2 -= startLeft;
+		y2 -= startTop;
+
+		pPoint.x = x2;
+		pPoint.y = y2;
+	} else {
+		CCLog("No define POINT CONVERT");
+	}
+
+	return pPoint;
+}
+
+float   _Layer_CardChan_::getDisPoint(CCPoint p1, CCPoint p2) {
+	float dis;
+
+	dis = sqrtf(powf(p1.x - p2.x, 2) + powf(p1.y - p2.y, 2));
+
+	return dis;
+}
+
+void _Layer_CardChan_::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent) {
+
+	CCSetIterator iterator = pTouches->begin();
+	CCTouch *touch;
+	touch = (CCTouch*)(*iterator);
+	CCPoint tap;
+	tap = convertPoint(touch->getLocation());
+	this->pointTouchBegan = tap;
+	disTouchBegan.setSize(0,0);
+	if(tap.x > pos_Left && tap.x < pos_Right && tap.y > pos_Bottom && tap.y < pos_Top && flag_DragDrop1){
+		CCLOG("Tap tap tap !");
+		flag_DragDrop2 = true;
+		disTouchBegan.setSize(tap.x - pos_Left, tap.y - pos_Bottom);
+	}
+}
+
+void _Layer_CardChan_::ccTouchesMoved(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent){
+	CCSetIterator iterator;
+	CCTouch *touch;
+	CCPoint tap;
+
+	iterator = pTouches->begin();
+	touch = (CCTouch*)(*iterator);
+	tap = convertPoint(touch->getLocation());
+	if (flag_DragDrop2)
+	{
+// 		tap.x -= disTouchBegan.width;
+// 		tap.y -= disTouchBegan.height;
+		layerCardResult->setPosition(ccp(tap.x - WIDTH_DESIGN / 2 - disTouchBegan.width, tap.y - HEIGHT_DESIGN / 2 - disTouchBegan.height));
+		pos_Left = tap.x - (h_cardhand / 6 + h_card + 5);
+		pos_Right = tap.x + (h_cardhand / 6 + h_card + 5);
+		pos_Bottom = tap.y- (h_card + 5) / 2;
+		pos_Top = tap.y + h_card + 5;
+	}
+}
+
+void _Layer_CardChan_::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
+{
+	flag_DragDrop2 = false;
+}
+
+void _Layer_CardChan_::btn_XemNoc_click(CCObject *sender, TouchEventType type){
+	if (type == TOUCH_EVENT_ENDED)
+	{
+		CCLOG("Button boc noc click !");
+	}
 }

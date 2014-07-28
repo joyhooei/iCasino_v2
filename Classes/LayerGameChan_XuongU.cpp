@@ -81,6 +81,8 @@ void LayerGameChan_XuongU::onButtonXuong(CCObject* pSender)
 	if (chooseXuong->count() == 0)
 	{
 		str = "";
+		CCLOG("Chua chon cuoc xuong !");
+		return;
 	}
 	else
 	{

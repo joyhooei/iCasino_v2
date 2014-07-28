@@ -57,6 +57,7 @@ LayerChanGame::LayerChanGame(){
 	currentPlayer = "";
 
 	countDiscard = 0;
+	countUser = 0;
 
 	gameStarted = false;
 	flagChiaBai = false;
@@ -90,14 +91,32 @@ void LayerChanGame::onExit()
 }
 
 void LayerChanGame::createAvatars(){
+
+	//w : h = 0.72
+	float width_Ava = 90;
+	float height_Ava = 125;
+
 	layerAvatars = LayerAvatarInGame::create();
 	layerAvatars->resetAll();
 	layerAvatars->getUserByPos(kUserMe)->setVisible(false);
 	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
 	layerAvatars->getUserByPos(kUserBot)->setPositionY(-200);
 	layerAvatars->getUserByPos(kUserBot)->setTouchEnabled(false);
-	layerAvatars->getUserByPos(kUserLeft)->setPositionY(layerAvatars->getUserByPos(kUserLeft)->getPositionY() + 30);
-	layerAvatars->getUserByPos(kUserRight)->setPositionY(layerAvatars->getUserByPos(kUserRight)->getPositionY() + 30);
+
+	CCSize oldSize = layerAvatars->getUserByPos(kUserRight)->getSizeThis();
+
+	layerAvatars->getUserByPos(kUserLeft)->setScaleX(width_Ava / oldSize.width);
+	layerAvatars->getUserByPos(kUserLeft)->setScaleY(height_Ava / oldSize.height);
+	layerAvatars->getUserByPos(kUserLeft)->setPosition(ccp(10, HEIGHT_DESIGN / 2 - height_Ava / 2 + 30));
+
+	layerAvatars->getUserByPos(kUserRight)->setScaleX(width_Ava / oldSize.width);
+	layerAvatars->getUserByPos(kUserRight)->setScaleY(height_Ava / oldSize.height);
+	layerAvatars->getUserByPos(kUserRight)->setPosition(ccp(WIDTH_DESIGN - width_Ava - 10, HEIGHT_DESIGN / 2 - height_Ava / 2 + 30));
+
+	layerAvatars->getUserByPos(kUserTop)->setScaleX(width_Ava / oldSize.width);
+	layerAvatars->getUserByPos(kUserTop)->setScaleY(height_Ava / oldSize.height);
+	layerAvatars->getUserByPos(kUserTop)->setPosition(ccp(WIDTH_DESIGN / 2 - width_Ava / 2, HEIGHT_DESIGN - height_Ava - 10));
+
 	this->addChild(layerAvatars);
 }
 
@@ -122,8 +141,8 @@ void LayerChanGame::createButtons(){
 
 	Button *btnEate = createButtonWithTitle_Pos("Ăn", ccp(WIDTH_DESIGN - w_Button - _space, h_Button + 30));
 
-	Button *btnU = createButtonWithTitle_Pos("Ù", ccp(WIDTH_DESIGN - w_Button * 2 - 30, 20));
-	Button *btnChiu = createButtonWithTitle_Pos("Chíu", ccp(WIDTH_DESIGN - w_Button * 2 - 30, h_Button + 30));
+	Button *btnU = createButton_Chan("Ù", ccp(WIDTH_DESIGN/ 2 - 57 / 2, 60),"U.png", "U_press.png");
+	Button *btnChiu = createButton_Chan("Chíu", ccp(WIDTH_DESIGN / 2 - 57 / 2, 10), "U.png", "U_press.png");
 
 	btnReady->setEnabled(true);
 	btnTake->setEnabled(false);
@@ -224,6 +243,8 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			if (strcmp(_usrn.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0) {
 				if(gameStarted){
 					layerCardChan->setMyListCards(_lc);
+					getButtonByTag(cTag_btnU)->setEnabled(true);
+					getButtonByTag(cTag_btnChiu)->setEnabled(true);
 				}
 				flagChiaBai = true;
 			}
@@ -243,6 +264,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		boost::shared_ptr<long> noccount = param->GetInt("noccount");
 		if (noccount != NULL) {
 			CCLOG("noc count: %ld",*noccount);
+			layerCardChan->setCountNoc((int)*noccount);
 		}
 		CCLOG("EXT_SRVNTF_NOC_COUNT");
 	}
@@ -386,7 +408,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		{
 			if (*rscode == 0)
 			{
-				getButtonByTag(cTag_btnChiu)->setEnabled(false);
+				//getButtonByTag(cTag_btnChiu)->setEnabled(false);
 				getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 				getButtonByTag(cTag_btnBoc)->setEnabled(false);
 				getButtonByTag(cTag_btnEate)->setEnabled(false);
@@ -404,8 +426,10 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			if (*rscode == 0)
 			{
 				CCLOG("Co the xuong U");
+				hideAllButton();
+				getButtonByTag(cTag_btnU)->setEnabled(false);
+				getButtonByTag(cTag_btnChiu)->setEnabled(false);
 				XuongU();
-				// Bao U
 			}
 
 		}
@@ -472,14 +496,29 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if( rg != NULL){
 			CCLOG("Resuilt game: %s",rg->c_str());
 			layerAvatars->stopAllTimer();
-			resuiltGame(rg->c_str());
+			//resuiltGame(rg->c_str());
+
+			string str = rg->c_str();
+			vector<string> arrResuilt = mUtils::splitString(str,';');
+// 			CCLOG("winner user : %s", arrResuilt[2].c_str());
+// 			CCLOG("den lang user : %s", arrResuilt[3].c_str());
+// 			CCLOG("win cuoc : %s", arrResuilt[4].c_str());
+// 			CCLOG("den lang cuoc: %s", arrResuilt[5].c_str());
+// 			CCLOG("tong diem dat duoc %s", arrResuilt[6].c_str());
+// 			CCLOG("danh sach tinh tien: %s", arrResuilt[7].c_str());
+			for (int  i = 0; i < arrResuilt.size(); i++)
+			{
+				CCLOG("i %d, %s", i, arrResuilt[i].c_str());
+			}
 		}
+
 		CCLOG("EXT_EVENT_GAME_RESULT");
 	}
 
 	// game end
 	else if (strcmp(EXT_EVENT_END.c_str(), cmd->c_str())==0){
-		setEndGame();
+		//setEndGame();
+		resuiltGame("");
 		CCLOG("EXT_EVENT_END");
 	}
 
@@ -557,8 +596,15 @@ void LayerChanGame::updateUser(string list){
 	layerAvatars->resetAll();
 	vector<string> listUser;
 	listUser = mUtils::splitString(list, ';');
+	countUser = listUser.size();
 	CCLOG("Do dai: %ld",listUser.size());
 	boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+
+	if(countUser == 2){
+		updateUser2Player(listUser);
+	}
+	else
+	{
 
 	for(int i = 0; i < listUser.size(); i++){
 		if(lastRoom == NULL){
@@ -592,6 +638,7 @@ void LayerChanGame::updateUser(string list){
 		}
 
 		if(strcmp(n[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+			getButtonByTag(cTag_btnReady)->setEnabled(true);
 			layerAvatars->setName(kUserMe, _name);
 			layerAvatars->getUserByPos(kUserMe)->setMoney(_money);
 			layerAvatars->getUserByPos(kUserMe)->setAI(n[1]);
@@ -610,6 +657,53 @@ void LayerChanGame::updateUser(string list){
 			}
 		}
 	}
+	}
+}
+
+void LayerChanGame::updateUser2Player(vector<string> arrUser){
+	boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	for (int i = 0; i < arrUser.size(); i++ )
+	{
+		if (lastRoom == NULL)
+		{
+			return;
+		}
+		if (strcmp(arrUser[i].c_str(),"") == 0)
+		{
+			continue;
+		}
+		vector<string> info = mUtils::splitString(arrUser[i],':');
+		if(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[1]) == NULL){
+			continue;
+		}
+
+		int _money = 0;
+		string _name = "";
+		string _url = "";
+
+		boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[1])->GetVariable("aN")->GetStringValue();
+		boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[1])->GetVariable("amf")->GetDoubleValue();
+		boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[1])->GetVariable("aal")->GetStringValue();
+
+		if (name != NULL) {
+			_name = name->c_str();
+		}
+		if(money != NULL){
+			_money = (int)(*money);
+		}
+		if(url != NULL){
+			_url = url->c_str();
+		}
+
+		int pos = getPosUserByName(info[1], _list_user);
+		if (pos == kUserMe)
+		{
+			//////////////////////////////////////////////////////////////////////////
+		}
+		else{
+			setInfoAvatar(kUserTop, info[1], _name, _money, _url);
+		}
+	}
 }
 
 void LayerChanGame::setInfoAvatar(int pos,string aI,string name, int money, string url){
@@ -622,8 +716,18 @@ void LayerChanGame::setInfoAvatar(int pos,string aI,string name, int money, stri
 
 void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, string cardsu, int crdorg){
 	CCLOG("From user: %s, to user: %s",f_user.c_str(),t_user.c_str());
+	CCLOG("count user = %d", countUser);
 	int fpos = getPosUserByName(f_user, _list_user);
 	int tpos = getPosUserByName(t_user, _list_user);
+
+	if(countUser == 2){
+		if (fpos != -1)
+		{
+			fpos = (fpos == kUserMe) ? kUserMe : kUserTop;
+		}
+		tpos = (tpos == kUserMe) ? kUserMe : kUserTop;
+	}
+
 	CCLOG("From %d to %d", fpos, tpos);
 	layerCardChan->takeCards(fpos, tpos, cardnu, cardsu, crdorg);
 	if (crdorg == 3 && tpos == kUserMe){
@@ -646,11 +750,11 @@ Button* LayerChanGame::createButtonWithTitle_Pos(const char *pName, CCPoint pPoi
 	return button;
 }
 
-Button* LayerChanGame::createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture){
+Button* LayerChanGame::createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture, const char* pTextureSelect){
 	Button* button = Button::create();
 	button->setTouchEnabled(true);
 	button->setScale9Enabled(false);
-	button->loadTextures(pTexture, "ready_selected.png", "");
+	button->loadTextures(pTexture, pTextureSelect, "");
 	button->setTitleText(pName);
 	button->setTitleColor(ccRED);
 	button->setTitleFontSize(20);
@@ -686,6 +790,7 @@ void LayerChanGame::whenUserTakeCards(long rscode){
 // set current player
 void LayerChanGame::setCurrentPlayer(string uid,int _count){
 	CCLOG("Current user %s", uid.c_str());
+
 	layerAvatars->stopAllTimer();
 	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0) {
 		getButtonByTag(cTag_btnReady)->setEnabled(false);
@@ -704,28 +809,50 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 		getButtonByTag(cTag_btnBoc)->setEnabled(false);
 		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 
-		switch (getPosUserByName(uid, _list_user)) {
-		case kUserLeft:
-			layerAvatars->getUserByPos(kUserLeft)->startTimer();
-			break;
-		case kUserRight:
-			layerAvatars->getUserByPos(kUserRight)->startTimer();
-			break;
-		case kUserTop:
+		int pos = getPosUserByName(uid, _list_user);
+		if (countUser == 2)
+		{
 			layerAvatars->getUserByPos(kUserTop)->startTimer();
-			break;
-		default:
-			break;
+		}
+		else
+		{
+			switch (pos) {
+			case kUserLeft:
+				layerAvatars->getUserByPos(kUserLeft)->startTimer();
+				break;
+			case kUserRight:
+				layerAvatars->getUserByPos(kUserRight)->startTimer();
+				break;
+			case kUserTop:
+				layerAvatars->getUserByPos(kUserTop)->startTimer();
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
 
 //set user ready
 void LayerChanGame::setUserReady(string uid){
-	if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-		getButtonByTag(cTag_btnReady)->setEnabled(false);
-	}else{
-		switch (getPosUserByName(uid, _list_user)) {
+	int pos = getPosUserByName(uid, _list_user);
+	if (countUser == 2)
+	{
+		if (pos != kUserMe)
+		{
+			layerAvatars->getUserByPos(kUserTop)->setReady(true);
+		}
+		else
+		{
+			getButtonByTag(cTag_btnReady)->setEnabled(false);
+		}
+	}
+	else
+	{
+		switch (pos) {
+		case kUserMe:
+			getButtonByTag(cTag_btnReady)->setEnabled(false);
+			break;
 		case kUserLeft:
 			layerAvatars->getUserByPos(kUserLeft)->setReady(true);
 			break;
@@ -860,7 +987,7 @@ void LayerChanGame::whenConguoi_ChoU(string uid){
 		}
 		else
 		{
-			getButtonByTag(cTag_btnEate)->setEnabled(true);
+			//getButtonByTag(cTag_btnEate)->setEnabled(true);
 		}
 
 	}else{
@@ -924,27 +1051,49 @@ void LayerChanGame::XuongU(){
 	}
 }
 
-
 void LayerChanGame::resuiltGame(string resuilt)
 {
-	
+	CCCallFunc *callfunc = CCCallFunc::create(this, callfunc_selector(LayerChanGame::setEndGame));
+	CCDelayTime *delay = CCDelayTime::create(11.0);
+	this->runAction(CCSequence::create(delay, callfunc, NULL));
 }
 
 void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
-	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
-	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
-	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	LayerGameChan_KetQua* mLayer;
-	if (ccbReader)
-	{
-		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
-		mLayer->setPlayer_U(uid);
-		mLayer->setListCard_WinnerUser(lc);
-		mLayer->setTag(666);
-		this->addChild(mLayer);
-		ccbReader->release();
-	}
+
+	Chat *toast = new Chat("" + uid + " Đã Ù lá bài này, Đợi xem ai báo Ù nữa hay không !", -1);
+	this->addChild(toast);
+
+	CCString *p = CCString::create(lc);
+	hideAllButton();
+	CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::wait10s),p);
+	CCDelayTime *delay = CCDelayTime::create(6.0);
+	this->runAction(CCSequence::create(delay, callfun, NULL));
+
+// 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
+// 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+// 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
+// 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+// 	LayerGameChan_KetQua* mLayer;
+// 	if (ccbReader)
+// 	{
+// 		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
+// 		mLayer->setPlayer_U(uid);
+// 		mLayer->setListCard_WinnerUser(lc);
+// 		mLayer->setTag(666);
+// 		this->addChild(mLayer);
+// 		ccbReader->release();
+// 	}
+}
+
+void LayerChanGame::wait10s(CCObject *data){
+	CCString *lc = (CCString *) data;
+	string str = string(lc->getCString());
+	CCLOG("String get ra: %s", str.c_str());
+
+	layerCardChan->scaleCardsHand_whenU();
+	layerCardChan->setCardsResuilt(str);
+	getButtonByTag(cTag_btnChiu)->setEnabled(false);
+	getButtonByTag(cTag_btnU)->setEnabled(false);
 }
 
 void LayerChanGame::notificationCallBack(bool isOK, int tag){
@@ -961,6 +1110,7 @@ void LayerChanGame::setEndGame(){
 	countDiscard = 0;
 
 	layerCardChan->resetAllCards();
+	layerAvatars->stopAllTimer();
 
 	getButtonByTag(cTag_btnBoc)->setEnabled(false);
 	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
@@ -1038,8 +1188,6 @@ void LayerChanGame::hideAllButton(){
 	getButtonByTag(cTag_btnBoc)->setEnabled(false);
 	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 	getButtonByTag(cTag_btnTake)->setEnabled(false);
-	getButtonByTag(cTag_btnChiu)->setEnabled(false);
-	getButtonByTag(cTag_btnU)->setEnabled(false);
 }
 void LayerChanGame::resetPositionButton(){
 
@@ -1049,7 +1197,6 @@ void LayerChanGame::callBackFunction_LatBai(CCNode *pSend){
 	if (strcmp(currentPlayer.c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
 	{
 		getButtonByTag(cTag_btnBoc)->setEnabled(false);
-		//getButtonByTag(cTag_btnEate)->setPosition(getButtonByTag(cTag_btnBoc)->getPosition());
 		getButtonByTag(cTag_btnEate)->setEnabled(true);
 		getButtonByTag(cTag_btnDuoi)->setEnabled(true);
 	}
