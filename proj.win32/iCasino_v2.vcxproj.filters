@@ -262,6 +262,9 @@
     <ClCompile Include="..\Classes\_Layer_CardChan_.cpp">
       <Filter>Classes\Children</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LayerGameChan_XuongU2.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -530,6 +533,9 @@
       <Filter>Classes\Children</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\_Layer_CardChan_.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerGameChan_XuongU2.h">
       <Filter>Classes\Children</Filter>
     </ClInclude>
   </ItemGroup>
