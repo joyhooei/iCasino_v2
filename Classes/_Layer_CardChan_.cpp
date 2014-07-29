@@ -252,6 +252,7 @@ void _Layer_CardChan_::resetAllCards(){
 	{
 		CardChan *pCard = (CardChan*)ALL_CARDS->objectAtIndex(i);
 		pCard->setOpacity(255);
+		pCard->setColor(ccWHITE);
 		pCard->setVisible(false);
 		pCard->setTouchEnabled(false);
 		pCard->setRotation(0);
@@ -727,6 +728,7 @@ void _Layer_CardChan_::action_BocNoc(int t_pos,string cardnu, string cardsu){
 	pCard->setSizeCard(w_card, h_card);
 	pCard->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2));
 	pCard->setOpacity(200);
+	pCard->setColor(ccc3(200,255,255));
 	pCard->setVisible(true);
 
 	float toX = -1;
@@ -1446,6 +1448,17 @@ void _Layer_CardChan_::setCardsResuilt(string listCards){
 			break;
 		}
 	}//end while
+}
+
+void _Layer_CardChan_::moveCardChi_whenU(){
+	CCObject *t;
+	int cou = 0;
+	CCARRAY_FOREACH(CARD_C_ME, t){
+		CardChan *pCard = dynamic_cast<CardChan*>(t);
+		float oldx = pCard->getPositionX();
+		CCMoveTo *moveTo = CCMoveTo::create(0.3,ccp(oldx, bottom_d_me - 25));
+		pCard->runAction(moveTo);
+	}
 }
 
 void _Layer_CardChan_::setCountNoc(int count){

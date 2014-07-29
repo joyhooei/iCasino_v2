@@ -75,11 +75,11 @@ void LayerGameChan_KetQua::displayResuilt(string resuilt){
 
 	if (strcmp(arrResuilt[2].c_str(), "") != 0)
 	{
-		str += arrResuilt[2] + " xuong: " + getCuoc(arrResuilt[4]) + "\n";
+		str += arrResuilt[2] + " Xướng: " + getCuoc(arrResuilt[4]) + "\n" + "Tổng điểm: "+arrResuilt[6] +"\n";
 	}
 
 	if (strcmp(arrResuilt[3].c_str(), "") != 0){
-		str += arrResuilt[4] + " den lang: " + getCuoc(arrResuilt[5]) + "\n";
+		str += arrResuilt[4] + " Đền làng: " + getCuoc(arrResuilt[5]) + "\n" + "Tổng điểm: "+arrResuilt[6] +"\n";
 	}
 	
 
@@ -93,7 +93,7 @@ void LayerGameChan_KetQua::displayResuilt(string resuilt){
 		}
 	}
 
-	CCLOG(str.c_str());
+	//CCLOG(str.c_str());
 
 	UILabel *content = UILabel::create();
 	content->setText(str.c_str());

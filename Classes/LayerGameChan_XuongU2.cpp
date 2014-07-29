@@ -30,27 +30,31 @@ LayerGameChan_XuongU2::LayerGameChan_XuongU2()
 	lstCuoc.push_back("Tám Đỏ");
 	lstCuoc.push_back("Kính Tứ Chi");
 	lstCuoc.push_back("Thập Thành");
-	lstCuoc.push_back("Có Thiên Khai");
+	lstCuoc.push_back("Thiên Khai");
 	lstCuoc.push_back("Ăn Bòn");
 	lstCuoc.push_back("Ù Bòn");
 	lstCuoc.push_back("Có Chíu");
 	lstCuoc.push_back("Chíu Ù");
 	lstCuoc.push_back("Bạch Thủ");
-	lstCuoc.push_back("Hoa rơi cửa phật");
-	lstCuoc.push_back("Nhà lầu xe hơi, hoa rơi cửa phật");
-	lstCuoc.push_back("Cá lội sân đình");
-	lstCuoc.push_back("Cá nhảy đầu thuyền");
-	lstCuoc.push_back("Chùa đổ nát hoa");
+	lstCuoc.push_back("Hoa rơi");
+	lstCuoc.push_back("NLXH, HRCP");
+	lstCuoc.push_back("Cá lội SĐ");
+	lstCuoc.push_back("Cá nhảy ĐT");
+	lstCuoc.push_back("Chùa đổ NH");
 	lstCuoc.push_back("Đôi Lèo");
-	lstCuoc.push_back("Đôi Tám đỏ");
-	lstCuoc.push_back("Đôi Tôm");
+	lstCuoc.push_back("2 Tám đỏ");
+	lstCuoc.push_back("2 Tôm");
 	lstCuoc.push_back("Bạch Thủ Chi");
     //
+	ListCuoc = CCArray::create();
+	ListCuoc->retain();
     GameServer::getSingleton().addListeners(this);
 }
 
 LayerGameChan_XuongU2::~LayerGameChan_XuongU2()
 {
+	ListCuoc->removeAllObjects();
+	ListCuoc->release();
     GameServer::getSingleton().removeListeners(this);
 }
 
@@ -63,36 +67,48 @@ SEL_MenuHandler LayerGameChan_XuongU2::onResolveCCBCCMenuItemSelector(cocos2d::C
 
 void LayerGameChan_XuongU2::onButtonXuong(CCObject* pSender)
 {
-// 	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-// 	boost::shared_ptr<ISFSObject> params (new SFSObject());
-// 
-// 	string str = "";
-// 	if (chooseXuong->count() == 0)
-// 	{
-// 		str = "";
-// 		CCLOG("Chua chon cuoc xuong !");
-// 		return;
-// 	}
-// 	else
-// 	{
-// 		for (int i = 0; i < (int)chooseXuong->count(); i++)
-// 		{
-// 			CCInteger *f = (CCInteger*) chooseXuong->objectAtIndex(i);
-// 			if (i < chooseXuong->count() - 1)
-// 			{
-// 				str+=boost::to_string(f->getValue())+":";
-// 			}
-// 			else
-// 				str+=boost::to_string(f->getValue());
-// 		}
-// 	}
-// 	
-// 	CCLOG("str = %s",str.c_str());
-// 	params->PutUtfString("ucsac",str);
-// 	boost::shared_ptr<IRequest> request (new ExtensionRequest("rquanou",params,lastRoom));
-// 	GameServer::getSingleton().getSmartFox()->Send(request);
-// 	this->removeFromParentAndCleanup(true);
-//     CCLOG("onButtonXuong ");
+	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+ 	boost::shared_ptr<ISFSObject> params (new SFSObject());
+
+	CCArray *arrCuoc = CCArray::create();
+	string str = "";
+	int _count = 0;
+	for (int i = 0; i < ListCuoc->count(); i++)
+	{
+		ButtonXuong *btn = (ButtonXuong*)ListCuoc->objectAtIndex(i);
+		if (btn->getClicked())
+		{
+			arrCuoc->addObject(btn);
+			_count++;
+		}
+	}
+
+	if (_count <= 0)
+	{
+		str = "";
+		CCLOG("Chua chon cuoc xuong !");
+		return;
+	}
+	else
+	{
+		for (int i = 0; i < (int)arrCuoc->count(); i++)
+		{
+			ButtonXuong *itemXuong = (ButtonXuong*)arrCuoc->objectAtIndex(i);
+			if (i < arrCuoc->count() - 1)
+			{
+				str+=boost::to_string(itemXuong->getID())+":";
+			}
+			else
+				str+=boost::to_string(itemXuong->getID());
+		}
+	}
+	
+	CCLOG("str = %s",str.c_str());
+	params->PutUtfString("ucsac",str);
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("rquanou",params,lastRoom));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+	this->removeFromParentAndCleanup(true);
+    CCLOG("onButtonXuong ");
 }
 // CCBMemberVariableAssigner interface
 bool LayerGameChan_XuongU2::onAssignCCBMemberVariable(CCObject *pTarget, const char *pMemberVariableName, cocos2d::CCNode *pNode)
@@ -105,23 +121,111 @@ bool LayerGameChan_XuongU2::onAssignCCBMemberVariable(CCObject *pTarget, const c
 
 void LayerGameChan_XuongU2::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
+	lblTitle->setString("");
+
 	UILayer* ui = UILayer::create();
-	ui->setAnchorPoint(ccp(0, 1));
-	ui->setContentSize(ccp(722, 298));
-	ui->setPosition( ccp(20, 20) );
+	ui->setAnchorPoint(ccp(0, 0));
+	ui->setPosition( ccp(0, 0) );
 	ui->setTouchEnabled(true);
 	this->addChild(ui);
 	//Init all button
-	for( int i = 0; i<6; i++ ){
-		UIButton* btn = UIButton::create();
-		btn->setTitleText( lstCuoc.at(i).c_str() );
-		btn->setPosition( ccp(80, 220 + i*35) );
-		btn->setPressedActionEnabled(true);
-		btn->setTitleFontSize(22);
-		ui->addWidget(btn);
+	int c = 0;
+	int d = 0;
+	float yPos = HEIGHT_DESIGN/2 - 60 + 37 * 5;
+	while(c < 26){
+		
+
+		if (d < 3)
+		{
+			for( int i = 0; i < 6; i++ ){
+
+				ButtonXuong* btn = ButtonXuong::create();
+				btn->setID(c);
+				btn->loadTextures("itemXuong.png","","");
+				btn->setTitleText( lstCuoc.at(c).c_str() );
+				btn->setTitleColor(ccBLACK);
+				btn->setAnchorPoint(ccp(0 , 0));
+
+				btn->setPosition( ccp(135 * d + 60, yPos - i % 6 * 37) );
+				btn->setEnabled(true);
+				btn->addTouchEventListener(this, toucheventselector(LayerGameChan_XuongU2::ItemXuong_Click));
+				btn->setTitleFontSize(22);
+				ListCuoc->addObject(btn);
+				ui->addWidget(btn);
+				c++;
+				if(c >= lstCuoc.size()){
+					c = 26;
+					break;
+				}
+			}
+		}
+		else{
+			for( int i = 0; i < 5; i++ ){
+
+				ButtonXuong* btn = ButtonXuong::create();
+				btn->setID(c);
+				btn->loadTextures("itemXuong.png","","");
+				btn->setTitleText( lstCuoc.at(c).c_str() );
+				btn->setTitleColor(ccBLACK);
+				btn->setAnchorPoint(ccp(0 , 0));
+
+				btn->setPosition( ccp(135 * d + 60, yPos - i % 5 * 37) );
+				btn->setEnabled(true);
+				btn->addTouchEventListener(this, toucheventselector(LayerGameChan_XuongU2::ItemXuong_Click));
+				btn->setTitleFontSize(20);
+				ListCuoc->addObject(btn);
+				ui->addWidget(btn);
+				c++;
+				if(c >= lstCuoc.size()){
+					c = 26;
+					break;
+				}
+			}
+		}
+		
+		d++;
 	}
-    //
     return;
+}
+
+void LayerGameChan_XuongU2::ItemXuong_Click(CCObject *sender, TouchEventType type){
+	if (type == TOUCH_EVENT_ENDED)
+	{
+		ButtonXuong *btn = (ButtonXuong*)sender;
+		CCLOG("Ban vua click: %d", btn->getID());
+		if (!btn->getClicked())
+		{
+			btn->loadTextures("itemXuong_press.png","","");
+			btn->setClicked(true);
+		}
+		else{
+			btn->loadTextures("itemXuong.png","","");
+			btn->setClicked(false);
+		}
+
+		string ttt = "";
+
+		for (int i = 0; i < ListCuoc->count(); i++)
+		{
+			ButtonXuong *itemXuong = (ButtonXuong*)ListCuoc->objectAtIndex(i);
+
+			if (itemXuong->getClicked())
+			{
+				if(i == ListCuoc->count() - 1){
+					ttt += getValuesCuoc(itemXuong->getID());
+				}
+				else
+				{
+					ttt += getValuesCuoc(itemXuong->getID()) +" ";
+				}
+			}
+		}
+		lblTitle->setString(ttt.c_str());
+	}
+}
+
+string LayerGameChan_XuongU2::getValuesCuoc(int idx){
+	return lstCuoc.at(idx);
 }
 
 void LayerGameChan_XuongU2::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -136,4 +240,29 @@ void LayerGameChan_XuongU2::OnExtensionResponse(unsigned long long ptrContext, b
 	{
 		CCLOG("nhan duoc respond");
 	}
+}
+
+bool ButtonXuong::init(){
+	if (!UIButton::init())
+	{
+		return false;
+	}
+	isClicked = false;
+	return true;
+}
+
+void ButtonXuong::setID(int idx){
+	this->idx = idx;
+}
+
+int ButtonXuong::getID(){
+	return this->idx;
+}
+
+void ButtonXuong::setClicked(bool isClicked){
+	this->isClicked = isClicked;
+}
+
+bool ButtonXuong::getClicked(){
+	return this->isClicked;
 }

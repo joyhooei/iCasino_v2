@@ -1160,7 +1160,7 @@ void XiTo::setDisplayValueListCard(CCArray *P,string lc){
         for (int k = 0; k < P->count(); k++) {
             Card *pC = (Card*)P->objectAtIndex(k);
             if( !pC->getClicked() ){
-                pC->setOpacity(200);
+                pC->setColor(ccc3(150,250,250));
             }
         }
     }
@@ -1521,7 +1521,7 @@ void XiTo::moveDealCard_Me(string _lc){
     }
     
     Card *pc = (Card*)CARD_ME->objectAtIndex(0);
-    pc->setOpacity(180);
+    pc->setColor(ccc3(150, 250, 250));
     moveDealCard(pc, lf_card_me, bt_card_me);
     
     Card* pc1 = (Card*)CARD_ME->objectAtIndex(1);

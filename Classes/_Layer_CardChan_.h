@@ -179,6 +179,7 @@ public:
 	void action_An_U(int f_user, int t_user, string cardnu, string cardsu);
 
 	void scaleCardsHand_whenU();
+	void moveCardChi_whenU();
 	void setCardsResuilt(string listCards);
 
 	void setListNoc(string _list);

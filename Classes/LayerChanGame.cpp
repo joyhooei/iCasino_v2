@@ -11,7 +11,7 @@
 #include "Requests/ExtensionRequest.h"
 #include "CardChan.h"
 #include "_Chat_.h"
-#include "LayerGameChan_XuongU.h"
+#include "LayerGameChan_XuongU2.h"
 #include "SliderCustomLoader.h"
 #include "SceneManager.h"
 #include "LayerGameChan_KetQua.h"
@@ -72,7 +72,7 @@ LayerChanGame::LayerChanGame(){
 	lblDetail->setText("");
 	lblDetail->setFontSize(20);
 	lblDetail->setAnchorPoint(ccp(0, 0));
-	lblDetail->setPosition(ccp(20, HEIGHT_DESIGN-lblDetail->getContentSize().height - 10));
+	lblDetail->setPosition(ccp(20, HEIGHT_DESIGN-lblDetail->getContentSize().height - 30));
 	lblDetail->setColor(ccRED);
 	this->addChild(lblDetail);
 
@@ -81,6 +81,7 @@ LayerChanGame::LayerChanGame(){
 
 	//displayLayerXuongU();
 	//displayLayerKetQua("");
+	//XuongU();
 
 	SceneManager::getSingleton().hideLoading();
 }
@@ -113,7 +114,7 @@ void LayerChanGame::displayLayerXuongU(){
 void LayerChanGame::displayLayerKetQua(string resuilt){
 	LayerGameChan_KetQua *kq = LayerGameChan_KetQua::create();
 	kq->setTag(171);
-	kq->displayResuilt("1;1;phanpc;;2:6;;6;phanpc:0:27000/phanpc1:6:-30000");
+	kq->displayResuilt(resuilt);
 	this->addChild(kq);
 }
 
@@ -131,6 +132,7 @@ LayerChanGame::~LayerChanGame(){
 void LayerChanGame::onExit()
 {
 	CCLOG("Deconstructor Game Chan");
+	SceneManager::getSingleton().setBackgroundScreen(false);
 	GameServer::getSingleton().removeListeners(this);
 }
 
@@ -453,7 +455,6 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		{
 			if (*rscode == 0)
 			{
-				//getButtonByTag(cTag_btnChiu)->setEnabled(false);
 				getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 				getButtonByTag(cTag_btnBoc)->setEnabled(false);
 				getButtonByTag(cTag_btnEate)->setEnabled(false);
@@ -470,11 +471,13 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		{
 			if (*rscode == 0)
 			{
-				CCLOG("Co the xuong U");
-				hideAllButton();
-				getButtonByTag(cTag_btnU)->setEnabled(false);
-				getButtonByTag(cTag_btnChiu)->setEnabled(false);
-				XuongU();
+// 				CCLOG("Co the xuong U");
+// 				hideAllButton();
+// 				getButtonByTag(cTag_btnU)->setEnabled(false);
+// 				getButtonByTag(cTag_btnChiu)->setEnabled(false);
+// 				layerCardChan->scaleCardsHand_whenU();
+// 				layerCardChan->moveCardChi_whenU();
+// 				XuongU();
 			}
 
 		}
@@ -511,13 +514,19 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		{
 			return;
 		}
-
-		CCLOG("nguoi U: %s", usrn->c_str());
-		CCLOG("Bài trên tay người Ù: %s", lc->c_str());
+		
 		if (strcmp(usrn->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) != 0)
 		{
 			CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/Chan/uroi.mp3");
 			waitPlayer_ReqU(usrn->c_str(), lc->c_str());
+		} else {
+			CCLOG("Co the xuong U");
+			hideAllButton();
+			getButtonByTag(cTag_btnU)->setEnabled(false);
+			getButtonByTag(cTag_btnChiu)->setEnabled(false);
+			layerCardChan->scaleCardsHand_whenU();
+			layerCardChan->moveCardChi_whenU();
+			XuongU();
 		}
 	}
 
@@ -528,11 +537,6 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		{
 			CCLOG("Các lá bài còn trong nọc: %s", nocdetl->c_str());
 			layerCardChan->setListNoc(nocdetl->c_str());
-// 			LayerGameChan_KetQua *KQ = (LayerGameChan_KetQua*)this->getChildByTag(666);
-// 			if (KQ != NULL)
-// 			{
-// 				KQ->setValueNoc(nocdetl->c_str());
-// 			}
 		}
 	}
 
@@ -542,15 +546,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if( rg != NULL){
 			CCLOG("Resuilt game: %s",rg->c_str());
 			layerAvatars->stopAllTimer();
-			//resuiltGame(rg->c_str());
-			string str = rg->c_str();
-			vector<string> arrResuilt = splitString(str,';');
-			CCLOG("winner user : %s", arrResuilt[2].c_str());
-			CCLOG("den lang user : %s", arrResuilt[3].c_str());
-			CCLOG("win cuoc : %s", arrResuilt[4].c_str());
-			CCLOG("den lang cuoc: %s", arrResuilt[5].c_str());
-			CCLOG("tong diem dat duoc %s", arrResuilt[6].c_str());
-			CCLOG("danh sach tinh tien: %s", arrResuilt[7].c_str());
+			resuiltGame(rg->c_str());
 		}
 
 		CCLOG("EXT_EVENT_GAME_RESULT");
@@ -559,11 +555,20 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	// game end
 	else if (strcmp(EXT_EVENT_END.c_str(), cmd->c_str())==0){
 		//setEndGame();
-		resuiltGame("");
+		//resuiltGame("");
 		CCLOG("EXT_EVENT_END");
 	}
 
-
+	else if(strcmp("rntf",cmd->c_str()) == 0){
+		if (this->getChildByTag(171) != NULL)
+		{
+			this->removeChildByTag(171);
+		}
+		if (this->getChildByTag(172) != NULL)
+		{
+			this->removeChildByTag(172);
+		}
+	}
 }//end extensions
 
 void LayerChanGame::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -1077,16 +1082,17 @@ void LayerChanGame::XuongU(){
 
 	// register loaders
 	ccNodeLoaderLibrary->registerDefaultCCNodeLoaders();
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_XuongU",   LayerGameChan_XuongULoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_XuongU2",   LayerGameChan_XuongU2Loader::loader());
 	// read main layer
 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 
-	LayerGameChan_XuongU *popUp;
+	LayerGameChan_XuongU2 *popUp;
 
 	if (ccbReader)
 	{
-		popUp = (LayerGameChan_XuongU *)ccbReader->readNodeGraphFromFile( "LayerGameChan_XuongU.ccbi" );
+		popUp = (LayerGameChan_XuongU2 *)ccbReader->readNodeGraphFromFile( "LayerGameChan_XuongU2.ccbi" );
 		popUp->setPosition(ccp(10,10));
+		popUp->setTag(172);
 		this->addChild(popUp);
 		ccbReader->release();
 	}
@@ -1094,9 +1100,10 @@ void LayerChanGame::XuongU(){
 
 void LayerChanGame::resuiltGame(string resuilt)
 {
-	CCCallFunc *callfunc = CCCallFunc::create(this, callfunc_selector(LayerChanGame::setEndGame));
-	CCDelayTime *delay = CCDelayTime::create(11.0);
-	this->runAction(CCSequence::create(delay, callfunc, NULL));
+	CCString *p = CCString::create(resuilt);
+	CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::setEndGame),p);
+	CCDelayTime *delay = CCDelayTime::create(10.0);
+	this->runAction(CCSequence::create(delay, callfun, NULL));
 }
 
 void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
@@ -1109,21 +1116,6 @@ void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
 	CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::wait10s),p);
 	CCDelayTime *delay = CCDelayTime::create(6.0);
 	this->runAction(CCSequence::create(delay, callfun, NULL));
-
-// 	CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
-// 	CCBReader* ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-// 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
-// 	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-// 	LayerGameChan_KetQua* mLayer;
-// 	if (ccbReader)
-// 	{
-// 		mLayer = (LayerGameChan_KetQua *)ccbReader->readNodeGraphFromFile( "LayerGameChan_KetQua.ccbi" );
-// 		mLayer->setPlayer_U(uid);
-// 		mLayer->setListCard_WinnerUser(lc);
-// 		mLayer->setTag(666);
-// 		this->addChild(mLayer);
-// 		ccbReader->release();
-// 	}
 }
 
 void LayerChanGame::wait10s(CCObject *data){
@@ -1142,7 +1134,7 @@ void LayerChanGame::notificationCallBack(bool isOK, int tag){
 }
 
 //set End Game
-void LayerChanGame::setEndGame(){
+void LayerChanGame::setEndGame(CCObject *data){
 	currentPlayer = "";
 	mylistCard = "";
 
@@ -1161,10 +1153,9 @@ void LayerChanGame::setEndGame(){
 	getButtonByTag(cTag_btnChiu)->setEnabled(false);
 	getButtonByTag(cTag_btnReady)->setEnabled(true);
 
-	if (this->getChildByTag(171) != NULL)
-	{
-		this->removeChildByTag(171);
-	}
+	CCString *resuilt = (CCString *) data;
+	string str = string(resuilt->getCString());
+	displayLayerKetQua(str);
 }
 
 //btn Ready

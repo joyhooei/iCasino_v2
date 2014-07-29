@@ -124,7 +124,7 @@ public:
 	void setCurrentPlayer(string uid,int _count);
 	void setUserReady(string uid);
 	void error_AnBao(long rscode);
-	void setEndGame();
+	void setEndGame(CCObject *data);
 	void whenConguoi_ChoU(string uid);
 	void whenConguoi_Chiu(string uid);
 	void XuongU();

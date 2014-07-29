@@ -31,6 +31,8 @@ private:
 
 	CCLabelTTF* lblTime;
 	CCLabelTTF* lblTitle;
+
+	CCArray *ListCuoc;
 public:
     LayerGameChan_XuongU2();
     virtual ~LayerGameChan_XuongU2();
@@ -49,6 +51,22 @@ public:
     void onButtonXuong(CCObject* pSender);
 	//
     void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+
+	void ItemXuong_Click(CCObject *sender, TouchEventType type);
+	string getValuesCuoc(int idx);
+};
+
+class ButtonXuong : public UIButton{
+private:
+	int idx;
+	bool isClicked;
+public:
+	virtual bool init();
+	CREATE_FUNC(ButtonXuong);
+	void setID(int idx);
+	int getID();
+	void setClicked(bool isClicked);
+	bool getClicked();
 };
 
 class LayerGameChan_XuongU2Loader : public cocos2d::extension::CCLayerLoader
