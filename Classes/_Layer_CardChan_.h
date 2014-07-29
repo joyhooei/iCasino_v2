@@ -35,6 +35,7 @@ private:
 	float h_card;
 	float goc;
 	int _coutZorder;
+	string list_noc;
 
 	UILayer *uLayer;
 	UIButton *dianoc;
@@ -101,7 +102,9 @@ private:
 	CCArray *ALL_CARDS;
 
 	CCArray *CARD_RESUITL;
+	CCArray *CARD_NOC;
 	CCLayer *layerCardResult;
+	UILayer *rLayer;
 
 	CCObject* m_callback;
 	SEL_CallFuncN m_callbackListener;
@@ -177,6 +180,10 @@ public:
 
 	void scaleCardsHand_whenU();
 	void setCardsResuilt(string listCards);
+
+	void setListNoc(string _list);
+	void displayListCard_Noc(CCArray *P);
+	void CardNoc_Touch(CCObject *pSender,TouchEventType type);
 
 	CardChan* getCardFromPos_take(int pos);
 

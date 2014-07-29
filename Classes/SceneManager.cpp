@@ -186,7 +186,7 @@ bool SceneManager::init() {
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerUpdateInfo",   LayerUpdateInfoLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerPasswordRoom",   LayerPasswordRoomLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerSettings",   LayerSettingsLoader::loader());
-	ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
+	//ccNodeLoaderLibrary->registerCCNodeLoader("LayerGameChan_KetQua",   LayerGameChan_KetQuaLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerInviteFriends",   LayerInviteFriendsLoader::loader());
 	ccNodeLoaderLibrary->registerCCNodeLoader("LayerForgotPassword",   LayerForgotPasswordLoader::loader());
 	// Add LayerLogin

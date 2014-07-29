@@ -16,6 +16,7 @@
 #include "SceneManager.h"
 #include "LayerGameChan_KetQua.h"
 #include "AllData.h"
+
 #define PI 3.141592653589
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
@@ -71,13 +72,56 @@ LayerChanGame::LayerChanGame(){
 	lblDetail->setText("");
 	lblDetail->setFontSize(20);
 	lblDetail->setAnchorPoint(ccp(0, 0));
-	lblDetail->setPosition(ccp(20, HEIGHT_DESIGN-lblDetail->getContentSize().height-20));
+	lblDetail->setPosition(ccp(20, HEIGHT_DESIGN-lblDetail->getContentSize().height - 10));
 	lblDetail->setColor(ccRED);
 	this->addChild(lblDetail);
 
 	GameServer::getSingleton().addListeners(this);
 	this->scheduleOnce(schedule_selector(LayerChanGame::sendRequestJoinGame),1.0f);
+
+	//displayLayerXuongU();
+	//displayLayerKetQua("");
+
 	SceneManager::getSingleton().hideLoading();
+}
+
+vector<string> LayerChanGame::splitString(string &S,const char &str){
+	vector<string> arrStr;
+	string::iterator t,t2;
+	for(t=S.begin();t<S.end();){
+		// Lặp từ vị trí bắt đầu
+		t2=find(t, S.end(),str); // Tìm vị trí space ' ' đầu tiên
+		//kể từ vị trí t
+		if(t!=t2)
+			arrStr.push_back(string(t,t2));
+		else  if( t2 != S.end() )
+			arrStr.push_back("");
+		if( t2 == S.end() )
+			break;
+		t=t2+1; // chuyển sang vị trí sau
+	}
+	return arrStr;
+}
+
+void LayerChanGame::displayLayerXuongU(){
+	CCSprite *xuong = CCSprite::create("XuongU.png");
+	xuong->setAnchorPoint(ccp(0,0));
+	xuong->setPosition(ccp((WIDTH_DESIGN - xuong->getContentSize().width) / 2,HEIGHT_DESIGN - xuong->getContentSize().height - 10));
+	this->addChild(xuong);
+}
+
+void LayerChanGame::displayLayerKetQua(string resuilt){
+	LayerGameChan_KetQua *kq = LayerGameChan_KetQua::create();
+	kq->setTag(171);
+	kq->displayResuilt("1;1;phanpc;;2:6;;6;phanpc:0:27000/phanpc1:6:-30000");
+	this->addChild(kq);
+}
+
+void LayerChanGame::btnClose_LayerResuilt(CCObject *sender, TouchEventType type){
+	if (type == TOUCH_EVENT_ENDED)
+	{
+		this->removeChildByTag(171);
+	}
 }
 
 LayerChanGame::~LayerChanGame(){
@@ -381,6 +425,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	else if (strcmp(EXT_SRVNTF_ANBAO.c_str(),cmd->c_str())==0){
 		boost::shared_ptr<long> anbaores = param->GetInt("anbaores");
 		if (anbaores != NULL) {
+			CCLOG("resuilt code %ld", *anbaores);
 			error_AnBao(*anbaores);
 		}
 		CCLOG("EXT_SRVNTF_ANBAO");
@@ -482,11 +527,12 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if (nocdetl != NULL)
 		{
 			CCLOG("Các lá bài còn trong nọc: %s", nocdetl->c_str());
-			LayerGameChan_KetQua *KQ = (LayerGameChan_KetQua*)this->getChildByTag(666);
-			if (KQ != NULL)
-			{
-				KQ->setValueNoc(nocdetl->c_str());
-			}
+			layerCardChan->setListNoc(nocdetl->c_str());
+// 			LayerGameChan_KetQua *KQ = (LayerGameChan_KetQua*)this->getChildByTag(666);
+// 			if (KQ != NULL)
+// 			{
+// 				KQ->setValueNoc(nocdetl->c_str());
+// 			}
 		}
 	}
 
@@ -497,19 +543,14 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			CCLOG("Resuilt game: %s",rg->c_str());
 			layerAvatars->stopAllTimer();
 			//resuiltGame(rg->c_str());
-
 			string str = rg->c_str();
-			vector<string> arrResuilt = mUtils::splitString(str,';');
-// 			CCLOG("winner user : %s", arrResuilt[2].c_str());
-// 			CCLOG("den lang user : %s", arrResuilt[3].c_str());
-// 			CCLOG("win cuoc : %s", arrResuilt[4].c_str());
-// 			CCLOG("den lang cuoc: %s", arrResuilt[5].c_str());
-// 			CCLOG("tong diem dat duoc %s", arrResuilt[6].c_str());
-// 			CCLOG("danh sach tinh tien: %s", arrResuilt[7].c_str());
-			for (int  i = 0; i < arrResuilt.size(); i++)
-			{
-				CCLOG("i %d, %s", i, arrResuilt[i].c_str());
-			}
+			vector<string> arrResuilt = splitString(str,';');
+			CCLOG("winner user : %s", arrResuilt[2].c_str());
+			CCLOG("den lang user : %s", arrResuilt[3].c_str());
+			CCLOG("win cuoc : %s", arrResuilt[4].c_str());
+			CCLOG("den lang cuoc: %s", arrResuilt[5].c_str());
+			CCLOG("tong diem dat duoc %s", arrResuilt[6].c_str());
+			CCLOG("danh sach tinh tien: %s", arrResuilt[7].c_str());
 		}
 
 		CCLOG("EXT_EVENT_GAME_RESULT");
@@ -1119,6 +1160,11 @@ void LayerChanGame::setEndGame(){
 	getButtonByTag(cTag_btnU)->setEnabled(false);
 	getButtonByTag(cTag_btnChiu)->setEnabled(false);
 	getButtonByTag(cTag_btnReady)->setEnabled(true);
+
+	if (this->getChildByTag(171) != NULL)
+	{
+		this->removeChildByTag(171);
+	}
 }
 
 //btn Ready

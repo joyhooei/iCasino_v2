@@ -133,6 +133,8 @@ public:
 	void wait10s(CCObject *data);
 
 	void resuiltGame(string resuilt);
+	void displayLayerXuongU();
+	void displayLayerKetQua(string resuilt);
 
 	void eventTakeCards(string f_user, string t_user, string cardnu, string cardsu, int crdorg);
 
@@ -144,10 +146,13 @@ public:
 	void btn_U_Click(CCObject *sender, TouchEventType type);
 	void btn_Chiu_Click(CCObject *sender, TouchEventType type);
 
+	void btnClose_LayerResuilt(CCObject *sender, TouchEventType type);
+
 	void hideAllButton();
 	void resetPositionButton();
 
 	void playSounds(string url);
+	vector<string> splitString(string &S,const char &str);
 
 	Button* createButtonWithTitle_Pos(const char *pName, CCPoint pPoint);
 	Button* createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture,const char* pTextureSelect);
