@@ -1291,6 +1291,7 @@ void LayerCardInGame::actionTransferedCard(int fromPosUser, int toPosUser, int p
 }
 
 void LayerCardInGame::actionPushCard(int fromPosUser, int toPosUser, int pId) {
+	return;
     int length = arrAllCard->count();
     if (pId >= length) pId = length - 1;
     
@@ -1454,13 +1455,13 @@ void LayerCardInGame::actionHaPhomByPos(int pos, vector<int> arrID, vector<int> 
 				break;
 		}
 
+		card->setZOrder(zOrder);
 		if (!card->isVisible()) {
 			card->setPosition(pointStart);
 			card->setVisible(true);
 		}
 		// Chỉ thực hiện khi Card thỏa mãn: vị trí của nó khác so với vị trí cần tới/
 		if (card->getPositionX() != pointEnd.x || card->getPositionY() != pointEnd.y) {
-			card->setZOrder(zOrder);
 			card->runAction(CCMoveTo::create(0.3, pointEnd));
 			card->runAction(CCScaleTo::create(0.3, 0.5));
 		}

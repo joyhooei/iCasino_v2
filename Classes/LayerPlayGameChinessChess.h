@@ -91,6 +91,7 @@ private:
 	UILayer *layerWidget;
 
 	enum EXT_RESPONSE{
+		EXT_EVENT_CHESS_TABLE_NTF,  // = "ctbl"
 		EXT_EVENT_START,            // = "s"
 		EXT_EVENT_NEXT_TURN,        // = "nt";
 		EXT_EVENT_END,              // = "e"
@@ -117,6 +118,19 @@ private:
 		DONG_Y_XIN_DI_LAI,
 		DONG_Y_CHO_HOA,
 		DONG_Y_CHO_DI_LAI
+	};
+
+	enum NAME_CHESS {
+		DARK = 1,
+		LIGHT = 2,
+		PAWN = 0,
+		BISHOP = 1,
+		ELEPHANT = 2,
+		KNIGHT = 3,
+		CANNON = 4,
+		ROOK = 5,
+		KING = 6,
+		EMPTY = 7
 	};
 
 	int convertResponseToInt(string inString);
@@ -215,6 +229,7 @@ public:
 	void event_EXT_EVENT_FOR_PEACE_NTF();     // = "fpntf"();
 	void event_EXT_EVENT_UNDO_MOVE_REQ();
 	void event_EXT_EVENT_UNDO_MOVE_NTF();
+	void event_EXT_EVENT_CHESS_TABLE_NTF();
 
 	// @thanhhv
 	vector<string> split(string &s, const char &c);
@@ -227,7 +242,9 @@ public:
 	bool isTouchedChess();
 	void createChess();
 	void refreshChess();
+	void drawChess(); // vẽ lại các quân cờ trên bàn dựa vào id_pos của chúng
 	void drawCanMove(vector<int> arrPos);
+	Chess* getChessByName_Side(int name, int side);
 
 	int convertID(int id);
 	void moveChess(int fromID, int toID);
