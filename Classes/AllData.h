@@ -105,6 +105,18 @@ enum{
 	cTag_btnU,
 	cTag_btnChiu
 };
+//@ndtuan
+//3cay
+enum {
+    kuser0,//me
+    kuser1,
+    kuser2,
+    kuser3,
+    kuser4,
+    kuser5,
+    kuser6
+    
+};
 // @thanhhv
 // Đặt những hàm được sử dụng thường xuyên ở đây
 class DoTogether {

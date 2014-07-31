@@ -13,10 +13,16 @@
 
 CardBaCay::~CardBaCay()
 {
-	CARD_ME->release();
-	CARD_RIGHT->release();
-	CARD_TOP->release();
-	CARD_LEFT->release();
+	
+    
+    CARD_0->release();
+	CARD_1->release();
+	CARD_2->release();
+	CARD_3->release();
+    CARD_4->release();
+	CARD_5->release();
+	CARD_6->release();
+	
 	this->removeAllChildren();
 	CCLOG("Deconstructor Layer Cards Ba Cay");
 }
@@ -39,10 +45,15 @@ bool CardBaCay::init()
 
 void CardBaCay::onExit()
 {
-	CARD_ME->release();
-	CARD_RIGHT->release();
-	CARD_TOP->release();
-	CARD_LEFT->release();
+	
+    
+    CARD_0->release();
+	CARD_1->release();
+	CARD_2->release();
+	CARD_3->release();
+    CARD_4->release();
+	CARD_5->release();
+	CARD_6->release();
 	if(m_callback)
 	{
 		m_callback = NULL;
@@ -54,15 +65,25 @@ void CardBaCay::onExit()
 
 void CardBaCay::initGame()
 {
-	CARD_ME = CCArray::create();
-	CARD_LEFT = CCArray::create();
-	CARD_RIGHT = CCArray::create();
-	CARD_TOP = CCArray::create();
 
-	CARD_ME->retain();
-	CARD_LEFT->retain();
-	CARD_RIGHT->retain();
-	CARD_TOP->retain();
+    
+    ///
+    CARD_0 = CCArray::create();
+	CARD_1 = CCArray::create();
+	CARD_2 = CCArray::create();
+	CARD_3 = CCArray::create();
+    CARD_4 = CCArray::create();
+	CARD_5 = CCArray::create();
+	CARD_6 = CCArray::create();
+    ///
+    CARD_0->retain();
+	CARD_1->retain();
+	CARD_2->retain();
+	CARD_3->retain();
+    CARD_4->retain();
+	CARD_5->retain();
+	CARD_6->retain();
+    //
 
 	arrCardTypes.push_back("s");
 	arrCardTypes.push_back("c");
@@ -73,18 +94,27 @@ void CardBaCay::initGame()
 	listUser = "";
 	myName = "";
 
-	leftMe = 346;
-	leftLeft = 145;
-	leftRight = 563;
-	leftTop = 352;
-	bottomMe = 125.1; 
-	bottomLeft = 240.2;
-	bottomTop = 299.2;
+
+    //
+    xCardPos_me=370;
+    yCardPos_me=175;
+    xCardPos_u1=140;
+    yCardPos_u1=205;
+    xCardPos_u2=140;
+    yCardPos_u2=302;
+    xCardPos_u3=264;
+    yCardPos_u3=345;
+    xCardPos_u4=492;
+    yCardPos_u4=345;
+    xCardPos_u5=610;
+    yCardPos_u5=302;
+    xCardPos_u6=605;
+    yCardPos_u6=205;
 	
-	w_card_me = 54;
-	w_card_notme = 48;
-	h_card_me = 54 * 1.3;
-	h_card_notme = 48 * 1.3;
+	w_card_me = 50;
+	w_card_notme = 30;
+	h_card_me = 50 * 1.3;
+	h_card_notme = 30 * 1.3;
 
 	count_give = 0;
 
@@ -95,10 +125,16 @@ void CardBaCay::initGame()
 void CardBaCay::resetGame()
 {
 	count_give = 0;
-	deleteAllCards_FromArray(CARD_ME);
-	deleteAllCards_FromArray(CARD_LEFT);
-	deleteAllCards_FromArray(CARD_RIGHT);
-	deleteAllCards_FromArray(CARD_TOP);
+
+    
+    deleteAllCards_FromArray(CARD_0);
+	deleteAllCards_FromArray(CARD_1);
+	deleteAllCards_FromArray(CARD_2);
+	deleteAllCards_FromArray(CARD_3);
+    deleteAllCards_FromArray(CARD_4);
+	deleteAllCards_FromArray(CARD_5);
+	deleteAllCards_FromArray(CARD_6);
+
 }
 
 void CardBaCay::setListUser(string listuser)
@@ -134,21 +170,30 @@ void CardBaCay::givePocker()
 	
 	if (strcmp(info[0].c_str(),myName.c_str()) == 0)
 	{
-		give_next(CARD_ME, w_card_me, h_card_me, leftMe, bottomMe, count_vir);
+		give_next(CARD_0, w_card_me, h_card_me, xCardPos_me, yCardPos_me, count_vir);
 	}
 	else
 	{
 		switch(getPosUserByName(info[0]))
 		{
-		case kUserLeft:
-			give_next(CARD_LEFT, w_card_notme, h_card_notme, leftLeft, bottomLeft, count_vir);
+		case kuser1:
+			give_next(CARD_1, w_card_notme, h_card_notme, xCardPos_u1, yCardPos_u1, count_vir);
 			break;
-		case kUserRight:
-			give_next(CARD_RIGHT, w_card_notme, h_card_notme, leftRight, bottomLeft, count_vir);
+		case kuser2:
+			give_next(CARD_2, w_card_notme, h_card_notme, xCardPos_u2, yCardPos_u2, count_vir);
 			break;
-		case kUserTop:
-			give_next(CARD_TOP, w_card_notme, h_card_notme, leftTop, bottomTop, count_vir);
+		case kuser3:
+			give_next(CARD_3, w_card_notme, h_card_notme, xCardPos_u3, yCardPos_u3, count_vir);
 			break;
+        case kuser4:
+            give_next(CARD_4, w_card_notme, h_card_notme, xCardPos_u4, yCardPos_u4, count_vir);
+            break;
+        case kuser5:
+            give_next(CARD_5, w_card_notme, h_card_notme, xCardPos_u5, yCardPos_u5, count_vir);
+            break;
+        case kuser6:
+            give_next(CARD_6, w_card_notme, h_card_notme, xCardPos_u6, yCardPos_u6, count_vir);
+            break;
 		default:
 			break;
 		}
@@ -161,6 +206,7 @@ void CardBaCay::give_next(CCArray *P, float _width, float _height, float _left, 
 	count_give++;
 
 	Card *card = new Card("card_back.png");
+    
 	card->setPosition(ccp(WIDTH_DESIGN / 2 - w_card_notme / 2, HEIGHT_DESIGN / 2 - h_card_notme / 2));
 	card->setScaleCard(w_card_notme / card->getContentSize().width, h_card_notme / card->getContentSize().height);
 	card->setVisible(true);
@@ -193,18 +239,27 @@ void CardBaCay::turnUpAllCards(string lc, int pos)
 {
 	switch(pos)
 	{
-	case kUserMe:
-		turnUpAllCards_Pos(lc, CARD_ME, w_card_me, h_card_me, leftMe, bottomMe);
+	case kuser0:
+		turnUpAllCards_Pos(lc, CARD_0, w_card_me, h_card_me, xCardPos_me, yCardPos_me);
 		break;
-	case kUserLeft:
-		turnUpAllCards_Pos(lc, CARD_LEFT, w_card_notme, h_card_notme, leftLeft, bottomLeft);
-		break;
-	case kUserRight:
-		turnUpAllCards_Pos(lc, CARD_RIGHT, w_card_notme, h_card_notme, leftRight, bottomLeft);
-		break;
-	case kUserTop:
-		turnUpAllCards_Pos(lc, CARD_TOP, w_card_notme, h_card_notme, leftTop, bottomTop);
-		break;
+    case kuser1:
+        turnUpAllCards_Pos(lc, CARD_1, w_card_notme, h_card_notme, xCardPos_u1, yCardPos_u1);
+        break;
+    case kuser2:
+        turnUpAllCards_Pos(lc, CARD_2, w_card_notme, h_card_notme, xCardPos_u2, yCardPos_u2);
+        break;
+    case kuser3:
+        turnUpAllCards_Pos(lc, CARD_3, w_card_notme, h_card_notme, xCardPos_u3, yCardPos_u3);
+        break;
+    case kuser4:
+        turnUpAllCards_Pos(lc, CARD_4, w_card_notme, h_card_notme, xCardPos_u4, yCardPos_u4);
+        break;
+    case kuser5:
+        turnUpAllCards_Pos(lc, CARD_5, w_card_notme, h_card_notme, xCardPos_u5, yCardPos_u5);
+        break;
+    case kuser6:
+        turnUpAllCards_Pos(lc, CARD_6, w_card_notme, h_card_notme, xCardPos_u6, yCardPos_u6);
+        break;
 	default:
 		break;
 	}
@@ -262,18 +317,28 @@ void CardBaCay::createCardBack(int pos)
 {
 	switch(pos)
 	{
-	case kUserMe:
-		createListCard_Back(CARD_ME, w_card_me, h_card_me, leftMe, bottomMe);
+	case kuser0:
+		createListCard_Back(CARD_0, w_card_me, h_card_me, xCardPos_me, yCardPos_me);
 		break;
-	case kUserLeft:
-		createListCard_Back(CARD_LEFT, w_card_notme, h_card_notme, leftLeft, bottomLeft);
+	case kuser1:
+		createListCard_Back(CARD_1, w_card_notme, h_card_notme, xCardPos_u1, yCardPos_u1);
 		break;
-	case kUserRight:
-		createListCard_Back(CARD_RIGHT, w_card_notme, h_card_notme, leftRight, bottomLeft);
-		break;
-	case kUserTop:
-		createListCard_Back(CARD_TOP, w_card_notme, h_card_notme, leftTop, bottomTop);
-		break;
+    case kuser2:
+        createListCard_Back(CARD_1, w_card_notme, h_card_notme, xCardPos_u2, yCardPos_u2);
+        break;
+    case kuser3:
+        createListCard_Back(CARD_1, w_card_notme, h_card_notme, xCardPos_u3, yCardPos_u3);
+        break;
+    case kuser4:
+        createListCard_Back(CARD_1, w_card_notme, h_card_notme, xCardPos_u4, yCardPos_u4);
+        break;
+    case kuser5:
+        createListCard_Back(CARD_1, w_card_notme, h_card_notme, xCardPos_u5, yCardPos_u5);
+        break;
+    case kuser6:
+        createListCard_Back(CARD_1, w_card_notme, h_card_notme, xCardPos_u6, yCardPos_u6);
+        break;
+   
 	}
 }
 
@@ -338,16 +403,25 @@ int CardBaCay::getPosUserByName(string pName)
 			if(strcmp(n[0].c_str(), pName.c_str()) == 0){
 
 				if(k == vt){
-					return kUserMe;
+					return kuser0;
 				}
-				else if(k == (vt + 1) % 4){
-					return kUserRight;
+				else if(k == (vt + 1) % 7){
+					return kuser1;
 				}
-				else if(k == (vt + 2) % 4){
-					return kUserTop;
+				else if(k == (vt + 2) % 7){
+					return kuser2;
 				}
-				else if(k == (vt + 3) % 4){
-					return kUserLeft;
+				else if(k == (vt + 3) % 7){
+					return kuser3;
+				}
+                else if(k == (vt + 4) % 7){
+					return kuser4;
+				}
+                else if(k == (vt + 5) % 7){
+					return kuser5;
+				}
+                else if(k == (vt + 6) % 7){
+					return kuser6;
 				}
 				break;
 			}
@@ -363,22 +437,31 @@ void CardBaCay::setCallbackFunc(CCObject* target, SEL_CallFuncN callfun)
 	m_callbackListener = callfun;
 }
 
-CCArray* CardBaCay::getListCards_Me()
+CCArray* CardBaCay::getListCards_0()
 {
-	return CARD_ME;
+	return CARD_0;
 }
-
-CCArray* CardBaCay::getListCards_Left()
+CCArray* CardBaCay::getListCards_1()
 {
-	return CARD_LEFT;
+	return CARD_1;
 }
-
-CCArray* CardBaCay::getListCards_Right()
+CCArray* CardBaCay::getListCards_2()
 {
-	return CARD_RIGHT;
+	return CARD_2;
 }
-
-CCArray* CardBaCay::getListCards_Top()
+CCArray* CardBaCay::getListCards_3()
 {
-	return CARD_TOP;
+	return CARD_3;
+}
+CCArray* CardBaCay::getListCards_4()
+{
+	return CARD_4;
+}
+CCArray* CardBaCay::getListCards_5()
+{
+	return CARD_5;
+}
+CCArray* CardBaCay::getListCards_6()
+{
+	return CARD_6;
 }

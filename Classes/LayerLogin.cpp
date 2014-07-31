@@ -14,7 +14,9 @@
 #include "SceneManager.h"
 #include "_Chat_.h"
 #include "mUtils.h"
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/Android.h"
+#endif
 #include <boost/format.hpp>
 
 using namespace cocos2d;

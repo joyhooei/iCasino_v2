@@ -93,6 +93,7 @@ float TomCuaCa::convertResult(string rs)
 	return -1;
 }
 TomCuaCa::TomCuaCa(){
+	meIsSpector=false;
 	if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
@@ -254,6 +255,8 @@ void TomCuaCa::updateUser(string list){
 	vector<string> listUser;
 	listUser = TCCsplit(list, ';');
 	CCLOG("Do dai: %ld",listUser.size());
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	
 	boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 	for(int i=0;i<listUser.size();i++){
 		if(lastRoom==NULL){
@@ -271,9 +274,7 @@ void TomCuaCa::updateUser(string list){
 		int _money = 0;
 		string _name = "";
 		string _url = "";
-		
-		
-		
+
 		boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("aN")->GetStringValue();
 		boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("amf")->GetDoubleValue();
 		boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("aal")->GetStringValue();
@@ -287,25 +288,27 @@ void TomCuaCa::updateUser(string list){
 		if (url != NULL) {
 			_url=url->c_str();
 		}
-	
-		if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+		if(myself->IsSpectator())
+			{
+				isSpector(n[0],_name,mon,_url);
+				}
+		else{
+				if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
 			
 			lAvatar->setName(kUserMe, _name.c_str());
 			lAvatar->getUserByPos(kUserMe)->setMoney(mon);
 			lAvatar->getUserByPos(kUserMe)->setIcon(_url);
 			lAvatar->getUserByPos(kUserMe)->setAI(n[0]);
-			
 
 			if(n[0]==find_ChuPhong(_list_user)){
 				lAvatar->setPosChuong(kUserMe);
 				_time=1;
 				lAvatar->setFlag(kUserMe, true);
 				btnReady->setTitleText("Bắt đầu");
-			}
+				}
 			else{
-
 				btnReady->setTitleText("Sẵn sàng");
-			}
+				}
 		}
 		else{
 			
@@ -316,7 +319,6 @@ void TomCuaCa::updateUser(string list){
 				lAvatar->getUserByPos(kUserLeft)->setMoney(mon);
 				lAvatar->getUserByPos(kUserLeft)->setIcon(_url);
 				lAvatar->getUserByPos(kUserLeft)->setAI(n[0]);
-				
 				if(n[0]==find_ChuPhong(_list_user)){
 					lAvatar->setFlag(kUserLeft, true);
 					lAvatar->setPosChuong(kUserLeft);
@@ -358,10 +360,11 @@ void TomCuaCa::updateUser(string list){
 					lAvatar->setPosChuong(kUserBot);
 					_time=0;
 				}
-			}
+				
+			}//switch
+			}//else
 		}
 	}
-	
 }
 string TomCuaCa::find_ChuPhong(string listUser){
 	vector<string> arrUser = TCCsplit(listUser,';');
@@ -382,6 +385,8 @@ int	 TomCuaCa::getPosUserByName(string uid,string _list_user){
 			vt = i;
 			break;
 		}
+		else
+			vt=0;
 	}
 	// từ đó tìm vị trí của id truyền vào (so với mình)
 	for(int k=0;k<list.size();k++){
@@ -612,7 +617,7 @@ void TomCuaCa::createBackgrounds(){
 		result = name->getCString();
 		result += (" - cược:" + moneyConvert);
 	}
-	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	nameGame= CCLabelTTF::create(result.c_str(), "", 16);
 	nameGame->setPosition(ccp(400, 222));
 	nameGame->setColor(ccWHITE);
 	nameGame->setOpacity(150);
@@ -661,7 +666,7 @@ void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_
 					if (lu != NULL) {
 						CCLOG("List user: %s",lu->c_str());
 							_list_user = *lu;
-				updateUser(*lu);
+							updateUser(*lu);
 
 					}else{
 							_list_user = "";
@@ -1009,6 +1014,7 @@ void TomCuaCa::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::sha
 }
 void TomCuaCa::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 	CCLOG("User ExitRoom On Room");
+	
 	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
 	boost::shared_ptr<void> ptrEventParamValueUser = (*ptrEventParams)["user"];
 	boost::shared_ptr<User> ptrNotifiedUser = ((boost::static_pointer_cast<User>))(ptrEventParamValueUser);
@@ -1018,6 +1024,7 @@ void TomCuaCa::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shar
 		lButton->eventTouchBtnBack(NULL, TOUCH_EVENT_ENDED);
 		CCLog("im exit");
 	}
+	updateUser(_list_user);
 }
 
 void TomCuaCa::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent) {
@@ -1185,4 +1192,71 @@ string TomCuaCa::convertMoneyFromDouble_Detail(double money) {
 	}
 
 
+}
+void TomCuaCa::isSpector(string _userID, string _userName, double _userMoney, string _userAv)
+{
+
+	
+	nameGame= CCLabelTTF::create("Bạn đang xem...", "", 16);
+	nameGame->setPosition(ccp(400, 60));
+	nameGame->setColor(ccWHITE);
+	nameGame->setOpacity(150);
+	uLayer->addChild(nameGame);
+	uLayer->setTouchEnabled(false);
+	btnReady->setEnabled(false);
+	btnUnReady->setEnabled(false);
+	lAvatar->setTouchEnabled(false);
+	this->setTouchEnabled(false);
+	//
+	if(_userID==find_ChuPhong(_list_user)){
+
+		lAvatar->setName(kUserMe, _userName.c_str());
+		lAvatar->getUserByPos(kUserMe)->setMoney(_userMoney);
+		lAvatar->getUserByPos(kUserMe)->setIcon(_userAv);
+		lAvatar->getUserByPos(kUserMe)->setAI(_userID);
+		lAvatar->setPosChuong(kUserMe);
+		lAvatar->setFlag(kUserMe, true);
+	}
+	else{
+		switch (getPosUserByName(_userID, _list_user)) {
+		case kUserLeft:
+			lAvatar->getUserByPos(kUserLeft)->setVisibleLayerInvite(false);
+			lAvatar->setName(kUserLeft, _userName.c_str());
+			lAvatar->getUserByPos(kUserLeft)->setMoney(_userMoney);
+			lAvatar->getUserByPos(kUserLeft)->setIcon(_userAv);
+			lAvatar->getUserByPos(kUserLeft)->setAI(_userID);
+			CCLog("LEFT---%s",_userName.c_str());
+			CCLog("--%d",getPosUserByName(_userID, _list_user));
+			break;
+		case kUserRight:
+			lAvatar->getUserByPos(kUserRight)->setVisibleLayerInvite(false);
+			lAvatar->setName(kUserRight, _userName.c_str());
+			lAvatar->getUserByPos(kUserRight)->setMoney(_userMoney);
+			lAvatar->getUserByPos(kUserRight)->setIcon(_userAv);
+			lAvatar->getUserByPos(kUserRight)->setAI(_userID);		
+			CCLog("RIGHT---%s",_userName.c_str());
+			CCLog("--%d",getPosUserByName(_userID, _list_user));
+			break;
+		case kUserTop:
+			
+			lAvatar->getUserByPos(kUserTop)->setVisibleLayerInvite(false);
+			lAvatar->setName(kUserTop, _userName.c_str());
+			lAvatar->getUserByPos(kUserTop)->setMoney(_userMoney);
+			lAvatar->getUserByPos(kUserTop)->setIcon(_userAv);
+			lAvatar->getUserByPos(kUserTop)->setAI(_userID);	
+			CCLog("TOP---%s",_userName.c_str());
+			CCLog("--%d",getPosUserByName(_userID, _list_user));
+			break;
+		case kUserBot:
+			
+			lAvatar->getUserByPos(kUserBot)->setVisibleLayerInvite(false);
+			lAvatar->setName(kUserBot, _userName.c_str());
+			lAvatar->getUserByPos(kUserBot)->setMoney(_userMoney);
+			lAvatar->getUserByPos(kUserBot)->setIcon(_userAv);
+			lAvatar->getUserByPos(kUserBot)->setAI(_userID);
+			CCLog("--BOT---%s",_userName.c_str()); 
+			CCLog("--%d",getPosUserByName(_userID, _list_user));
+			break;
+		}
+	}
 }

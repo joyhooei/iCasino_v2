@@ -476,7 +476,7 @@ void Lieng::action_UpdateListUser(string lsUser)
 
 void Lieng::action_UserRejoinGame(string lsUser){
 
-	if (checkPlaying(lsUser) && layerCards->getListCards_Me()->count() == 0)
+	if (checkPlaying(lsUser) && layerCards->getListCards_0()->count() == 0)
 	{
 		moveButtonRight();
 	}
@@ -492,7 +492,7 @@ void Lieng::action_UserRejoinGame(string lsUser){
 				getButtonByTag(dTag_btnReady)->setEnabled(false);
 			}
 
-			if (layerCards->getListCards_Me()->count() != 3 && info[2] != "0")
+			if (layerCards->getListCards_0()->count() != 3 && info[2] != "0")
 			{
 				layerCards->createCardBack(kUserMe);
 			}
@@ -502,19 +502,19 @@ void Lieng::action_UserRejoinGame(string lsUser){
 			switch(layerAvatars->getPosByName(info[0]))
 			{
 			case kUserLeft:
-				if (layerCards->getListCards_Left()->count() != 3 && info[2] != "0")
+				if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
 				{
 					layerCards->createCardBack(kUserLeft);
 				}
 				break;
 			case kUserRight:
-				if (layerCards->getListCards_Right()->count() != 3 && info[2] != "0")
+				if (layerCards->getListCards_2()->count() != 3 && info[2] != "0")
 				{
 					layerCards->createCardBack(kUserRight);
 				}
 				break;
 			case kUserTop:
-				if (layerCards->getListCards_Top()->count() != 3 && info[2] != "0")
+				if (layerCards->getListCards_3()->count() != 3 && info[2] != "0")
 				{
 					layerCards->createCardBack(kUserTop);
 				}

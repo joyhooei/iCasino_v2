@@ -1024,7 +1024,7 @@ void LayerPlayGameChinessChess::OnSmartFoxPublicMessage( unsigned long long ptrC
 	newMes->setStatusByServer(false);
 
 	CCPoint point;
-	String name = ptrNotifiedUser->Name()->c_str();
+	string name = ptrNotifiedUser->Name()->c_str();
 
 	// neu la minh thi ko dc chat
 	if (name == myName && isSpector) return;

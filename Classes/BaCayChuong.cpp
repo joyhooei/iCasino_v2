@@ -478,7 +478,7 @@ void BaCayChuong::action_UserRejoinGame(string lsUser){
 	for(int i = 0; i < list.size(); i++){
 		vector<string> info = mUtils::splitString(list[i], '|');
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-			if(info[3]== "1" && layerCard->getListCards_Me()->count() == 0){
+			if(info[3]== "1" && layerCard->getListCards_0()->count() == 0){
 				CCLOG("Me Rejoin");
 				layerCard->createCardBack(kUserMe);
 			}
@@ -486,19 +486,19 @@ void BaCayChuong::action_UserRejoinGame(string lsUser){
 		else{
 			switch (layerAvatars->getPosByName(info[0])) {
 			case kUserLeft:
-				if(info[3] == "1" && layerCard->getListCards_Left()->count() == 0){
+				if(info[3] == "1" && layerCard->getListCards_1()->count() == 0){
 					layerCard->createCardBack(kUserLeft);	
 				}
 				break;
 
 			case kUserRight:
-				if(info[3] == "1" && layerCard->getListCards_Right()->count() == 0){
+				if(info[3] == "1" && layerCard->getListCards_2()->count() == 0){
 					layerCard->createCardBack(kUserRight);	
 				}
 				break;
 
 			case kUserTop:
-				if(info[3] == "1" && layerCard->getListCards_Top()->count() == 0){
+				if(info[3] == "1" && layerCard->getListCards_3()->count() == 0){
 					layerCard->createCardBack(kUserTop);
 				}
 				break;

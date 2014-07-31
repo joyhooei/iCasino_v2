@@ -1,7 +1,9 @@
 ﻿#include "LayerChatWindow.h"
 #include "SceneManager.h"
 #include "mUtils.h"
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/Android.h"
+#endif
 
 USING_NS_CC;
 USING_NS_CC_EXT;

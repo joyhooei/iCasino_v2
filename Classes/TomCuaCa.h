@@ -52,6 +52,7 @@ private:
 	vector<string> arrName;
 	vector<int> arrMoney;
 	vector<double> arrMoneyDouble;
+	bool meIsSpector;
 	//Các button trong game
 	
 
@@ -85,7 +86,7 @@ public:
 	FrameBet* betRuou;
 	FrameBet* betNai;
 	LayerButtonInGame* lButton;
-
+	CCLabelTTF *nameGame;
 
 	TomCuaCa();
 	~TomCuaCa();
@@ -130,6 +131,7 @@ public:
 	string convertMoney(int money);
 	string convertMoneyFromDouble(double money);
 	string convertMoneyFromDouble_Detail(double money);
+	void isSpector(string _userID, string _userName, double _userMoney, string _userAv);
 };
 
 #endif /* defined(__iCasino_v2__TomCuaCa__) */

@@ -14,7 +14,9 @@
 #include "mUtils.h"
 #include "LayerInviteFriends.h"
 #include "LayerInviteFriendsFacebook.h"
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/Android.h"
+#endif
 #include "SceneManager.h"
 
 using namespace cocos2d;

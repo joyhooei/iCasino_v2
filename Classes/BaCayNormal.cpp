@@ -9,7 +9,7 @@
 #include "BaCayNormal.h"
 #include "_Background_inGame_.h"
 #include "Requests/ExtensionRequest.h"
-#include "_Number_inGame_.h"
+#include "_Number_inGame_7u.h"
 #include "Nan3Cay.h"
 #include "mUtils.h"
 #include "_Chat_.h"
@@ -18,6 +18,8 @@
 
 BaCayNormal::BaCayNormal(){
 
+  
+    
 	EXT_EVENT_LIST_USER_UPDATE = "luu";
 	EXT_EVENT_READY_NTF = "rntf";
 	EXT_EVENT_START = "s";
@@ -38,7 +40,11 @@ BaCayNormal::BaCayNormal(){
 	createAvatars();
 	createButtons();
 	createCards();
-
+    
+    LayerNumberInGame7u *abc = LayerNumberInGame7u::create();
+    this->addChild(abc);
+    abc->showNumberByPos(kuser1,7000);
+    
 	layerBet = BetGame3Cay::create();
 	this->addChild(layerBet);
 
@@ -92,7 +98,7 @@ void BaCayNormal::createBackgrounds(){
 void BaCayNormal::createAvatars(){
 	layerAvatars = LayerBaCayAvatar::create();
 	layerAvatars->resetAll();
-	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
+	layerAvatars->getUserByPos(kuser0)->setVisible(true);
 	this->addChild(layerAvatars);
 }
 
@@ -255,6 +261,7 @@ void BaCayNormal::OnExtensionResponse(unsigned long long ptrContext, boost::shar
 
 	else if(strcmp(EXT_EVENT_GAME_RESULT.c_str(), cmd->c_str())==0){
 		boost::shared_ptr<string> rg = param->GetUtfString("rg");
+        CCLog("rg---%s",rg->c_str());
 		if(rg != NULL){
 			whenResuiltGame(*rg);
 		}
@@ -363,7 +370,7 @@ void BaCayNormal::btn_XemBai_click(CCObject *sender, TouchEventType type){
 			this->removeChildByTag(123);
 		}
 		if(_list_cards!=""){
-			layerCards->turnUpAllCards(_list_cards, kUserMe);
+			layerCards->turnUpAllCards(_list_cards, kuser0);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 			getButtonByTag(dTag_btnView)->setEnabled(false);
 		}
@@ -383,7 +390,7 @@ void BaCayNormal::btn_NanBai_click(CCObject *sender, TouchEventType type){
 
 void BaCayNormal::callBackFunction_LatBai(CCNode *pSend){
 	if(_list_cards != ""){
-		layerCards->turnUpAllCards(_list_cards, kUserMe);
+		layerCards->turnUpAllCards(_list_cards, kuser0);
 		getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 		getButtonByTag(dTag_btnView)->setEnabled(false);
 	}
@@ -391,7 +398,7 @@ void BaCayNormal::callBackFunction_LatBai(CCNode *pSend){
 
 void BaCayNormal::eventListUserUpdate(string listusers)
 {
-	CCLOG("Vao day roi loix");
+	
 	layerAvatars->setListUserForBaCay(listusers);
 	layerCards->setMyName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
 	layerCards->setListUser(listusers);
@@ -429,33 +436,55 @@ void BaCayNormal::whenUserRejoinOrGuess(string listUser){
 	for(int i=0;i<list.size();i++){
 		vector<string> info = mUtils::splitString(list[i], '|');
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-			if(info[1]== "1" && layerCards->getListCards_Me()->count() == 0){
+			if(info[1]== "1" && layerCards->getListCards_0()->count() == 0){
 				CCLOG("Me Rejoin");
-				layerCards->createCardBack(kUserMe);
+				layerCards->createCardBack(kuser0);
 			}
 		}
 
 		else{
 			switch (layerAvatars->getPosByName(info[0])) {
-			case kUserLeft:
-				if (info[1] == "1" && layerCards->getListCards_Left()->count() == 0)
+			case kuser1:
+				if (info[1] == "1" && layerCards->getListCards_1()->count() == 0)
 				{
-					layerCards->createCardBack(kUserLeft);
+					layerCards->createCardBack(kuser1);
 				}
 				break;
+                case kuser2:
+                    if (info[1] == "1" && layerCards->getListCards_2()->count() == 0)
+                    {
+                        layerCards->createCardBack(kuser2);
+                    }
+                    break;
 
-			case kUserRight:
-				if (info[1] == "1" && layerCards->getListCards_Right()->count() == 0)
-				{
-					layerCards->createCardBack(kUserRight);
-				}
-				break;
+                case kuser3:
+                    if (info[1] == "1" && layerCards->getListCards_3()->count() == 0)
+                    {
+                        layerCards->createCardBack(kuser3);
+                    }
+                    break;
 
-			case kUserTop:
-				if (info[1] == "1" && layerCards->getListCards_Top()->count() == 0)
-				{
-					layerCards->createCardBack(kUserTop);
-				}
+                case kuser4:
+                    if (info[1] == "1" && layerCards->getListCards_4()->count() == 0)
+                    {
+                        layerCards->createCardBack(kuser4);
+                    }
+                    break;
+
+                case kuser5:
+                    if (info[1] == "1" && layerCards->getListCards_5()->count() == 0)
+                    {
+                        layerCards->createCardBack(kuser5);
+                    }
+                    break;
+
+                case kuser6:
+                    if (info[1] == "1" && layerCards->getListCards_6()->count() == 0)
+                    {
+                        layerCards->createCardBack(kuser6);
+                    }
+                    break;
+
 				break;
 			default:
 				break;
@@ -501,38 +530,53 @@ void BaCayNormal::whenResuiltGame(string rg){
 		this->removeChildByTag(123);
 	}
 
-	LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
+	LayerNumberInGame7u *layerNumbers = LayerNumberInGame7u::create();
 	this->addChild(layerNumbers);
 
 	vector<string> resuilt = mUtils::splitString(rg, ';');
 
 	for(int i = 0; i < resuilt.size(); i++){
 		vector<string> info = mUtils::splitString(resuilt[i], '|');
-
+        double mon = atof(info[4].c_str());
 		string strResuilt = info[1] + "|" + info[2] + "|" + info[3];
-
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-			layerBet->setResuit4AllUser(kUserMe, "1", strResuilt);
-			layerNumbers->showNumberByPos(kUserMe, info[4]);
+			//layerBet->setResuit4AllUser(kUserMe, "1", strResuilt);
+			layerNumbers->showNumberByPos(kuser0,mon);
+            
 		}
 		else{
 			int pos = layerAvatars->getPosByName(info[0]);
 
 			switch (pos) {
-			case kUserLeft:
-				layerBet->setResuit4AllUser(kUserLeft, "1", strResuilt);
-				layerNumbers->showNumberByPos(kUserLeft, info[4]);
+			case kuser1:
+				//layerBet->setResuit4AllUser(kuser1, "1", strResuilt);
+				layerNumbers->showNumberByPos(kuser1, mon);
 				break;
-
-			case kUserRight:
-				layerBet->setResuit4AllUser(kUserRight, "1", strResuilt);
-				layerNumbers->showNumberByPos(kUserRight, info[4]);
-				break;
-
-			case kUserTop:
-				layerBet->setResuit4AllUser(kUserTop, "1", strResuilt);
-				layerNumbers->showNumberByPos(kUserTop, info[4]);
-				break;
+                    
+                case kuser2:
+                    layerBet->setResuit4AllUser(kuser2, "1", strResuilt);
+                    layerNumbers->showNumberByPos(kuser2, mon);
+                    break;
+                    
+                case kuser3:
+                    layerBet->setResuit4AllUser(kuser3, "1", strResuilt);
+                    layerNumbers->showNumberByPos(kuser3, mon);
+                    break;
+                    
+                case kuser4:
+                    layerBet->setResuit4AllUser(kuser4, "1", strResuilt);
+                    layerNumbers->showNumberByPos(kuser4,mon);
+                    break;
+                    
+                case kuser5:
+                    layerBet->setResuit4AllUser(kuser5, "1", strResuilt);
+                    layerNumbers->showNumberByPos(kuser5,mon);
+                    break;
+                    
+                case kuser6:
+                    layerBet->setResuit4AllUser(kuser6, "1", strResuilt);
+                    layerNumbers->showNumberByPos(kuser6, mon);
+                    break;
 
 			default:
 				break;
@@ -558,13 +602,13 @@ void BaCayNormal::LatBai(string listCard,string uid, bool tua){
 			{
 				this->removeChildByTag(123);
 			}
-			layerCards->turnUpAllCards(listCard, kUserMe);
+			layerCards->turnUpAllCards(listCard, kuser0);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 			getButtonByTag(dTag_btnView)->setEnabled(false);
 			getButtonByTag(dTag_btnTurnAll)->setEnabled(false);
 		}
 		else{
-			layerCards->turnUpAllCards("0_0-0_0-0_0", kUserMe);
+			layerCards->turnUpAllCards("0_0-0_0-0_0", kuser0);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(true);
 			getButtonByTag(dTag_btnView)->setEnabled(true);
 			getButtonByTag(dTag_btnTurnAll)->setEnabled(true);

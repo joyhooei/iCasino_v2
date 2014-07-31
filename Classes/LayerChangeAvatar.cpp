@@ -10,7 +10,9 @@
 #include "LayerChangeAvatar.h"
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/Android.h"
+#endif
 
 
 using namespace cocos2d;

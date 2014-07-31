@@ -49,10 +49,16 @@ public:
 
 	void setCallbackFunc(CCObject* target, SEL_CallFuncN callfun);
 
-	CCArray* getListCards_Me();
-	CCArray* getListCards_Left();
-	CCArray* getListCards_Right();
-	CCArray* getListCards_Top();
+
+    
+    CCArray* getListCards_0();
+    CCArray* getListCards_1();
+    CCArray* getListCards_2();
+    CCArray* getListCards_3();
+    CCArray* getListCards_4();
+    CCArray* getListCards_5();
+    CCArray* getListCards_6();
+    
 private:
 	vector<string> arrCardTypes;
 
@@ -60,13 +66,21 @@ private:
 	string listUser;
 	string myName;
 
-	float leftMe;
-	float leftLeft;
-	float leftRight;
-	float leftTop;
-	float bottomMe;
-	float bottomLeft;
-	float bottomTop;
+    //
+    float xCardPos_me;
+    float yCardPos_me;
+    float xCardPos_u1;
+    float yCardPos_u1;
+    float xCardPos_u2;
+    float yCardPos_u2;
+    float xCardPos_u3;
+    float yCardPos_u3;
+    float xCardPos_u4;
+    float yCardPos_u4;
+    float xCardPos_u5;
+    float yCardPos_u5;
+    float xCardPos_u6;
+    float yCardPos_u6;
 
 	float h_card_me;
 	float h_card_notme;
@@ -75,10 +89,14 @@ private:
 
 	int count_give;
 
-	CCArray *CARD_ME;
-	CCArray *CARD_LEFT;
-	CCArray *CARD_RIGHT;
-	CCArray *CARD_TOP;
+    
+    CCArray *CARD_0;
+    CCArray *CARD_1;
+    CCArray *CARD_2;
+    CCArray *CARD_3;
+    CCArray *CARD_4;
+    CCArray *CARD_5;
+    CCArray *CARD_6;
 
 	CCObject* m_callback;
 	SEL_CallFuncN m_callbackListener;

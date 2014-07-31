@@ -27,35 +27,58 @@ bool LayerBaCayAvatar::init()
 
 	this->myName = SceneManager::getSingleton().getMyName();
 
-	Avatar *me = new Avatar(true);
-	Avatar *left = new Avatar(false);
-	Avatar *right = new Avatar(false);
-	Avatar *top = new Avatar(false);
-	Avatar *bottom = new Avatar(false);
+	Avatar *me = new Avatar(false);
+	Avatar *user1 = new Avatar(false);
+	Avatar *user2 = new Avatar(false);
+	Avatar *user3 = new Avatar(false);
+	Avatar *user4 = new Avatar(false);
+    Avatar *user5 = new Avatar(false);
+    Avatar *user6 = new Avatar(false);
 
 	me->autorelease();
-	left->autorelease();
-	right->autorelease();
-	top->autorelease();
-	bottom->autorelease();
+	user1->autorelease();
+	user2->autorelease();
+	user3->autorelease();
+	user4->autorelease();
+    user5->autorelease();
+    user6->autorelease();
 
-	me->setPosition(ccp(10, HEIGHT_DESIGN - 10 - me->getSizeThis().height));
-	left->setPosition(ccp(10, HEIGHT_DESIGN / 2 - left->getSizeThis().height / 2));
-	right->setPosition(ccp(WIDTH_DESIGN - 10 - right->getSizeThis().width, HEIGHT_DESIGN / 2 - left->getSizeThis().height / 2));
-	top->setPosition(ccp(WIDTH_DESIGN / 2 - top->getSizeThis().width / 2, HEIGHT_DESIGN - 10 - top->getSizeThis().height));
-	bottom->setPosition(ccp(top->getPositionX(), 10));
+	
 
-	me->setTag(kUserMe);
-	left->setTag(kUserLeft);
-	right->setTag(kUserRight);
-	top->setTag(kUserTop);
-	bottom->setTag(kUserBot);
+    me->setPosition(ccp(WIDTH_DESIGN/2-me->getSizeThis().width/2+25,10));
+    user1->setPosition(ccp(40, 110));
+    user2->setPosition(ccp(40, HEIGHT_DESIGN-200));
+    user3->setPosition(ccp(250, 360));
+    user4->setPosition(ccp(WIDTH_DESIGN-320, 360));
+    user5->setPosition(ccp(WIDTH_DESIGN-120, HEIGHT_DESIGN-200));
+    user6->setPosition(ccp(WIDTH_DESIGN-120,110));
+    
+    
+	me->setTag(kuser0);
+	user1->setTag(kuser1);
+    user2->setTag(kuser2);
+    user3->setTag(kuser3);
+    user4->setTag(kuser4);
+    user5->setTag(kuser5);
+    user6->setTag(kuser6);
+    
+    me->setScale(0.9);
+    user1->setScale(0.9);
+    user2->setScale(0.9);
+    user3->setScale(0.9);
+    user4->setScale(0.9);
+    user5->setScale(0.9);
+    user6->setScale(0.9);
+    
+
 
 	this->addChild(me);
-	this->addChild(left);
-	this->addChild(right);
-	this->addChild(top);
-	this->addChild(bottom);
+	this->addChild(user1);
+	this->addChild(user2);
+	this->addChild(user3);
+	this->addChild(user4);
+    this->addChild(user5);
+    this->addChild(user6);
 
 	chuong = UIImageView::create();
 	chuong->loadTexture("Chuong.png");
@@ -87,12 +110,14 @@ void LayerBaCayAvatar::setFlag (int pos, bool isShow)
 	if (this->getUserByPos(pos) == NULL) return;
 	this->getUserByPos(pos)->setFlag(isShow);
 	//
-	if(pos == kUserMe){
+	if(pos == kuser0){
 		//
-		this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
-		this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
-		this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
-		this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
+		this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
+		this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
+		this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
+		this->getUserByPos(kuser4)->setMeIsBoss(meIsBoss);
+        this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
+        this->getUserByPos(kuser6)->setMeIsBoss(meIsBoss);
 	}
 }
 
@@ -131,47 +156,69 @@ void LayerBaCayAvatar::setVisibleLayerInvite(int pos, bool isShow)
 
 void LayerBaCayAvatar::resetAll()
 {
-	setFlag(kUserMe, false);
-	setFlag(kUserLeft, false);
-	setFlag(kUserRight, false);
-	setFlag(kUserTop, false);
+	setFlag(kuser0, false);
+	setFlag(kuser1, false);
+	setFlag(kuser2, false);
+	setFlag(kuser3, false);
+    setFlag(kuser4, false);
+    setFlag(kuser5, false);
+    setFlag(kuser6, false);
 
-	setName(kUserMe, "");
-	setName(kUserLeft, "");
-	setName(kUserRight, "");
-	setName(kUserTop, "");
+	setName(kuser0, "");
+	setName(kuser1, "");
+	setName(kuser2, "");
+	setName(kuser3, "");
+    setName(kuser4, "");
+    setName(kuser5, "");
+    setName(kuser6, "");
 
-	setMoney(kUserMe, "");
-	setMoney(kUserLeft, "");
-	setMoney(kUserRight, "");
-	setMoney(kUserTop, "");
+	setMoney(kuser0, "");
+	setMoney(kuser1, "");
+	setMoney(kuser2, "");
+	setMoney(kuser3, "");
+    setMoney(kuser4, "");
+    setMoney(kuser5, "");
+    setMoney(kuser6, "");
 
-	this->getUserByPos(kUserLeft)->setVisibleLayerInvite(true);
-	this->getUserByPos(kUserRight)->setVisibleLayerInvite(true);
-	this->getUserByPos(kUserTop)->setVisibleLayerInvite(true);
+	this->getUserByPos(kuser1)->setVisibleLayerInvite(true);
+	this->getUserByPos(kuser2)->setVisibleLayerInvite(true);
+	this->getUserByPos(kuser3)->setVisibleLayerInvite(true);
+    this->getUserByPos(kuser4)->setVisibleLayerInvite(true);
+    this->getUserByPos(kuser5)->setVisibleLayerInvite(true);
+    this->getUserByPos(kuser6)->setVisibleLayerInvite(true);
 }
 
 void LayerBaCayAvatar::setPosChuong(int pos)
 {
 	switch (pos) {
-	case kUserLeft:
+	case kuser1:
 		chuong->setPosition(ccp(101,175));
 		chuong->setVisible(true);
 		break;
-	case kUserRight:
+	case kuser2:
 		chuong->setPosition(ccp(678,175));
 		chuong->setVisible(true);
 		break;
-	case kUserTop:
+	case kuser3:
 		chuong->setPosition(ccp(445,345));
 		chuong->setVisible(true);
 		break;
-	case kUserBot:
+	case kuser4:
+        chuong->setPosition(ccp(445,345));
+        chuong->setVisible(true);
 		break;
-	case kUserMe:
+	case kuser5:
 		chuong->setPosition(ccp(175,420));
 		chuong->setVisible(true);
 		break;
+    case kuser6:
+        chuong->setPosition(ccp(175,420));
+        chuong->setVisible(true);
+        break;
+    case kuser0:
+        chuong->setPosition(ccp(175,420));
+        chuong->setVisible(true);
+        break;
 	default:
 		break;
 	}
@@ -179,11 +226,13 @@ void LayerBaCayAvatar::setPosChuong(int pos)
 
 void LayerBaCayAvatar::setUnReadyAllUser()
 {
-	setReady(kUserMe, false);
-	setReady(kUserLeft, false);
-	setReady(kUserRight, false);
-	setReady(kUserTop, false);
-	setReady(kUserBot, false);
+	setReady(kuser0, false);
+	setReady(kuser1, false);
+	setReady(kuser2, false);
+	setReady(kuser3, false);
+	setReady(kuser4, false);
+    setReady(kuser5, false);
+    setReady(kuser6, false);
 }
 
 void LayerBaCayAvatar::resetGame()
@@ -221,16 +270,27 @@ int LayerBaCayAvatar::getPosByName(string name)
 		if (strcmp(info[0].c_str(), name.c_str()) == 0)
 		{
 			if(i == vt){
-				return kUserMe;
+                CCLog("vi tri------%d:",vt);
+				return kuser0;
+    
 			}
-			else if(i == (vt + 1) % 4){
-				return kUserRight;
+			else if(i == (vt + 1) % 7){
+				return kuser1;
 			}
-			else if(i == (vt + 2) % 4){
-				return kUserTop;
+			else if(i == (vt + 2) % 7){
+				return kuser2;
 			}
-			else if(i == (vt + 3) % 4){
-				return kUserLeft;
+			else if(i == (vt + 3) % 7){
+				return kuser3;
+			}
+            else if(i == (vt + 4) % 7){
+				return kuser4;
+			}
+            else if(i == (vt + 5) % 7){
+				return kuser5;
+			}
+            else if(i == (vt + 6) % 7){
+				return kuser6;
 			}
 			break;
 		}
@@ -258,43 +318,56 @@ void LayerBaCayAvatar::updateUsers()
 		return;
 	}
 
-	Avatar *avaMe = getUserByPos(kUserMe);
-	Avatar *avaLeft = getUserByPos(kUserLeft);
-	Avatar *avaRight = getUserByPos(kUserRight);
-	Avatar *avaTop = getUserByPos(kUserTop);
-	Avatar *avaBot = getUserByPos(kUserBot);
+	Avatar *avaMe    = getUserByPos(kuser0);
+	Avatar *avaUser1 = getUserByPos(kuser1);
+	Avatar *avaUser2 = getUserByPos(kuser2);
+	Avatar *avaUser3 = getUserByPos(kuser3);
+	Avatar *avaUser4 = getUserByPos(kuser4);
+    Avatar *avaUser5 = getUserByPos(kuser5);
+    Avatar *avaUser6 = getUserByPos(kuser6);
 
-	avaMe->setVisible(false);
+	avaMe->setVisible(true);
 	avaMe->setTouchEnabled(false);
 	avaMe->setReady(false);
 	avaMe->setName("");
 	avaMe->setMoney("");
 	avaMe->setAI("");
 
-	avaLeft->setVisibleLayerInvite(true);
-	avaLeft->setReady(false);
-	avaLeft->setName("");
-	avaLeft->setMoney("");
-	avaLeft->setAI("");
+	avaUser1->setVisibleLayerInvite(true);
+	avaUser1->setReady(false);
+	avaUser1->setName("");
+	avaUser1->setMoney("");
+	avaUser1->setAI("");
 	//
-	avaRight->setVisibleLayerInvite(true);
-	avaRight->setReady(false);
-	avaRight->setName("");
-	avaRight->setMoney("");
-	avaRight->setAI("");
+	avaUser2->setVisibleLayerInvite(true);
+	avaUser2->setReady(false);
+	avaUser2->setName("");
+	avaUser2->setMoney("");
+	avaUser2->setAI("");
 	//
-	avaTop->setVisibleLayerInvite(true);
-	avaTop->setReady(false);
-	avaTop->setName("");
-	avaTop->setMoney("");
-	avaTop->setAI("");
+	avaUser3->setVisibleLayerInvite(true);
+	avaUser3->setReady(false);
+	avaUser3->setName("");
+	avaUser3->setMoney("");
+	avaUser3->setAI("");
 	//
-	avaBot->setVisibleLayerInvite(true);
-	avaBot->setReady(false);
-	avaBot->setPositionY(-200);
-	avaBot->setName("");
-	avaBot->setMoney("");
-	avaBot->setAI("");
+	avaUser4->setVisibleLayerInvite(true);
+	avaUser4->setReady(false);
+	avaUser4->setName("");
+	avaUser4->setMoney("");
+	avaUser4->setAI("");
+    //
+    avaUser5->setVisibleLayerInvite(true);
+	avaUser5->setReady(false);
+	avaUser5->setName("");
+	avaUser5->setMoney("");
+	avaUser5->setAI("");
+    //
+    avaUser6->setVisibleLayerInvite(true);
+	avaUser6->setReady(false);
+	avaUser6->setName("");
+	avaUser6->setMoney("");
+	avaUser6->setAI("");
 
 	for (int i = 0; i < arrUser.size(); i++)
 	{
@@ -315,30 +388,32 @@ void LayerBaCayAvatar::updateUsers()
 			string _url = (url != NULL) ? url->c_str() : "";
 			string _name = (name != NULL) ? name->c_str() : info[0];
 
-			Avatar *user = getUserByPos(pos);
-			user->setName(_name);
-			user->setFlag(i == 0);
-			user->setAI(info[0]);
+			Avatar *_user = getUserByPos(pos);
+			_user->setName(_name);
+			_user->setFlag(i == 0);
+			_user->setAI(info[0]);
 			//
 			bool meIsBoss = (i == 0);
-			if(pos == kUserMe){
-				this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
-				this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
-				this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
-				this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
+			if(pos == kuser0){
+				this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kuser4)->setMeIsBoss(meIsBoss);
+                this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
+                this->getUserByPos(kuser6)->setMeIsBoss(meIsBoss);
 			}
 			//
-			user->setIcon(_url);
+			_user->setIcon(_url);
 			//user->setAI(aI);
-			user->setMoney(_money);
+			_user->setMoney(_money);
 
 			if (pos == kUserMe)
 			{
-				user->setVisible(true);
-				user->setTouchEnabled(true);
+				_user->setVisible(true);
+				_user->setTouchEnabled(true);
 			}
 			else {
-				user->setVisibleLayerInvite(false);
+				_user->setVisibleLayerInvite(false);
 			}
 		}
 	}
@@ -363,8 +438,11 @@ void LayerBaCayAvatar::runTimer(int posUser)
 
 void LayerBaCayAvatar::stopAllTimer()
 {
-	getUserByPos(kUserMe)->stopTimer();
-	getUserByPos(kUserLeft)->stopTimer();
-	getUserByPos(kUserRight)->stopTimer();
-	getUserByPos(kUserTop)->stopTimer();
+	getUserByPos(kuser0)->stopTimer();
+	getUserByPos(kuser1)->stopTimer();
+	getUserByPos(kuser2)->stopTimer();
+	getUserByPos(kuser3)->stopTimer();
+    getUserByPos(kuser4)->stopTimer();
+    getUserByPos(kuser5)->stopTimer();
+    
 }
