@@ -200,7 +200,7 @@ void LayerChonBanChoi::tableCellUnhighlight(CCTableView* table, CCTableViewCell*
     //CCLOG("tableCellUnhighlight: %d", cell->getObjectID());
 }
 
-// hàm khi click vào 1 hành của table view
+// hàm khi click vào 1 hàng của table view
 void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, cocos2d::extension::CCTableViewCell *cell){
     CCLOG("Roomid: %d", cell->getObjectID());
     if(table->getTag()==tagListPlay){
@@ -222,7 +222,20 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 			this->addChild(toast);
 			return;
 		}
+		//HoangDD Update 31/07/2014
 		mCurrentRoomIDJoin = ro->Id();
+		boost::shared_ptr<RoomVariable> rv = ro->GetVariable("params");
+		vector<string> lstParams = mUtils::splitString( *rv->GetStringValue(), '@' );
+		// counting players
+		int currPlayers = atoi( lstParams.at(2).c_str() );
+		int numOfPlayers = atoi ( boost::to_string(ro->MaxUsers()).c_str() );
+		// get idroom to left
+		int a = -1;
+		if( GameServer::getSingleton().getSmartFox()->LastJoinedRoom() ){
+			a = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->Id();
+		}
+		boost::shared_ptr<long int> id2Left = boost::make_shared<long int>(a);
+		//
 		if( ro->IsPasswordProtected() ){
 			//load popup password
 			CCNodeLoaderLibrary* ccNodeLoaderLibrary = SceneManager::getSingleton().getNodeLoaderLibrary();
@@ -238,7 +251,7 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 			mLayer->setRoomID( ro->Id() );
 			return;
 		}
-        boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro,""));
+        boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro, "", id2Left, currPlayers==numOfPlayers));
         GameServer::getSingleton().getSmartFox()->Send(request);
     }else{
 		//Uncheck other cell
@@ -314,14 +327,21 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
 			sLock->setScale(0.7);
 			cell->addChild(sLock);
 		}
-        //người chơi
-        CCString *songuoi = CCString::createWithFormat("%s/%s",boost::to_string(rooms->at(idx)->UserCount()).c_str(),boost::to_string(rooms->at(idx)->MaxUsers()).c_str());
+		//người chơi
+		CCString *songuoi;
+		if( lstBet.size()<2 )
+			songuoi = CCString::createWithFormat("%s/%s (*)",boost::to_string(rooms->at(idx)->UserCount()).c_str(),boost::to_string(rooms->at(idx)->MaxUsers()).c_str());
+		else
+			songuoi = CCString::createWithFormat("%s/%s", lstBet.at(2).c_str(), boost::to_string(rooms->at(idx)->MaxUsers()).c_str());
         
         cell->addChild(createLabel4Cell(tag_Players, songuoi->getCString(), CCSizeMake(100, 40), ccp(101, 0)));
         
         cell->addChild(createLabel4Cell(tag_Bet, mUtils::convertMoneyEx( atoi( lstBet.at(0).c_str() ) ).c_str(), CCSizeMake(100, 40), ccp(202, 0)));
         
-        cell->addChild(createLabel4Cell(-1, "Nhà chẳng có gì, có mỗi điều kiện", CCSizeMake(271, 40), ccp(302, 0)));
+		if( lstBet.size()<2 )
+			cell->addChild(createLabel4Cell(tag_Details, "Nhà chẳng có gì, có mỗi điều kiện", CCSizeMake(271, 40), ccp(302, 0)));
+		else
+			cell->addChild(createLabel4Cell(tag_Details, lstBet.at(1).compare("1")==0?"Đang chơi":"Nhà chẳng có gì, có mỗi điều kiện", CCSizeMake(271, 40), ccp(302, 0)));
         
         CCSprite* line = CCSprite::createWithSpriteFrameName("assest/background_cell.png");
         line->setPosition(ccp(tblListRooms->getContentSize().width/2,0));
@@ -336,13 +356,25 @@ CCTableViewCell* LayerChonBanChoi::process4ListRooms(cocos2d::extension::CCTable
         
         CCLabelTTF *label2 = getLabelFromTagID(cell, tag_Players);
         if( label2!=NULL ){
-            CCString *songuoi = CCString::createWithFormat("%s/%s",boost::to_string(rooms->at(idx)->UserCount()).c_str(),boost::to_string(rooms->at(idx)->MaxUsers()).c_str());
+			CCString *songuoi;
+			if( lstBet.size()<2 )
+				songuoi = CCString::createWithFormat("%s/%s (*)",boost::to_string(rooms->at(idx)->UserCount()).c_str(),boost::to_string(rooms->at(idx)->MaxUsers()).c_str());
+			else
+				songuoi = CCString::createWithFormat("%s/%s", lstBet.at(2).c_str(), boost::to_string(rooms->at(idx)->MaxUsers()).c_str());
             label2->setString(songuoi->getCString());
         }
         
         CCLabelTTF *label3 = getLabelFromTagID(cell, tag_Bet);
         if( label3!=NULL ){
             label3->setString( mUtils::convertMoneyEx( atoi( lstBet.at(0).c_str() ) ).c_str() );
+		}
+
+		CCLabelTTF *label4= getLabelFromTagID(cell, tag_Details);
+		if( label4!=NULL ){
+			if( lstBet.size()<2 )
+				label4->setString("Nhà chẳng có gì, có mỗi điều kiện");
+			else
+				label4->setString(lstBet.at(1).compare("1")==0?"Đang chơi":"Nhà chẳng có gì, có mỗi điều kiện");
 		}
 		//Lock
 		if( rooms->at(idx)->IsPasswordProtected() ){
@@ -565,4 +597,15 @@ void LayerChonBanChoi::autoReloadData()
 	CCLOG("LayerChonBanChoi::autoReloadData() - BEGIN");
 	tblListRooms->reloadData();
 	CCLOG("LayerChonBanChoi::autoReloadData() - END");
+}
+
+void LayerChonBanChoi::OnSmartFoxRoomVariableUpdate( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueRoom = (*ptrEvetnParams)["room"];
+	boost::shared_ptr<Room> room = ((boost::static_pointer_cast<Room>(ptrEventParamValueRoom)));
+	//
+	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
+	string s = *rv->GetStringValue();
+	CCLOG("Room %s update RoomVariables: %s", room->Name()->c_str(), s.c_str());
 }

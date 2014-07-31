@@ -10,6 +10,7 @@
 #include "mUtils.h"
 #include "Requests/JoinRoomRequest.h"
 #include "GameServer.h"
+#include "boost/smart_ptr/make_shared.hpp"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -36,8 +37,26 @@ SEL_MenuHandler LayerPasswordRoom::onResolveCCBCCMenuItemSelector(cocos2d::CCObj
 void LayerPasswordRoom::onButtonConfirm(CCObject* pSender)
 {
     CCLOG("onButtonConfirm");
-
-	boost::shared_ptr<IRequest> request (new JoinRoomRequest(roomID, txtPassword->getText()));
+	boost::shared_ptr<Room> ro = GameServer::getSingleton().getSmartFox()->GetRoomById( roomID );
+	if( ro==NULL ){
+		CCLOG("ROOM NOT EXIST!!!");
+		this->removeFromParentAndCleanup(true);
+		return;
+	}
+	//Get room variables
+	boost::shared_ptr<RoomVariable> rv = ro->GetVariable("params");
+	vector<string> lstParams = mUtils::splitString( *rv->GetStringValue(), '@' );
+	// counting players
+	int currPlayers = atoi( lstParams.at(2).c_str() );
+	int numOfPlayers = atoi ( boost::to_string(ro->MaxUsers()).c_str() );
+	// get idroom to left
+	int a = -1;
+	if( GameServer::getSingleton().getSmartFox()->LastJoinedRoom() ){
+		a = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->Id();
+	}
+	boost::shared_ptr<long int> id2Left = boost::make_shared<long int>(a);
+	//
+	boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro, txtPassword->getText(), id2Left, currPlayers==numOfPlayers));
 	GameServer::getSingleton().getSmartFox()->Send(request);
 
 	this->removeFromParentAndCleanup(true);

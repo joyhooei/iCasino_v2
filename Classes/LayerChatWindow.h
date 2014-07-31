@@ -22,12 +22,19 @@ private:
 
 	vector<string> lstStringMessage;
 	vector<CCArmature*> lstEmo;
+
+	UILayer* layerButton;
 public:
 	~LayerChatWindow();
 	virtual void registerWithTouchDispatcher(void);
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void onEnter();
 	virtual void onExit();
+
+	/*
+	 * only 8 message
+	 */
+	void setListChatMessage(vector<string> lst);
 
 	void setCallbackFunc(CCObject* target, SEL_CallFuncND callfun);
 

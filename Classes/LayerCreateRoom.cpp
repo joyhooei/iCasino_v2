@@ -60,7 +60,7 @@ void LayerCreateRoom::onButtonCreate(CCObject* pSender)
     CCLOG("Tạo bàn chơi mới");
     boost::shared_ptr<ISFSObject> roomConfig (new SFSObject());
 	//HoangDD comment
-    roomConfig->PutUtfString("params", CCString::createWithFormat("%.0f@", 1000*ceil(sliderMoney->getValue()))->getCString());
+    roomConfig->PutUtfString("params", CCString::createWithFormat("%.0f@0@1", 1000*ceil(sliderMoney->getValue()))->getCString());
 	roomConfig->PutUtfString("gid", CCString::createWithFormat("%d", m_gameID)->getCString());
 	roomConfig->PutUtfString("rpass", txtPassword->getText());
     //sendRequest

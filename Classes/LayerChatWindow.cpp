@@ -45,31 +45,33 @@ bool LayerChatWindow::init()
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 	_count = 100;
-	UILayer* ul = UILayer::create();
-	ul->addWidget(GUIReader::shareReader()->widgetFromJsonFile("LayerChatWindow_1.ExportJson"));
-	this->addChild(ul);
-	ul->setTouchPriority(-128);
+	layerButton = UILayer::create();
+	layerButton->addWidget(GUIReader::shareReader()->widgetFromJsonFile("LayerChatWindow_1.ExportJson"));
+	this->addChild(layerButton);
+	layerButton->setTouchPriority(-128);
 	this->setTouchEnabled(true);
 
 	//Get all chat button
 	for( int i = 1; i <= 8; i++ ){
-		UIButton* btnChat = dynamic_cast<UIButton*>(ul->getWidgetByName( CCString::createWithFormat("btnChat%d", i)->getCString() ));
+		UIButton* btnChat = dynamic_cast<UIButton*>(layerButton->getWidgetByName( CCString::createWithFormat("btnChat%d", i)->getCString() ));
 		btnChat->setTitleText( lstStringMessage.at(i-1).c_str() );
 		btnChat->addTouchEventListener(this,(SEL_TouchEvent)&LayerChatWindow::onButtonChats);
 	}
-	UIButton* btnClose = dynamic_cast<UIButton*>(ul->getWidgetByName("btnClose"));
+	UIButton* btnClose = dynamic_cast<UIButton*>(layerButton->getWidgetByName("btnClose"));
 	btnClose->addTouchEventListener(this,(SEL_TouchEvent)&LayerChatWindow::onButtonClose);
 	//
-	UIButton* btnSend = dynamic_cast<UIButton*>(ul->getWidgetByName("btnSend"));
+	UIButton* btnSend = dynamic_cast<UIButton*>(layerButton->getWidgetByName("btnSend"));
 	btnSend->addTouchEventListener(this,(SEL_TouchEvent)&LayerChatWindow::onButtonSend);
 
-	txtChat = dynamic_cast<UITextField*>(ul->getWidgetByName("txtChat"));
+	txtChat = dynamic_cast<UITextField*>(layerButton->getWidgetByName("txtChat"));
 	txtChat->setText("");
 	txtChat->setPlaceHolder("Noi dung");
+	txtChat->setTextHorizontalAlignment(kCCTextAlignmentCenter);
+	txtChat->setTextVerticalAlignment(kCCVerticalTextAlignmentCenter);
 	txtChat->addEventListenerTextField(this, textfieldeventselector(LayerChatWindow::textFieldEvent));
 
-	UIPanel* pEmo = dynamic_cast<UIPanel*>(ul->getWidgetByName("pEmo"));
-	UIImageView* pImg = dynamic_cast<UIImageView*>(ul->getWidgetByName("Image_25_0"));
+	UIPanel* pEmo = dynamic_cast<UIPanel*>(layerButton->getWidgetByName("pEmo"));
+	UIImageView* pImg = dynamic_cast<UIImageView*>(layerButton->getWidgetByName("Image_25_0"));
 	//Add all emo to this
 	int i = 1;
 // 	CCArmatureDataManager::sharedArmatureDataManager()->removeArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
@@ -142,7 +144,7 @@ void LayerChatWindow::onButtonSend( CCObject* pSender, TouchEventType type )
 		txtChat->setDetachWithIME(false);
 		//hide keyboard
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-		//hideKeyboard();
+		hideKeyboard();
 #else
 		CCLog("Khong ho tro nen tang nay");
 #endif
@@ -239,5 +241,20 @@ void LayerChatWindow::resumeAllAnimations()
 {
 	for( int i = 0; i<lstEmo.size(); i++ ){
 		lstEmo.at(i)->getAnimation()->resume();
+	}
+}
+
+void LayerChatWindow::setListChatMessage( vector<string> lst )
+{
+	if( lst.size()!=8 )
+		return;
+	lstStringMessage.clear();
+	for( int i = 0; i<lst.size(); i++ ){
+		lstStringMessage.push_back(lst.at(i));
+	}
+	//reload button title
+	for( int i = 1; i <= 8; i++ ){
+		UIButton* btnChat = dynamic_cast<UIButton*>(layerButton->getWidgetByName( CCString::createWithFormat("btnChat%d", i)->getCString() ));
+		btnChat->setTitleText( lstStringMessage.at(i-1).c_str() );
 	}
 }

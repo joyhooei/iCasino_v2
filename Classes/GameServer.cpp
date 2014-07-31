@@ -187,6 +187,13 @@ void GameServer::OnSmartFoxRoomAdd(unsigned long long ptrContext, boost::shared_
 }
 void GameServer::OnSmartFoxRoomVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     GameServer::getSingleton().OnSmartFoxNtf(tag_EventRoomVariableUpdate, ptrContext, ptrEvent );
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueRoom = (*ptrEvetnParams)["room"];
+	boost::shared_ptr<Room> room = ((boost::static_pointer_cast<Room>(ptrEventParamValueRoom)));
+	//
+	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
+	string s = *rv->GetStringValue();
+	CCLOG("Room %s update RoomVariables: %s", room->Name()->c_str(), s.c_str());
 }
 void GameServer::OnSmartFoxRoomPasswordStateChange(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
     GameServer::getSingleton().OnSmartFoxNtf(tag_EventRoomPasswordStateChange, ptrContext, ptrEvent );
