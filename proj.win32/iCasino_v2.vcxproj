@@ -213,6 +213,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\_LayerBet_.cpp" />
     <ClCompile Include="..\Classes\_Layer_CardChan_.cpp" />
     <ClCompile Include="..\Classes\_Number_.cpp" />
+    <ClCompile Include="..\Classes\_Number_Chat_inGame7u.cpp" />
     <ClCompile Include="..\Classes\_Number_inGame_.cpp" />
     <ClCompile Include="..\Classes\_Number_inTomCuaCa.cpp" />
     <ClCompile Include="main.cpp" />
@@ -310,6 +311,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\_LayerBet_.h" />
     <ClInclude Include="..\Classes\_Layer_CardChan_.h" />
     <ClInclude Include="..\Classes\_Number_.h" />
+    <ClInclude Include="..\Classes\_Number_Chat_inGame7u.h" />
     <ClInclude Include="..\Classes\_Number_inGame_.h" />
     <ClInclude Include="..\Classes\_Number_inTomCuaCa.h" />
     <ClInclude Include="main.h" />

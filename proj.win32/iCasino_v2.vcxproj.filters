@@ -265,6 +265,9 @@
     <ClCompile Include="..\Classes\LayerGameChan_XuongU2.cpp">
       <Filter>Classes\Children</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\_Number_Chat_inGame7u.cpp">
+      <Filter>Classes\Children</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -536,6 +539,9 @@
       <Filter>Classes\Children</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LayerGameChan_XuongU2.h">
+      <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\_Number_Chat_inGame7u.h">
       <Filter>Classes\Children</Filter>
     </ClInclude>
   </ItemGroup>
