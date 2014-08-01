@@ -6,14 +6,14 @@
 //
 //
 
-#include "_Number_inGame_7u.h"
-
-LayerNumberInGame7u::~LayerNumberInGame7u() {
-	CCLOG("~~~~LayerNumberInGame7u");
+#include "_Number_Chat_inGame7u.h"
+#include "_Chat_.h"
+Number_Chat_inGame7u::~Number_Chat_inGame7u() {
+	CCLOG("~~~~Number_Chat_inGame7u");
 	arrPos.clear();
 	arrNumberString.clear();
 }
-bool LayerNumberInGame7u::init() {
+bool Number_Chat_inGame7u::init() {
     if (!CCLayer::init()) return false;
     
     this->setAnchorPoint(ccp(0, 0));
@@ -22,27 +22,27 @@ bool LayerNumberInGame7u::init() {
     return true;
 }
 
-void LayerNumberInGame7u::showNumberByPos(int pos, string numberString) {
+void Number_Chat_inGame7u::showNumberByPos(int pos, string numberString) {
 	arrPos.push_back(pos);
 	arrNumberString.push_back(numberString);
 
 	if (!isRunning) {
 		isRunning = true;
-		this->scheduleOnce(schedule_selector(LayerNumberInGame7u::runAction), 1);
+		this->scheduleOnce(schedule_selector(Number_Chat_inGame7u::runAction), 1);
 	}
 }
 
-void LayerNumberInGame7u::showNumberByPos(int pos, double numberDouble) {
+void Number_Chat_inGame7u::showNumberByPos(int pos, double numberDouble) {
 	arrPos.push_back(pos);
 	arrNumberDouble.push_back(numberDouble);
 
 	if (!isRunning) {
 		isRunning = true;
-		this->scheduleOnce(schedule_selector(LayerNumberInGame7u::runAction2), 0.5);
+		this->scheduleOnce(schedule_selector(Number_Chat_inGame7u::runAction2), 0.5);
 	}
 }
 
-void LayerNumberInGame7u::runAction(float dt) {
+void Number_Chat_inGame7u::runAction(float dt) {
 	int dem0 = 0;
 	int dem1 = 0;
 	int dem2 = 0;
@@ -69,7 +69,7 @@ void LayerNumberInGame7u::runAction(float dt) {
                 dem1++;
                 break;
             case kuser2:
-                point.setPoint(10, 175 + dem2 * number->getSize().height);
+                point.setPoint(10, 280);
                 dem2++;
                 break;
             case kuser3:
@@ -101,7 +101,7 @@ void LayerNumberInGame7u::runAction(float dt) {
 	//this->scheduleOnce(schedule_selector(LayerNumberInGame::callbackShowNumber), 3);
 }
 
-void LayerNumberInGame7u::runAction2(float dt) {
+void Number_Chat_inGame7u::runAction2(float dt) {
 	int dem0 = 0;
 	int dem1 = 0;
 	int dem2 = 0;
@@ -128,23 +128,23 @@ void LayerNumberInGame7u::runAction2(float dt) {
                 dem1++;
                 break;
             case kuser2:
-                point.setPoint(10, 175 + dem2 * number->getSize().height);
+                point.setPoint(10, 280);
                 dem2++;
                 break;
             case kuser3:
-                point.setPoint(10, 175 + dem3 * number->getSize().height);
+                point.setPoint(210, 360);
                 dem3++;
                 break;
             case kuser4:
-                point.setPoint(10, 175 + dem4 * number->getSize().height);
+                point.setPoint(450, 360);
                 dem4++;
                 break;
             case kuser5:
-                point.setPoint(10, 175 + dem5 * number->getSize().height);
+                point.setPoint(650, 280);
                 dem5++;
                 break;
             case kuser6:
-                point.setPoint(10, 175 + dem6 * number->getSize().height);
+                point.setPoint(650,110);
                 dem6++;
                 break;
                 
@@ -159,6 +159,45 @@ void LayerNumberInGame7u::runAction2(float dt) {
 	this->isRunning = false;
 }
 
-void LayerNumberInGame7u::callbackShowNumber(float dt) {
+void Number_Chat_inGame7u::callbackShowNumber(float dt) {
 	isRunning = false;
+}
+void Number_Chat_inGame7u::showChatByPos(int pos, string mes) {
+    Chat *newMes = new Chat(mes, pos);
+    newMes->setStatusByServer(false);
+    
+    CCPoint point;
+    
+    
+    switch (pos) {
+        case kuser0:
+            point.setPoint(WIDTH_DESIGN/2, 120);
+            break;
+        case kuser1:
+            point.setPoint((newMes->getSize().width)/2 , 230);
+            break;
+        case kuser2:
+            point.setPoint((newMes->getSize().width)/2, 380);
+            break;
+        case kuser3:
+            point.setPoint(150+newMes->getSize().width/2, 420);
+            break;
+        case kuser4:
+            point.setPoint(400+newMes->getSize().width/2, 420);
+            break;
+        case kuser5:
+            point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 350);
+            break;
+        case kuser6:
+            point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 200);
+            break;
+            
+        default:
+            point.setPoint((WIDTH_DESIGN - newMes->getSize().width) / 2, (HEIGHT_DESIGN - newMes->getSize().height) / 2);
+            newMes->setStatusByServer(true);
+            break;
+    }
+    
+    newMes->setPosition(point);
+    this->addChild(newMes);
 }

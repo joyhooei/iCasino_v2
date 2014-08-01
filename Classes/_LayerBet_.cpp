@@ -56,18 +56,26 @@ bool BetGame3Cay::init()
 	this->addChild(right);
 	this->addChild(top);
 
-	leftMe = 346;
-	leftLeft = 145;
-	leftRight = 563;
-	leftTop = 352;
-	bottomMe = 125.1; 
-	bottomLeft = 240.2;
-	bottomTop = 299.2;
-
-	w_card_me = 54;
-	w_card_notme = 48;
-	h_card_me = 54 * 1.3;
-	h_card_notme = 48 * 1.3;
+    //
+    xCardPos_me=370;
+    yCardPos_me=175;
+    xCardPos_u1=140;
+    yCardPos_u1=205;
+    xCardPos_u2=140;
+    yCardPos_u2=302;
+    xCardPos_u3=264;
+    yCardPos_u3=345;
+    xCardPos_u4=492;
+    yCardPos_u4=345;
+    xCardPos_u5=610;
+    yCardPos_u5=302;
+    xCardPos_u6=605;
+    yCardPos_u6=205;
+	
+	w_card_me = 50;
+	w_card_notme = 30;
+	h_card_me = 50 * 1.3;
+	h_card_notme = 30 * 1.3;
 
 	layerResuilt = CCLayer::create();
 	layerResuilt->setAnchorPoint(ccp(0, 0));
@@ -97,22 +105,34 @@ void BetGame3Cay::setVisibleAllFrameBet()
 void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
 	float x = -1, y = -1;
 	switch(pos){
-	case kUserMe:
-		x = 400;
-		y = bottomMe - h_card_me / 2 - 10;
+	case kuser0:
+		x = 500;
+		y = 70;
 		break;
-	case kUserLeft:
-		x = leftLeft + (w_card_notme * 3) / 2;
-		y = bottomLeft - h_card_notme / 2 - 10;
+	case kuser1:
+        x = 170;
+		y = 160;
 		break;
-	case kUserRight:
-		x = leftRight + (w_card_notme * 3) / 2;
-		y = bottomLeft - h_card_notme / 2 - 10;
+	case kuser2:
+		x = 170;
+		y = 340;
 		break;
-	case kUserTop:
-		x = 400;
-		y = bottomTop - h_card_notme / 2 - 10;
+	case kuser3:
+		x = 300;
+		y = 310;
 		break;
+    case kuser4:
+        x = 525;
+        y = 310;
+        break;
+    case kuser5:
+        x = 650;
+        y = 330;
+        break;
+    case kuser6:
+        x = 650;
+        y = 160;
+        break;
 	}
 
 	string txt = "";

@@ -18,17 +18,25 @@ using namespace std;
 class BetGame3Cay : public CCLayer
 {
 private:
-	float leftMe;
-	float leftLeft;
-	float leftRight;
-	float leftTop;
-	float bottomMe;
-	float bottomLeft;
-	float bottomTop;
-
+	float xCardPos_me;
+    float yCardPos_me;
+    float xCardPos_u1;
+    float yCardPos_u1;
+    float xCardPos_u2;
+    float yCardPos_u2;
+    float xCardPos_u3;
+    float yCardPos_u3;
+    float xCardPos_u4;
+    float yCardPos_u4;
+    float xCardPos_u5;
+    float yCardPos_u5;
+    float xCardPos_u6;
+    float yCardPos_u6;
+    
 	float h_card_me;
 	float h_card_notme;
 	float w_card_me;
+    
 	float w_card_notme;
 
 	CCLayer *layerResuilt;

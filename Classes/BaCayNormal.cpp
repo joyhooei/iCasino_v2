@@ -9,7 +9,7 @@
 #include "BaCayNormal.h"
 #include "_Background_inGame_.h"
 #include "Requests/ExtensionRequest.h"
-#include "_Number_inGame_7u.h"
+#include "_Number_Chat_inGame7u.h"
 #include "Nan3Cay.h"
 #include "mUtils.h"
 #include "_Chat_.h"
@@ -41,16 +41,21 @@ BaCayNormal::BaCayNormal(){
 	createButtons();
 	createCards();
     
-    LayerNumberInGame7u *abc = LayerNumberInGame7u::create();
-    this->addChild(abc);
-    abc->showNumberByPos(kuser1,7000);
+
     
 	layerBet = BetGame3Cay::create();
 	this->addChild(layerBet);
 
-	layerChat = LayerChatInGame::create();
-	this->addChild(layerChat);
-
+    
+	layerNumberChat = Number_Chat_inGame7u::create();
+	this->addChild(layerNumberChat);
+    layerNumberChat->showChatByPos(kuser0, "test chattttttt");
+    layerNumberChat->showChatByPos(kuser1, "test chattttttt");
+    layerNumberChat->showChatByPos(kuser2, "test chattttttt");
+    layerNumberChat->showChatByPos(kuser3, "test chattttttt");
+    layerNumberChat->showChatByPos(kuser4, "test chattttttt");
+    layerNumberChat->showChatByPos(kuser5, "test chattttttt");
+    layerNumberChat->showChatByPos(kuser6, "test chattttttt");
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
 }
@@ -314,7 +319,7 @@ void BaCayNormal::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::
 	{
 		return;
 	}
-	layerChat->showChatByPos(pos, ptrNotifiedMessage->c_str());
+	layerNumberChat->showChatByPos(pos, ptrNotifiedMessage->c_str());
 }
 
 void BaCayNormal::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -530,7 +535,7 @@ void BaCayNormal::whenResuiltGame(string rg){
 		this->removeChildByTag(123);
 	}
 
-	LayerNumberInGame7u *layerNumbers = LayerNumberInGame7u::create();
+	Number_Chat_inGame7u *layerNumbers = Number_Chat_inGame7u::create();
 	this->addChild(layerNumbers);
 
 	vector<string> resuilt = mUtils::splitString(rg, ';');
@@ -540,7 +545,7 @@ void BaCayNormal::whenResuiltGame(string rg){
         double mon = atof(info[4].c_str());
 		string strResuilt = info[1] + "|" + info[2] + "|" + info[3];
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-			//layerBet->setResuit4AllUser(kUserMe, "1", strResuilt);
+			layerBet->setResuit4AllUser(kuser0, "1", strResuilt);
 			layerNumbers->showNumberByPos(kuser0,mon);
             
 		}
@@ -549,7 +554,7 @@ void BaCayNormal::whenResuiltGame(string rg){
 
 			switch (pos) {
 			case kuser1:
-				//layerBet->setResuit4AllUser(kuser1, "1", strResuilt);
+				layerBet->setResuit4AllUser(kuser1, "1", strResuilt);
 				layerNumbers->showNumberByPos(kuser1, mon);
 				break;
                     
@@ -576,6 +581,7 @@ void BaCayNormal::whenResuiltGame(string rg){
                 case kuser6:
                     layerBet->setResuit4AllUser(kuser6, "1", strResuilt);
                     layerNumbers->showNumberByPos(kuser6, mon);
+                    
                     break;
 
 			default:

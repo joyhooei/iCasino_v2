@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef __iCasino_v2___Number_inGame_7u__
-#define __iCasino_v2___Number_inGame_7u__
+#ifndef __iCasino_v2___Number_Chat_inGame7u__
+#define __iCasino_v2___Number_Chat_inGame7u__
 
 #include <iostream>
 
@@ -18,7 +18,7 @@
 using namespace std;
 using namespace cocos2d;
 
-class LayerNumberInGame7u : public CCLayer
+class Number_Chat_inGame7u : public CCLayer
 {
 private:
     vector<int> arrPos;
@@ -27,15 +27,16 @@ private:
 	bool isRunning;
     
 public:
-	~LayerNumberInGame7u();
+	~Number_Chat_inGame7u();
     bool init();
-    CREATE_FUNC(LayerNumberInGame7u);
+    CREATE_FUNC(Number_Chat_inGame7u);
     
     void showNumberByPos(int pos, string numberString);
 	void showNumberByPos(int pos, double numberDouble);
 	void runAction(float dt);
 	void runAction2(float dt);
     void callbackShowNumber(float dt);
+    void showChatByPos(int pos, string mes);
 };
 
 #endif /* defined(__iCasino_v2___Number_inGame___) */
