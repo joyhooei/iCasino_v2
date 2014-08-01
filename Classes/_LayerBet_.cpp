@@ -130,7 +130,7 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
         y = 330;
         break;
     case kuser6:
-        x = 650;
+        x = 640;
         y = 160;
         break;
 	}

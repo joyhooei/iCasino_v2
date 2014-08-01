@@ -27,6 +27,7 @@ private:
     
 public:
     Chat(string pMes, int posUser);
+
     virtual bool init();
     
     void setStatusByServer(bool isServer);

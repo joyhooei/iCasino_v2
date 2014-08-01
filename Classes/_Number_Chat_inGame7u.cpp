@@ -163,7 +163,7 @@ void Number_Chat_inGame7u::callbackShowNumber(float dt) {
 	isRunning = false;
 }
 void Number_Chat_inGame7u::showChatByPos(int pos, string mes) {
-    Chat *newMes = new Chat(mes, pos);
+    Chat *newMes = new Chat(mes, kuser0);
     newMes->setStatusByServer(false);
     
     CCPoint point;
@@ -177,19 +177,19 @@ void Number_Chat_inGame7u::showChatByPos(int pos, string mes) {
             point.setPoint((newMes->getSize().width)/2 , 230);
             break;
         case kuser2:
-            point.setPoint((newMes->getSize().width)/2, 380);
+            point.setPoint((newMes->getSize().width)/2, 400);
             break;
         case kuser3:
-            point.setPoint(150+newMes->getSize().width/2, 420);
+            point.setPoint(180+newMes->getSize().width/2, 420);
             break;
         case kuser4:
             point.setPoint(400+newMes->getSize().width/2, 420);
             break;
         case kuser5:
-            point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 350);
+            point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 400);
             break;
         case kuser6:
-            point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 200);
+            point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 230);
             break;
             
         default:
