@@ -71,8 +71,8 @@ bool LayerBaCayAvatar::init()
     user6->setScale(0.9);
     
 
-
 	this->addChild(me);
+
 	this->addChild(user1);
 	this->addChild(user2);
 	this->addChild(user3);
@@ -192,32 +192,34 @@ void LayerBaCayAvatar::setPosChuong(int pos)
 {
 	switch (pos) {
 	case kuser1:
-		chuong->setPosition(ccp(101,175));
+		chuong->setPosition(ccp(30,210));
+            
 		chuong->setVisible(true);
 		break;
 	case kuser2:
-		chuong->setPosition(ccp(678,175));
+		chuong->setPosition(ccp(30,380));
 		chuong->setVisible(true);
 		break;
 	case kuser3:
-		chuong->setPosition(ccp(445,345));
+		chuong->setPosition(ccp(240,460));
 		chuong->setVisible(true);
 		break;
 	case kuser4:
-        chuong->setPosition(ccp(445,345));
+        chuong->setPosition(ccp(540,460));
         chuong->setVisible(true);
 		break;
 	case kuser5:
-		chuong->setPosition(ccp(175,420));
+		chuong->setPosition(ccp(WIDTH_DESIGN-125,380));
 		chuong->setVisible(true);
 		break;
     case kuser6:
-        chuong->setPosition(ccp(175,420));
+        chuong->setPosition(ccp(WIDTH_DESIGN-125,210));
         chuong->setVisible(true);
         break;
     case kuser0:
-        chuong->setPosition(ccp(175,420));
+        chuong->setPosition(ccp(370,110));
         chuong->setVisible(true);
+       
         break;
 	default:
 		break;
@@ -270,7 +272,6 @@ int LayerBaCayAvatar::getPosByName(string name)
 		if (strcmp(info[0].c_str(), name.c_str()) == 0)
 		{
 			if(i == vt){
-                CCLog("vi tri------%d:",vt);
 				return kuser0;
     
 			}
@@ -389,12 +390,14 @@ void LayerBaCayAvatar::updateUsers()
 			string _name = (name != NULL) ? name->c_str() : info[0];
 
 			Avatar *_user = getUserByPos(pos);
+            _user->setVisibleLayerInvite(false);
 			_user->setName(_name);
 			_user->setFlag(i == 0);
 			_user->setAI(info[0]);
 			//
 			bool meIsBoss = (i == 0);
 			if(pos == kuser0){
+                
 				this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
 				this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
 				this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
@@ -407,10 +410,10 @@ void LayerBaCayAvatar::updateUsers()
 			//user->setAI(aI);
 			_user->setMoney(_money);
 
-			if (pos == kUserMe)
+			if (pos == kuser0)
 			{
 				_user->setVisible(true);
-				_user->setTouchEnabled(true);
+				_user->setTouchEnabled(false);
 			}
 			else {
 				_user->setVisibleLayerInvite(false);

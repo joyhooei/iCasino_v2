@@ -107,15 +107,14 @@ enum{
 };
 //@ndtuan
 //3cay
-enum {
-    kuser0 = 0,//me
+enum{
+    kuser0 = 10,//me
     kuser1,
     kuser2,
     kuser3,
     kuser4,
     kuser5,
-    kuser6
-    
+    kuser6    
 };
 // @thanhhv
 // Đặt những hàm được sử dụng thường xuyên ở đây

@@ -8,7 +8,7 @@
 
 #include "Lieng.h"
 #include "_Background_inGame_.h"
-#include "_Number_inGame_.h"
+#include "_Number_Chat_inGame7u.h"
 #include "Requests/ExtensionRequest.h"
 #include "Nan3Cay.h"
 #include "LayerBet_Lieng.h"
@@ -65,7 +65,7 @@ Lieng::Lieng()
 	createLayerBet();
 	createCards();
 
-	layerChat = LayerChatInGame::create();
+	layerChat = Number_Chat_inGame7u::create();
 	this->addChild(layerChat);
 
 	GameServer::getSingleton().addListeners(this);
@@ -126,7 +126,7 @@ void Lieng::createCards()
 
 void Lieng::createAvatars(){
 	layerAvatars = LayerBaCayAvatar::create();
-	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
+	//layerAvatars->getUserByPos(kUserBot)->setVisible(false);
 	layerAvatars->resetAll();
 	this->addChild(layerAvatars);
 }
@@ -494,30 +494,43 @@ void Lieng::action_UserRejoinGame(string lsUser){
 
 			if (layerCards->getListCards_0()->count() != 3 && info[2] != "0")
 			{
-				layerCards->createCardBack(kUserMe);
+				layerCards->createCardBack(kuser0);
 			}
 		}
 		else
 		{
 			switch(layerAvatars->getPosByName(info[0]))
 			{
-			case kUserLeft:
+			case kuser1:
 				if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
 				{
-					layerCards->createCardBack(kUserLeft);
+					layerCards->createCardBack(kuser1);
 				}
-				break;
-			case kUserRight:
-				if (layerCards->getListCards_2()->count() != 3 && info[2] != "0")
-				{
-					layerCards->createCardBack(kUserRight);
-				}
-				break;
-			case kUserTop:
-				if (layerCards->getListCards_3()->count() != 3 && info[2] != "0")
-				{
-					layerCards->createCardBack(kUserTop);
-				}
+            case kuser2:
+                if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                {
+                    layerCards->createCardBack(kuser2);
+                }
+                case kuser3:
+                    if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                    {
+                        layerCards->createCardBack(kuser3);
+                    }
+                case kuser4:
+                    if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                    {
+                        layerCards->createCardBack(kuser4);
+                    }
+                case kuser5:
+                    if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                    {
+                        layerCards->createCardBack(kuser5);
+                    }
+                case kuser6:
+                    if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                    {
+                        layerCards->createCardBack(kuser6);
+                    }
 				break;
 			}
 		}
@@ -651,7 +664,7 @@ void Lieng::whenResuiltGame(string rg){
 		this->removeChildByTag(123);
 	}
 
-	LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
+	Number_Chat_inGame7u *layerNumbers = Number_Chat_inGame7u::create();
 	this->addChild(layerNumbers);
 
 	vector<string> resuilt = mUtils::splitString(rg,';');
@@ -684,7 +697,7 @@ void Lieng::action_To(string uid,string betal){
 	layerAvatars->stopAllTimer();
 
 	if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
-		layerAvatars->getUserByPos(kUserMe)->startTimer();
+		layerAvatars->getUserByPos(kuser0)->startTimer();
 
 		getButtonByTag(dTag_btnBet)->setEnabled(false);
 		getButtonByTag(dTag_btnFold)->setEnabled(false);
@@ -714,16 +727,24 @@ void Lieng::action_To(string uid,string betal){
 		getButtonByTag(dTag_btnFollow)->setEnabled(false);
 		//Count Down
 		switch(layerAvatars->getPosByName(uid)){
-		case kUserLeft:
-			layerAvatars->getUserByPos(kUserLeft)->startTimer();
+		case kuser1:
+			layerAvatars->getUserByPos(kuser1)->startTimer();
 			break;
-		case kUserRight:
-			layerAvatars->getUserByPos(kUserRight)->startTimer();
+		case kuser2:
+			layerAvatars->getUserByPos(kuser2)->startTimer();
 			break;
-		case kUserTop:
-			layerAvatars->getUserByPos(kUserTop)->startTimer();
+		case kuser3:
+			layerAvatars->getUserByPos(kuser3)->startTimer();
 			break;
-		}
+            case kuser4:
+                layerAvatars->getUserByPos(kuser4)->startTimer();
+			break;
+            case kuser5:
+                layerAvatars->getUserByPos(kuser5)->startTimer();
+			break;
+            case kuser6:
+                layerAvatars->getUserByPos(kuser6)->startTimer();
+			break;}
 	}
 }
 
@@ -751,7 +772,7 @@ void Lieng::btn_XemBai_click(CCObject *sender, TouchEventType type){
 		}
 
 		if(_list_cards != ""){
-			layerCards->turnUpAllCards(_list_cards, kUserMe);
+			layerCards->turnUpAllCards(_list_cards, kuser0);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 			getButtonByTag(dTag_btnView)->setEnabled(false);
 			moveButtonRight();
@@ -771,7 +792,7 @@ void Lieng::btn_NanBai_click(CCObject *sender, TouchEventType type){
 
 void Lieng::callBackFunction_LatBai(CCNode *pSend){
 	if(_list_cards != ""){
-		layerCards->turnUpAllCards(_list_cards, kUserMe);
+		layerCards->turnUpAllCards(_list_cards, kuser0);
 		getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 		getButtonByTag(dTag_btnView)->setEnabled(false);
 		moveButtonRight();

@@ -30,31 +30,50 @@ bool BetGame3Cay::init()
 	this->setAnchorPoint(ccp(0, 0));
 	this->setPosition(ccp(0, 0));
 
-	FrameBet *me = FrameBet::create();
-	FrameBet *left = FrameBet::create();
-	FrameBet *right = FrameBet::create();
-	FrameBet *top = FrameBet::create();
+	FrameBet *bme = FrameBet::create();
+	FrameBet *buser1 = FrameBet::create();
+    FrameBet *buser2 = FrameBet::create();
+    FrameBet *buser3 = FrameBet::create();
+    FrameBet *buser4 = FrameBet::create();
+    FrameBet *buser5 = FrameBet::create();
+    FrameBet *buser6 = FrameBet::create();
+
 	//FrameBet *bottom = FrameBet::create();
 
-	me->setPosition(ccp(75,396));
-	left->setPosition(ccp(109,278));
-	right->setPosition(ccp(WIDTH_DESIGN-109-right->getKc_width(),278));
-	top->setPosition(ccp(454, 440));
+	bme->setPosition(ccp(460,70));
+	buser1->setPosition(ccp(130,140));
+	buser2->setPosition(ccp(130,340));
+	buser3->setPosition(ccp(260, 300));
+    buser4->setPosition(ccp(470, 300));
+    buser5->setPosition(ccp(595, 330));
+    buser6->setPosition(ccp(590, 140));
 
-	me->setTag(kUserMe);
-	left->setTag(kUserLeft);
-	right->setTag(kUserRight);
-	top->setTag(kUserTop);
+	bme->setTag(kuser0);
+	buser1->setTag(kuser1);
+    buser2->setTag(kuser2);
+    buser3->setTag(kuser3);
+    buser4->setTag(kuser4);
+    buser5->setTag(kuser5);
+    buser6->setTag(kuser6);
 
-	me->setVisible(false);
-	left->setVisible(false);
-	right->setVisible(false);
-	top->setVisible(false);
 
-	this->addChild(me);
-	this->addChild(left);
-	this->addChild(right);
-	this->addChild(top);
+	bme->setVisible(false);
+    buser1->setVisible(false);
+     buser2->setVisible(false);
+     buser3->setVisible(false);
+     buser4->setVisible(false);
+     buser5->setVisible(false);
+     buser6->setVisible(false);
+
+
+	this->addChild(bme);
+	this->addChild(buser1);
+    this->addChild(buser2);
+    this->addChild(buser3);
+    this->addChild(buser4);
+    this->addChild(buser5);
+    this->addChild(buser6);
+	
 
     //
     xCardPos_me=370;
@@ -96,10 +115,13 @@ FrameBet* BetGame3Cay::getFrameBetByPos(int pos)
 
 void BetGame3Cay::setVisibleAllFrameBet()
 {
-	getFrameBetByPos(kUserMe)->setVisible(false);
-	getFrameBetByPos(kUserLeft)->setVisible(false);
-	getFrameBetByPos(kUserRight)->setVisible(false);
-	getFrameBetByPos(kUserTop)->setVisible(false);
+	getFrameBetByPos(kuser0)->setVisible(false);
+	getFrameBetByPos(kuser1)->setVisible(false);
+	getFrameBetByPos(kuser2)->setVisible(false);
+	getFrameBetByPos(kuser3)->setVisible(false);
+    getFrameBetByPos(kuser4)->setVisible(false);
+    getFrameBetByPos(kuser5)->setVisible(false);
+    getFrameBetByPos(kuser6)->setVisible(false);
 }
 
 void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
@@ -166,7 +188,7 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
 	CCLabelTTF *ket =  CCLabelTTF::create(txt.c_str(), "fonts/UVNDaLat_R.TTF", 22.0);
 	ket->setColor(ccc3(239,235,117));
 	ket->setPosition(ccp(x, y));
-	layerResuilt->addChild(ket);
+	//layerResuilt->addChild(ket);
 }
 
 CCLayer* BetGame3Cay::getLayerResuilt(){

@@ -17,7 +17,7 @@
 #include "_Button_inGame_.h"
 #include "_LayerBet_.h"
 #include "_CardBaCay_.h"
-#include "_Chat_inGame_.h"
+#include "_Number_Chat_inGame7u.h"
 
 using namespace cocos2d;
 using namespace cocos2d::ui;
@@ -65,7 +65,7 @@ private:
 	LayerButtonInGame *layerButtons;
 	CardBaCay *layerCards;
 	BetGame3Cay *layerBet;
-	LayerChatInGame *layerChat;
+	Number_Chat_inGame7u *layerChat;
 
 public:
 	Lieng();

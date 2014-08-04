@@ -60,12 +60,12 @@ void Number_Chat_inGame7u::runAction(float dt) {
 		CCPoint point;
 
 		switch (pos) {
-		case kuser0:
-			point.setPoint(300, 200);
-			dem0++;
-			break;
+            case kuser0:
+                point.setPoint(WIDTH_DESIGN/2-number->getSize().width/2,80);
+                dem0++;
+                break;
             case kuser1:
-                point.setPoint(400, 500);
+                point.setPoint(10,130);
                 dem1++;
                 break;
             case kuser2:
@@ -73,22 +73,22 @@ void Number_Chat_inGame7u::runAction(float dt) {
                 dem2++;
                 break;
             case kuser3:
-                point.setPoint(10, 175 + dem3 * number->getSize().height);
+                point.setPoint(210, 360);
                 dem3++;
                 break;
             case kuser4:
-                point.setPoint(10, 175 + dem4 * number->getSize().height);
+                point.setPoint(450, 360);
                 dem4++;
                 break;
             case kuser5:
-                point.setPoint(10, 175 + dem5 * number->getSize().height);
+                point.setPoint(650, 280);
                 dem5++;
                 break;
             case kuser6:
-                point.setPoint(10, 175 + dem6 * number->getSize().height);
+                point.setPoint(650,110);
                 dem6++;
                 break;
-
+                
 		}
 		number->setPositionStart(point);
 		this->addChild(number);

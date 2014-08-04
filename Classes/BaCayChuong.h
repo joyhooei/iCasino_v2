@@ -15,7 +15,7 @@
 #include "LayerAvatar_BaCay.h"
 #include "_CardBaCay_.h"
 #include "_LayerBet_.h"
-#include "_Chat_inGame_.h"
+#include "_Number_Chat_inGame7u.h"
 #include "_Button_inGame_.h"
 
 using namespace cocos2d;
@@ -55,7 +55,7 @@ private:
 	bool flagDatCuoc ;
 
 	LayerBaCayAvatar *layerAvatars;
-	LayerChatInGame *layerChat;
+	Number_Chat_inGame7u *layerChat;
 	LayerButtonInGame *layerButtons;
 	CardBaCay *layerCard;
 	BetGame3Cay *layerBet;

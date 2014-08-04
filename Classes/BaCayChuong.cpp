@@ -9,7 +9,7 @@
 #include "BaCayChuong.h"
 #include "_Background_inGame_.h"
 #include "Requests/ExtensionRequest.h"
-#include "_Number_inGame_.h"
+#include "_Number_Chat_inGame7u.h"
 #include "SliderCustomLoader.h"
 #include "LayerBet_BaCayChuong.h"
 #include "Nan3Cay.h"
@@ -58,7 +58,7 @@ BaCayChuong::BaCayChuong(){
 	createCards();
 	createLayerBet();
 
-	layerChat = LayerChatInGame::create();
+	layerChat = Number_Chat_inGame7u::create();
 	this->addChild(layerChat);
 
 	CCLOG("Da khoi tao het cac du lieu can thiet ....");
@@ -114,8 +114,8 @@ void BaCayChuong::createCards(){
 void BaCayChuong::createAvatars(){
 	layerAvatars = LayerBaCayAvatar::create();
 	layerAvatars->resetAll();
-	layerAvatars->getUserByPos(kUserBot)->setVisible(false);
-	layerAvatars->getUserByPos(kUserBot)->setTouchEnabled(false);
+	//layerAvatars->getUserByPos(k)->setVisible(false);
+	//layerAvatars->getUserByPos(kUserBot)->setTouchEnabled(false);
 	this->addChild(layerAvatars);
 }
 
@@ -190,7 +190,7 @@ Button* BaCayChuong::getButtonByTag(int pTag){
 }
 
 void BaCayChuong::createLayerChat(){
-	layerChat = LayerChatInGame::create();
+	layerChat = Number_Chat_inGame7u::create();
 	this->addChild(layerChat);
 }
 
@@ -480,29 +480,46 @@ void BaCayChuong::action_UserRejoinGame(string lsUser){
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
 			if(info[3]== "1" && layerCard->getListCards_0()->count() == 0){
 				CCLOG("Me Rejoin");
-				layerCard->createCardBack(kUserMe);
+				layerCard->createCardBack(kuser0);
 			}
 		}
 		else{
 			switch (layerAvatars->getPosByName(info[0])) {
-			case kUserLeft:
+			case kuser1:
 				if(info[3] == "1" && layerCard->getListCards_1()->count() == 0){
-					layerCard->createCardBack(kUserLeft);	
+					layerCard->createCardBack(kuser1);
 				}
 				break;
 
-			case kUserRight:
+			case kuser2:
 				if(info[3] == "1" && layerCard->getListCards_2()->count() == 0){
-					layerCard->createCardBack(kUserRight);	
+					layerCard->createCardBack(kuser2);
 				}
 				break;
 
-			case kUserTop:
+			case kuser3:
 				if(info[3] == "1" && layerCard->getListCards_3()->count() == 0){
-					layerCard->createCardBack(kUserTop);
+					layerCard->createCardBack(kuser3);
 				}
 				break;
-
+                    
+            case kuser4:
+                if(info[3] == "1" && layerCard->getListCards_4()->count() == 0){
+                    layerCard->createCardBack(kuser4);
+                }
+                break;
+                    
+            case kuser5:
+                if(info[3] == "1" && layerCard->getListCards_5()->count() == 0){
+                    layerCard->createCardBack(kuser5);
+                }
+                break;
+                    
+            case kuser6:
+                if(info[3] == "1" && layerCard->getListCards_6()->count() == 0){
+                    layerCard->createCardBack(kuser6);
+                }
+                break;
 			default:
 				break;
 			}
@@ -516,13 +533,13 @@ void BaCayChuong::action_LatBai(string listCard,string uid, bool tua){
 			if(this->getChildByTag(123) !=NULL){
 				this->removeChildByTag(123);
 			}
-			layerCard->turnUpAllCards(listCard, kUserMe);
+			layerCard->turnUpAllCards(listCard, kuser0);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 			getButtonByTag(dTag_btnView)->setEnabled(false);
 			getButtonByTag(dTag_btnTurnAll)->setEnabled(false);
 		}
 		else{
-			layerCard->turnUpAllCards("0_0-0_0-0_0", kUserMe);
+			layerCard->turnUpAllCards("0_0-0_0-0_0", kuser0);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(true);
 			getButtonByTag(dTag_btnView)->setEnabled(true);
 			getButtonByTag(dTag_btnTurnAll)->setEnabled(true);
@@ -550,7 +567,7 @@ void BaCayChuong::whenResuiltGame(string rg){
 		this->removeChildByTag(123);
 	}
 
-	LayerNumberInGame *layerNumbers = LayerNumberInGame::create();
+	Number_Chat_inGame7u *layerNumbers = Number_Chat_inGame7u::create();
 	this->addChild(layerNumbers);
 
 	vector<string> resuilt = mUtils::splitString(rg, ';');
@@ -562,25 +579,37 @@ void BaCayChuong::whenResuiltGame(string rg){
 		string strResuilt = info[1] + "|" + info[2] + "|" + info[3];
 
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0){
-			layerNumbers->showNumberByPos(kUserMe, strScore);
-			layerBet->setResuit4AllUser(kUserMe, "1", strResuilt);
+			layerNumbers->showNumberByPos(kuser0, strScore);
+			layerBet->setResuit4AllUser(kuser0, "1", strResuilt);
 		}
 		else
 		{
 			int pos = layerAvatars->getPosByName(info[0]);
 			switch (pos) {
-			case kUserLeft:
-				layerBet->setResuit4AllUser(kUserLeft, "1", strResuilt);
-				layerNumbers->showNumberByPos(kUserLeft, strScore);
+			case kuser1:
+				layerBet->setResuit4AllUser(kuser1, "1", strResuilt);
+				layerNumbers->showNumberByPos(kuser1, strScore);
 				break;
-			case kUserRight:
-				layerBet->setResuit4AllUser(kUserRight, "1", strResuilt);
-				layerNumbers->showNumberByPos(kUserRight, strScore);
+			case kuser2:
+				layerBet->setResuit4AllUser(kuser2, "1", strResuilt);
+				layerNumbers->showNumberByPos(kuser2, strScore);
 				break;
-			case kUserTop:
-				layerBet->setResuit4AllUser(kUserTop, "1", strResuilt);
-				layerNumbers->showNumberByPos(kUserTop, strScore);
+			case kuser3:
+				layerBet->setResuit4AllUser(kuser3, "1", strResuilt);
+				layerNumbers->showNumberByPos(kuser3, strScore);
 				break;
+            case kuser4:
+                layerBet->setResuit4AllUser(kuser4, "1", strResuilt);
+                layerNumbers->showNumberByPos(kuser4, strScore);
+                break;
+            case kuser5:
+                layerBet->setResuit4AllUser(kuser5, "1", strResuilt);
+                layerNumbers->showNumberByPos(kuser5, strScore);
+                break;
+            case kuser6:
+                layerBet->setResuit4AllUser(kuser6, "1", strResuilt);
+                layerNumbers->showNumberByPos(kuser6, strScore);
+                break;
 			default:
 				break;
 			}
@@ -662,7 +691,7 @@ void BaCayChuong::btn_XemBai_click(CCObject *sender, TouchEventType type){
 			this->removeChildByTag(123);
 		}
 		if(_list_cards != ""){
-			layerCard->turnUpAllCards(_list_cards, kUserMe);
+			layerCard->turnUpAllCards(_list_cards, kuser0);
 			getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 			getButtonByTag(dTag_btnView)->setEnabled(false);
 		}

@@ -49,13 +49,7 @@ BaCayNormal::BaCayNormal(){
     
 	layerNumberChat = Number_Chat_inGame7u::create();
 	this->addChild(layerNumberChat);
-    layerNumberChat->showChatByPos(kuser0, "test chattttttt");
-    layerNumberChat->showChatByPos(kuser1, "test chattttttt");
-    layerNumberChat->showChatByPos(kuser2, "test chattttttt");
-    layerNumberChat->showChatByPos(kuser3, "test chattttttt");
-    layerNumberChat->showChatByPos(kuser4, "test chattttttt");
-    layerNumberChat->showChatByPos(kuser5, "test chattttttt");
-    layerNumberChat->showChatByPos(kuser6, "test chattttttt");
+
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
 }
@@ -103,8 +97,9 @@ void BaCayNormal::createBackgrounds(){
 void BaCayNormal::createAvatars(){
 	layerAvatars = LayerBaCayAvatar::create();
 	layerAvatars->resetAll();
-	layerAvatars->getUserByPos(kuser0)->setVisible(true);
+	layerAvatars->getUserByPos(kuser0)->setTouchEnabled(false);
 	this->addChild(layerAvatars);
+    
 }
 
 void BaCayNormal::createButtons(){
