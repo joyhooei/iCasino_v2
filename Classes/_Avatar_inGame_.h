@@ -72,6 +72,7 @@ private:
 
 	int typeGame;
 	bool isGuess;
+	bool isSpector;
 	string myName;
 	string myAI;
     string listUser;

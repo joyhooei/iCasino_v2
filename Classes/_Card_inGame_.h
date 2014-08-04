@@ -139,12 +139,14 @@ public:
 	void showCardOnHandAll();
 	void showCardOnHandByPos_Arr(int kUser, vector<int> arrID);
 	void showCardOnHandByPos_List(int kUser, string lc);
+	void hideCardByArr(vector<int> arrID);
 
 private:
 	// lưu các ID-Card để cuối ván hiển thị
 	vector<int> arrIDCardOnHandLeft;
 	vector<int> arrIDCardOnHandRight;
 	vector<int> arrIDCardOnHandTop;
+	vector<int> arrIDCardOnHandBot;
 
 	// lưu các ID-Card đang có trên bàn (để hết ván remove khỏi bàn)
 	vector<int> arrIDCardOnTable;
@@ -203,7 +205,7 @@ private:
     string lcRecommendHaPhom;
     
     // số bài trên tay
-    CCSprite *cardBackLeft, *cardBackRight, *cardBackTop;
+    CCSprite *cardBackLeft, *cardBackRight, *cardBackTop, *cardBackBot;
 };
 
 #endif /* defined(__iCasino_v2___Card_inGame___) */

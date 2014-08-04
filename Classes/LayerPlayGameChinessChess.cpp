@@ -17,6 +17,8 @@
 #include "LayerSettings.h"
 #include "LayerChatWindow.h"
 #include "LayerChargeMoney.h"
+#include "Requests/SpectatorToPlayerRequest.h"
+#include "Requests/PlayerToSpectatorRequest.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -795,8 +797,21 @@ void LayerPlayGameChinessChess::onButtonRemove(CCObject* pSender){
 	CCLog("Undo button clicked");
 	if (isSpector)
 	{
-		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
-		this->addChild(noti);
+		//Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
+		//this->addChild(noti);
+		if (!this->isRegistSitdown) {
+			this->isRegistSitdown = true;
+			Chat *noti = new Chat("Đã đăng kí ngồi vào bàn", -1);
+			this->addChild(noti);
+		}
+
+		if (!this->isStartedGame) {
+			// join game
+			boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+			//PlayerToSpectatorRequest
+			GameServer::getSingleton().getSmartFox()->Send(request);
+		}
+
 		return;
 	}
 
@@ -901,7 +916,22 @@ bool LayerPlayGameChinessChess::onAssignCCBMemberVariable(CCObject *pTarget, con
 void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
 	myName = SceneManager::getSingleton().getMyName();
+	isRegistSitdown = false;
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+	
+
+	// add button sitting, stand up
+	CCMenuItemImage *pSittingDown = CCMenuItemImage::create("sitting.png",
+															"sitting.png",
+															this,
+															menu_selector(LayerPlayGameChinessChess::menuSittingDownCallback));
+	pSittingDown->setPosition(ccp(WIDTH_DESIGN - pSittingDown->getContentSize().width/2, HEIGHT_DESIGN/2));
+
+	CCMenu *pMenu = CCMenu::create(pSittingDown, NULL);
+	pMenu->setPosition(CCPointZero);
+	this->addChild(pMenu, 1000);
+	
+	
 	if (isSpector) {
 		CCLog("Minh la khach!");
 		isRedChess = false;
@@ -1224,6 +1254,13 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_END(){
     // reset
     indexCurrent = -1;
     indexTarget  = -1;
+
+	if (isRegistSitdown) {
+		// join game
+		boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+		//PlayerToSpectatorRequest
+		GameServer::getSingleton().getSmartFox()->Send(request);
+	}
 }
 
 void LayerPlayGameChinessChess::event_EXT_EVENT_READY_NTF(){
@@ -1337,7 +1374,8 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
     
     if (listUser != NULL) {
         CCLog("event_EXT_EVENT_LIST_USER_UPDATE:: listUser=%s", listUser->c_str());
-        
+		isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();        
+
         // thanhhv2|r|30.00|isFirstPlay;thanhhv1|b|32.02|isFirstPlay;
         // Dựa vào ds này xác định xem mình là chủ phòng hay ko
         string ls = listUser->c_str();
@@ -1346,6 +1384,14 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 		// nếu mình là khách (isSpector=true)
 		// Begin
 		if (isSpector) {
+			// Ẩn đi các Button "Đi lại", "Cầu hòa", "Thua"
+// 			btnReMove->setEnabled(true);
+// 			btnPeace->setEnabled(false);
+// 			btnLose->setEnabled(false);
+
+
+
+			///
 			int sizeInfo = arrInfo.size();
 			if (sizeInfo < 1) return;
 
@@ -1433,6 +1479,11 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 		}
 		// End
         
+		else {
+			btnReady->setEnabled(true);
+			btnReady->setVisible(true);
+		}
+
         int sizeInfo = arrInfo.size();
         for (int i = 0; i < sizeInfo; i++) {
             vector<string> arr = split(arrInfo[i], '|');
@@ -1918,4 +1969,7 @@ void LayerPlayGameChinessChess::onImageDownLoaded(CCHttpClient* pSender, CCHttpR
 	setAvatarByPath(nodeContainer, writablePath.c_str());
 }
 
+void LayerPlayGameChinessChess::menuSittingDownCallback(CCObject *pSender) {
+	CCLog(":)");
+}
 

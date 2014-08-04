@@ -25,6 +25,8 @@
 #include "_Chat_inGame_.h"
 
 #include "Requests/ExtensionRequest.h"
+#include "Requests/SpectatorToPlayerRequest.h"
+#include "Requests/PlayerToSpectatorRequest.h"
 
 using namespace cocos2d;
 using namespace cocos2d::ui;
@@ -37,7 +39,11 @@ private:
     
     string myName;
     string currentPlaying;
-	bool   isNewTurn;
+	bool isNewTurn;
+	bool isSpector;
+	bool isStartedGame;
+	bool isRegistSittingDown;
+	bool isRegistStandUp;
     
     vector<string> arrName;
     vector<int> arrMoney;
@@ -77,12 +83,15 @@ public:
     void actionSortCards(CCObject *pSender, TouchEventType pType);
     void actionHitCards(CCObject *pSender, TouchEventType pType);
     void actionNextTurn(CCObject *pSender, TouchEventType pType);
+	void actionSitting(CCObject *pSender, TouchEventType pType);
+	void actionStandUp(CCObject *pSender, TouchEventType pType);
     
     // event server
     virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
     virtual void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	virtual void OnSmartFoxRoomVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
     void event_EXT_EVENT_USER_JOIN_NOTIF();      // jrntf
     void event_EXT_EVENT_LISTCARD_NTF();         //"lcntf";

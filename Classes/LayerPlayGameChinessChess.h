@@ -86,6 +86,7 @@ private:
 	CCLabelTTF* lblPhaoBlack_status;
 	CCLabelTTF* lblTuongBlack_status;
 	CCLabelTTF* lblSyBlack_status;
+	
 
 	// @thanhhv
 	UILayer *layerWidget;
@@ -159,6 +160,7 @@ private:
 	bool isStartedGame;
 	bool isIamTheFirst;
 	bool isRedChess;  // ktra xem minh la quan do hay quan den
+	bool isRegistSitdown;
 
 	string myName;
 	string nameCurrentTurn;
@@ -258,6 +260,8 @@ public:
 	void setAvatarBySprite(CCNode *nodeContainer, CCSprite* img);
 	void onImageDownLoaded(CCHttpClient* pSender, CCHttpResponse* pResponse);
 	void loadDefaultImage(CCNode *nodeContainer);
+
+	void menuSittingDownCallback(CCObject *pSender);
 };
 
 class LayerPlayGameChinessChessLoader : public cocos2d::extension::CCLayerLoader

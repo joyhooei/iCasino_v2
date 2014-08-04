@@ -101,6 +101,7 @@ private:
 	string listID_HaPhom;
 	string dstphsString; // danh sach cac bo phom co the gui
 	int cardid_push;
+	bool isSpector;
     
     // mảng lưu các tên và thông tin tương ứng để hiển thị
     vector<string> arrName;

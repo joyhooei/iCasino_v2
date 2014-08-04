@@ -285,6 +285,7 @@ void LayerPlayGamePhom::createButtons() {
     btnPush->setTag(kTagButtonPush);
     btnUUU->setTag(kTagButtonU);
     
+	btnReady->setEnabled(false);
     btnSortCard->setEnabled(false);
     btnHitCard->setEnabled(false);
     btnGiveCard->setEnabled(false);
@@ -322,6 +323,7 @@ void LayerPlayGamePhom::createChats() {
 void LayerPlayGamePhom::initGame() {
     // khởi tạo các giá trị ban đầu hoặc hiển thị các thông tin cần thiết
 	this->actionLast = 0;
+	this->isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
     
     // thông tin tiền hiện tại của Users
     for (int i = 0; i < arrName.size(); i++) {
@@ -864,6 +866,13 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_PLAYER_LIST() {
     
 	if (list != NULL)
 	{
+		if (!isSpector) {
+			getButtonByTag(kTagButtonReady)->setEnabled(true);
+		} else {
+			// đã có người mới vào và cập nhật lại các vị trí nên sẽ tự reset card
+			layerCards->resetGame();
+		}
+
 		layerChats->showChatByPos(-1, "Cập nhật người chơi");
 		playSound("ring_ring.mp3");
 		layerAvatars->setListUserByPhom(list->c_str());
@@ -911,9 +920,14 @@ void LayerPlayGamePhom::event_EXT_EVENT_START() {
 
     this->resetGame();
     this->initGame();
+
+	string mes = "Bắt đầu";
+	if (isSpector) mes += ". Bạn là khách, hãy tham gia sau";
+	layerChats->showChatByPos(-1, mes);
 }
 
 void LayerPlayGamePhom::event_EXT_EVENT_END() {
+	layerChats->showChatByPos(-1, "Kết thúc");
     CCLog("EXT_EVENT_END");
 	playSound("end_game.mp3");
     
@@ -931,8 +945,12 @@ void LayerPlayGamePhom::event_EXT_EVENT_END() {
     getButtonByTag(kTagButtonU)->setEnabled(false);
     
     
-    getButtonByTag(kTagButtonReady)->setTitleText("Sẵn sàng");
-    getButtonByTag(kTagButtonReady)->setEnabled(true);
+	if (!isSpector) {
+		getButtonByTag(kTagButtonReady)->setTitleText("Sẵn sàng");
+		getButtonByTag(kTagButtonReady)->setEnabled(true);
+	} else {
+		
+	}
     
     layerAvatars->stopAllTimer();
 

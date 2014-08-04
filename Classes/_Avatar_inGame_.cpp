@@ -66,6 +66,7 @@ bool LayerAvatarInGame::init() {
 	this->typeGame = 0;
 	this->myName = SceneManager::getSingleton().getMyName();
 	this->myAI   = SceneManager::getSingleton().getMyName();
+	this->isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
 
 	CCLog("this->myName = SceneManager::getSingleton().getMyName() = %s", this->myName.c_str());
 
@@ -179,6 +180,8 @@ void LayerAvatarInGame::setListUserByTienLen(string listUser) {
     //resetGame();
     this->typeGame= TIEN_LEN;
     this->listUser = listUser;
+	this->isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+
     const char c1 = '-';
     const char c2 = '_';
     formatAndStore(c1, c2);
@@ -195,7 +198,8 @@ void LayerAvatarInGame::formatAndStore(const char &c1, const char &c2) {
 	arrMoney.clear();
 	arrMoneyDouble.clear();
 
-    for (int i = 0; i < arrUsers.size(); i++) {
+	int size = arrUsers.size();
+    for (int i = 0; i < size; i++) {
         vector<string> arr = getArrSplit(arrUsers[i], c2);
 		if (arr.size() < 3)
 		{
@@ -231,14 +235,12 @@ void LayerAvatarInGame::formatAndStore(const char &c1, const char &c2) {
 		// account ID
 		boost::shared_ptr<string> aI = userInfo->Name();
 		if (aI != NULL){
-			CCLog("---------aI= %s", aI->c_str());
 			arrAI.push_back(aI->c_str());
 		}
 
 		// account Name
 		boost::shared_ptr<string> aN = userInfo->GetVariable("aN")->GetStringValue();
 		if (aN != NULL) {
-			CCLog("---------aN= %s", aN->c_str());
 			arrName.push_back(aN->c_str());
 		}
     }
@@ -261,7 +263,7 @@ int LayerAvatarInGame::getIndexInArrByName(string name) {
 
 int LayerAvatarInGame::getIndexInArrByAccountID(string aI) {
 	for (int i = 0; i < arrAI.size(); i++) {
-		if (arrAI[i] == aI) return i;
+		if (arrAI[i] == aI) return (i < 4 ? i : -1); // trả lại giá trị -1 nếu tên nằm ngoài danh sách 4 người đầu tiên
 	}
 	return -1;
 }
@@ -276,7 +278,20 @@ int LayerAvatarInGame::getPosByName(string pName) {
 	if (pos == -1)
 	{
 		isGuess = true;
-		return (getIndexInArrByName(pName));
+		//return (getIndexInArrByName(pName));
+		pos = getIndexInArrByName(pName);
+		switch (pos) {
+			case 0:
+				return kUserBot;
+			case 1:
+				return kUserRight;
+			case 2:
+				return kUserTop;
+			case 3:
+				return kUserLeft;
+		}
+
+		return -1;
 	}
     // tra lai vi tri
 	else{
@@ -309,7 +324,17 @@ int LayerAvatarInGame::getPosByAccountID(string aI) {
 	if (pos == -1)
 	{
 		isGuess = true;
-		return (getIndexInArrByAccountID(aI));
+		pos = getIndexInArrByAccountID(aI);
+		switch (pos) {
+			case 0:
+				return kUserBot;
+			case 1:
+				return kUserRight;
+			case 2:
+				return kUserTop;
+			case 3:
+				return kUserLeft;
+		}
 	}
 	// tra lai vi tri
 	else{
@@ -483,9 +508,8 @@ void LayerAvatarInGame::updateUsers() {
 		double moneyDouble = arrMoneyDouble.at(i);
 
         int pos = getPosByAccountID(aI);
-		CCLog("------pos=%d", pos);
         if (pos < 0)
-            break;
+            continue;;
 		if (!isGuess){
 			getUserByPos(kUserBot)->setVisible(false); 
 			getUserByPos(kUserBot)->setTouchEnabled(false);
@@ -526,7 +550,9 @@ void LayerAvatarInGame::updateUsers() {
 
 void LayerAvatarInGame::runTimer(int posUser) {
     stopAllTimer();
-    getUserByPos(posUser)->startTimer();
+	Avatar *avatar =  getUserByPos(posUser);
+	if (avatar==NULL) return;
+	avatar->startTimer();
 }
 
 void LayerAvatarInGame::stopAllTimer() {
@@ -534,6 +560,7 @@ void LayerAvatarInGame::stopAllTimer() {
     getUserByPos(kUserLeft)->stopTimer();
     getUserByPos(kUserRight)->stopTimer();
     getUserByPos(kUserTop)->stopTimer();
+	getUserByPos(kUserBot)->stopTimer();
 }
 
 
