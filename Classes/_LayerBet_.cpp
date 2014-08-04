@@ -17,7 +17,8 @@ BetGame3Cay::~BetGame3Cay()
 
 void BetGame3Cay::onExit()
 {
-
+    this->removeAllComponents();
+    this->removeAllChildren();
 }
 
 bool BetGame3Cay::init()

@@ -110,7 +110,7 @@ enum{
 //@ndtuan
 //3cay
 enum{
-    kuser0 = 10,//me
+    kuser0 = 0,//me
     kuser1,
     kuser2,
     kuser3,

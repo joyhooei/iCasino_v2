@@ -64,6 +64,7 @@ void BaCayNormal::onExit()
 {
 	GameServer::getSingleton().removeListeners(this);
 	this->removeAllComponents();
+    
 	CCLOG("Deconstructor 3 Cay Normal --- Jump Here !");
 }
 

@@ -152,9 +152,9 @@ void Lieng::createButtons(){
 
 	Button* btn_Fold = createButtonWithTitle_Pos("Úp Bài", ccp(WIDTH_DESIGN - w_Button - 200, 15));
     btn_Fold->setScale(0.7);
-	Button* btn_Bet	= createButtonWithTitle_Pos("Tố", ccp(WIDTH_DESIGN - w_Button - 60, 15));
+	Button* btn_Bet	= createButtonWithTitle_Pos("Tố", ccp(WIDTH_DESIGN - w_Button - 105, 15));
     btn_Bet->setScale(0.7);
-	Button* btn_Follow = createButtonWithTitle_Pos("Theo", ccp(WIDTH_DESIGN - w_Button - 40, h_Button + 20));
+	Button* btn_Follow = createButtonWithTitle_Pos("Theo", ccp(WIDTH_DESIGN - w_Button - 105, h_Button + 20));
     btn_Follow->setScale(0.7);
 
 	btn_Ready->addTouchEventListener(this, toucheventselector(Lieng::btn_ready_click));
@@ -577,7 +577,7 @@ void Lieng::moveButtonRight(){
 	int w_Button = 129;
 	int h_Button = 44;
 
-	getButtonByTag(dTag_btnFollow)->setPosition(ccp(WIDTH_DESIGN - w_Button , h_Button + 20));
+	getButtonByTag(dTag_btnFollow)->setPosition(ccp(WIDTH_DESIGN - w_Button -105 , h_Button + 20));
 	getButtonByTag(dTag_btnBet)->setPosition(ccp(WIDTH_DESIGN - w_Button , 10));
 	getButtonByTag(dTag_btnFold)->setPosition(ccp(WIDTH_DESIGN - w_Button * 2 - 10, 10));
 }
@@ -586,8 +586,8 @@ void Lieng::resetButtonLocation(){
 	int w_Button = 129;
 	int h_Button = 44;
 
-	getButtonByTag(dTag_btnBet)->setPosition(ccp(WIDTH_DESIGN - w_Button -60, 15));
-	getButtonByTag(dTag_btnFollow)->setPosition(ccp(WIDTH_DESIGN - w_Button * 2 - 40, h_Button + 20));
+	getButtonByTag(dTag_btnBet)->setPosition(ccp(WIDTH_DESIGN - w_Button -105, 15));
+	getButtonByTag(dTag_btnFollow)->setPosition(ccp(WIDTH_DESIGN - w_Button -105, h_Button + 20));
 	getButtonByTag(dTag_btnFold)->setPosition(ccp(WIDTH_DESIGN - w_Button - 200, 15));
 }
 

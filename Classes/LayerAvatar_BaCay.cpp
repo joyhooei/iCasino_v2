@@ -96,6 +96,12 @@ bool LayerBaCayAvatar::init()
 void LayerBaCayAvatar::onExit()
 {
 
+	if (chuong) {
+		chuong->release();
+		chuong=NULL;
+	}
+
+
 }
 
 void LayerBaCayAvatar::setIcon (int pos, char *url)
@@ -429,7 +435,11 @@ string LayerBaCayAvatar::getNameByPos(int pos)
 
 Avatar* LayerBaCayAvatar::getUserByPos(int pos)
 {
-	if (this->getChildByTag(pos) == NULL) return NULL;
+	if (this->getChildByTag(pos) == NULL)
+    {
+        return NULL;
+        CCLog("tag null");
+    }
 	return (Avatar*) this->getChildByTag(pos);
 }
 
