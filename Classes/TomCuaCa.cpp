@@ -572,9 +572,9 @@ void TomCuaCa::whenGameEnd(){
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 	}
 }
-	 TomCuaCa::~TomCuaCa(){
-		 if(mUtils::isSoundOn())
-			 CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
+TomCuaCa::~TomCuaCa(){
+    
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 	GameServer::getSingleton().removeListeners(this);
 	this->removeAllChildren();
 	this->removeAllComponents();
@@ -990,7 +990,7 @@ void TomCuaCa::hienOketqua()
 }
 void TomCuaCa::onExit()
 {
-	if(mUtils::isSoundOn())
+	
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 	GameServer::getSingleton().removeListeners(this);
 	this->removeAllComponents();
