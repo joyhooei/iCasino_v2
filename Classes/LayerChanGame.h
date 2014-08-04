@@ -44,8 +44,11 @@ enum{
 	ANBAO_REASON_AN_ROILAI_DANH,
 	ANBAO_REASON_ANCA_ROILAI_DANH_QUAN_CUNG_HANG,
 	ANBAO_REASON_CHIUDUOC_NHUNG_LAI_ANTHUONG,
-	ANBAO_REASON_AN_CHON_CA,
+	ANBAO_REASON_AN_CHON_CA, 
 	ANBAO_REASON_CO_CHAN_CAU_CA,     // có chắn cấu cạ: Lấy 1 quân trong chắn sẵn có để ăn cạ.
+	ANBAO_REASON_U_NHUNG_KHONG_XUONG,  // Có thể Ù nhưng lại quên, hoặc ko xướng -> ngồi im không được xướng Ù nữa.
+	ANBAO_REASON_HO_U_LAO,           // chưa Ù đã hô Ù - bị đền làng
+	ANBAO_REASON_XUONG_SAI_CUOC,
 };
 
 class LayerChanGame : public CCLayer,public PlayerCallBack, public NotificationCallBack{
@@ -91,6 +94,7 @@ private:
 
 	bool gameStarted;
 	bool flagChiaBai;
+	bool flagChiu;
 
 	int countDiscard;
 	int countUser;
@@ -123,8 +127,9 @@ public:
 	void whenUserTakeCards(long rscode);
 	void setCurrentPlayer(string uid,int _count);
 	void setUserReady(string uid);
-	void error_AnBao(long rscode);
-	void setEndGame(CCObject *data);
+	void error_AnBao(long rscode, string uid);
+	void setEndGame();
+	
 	void whenConguoi_ChoU(string uid);
 	void whenConguoi_Chiu(string uid);
 	void XuongU();
@@ -133,6 +138,8 @@ public:
 	void wait10s(CCObject *data);
 
 	void resuiltGame(string resuilt);
+	void displayResuitGame(CCObject *data);
+
 	void displayLayerXuongU();
 	void displayLayerKetQua(string resuilt);
 

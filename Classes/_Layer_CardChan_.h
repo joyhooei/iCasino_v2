@@ -41,6 +41,10 @@ private:
 	UIButton *dianoc;
 	UILabel *countNoc;
 
+	//cheat
+	int numberchiu;
+	int suitechiu;
+
 	//Khoảng cách các lá bài cửa trì khi đã bốc đủ 8 lá
 	//Ban đầu khoảng cách là w_card
 	float kc_me;

@@ -36,24 +36,19 @@ bool LayerGameChan_KetQua::init(){
 	this->addChild(resuiltKQ);
 
 	img = UIImageView::create();
-	img->loadTexture("frame-wood.png");
+	img->loadTexture("frame_thongbao.png");
 	img->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2));
 	resuiltKQ->addWidget(img);
 
 	btnClose = UIButton::create();
 	btnClose->loadTextures("btnChanClose.png","btnChanClose_press.png","");
-	btnClose->setPosition(ccp(WIDTH_DESIGN / 2, img->getPositionY() - img->getContentSize().height / 2 + 13));
+	btnClose->setPosition(ccp(WIDTH_DESIGN / 2, img->getPositionY() - img->getContentSize().height / 2));
 	btnClose->setTitleText("Đóng");
+	btnClose->setTitleColor(ccWHITE);
+	btnClose->setTitleFontSize(18);
 	btnClose->setEnabled(true);
 	btnClose->addTouchEventListener(this, toucheventselector(LayerGameChan_KetQua::btnClose_LayerResuilt));
 	resuiltKQ->addWidget(btnClose);
-
-	UILabel *title = UILabel::create();
-	title->setText("Kết quả");
-	title->setFontSize(40);
-	title->setColor(ccRED);
-	title->setPosition(ccp(WIDTH_DESIGN / 2,HEIGHT_DESIGN / 2 + img->getContentSize().height / 2 - 40));
-	resuiltKQ->addWidget(title);
 
 	return true;
 }
@@ -79,7 +74,7 @@ void LayerGameChan_KetQua::displayResuilt(string resuilt){
 	}
 
 	if (strcmp(arrResuilt[3].c_str(), "") != 0){
-		str += arrResuilt[4] + " Đền làng: " + getCuoc(arrResuilt[5]) + "\n" + "Tổng điểm: "+arrResuilt[6] +"\n";
+		str += arrResuilt[3] + " Đền làng: " + getCuoc(arrResuilt[5]) + "\n" + "Tổng điểm: "+arrResuilt[6] +"\n";
 	}
 	
 
@@ -100,7 +95,7 @@ void LayerGameChan_KetQua::displayResuilt(string resuilt){
 	content->setFontSize(20);
 	content->setColor(ccRED);
 	img->addChild(content);
-}
+} 
 
 vector<string> LayerGameChan_KetQua::splitString(string &S,const char &str){
 	vector<string> arrStr;
@@ -126,10 +121,14 @@ vector<string> LayerGameChan_KetQua::splitString(string &S,const char &str){
 // mẫu: 1;1;phanpc;;2:6;;6;phanpc:0:27000/phanpc1:6:-30000
 
 string LayerGameChan_KetQua::getCuoc(string cuoc){
-	vector<string> arr = splitString(cuoc, ',');
+	vector<string> arr = splitString(cuoc, ':');
 	string str = "";
 	for (int i = 0; i < arr.size(); i++)
 	{
+		if (str.length() > 13)
+		{
+			str += "\n";
+		}
 		if (i == arr.size() - 1)
 		{
 			str += identifyCuoc_sac(arr[i]);
@@ -164,9 +163,9 @@ string LayerGameChan_KetQua::identifyCuoc_sac(string _cuoc){
 	case 8:
 		return "Tám Đỏ";
 	case 9:
-		return " Kính Tứ Chi";
+		return "Kính Tứ Chi";
 	case 10:
-		return " Thập thành";
+		return "Thập thành";
 	case 11:
 		return "Có Thiên Khai";
 	case 12:

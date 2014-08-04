@@ -233,7 +233,7 @@ bool _Layer_CardChan_::init()
 
 void _Layer_CardChan_::createAllCards(){
 
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < 130; i++)
 	{
 		CardChan *pCard = CardChan::create();
 		pCard->setZOrder(i);
@@ -251,7 +251,6 @@ void _Layer_CardChan_::resetAllCards(){
 	for(int i = 0; i < (int)ALL_CARDS->count(); i++)
 	{
 		CardChan *pCard = (CardChan*)ALL_CARDS->objectAtIndex(i);
-		pCard->setOpacity(255);
 		pCard->setColor(ccWHITE);
 		pCard->setVisible(false);
 		pCard->setTouchEnabled(false);
@@ -363,6 +362,7 @@ void _Layer_CardChan_::rotateListCards(CCArray *P){
 }
 
 void _Layer_CardChan_::refreshListCard(){
+	CCLOG("refresh list cards");
 	float countCard = (float)(CARD_ME->count() - 1);
 
 	float start = (-countCard / 2) * goc;
@@ -1159,6 +1159,7 @@ void _Layer_CardChan_::action_ChuyenBai_ME(int pos, string cardnu, string cardsu
 			pCard->runAction(rotateTo);
 			pCard->runAction(scaleBy);
 			pCard->setTouchEnabled(false);
+			pCard->setZOrder(_coutZorder + 1);
 
 			CARD_ME->removeObject(pCard);
 			CARD_D_ME_bottom->addObject(pCard);
@@ -1233,85 +1234,115 @@ void _Layer_CardChan_::action_ChuyenBai_Chiu(int pos, string cardnu, string card
 	float toY = -1;
 	int f = -1;
 
-	if (pos == kUserMe)
-	{
-		CCLOG("Chuyen bai khi minh chiu");
-		CCLOG("cardnu = %d, cardsu = %d", atoi(cardnu.c_str()), atoi(cardsu.c_str()));
-		for(int i = 0; i < CARD_ME->count(); i++)
-		{
-			CardChan *cards = (CardChan *)CARD_ME->objectAtIndex(i);
-			if (cards->getNumber() == atoi(cardnu.c_str()) && cards->getSuite() == atoi(cardsu.c_str()))
-			{
-				cards->setTouchEnabled(false);
-				float rotation = -(cards->getRotation());
-				cards->setRotation(rotation);
-				cards->setVisible(false);
-				pCard = (CardChan *)CARD_ME->objectAtIndex(i);
-				pCard = cards;
-				//pCard->setRotation(rotation);
-				CARD_ME->removeObjectAtIndex(i);
-				CCLOG("Rotation %f", rotation);
-				break;
-			}
-		}
-		refreshListCard();
-		toX = (float)(CARD_D_ME_bottom->count() - count_chiu_me) * w_card + left_d_me;
-		toY = (bottom_d_me) - (25 /2) * count_chiu_me;
-		count_chiu_me++;
-		f = kUserMe;
-	}
-	else
+// 	if (pos == kUserMe)
+// 	{
+// 		for(int i = 0; i < CARD_ME->count(); i++)
+// 		{
+// 			CardChan *cards = (CardChan *)CARD_ME->objectAtIndex(i);
+// 			if (cards->getNumber() == atoi(cardnu.c_str()) && cards->getSuite() == atoi(cardsu.c_str()))
+// 			{
+// 				cards->setTouchEnabled(false);
+// 				cards->setEnabled(false);
+// 				cards->setVisible(false);
+// 				CARD_ME->removeObjectAtIndex(i);
+// 				break;
+// 			}
+// 		}
+// 
+// 		int tmp = count_chiu_me / 3;
+// 		int cmp = count_chiu_me % 3;
+// 
+// 		pCard = (CardChan *)ALL_CARDS->objectAtIndex(_coutZorder);
+// 		_coutZorder++;
+// 		pCard->loadTexture(findTypeCard(cardnu, cardsu).c_str());
+// 		pCard->setSizeCard(w_card, h_card);
+// 		pCard->setPosition(ccp(400, 120));
+// 		toX = (float)(CARD_D_ME_bottom->count() - tmp * 3 - cmp + tmp) * w_card + left_d_me;
+// 		toY = (bottom_d_me) - (25 / 2) * (cmp + 1);
+// 		count_chiu_me++;
+// 		f = kUserMe;
+// 		CCLOG("tmp = %d", tmp);
+// 	}
+// 	else
 	{
 		CCLOG("Chuyen bai khi nguoi khac chiu");
 		pCard = (CardChan *)ALL_CARDS->objectAtIndex(_coutZorder);
 		_coutZorder++;
 		pCard->loadTexture(findTypeCard(cardnu, cardsu).c_str());
 		pCard->setSizeCard(w_card, h_card);
-
+		int tmp;
+		int cmp;
 		switch(pos){
+		case kUserMe:
+			for(int i = 0; i < CARD_ME->count(); i++)
+			{
+				CardChan *cards = (CardChan *)CARD_ME->objectAtIndex(i);
+				if (cards->getNumber() == atoi(cardnu.c_str()) && cards->getSuite() == atoi(cardsu.c_str()))
+				{
+					cards->setTouchEnabled(false);
+					cards->setVisible(false);
+					CARD_ME->removeObjectAtIndex(i);
+					break;
+				}
+			}
+			tmp = count_chiu_me / 3;
+			cmp = count_chiu_me % 3;
+			pCard->setPosition(ccp(400, 120));
+			toX = (float)(CARD_D_ME_bottom->count() - tmp * 3 - cmp + tmp) * w_card + left_d_me;
+			toY = (bottom_d_me) - (25 / 2) * (cmp + 1);
+			count_chiu_me++;
+			f = kUserMe;
+			break;
+
 		case kUserLeft:
+			tmp = count_chiu_left / 3;
+			cmp = count_chiu_left % 3;
 			pCard->setPosition(ccp(posCard_LeftX, posCard_LeftY));
-			toX = (float)(CARD_D_LEFT_bottom->count() - count_chiu_left) * w_card + left_d_left;
-			toY = (bottom_d_left) - (25 /2) * (count_chiu_left + 1);
+			toX = (float)(CARD_D_LEFT_bottom->count() - tmp * 3 - cmp + tmp) * w_card + left_d_left;
+			toY = (bottom_d_left) - (25 /2) * (cmp + 1);
 			count_chiu_left++;
 			f = kUserLeft;
 			break;
 		case kUserRight:
+			tmp = count_chiu_right / 3;
+			cmp = count_chiu_right % 3;
 			pCard->setPosition(ccp(posCard_RightX, posCard_RightY));
-			toX = left_d_right - (float)(CARD_D_RIGHT_bottom->count() - count_chiu_right) * w_card;
-			toY = bottom_d_right - (25 / 2) * (count_chiu_right + 1);
+			toX = left_d_right - (float)(CARD_D_RIGHT_bottom->count() - tmp * 3 - cmp + tmp) * w_card;
+			toY = bottom_d_right - (25 / 2) * (cmp + 1);
 			count_chiu_right++;
 			f = kUserRight;
 			break;
 		case kUserTop:
+			tmp = count_chiu_top / 3;
+			cmp = count_chiu_top % 3;
 			pCard->setPosition(ccp(posCard_TopX, posCard_TopY));
-			toX = (float)(CARD_D_TOP_bottom->count() - count_chiu_top) * w_card + left_d_top;
-			toY = bottom_d_top - (25 / 2) * (count_chiu_top + 1);
+			toX = (float)(CARD_D_TOP_bottom->count() - tmp * 3 - cmp + tmp) * w_card + left_d_top;
+			toY = bottom_d_top - (25 / 2) * (cmp + 1);
 			count_chiu_top++;
 			f = kUserTop;
 			break;
 		default:
 			break;
 		}
+		CCLOG("tmp = %d", tmp);
 	}
-
+	
 	pCard->setVisible(true);
+	pCard->setZOrder(_coutZorder + 4);
 	float _rotate = -(pCard->getRotation());
 	CCLOG("rotate: %f",pCard->getRotation());
-	float scaleX = (f == kUserMe) ? w_card / w_cardhand : 1;
-	float scaleY = (f == kUserMe) ? h_card / h_cardhand : 1;
 
 	CCActionInterval *moveto = CCMoveTo::create(0.3, ccp(toX, toY));
-	CCActionInterval *scaleBy = CCScaleBy::create(0.3, scaleX, scaleY);
-	CCActionInterval *rotateBy = CCRotateBy::create(0.3,_rotate);
+	CCActionInterval *rotateBy = CCRotateTo::create(0.3, _rotate);
 	pCard->runAction(moveto);
-	pCard->runAction(scaleBy);
 	pCard->runAction(rotateBy);
 
 	switch(f)
 	{
 	case kUserMe:
 		CARD_D_ME_bottom->addObject(pCard);
+		this->runAction(CCSequence::create(CCDelayTime::create(1.0),CCCallFunc::create(this, callfunc_selector(_Layer_CardChan_::refreshListCard)),NULL));
+		//refreshListCard();
 		break;
 	case kUserLeft:
 		CARD_D_LEFT_bottom->addObject(pCard);
@@ -1328,7 +1359,7 @@ void _Layer_CardChan_::action_ChuyenBai_Chiu(int pos, string cardnu, string card
 }
 
 void _Layer_CardChan_::action_ChuyenBai_ChiuME(string cardnu, string cardsu){
-// 
+
 // 	CCObject *t;
 // 	CCARRAY_FOREACH(CARD_ME, t){
 // 		CardChan *pCard =  dynamic_cast<CardChan*>(t);
@@ -1558,6 +1589,7 @@ void _Layer_CardChan_::doDuoiCard(){
 	boost::shared_ptr<Room> lstRooms = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 	boost::shared_ptr<IRequest> request (new ExtensionRequest("rqduoic",params,lstRooms));
 	GameServer::getSingleton().getSmartFox()->Send(request);
+	refreshListCard();
 }
 
 void _Layer_CardChan_::doViewNoc(string listnoc){

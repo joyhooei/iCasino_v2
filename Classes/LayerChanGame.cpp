@@ -168,7 +168,6 @@ void LayerChanGame::createAvatars(){
 
 void LayerChanGame::createCards(){
 	layerCardChan = _Layer_CardChan_::create();
-	layerCardChan->createAllCards();
 	this->addChild(layerCardChan);
 }
 
@@ -244,8 +243,15 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			_lu = lu->c_str();
 			_list_user = lu->c_str();
 			updateUser(_list_user);
+
+			layerCardChan->resetAllCards();
+			layerAvatars->stopAllTimer();
+			hideAllButton();
+			getButtonByTag(cTag_btnU)->setEnabled(false);
+			getButtonByTag(cTag_btnChiu)->setEnabled(false);
+			getButtonByTag(cTag_btnReady)->setEnabled(true);
+
 			CCLOG("List user update: %s",_list_user.c_str());
-			CCLOG("EXT_SRVNTF_PLAYER_LIST");
 		}
 	}
 
@@ -311,6 +317,13 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if (noccount != NULL) {
 			CCLOG("noc count: %ld",*noccount);
 			layerCardChan->setCountNoc((int)*noccount);
+			if (*noccount == 0)
+			{
+				Chat *toast = new Chat("Đã bốc hết nọc, đợi xem có nhà nào báo Ù không !" , -1);
+				toast->setPositionY(HEIGHT_DESIGN / 2);
+				this->addChild(toast);
+				layerAvatars->stopAllTimer();
+			}
 		}
 		CCLOG("EXT_SRVNTF_NOC_COUNT");
 	}
@@ -426,9 +439,12 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	//An bao
 	else if (strcmp(EXT_SRVNTF_ANBAO.c_str(),cmd->c_str())==0){
 		boost::shared_ptr<long> anbaores = param->GetInt("anbaores");
-		if (anbaores != NULL) {
+		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+
+		if (anbaores != NULL && usrn != NULL) {
 			CCLOG("resuilt code %ld", *anbaores);
-			error_AnBao(*anbaores);
+			error_AnBao(*anbaores, usrn->c_str());
+			//usrn
 		}
 		CCLOG("EXT_SRVNTF_ANBAO");
 	}
@@ -459,6 +475,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 				getButtonByTag(cTag_btnBoc)->setEnabled(false);
 				getButtonByTag(cTag_btnEate)->setEnabled(false);
 				getButtonByTag(cTag_btnTake)->setEnabled(true);
+				layerCardChan->refreshListCard();
 			}
 		}
 	}
@@ -524,9 +541,11 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			hideAllButton();
 			getButtonByTag(cTag_btnU)->setEnabled(false);
 			getButtonByTag(cTag_btnChiu)->setEnabled(false);
-			layerCardChan->scaleCardsHand_whenU();
-			layerCardChan->moveCardChi_whenU();
-			XuongU();
+			Chat *toast = new Chat("Bạn đã báo Ù lá bài này, đợi xem có nhà nào báo ù nữa không !", -1);
+			toast->setPositionY(HEIGHT_DESIGN / 2);
+			this->addChild(toast);
+			this->runAction(CCSequence::create(CCDelayTime::create(6.0),CCCallFunc::create(this, callfunc_selector(LayerChanGame::XuongU)),NULL));
+			//XuongU();
 		}
 	}
 
@@ -554,16 +573,12 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 
 	// game end
 	else if (strcmp(EXT_EVENT_END.c_str(), cmd->c_str())==0){
-		//setEndGame();
-		//resuiltGame("");
+		this->runAction(CCSequence::create(CCDelayTime::create(7), CCCallFunc::create(this, callfunc_selector(LayerChanGame::setEndGame)), NULL));
 		CCLOG("EXT_EVENT_END");
 	}
 
 	else if(strcmp("rntf",cmd->c_str()) == 0){
-		if (this->getChildByTag(171) != NULL)
-		{
-			this->removeChildByTag(171);
-		}
+		
 		if (this->getChildByTag(172) != NULL)
 		{
 			this->removeChildByTag(172);
@@ -915,7 +930,8 @@ void LayerChanGame::setUserReady(string uid){
 }
 
 //Display loi an bao
-void LayerChanGame::error_AnBao(long rscode){
+void LayerChanGame::error_AnBao(long rscode, string uid){
+	
 	int t = (int)rscode;
 	string str = "";
 	switch(t){
@@ -1009,6 +1025,26 @@ void LayerChanGame::error_AnBao(long rscode){
 		CCLOG("Lỗi ăn báo: có Chắn Cấu Cạ");
 		str = "ăn báo: có Chắn Cấu Cạ";
 		break;
+	case ANBAO_REASON_U_NHUNG_KHONG_XUONG:
+		str = "Ù nhưng không Xướng";
+		break;
+	case ANBAO_REASON_HO_U_LAO:
+		str = "Ù Láo";
+		break;
+	case ANBAO_REASON_XUONG_SAI_CUOC:
+		str = "Xướng sai cước ";
+		break;
+	}
+
+
+	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) != 0)
+	{
+		//boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(uid)->GetVariable("aN")->GetStringValue();
+
+		Chat *toast = new Chat("" + uid + " bị ngồi im do " + str, -1);
+		toast->setPositionY(HEIGHT_DESIGN / 2);
+		this->addChild(toast);
+		return;
 	}
 
 	LayerNotification* layer = SceneManager::getSingleton().getLayerNotification();
@@ -1016,7 +1052,7 @@ void LayerChanGame::error_AnBao(long rscode){
 		CCLOG("NTF Dialog already open!");
 		return;
 	}
-	layer->setNotificationOptions("Lỗi", (str+ ",\n không thể báo ù ván này !").c_str(), false , "", 1, this );
+	layer->setNotificationOptions("Lỗi", (str+ ",\n !").c_str(), false , "", 1, this );
 }
 
 //Khi co nguoi cho U
@@ -1025,6 +1061,9 @@ void LayerChanGame::whenConguoi_ChoU(string uid){
 	myName = GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str();
 
 	if(strcmp(uid.c_str(),myName.c_str()) == 0){
+		Chat *toast = new Chat("Bạn có thể Ù lá bài này", -1);
+		toast->setPositionY(HEIGHT_DESIGN/2);
+		this->addChild(toast);
 		// Hiển thị button Ù
 		getButtonByTag(cTag_btnU)->setEnabled(true);
 		if(strcmp(myName.c_str(),currentPlayer.c_str()) == 0)
@@ -1033,11 +1072,12 @@ void LayerChanGame::whenConguoi_ChoU(string uid){
 		}
 		else
 		{
-			//getButtonByTag(cTag_btnEate)->setEnabled(true);
+			
 		}
 
 	}else{
 		Chat *toast = new Chat(""+uid+" Đang chờ Ù, Đợi nhà này sướng", -1);
+		toast->setPositionY(HEIGHT_DESIGN/2);
 		this->addChild(toast);
 
 		hideAllButton();
@@ -1064,6 +1104,9 @@ void LayerChanGame::whenConguoi_Chiu(string uid){
 
 	if (strcmp(uid.c_str(),myName.c_str()) == 0)
 	{
+		Chat *toast = new Chat("Có thể chíu lá bài này", -1);
+		toast->setPositionY(HEIGHT_DESIGN / 2);
+		this->addChild(toast);
 		getButtonByTag(cTag_btnChiu)->setEnabled(true);
 	}
 	else
@@ -1076,6 +1119,10 @@ void LayerChanGame::whenConguoi_Chiu(string uid){
 
 //Xuong U
 void LayerChanGame::XuongU(){
+
+	layerCardChan->scaleCardsHand_whenU();
+	layerCardChan->moveCardChi_whenU();
+
 	cocos2d::extension::CCBReader * ccbReader = NULL;
 	CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	V_REGISTER_LOADER_GLUE(ccNodeLoaderLibrary, SliderCustom);
@@ -1101,9 +1148,37 @@ void LayerChanGame::XuongU(){
 void LayerChanGame::resuiltGame(string resuilt)
 {
 	CCString *p = CCString::create(resuilt);
-	CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::setEndGame),p);
-	CCDelayTime *delay = CCDelayTime::create(10.0);
+	CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::displayResuitGame),p);
+	CCDelayTime *delay = CCDelayTime::create(6.0);
 	this->runAction(CCSequence::create(delay, callfun, NULL));
+}
+
+void LayerChanGame::setEndGame(){
+	currentPlayer = "";
+	mylistCard = "";
+
+	flagChiaBai = false;
+
+	countDiscard = 0;
+
+	layerCardChan->resetAllCards();
+	layerAvatars->stopAllTimer();
+
+	getButtonByTag(cTag_btnBoc)->setEnabled(false);
+	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+	getButtonByTag(cTag_btnEate)->setEnabled(false);
+	getButtonByTag(cTag_btnTake)->setEnabled(false);
+	getButtonByTag(cTag_btnU)->setEnabled(false);
+	getButtonByTag(cTag_btnChiu)->setEnabled(false);
+	getButtonByTag(cTag_btnReady)->setEnabled(true);
+
+	
+}
+
+void LayerChanGame::displayResuitGame(CCObject *data){
+	CCString *resuilt = (CCString *) data;
+	string str = string(resuilt->getCString());
+	displayLayerKetQua(str);
 }
 
 void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
@@ -1133,30 +1208,6 @@ void LayerChanGame::notificationCallBack(bool isOK, int tag){
 	CCLOG("callbackNtf****");
 }
 
-//set End Game
-void LayerChanGame::setEndGame(CCObject *data){
-	currentPlayer = "";
-	mylistCard = "";
-
-	flagChiaBai = false;
-
-	countDiscard = 0;
-
-	layerCardChan->resetAllCards();
-	layerAvatars->stopAllTimer();
-
-	getButtonByTag(cTag_btnBoc)->setEnabled(false);
-	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
-	getButtonByTag(cTag_btnEate)->setEnabled(false);
-	getButtonByTag(cTag_btnTake)->setEnabled(false);
-	getButtonByTag(cTag_btnU)->setEnabled(false);
-	getButtonByTag(cTag_btnChiu)->setEnabled(false);
-	getButtonByTag(cTag_btnReady)->setEnabled(true);
-
-	CCString *resuilt = (CCString *) data;
-	string str = string(resuilt->getCString());
-	displayLayerKetQua(str);
-}
 
 //btn Ready
 void LayerChanGame::btn_ready_click(CCObject *sender, TouchEventType type){
