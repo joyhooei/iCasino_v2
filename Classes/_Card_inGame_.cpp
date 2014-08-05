@@ -1299,18 +1299,24 @@ void LayerCardInGame::actionTransferedCard(int fromPosUser, int toPosUser, int p
 }
 
 void LayerCardInGame::actionPushCard(int fromPosUser, int toPosUser, int pId) {
-	return;
     int length = arrAllCard->count();
     if (pId >= length) pId = length - 1;
     
     Card *card = getCardByID(pId);
     
+	if (fromPosUser == kUserMe) {
+		removeCardOnHandByID(pId);
+		refreshCardOnHand();
+	}
+
+	return;
+
     switch (fromPosUser) {
         case kUserMe: 
             removeCardOnHandByID(pId);
             refreshCardOnHand();
             break;
-            
+         
         case kUserLeft:
             if (!card->isVisible()) {
                 card->setVisible(true);
