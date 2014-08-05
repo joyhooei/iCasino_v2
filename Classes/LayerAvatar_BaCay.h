@@ -52,11 +52,14 @@ public:
 
 	void runTimer(int posUser);
 	void stopAllTimer();
-
+    void vaoBanChoi(CCObject* obj, TouchEventType type);
+    void meIsSpec();
+    void specToPlayer();
 private:
 	string myName;
 	string listUser;
 	UIImageView *chuong;
+    Button *btn_xem;
 };
 
 #endif

@@ -105,6 +105,9 @@ public:
 	void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+    
+    //spec
+    void specMode();
 };
 
 #endif /* defined(__iCasinov2__BaCayChuong__) */

@@ -342,18 +342,27 @@ void BaCayChuong::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, bo
 
 	switch(layerAvatars->getPosByName(uid->c_str()))
 	{
-	case kUserMe:
-		layerAvatars->getUserByPos(kUserMe)->setMoney(_money);
+	case kuser0:
+		layerAvatars->getUserByPos(kuser0)->setMoney(_money);
 		break;
-	case kUserLeft:
-		layerAvatars->getUserByPos(kUserLeft)->setMoney(_money);
+	case kuser1:
+		layerAvatars->getUserByPos(kuser1)->setMoney(_money);
 		break;
-	case kUserRight:
-		layerAvatars->getUserByPos(kUserRight)->setMoney(_money);
+	case kuser2:
+		layerAvatars->getUserByPos(kuser2)->setMoney(_money);
 		break;
-	case kUserTop:
-		layerAvatars->getUserByPos(kUserTop)->setMoney(_money);
+	case kuser3:
+		layerAvatars->getUserByPos(kuser3)->setMoney(_money);
 		break;
+        case kuser4:
+            layerAvatars->getUserByPos(kuser4)->setMoney(_money);
+            break;
+        case kuser5:
+            layerAvatars->getUserByPos(kuser5)->setMoney(_money);
+            break;
+        case kuser6:
+            layerAvatars->getUserByPos(kuser6)->setMoney(_money);
+            break;
 	default:
 		break;
 	}
@@ -413,7 +422,8 @@ string BaCayChuong::find_Chuong(string listUser){
 
 void BaCayChuong::eventListUser(string listusers)
 {
-	
+    boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+  
 
 	layerAvatars->setListUserForBaCay(listusers);
 	layerAvatars->setPosChuong(layerAvatars->getPosByName(find_Chuong(listusers)));
@@ -435,6 +445,17 @@ void BaCayChuong::eventListUser(string listusers)
 	layerBet->setVisibleAllFrameBet();
 
 	vector<string> list = mUtils::splitString(listusers,';');
+    if(!myself->IsSpectator())
+    {
+        if(list.size()<7)
+        {
+            layerAvatars->specToPlayer();
+        }
+        layerAvatars->meIsSpec();
+        specMode();
+        
+    }
+  
 	for (int i = 0; i< list.size(); i++)
 	{
 		vector<string> info = mUtils::splitString(list[i],'|');
@@ -723,4 +744,21 @@ void BaCayChuong::callBackFuntion_Endgive(CCNode *pSend)
 	getButtonByTag(dTag_btnSqueez)->setEnabled(true);
 	getButtonByTag(dTag_btnView)->setEnabled(true);
 	getButtonByTag(dTag_btnTurnAll)->setEnabled(true);
+}
+void BaCayChuong::specMode()
+{
+    /*btn_Ready->setEnabled(false);
+	btn_Unready->setEnabled(false);
+	btn_Bet->setEnabled(false);
+	btn_TurnUpAll->setEnabled(false);
+	btn_View->setEnabled(false);
+	btn_Squeezing->setEnabled(false);
+    */
+    getButtonByTag(dTag_btnReady)->setEnabled(false);
+    getButtonByTag(dTag_btnUnready)->setEnabled(false);
+    getButtonByTag(dTag_btnTurnAll)->setEnabled(false);
+    getButtonByTag(dTag_btnView)->setEnabled(false);
+    getButtonByTag(dTag_btnSqueez)->setEnabled(false);
+    getButtonByTag(dTag_btnBet)->setEnabled(false);
+    
 }
