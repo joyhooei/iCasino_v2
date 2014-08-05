@@ -22,6 +22,14 @@ bool LayerBaCayAvatar::init()
 {
 	if (!CCLayer::init()) return false;
 
+    btn_xem = Button::create();
+    btn_xem->loadTextures("ready.png", "ready_selected.png", "");
+    btn_xem->setTitleText("Chơi ngay");
+    btn_xem->setPosition(ccp(700,50));
+    btn_xem->addTouchEventListener(this, (SEL_TouchEvent)&LayerBaCayAvatar::vaoBanChoi);
+    btn_xem->setEnabled(false);
+    this->addChild(btn_xem);
+    
 	this->setAnchorPoint(ccp(0, 0));
 	this->setPosition(ccp(0, 0));
 
@@ -319,8 +327,16 @@ void LayerBaCayAvatar::updateUsers()
 	{
 		return;
 	}
-
+    boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+  
+    
 	vector<string> arrUser = mUtils::splitString(listUser,';');
+    CCLog("nums of player: %d",arrUser.size());
+    if(!myself->IsSpectator())
+    {
+        meIsSpec();
+        
+    }
 	if (arrUser.size() == 0)
 	{
 		return;
@@ -460,4 +476,20 @@ void LayerBaCayAvatar::stopAllTimer()
     getUserByPos(kuser5)->stopTimer();
     getUserByPos(kuser6)->stopTimer();
     
+}
+void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
+{
+    if(type==TOUCH_EVENT_ENDED)
+    CCLog("da vao");
+}
+void LayerBaCayAvatar::meIsSpec()
+{
+    btn_xem->setEnabled(true);
+    btn_xem->setTouchEnabled(true);
+    CCLog("Dang xem...");
+    
+}
+void LayerBaCayAvatar::specToPlayer()
+{
+    CCLog("is Player");
 }
