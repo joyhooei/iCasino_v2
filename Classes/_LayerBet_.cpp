@@ -32,6 +32,7 @@ bool BetGame3Cay::init()
 	this->setPosition(ccp(0, 0));
 
 	FrameBet *bme = FrameBet::create();
+	FrameBet *spec = FrameBet::create();
 	FrameBet *buser1 = FrameBet::create();
     FrameBet *buser2 = FrameBet::create();
     FrameBet *buser3 = FrameBet::create();
@@ -42,6 +43,7 @@ bool BetGame3Cay::init()
 	//FrameBet *bottom = FrameBet::create();
 
 	bme->setPosition(ccp(460,70));
+	spec->setPosition(CCPointZero);
 	buser1->setPosition(ccp(130,140));
 	buser2->setPosition(ccp(130,340));
 	buser3->setPosition(ccp(260, 300));
@@ -50,6 +52,7 @@ bool BetGame3Cay::init()
     buser6->setPosition(ccp(590, 140));
 
 	bme->setTag(kuser0);
+	spec->setTag(100);
 	buser1->setTag(kuser1);
     buser2->setTag(kuser2);
     buser3->setTag(kuser3);
@@ -59,6 +62,7 @@ bool BetGame3Cay::init()
 
 
 	bme->setVisible(false);
+	spec->setVisible(false);
     buser1->setVisible(false);
      buser2->setVisible(false);
      buser3->setVisible(false);
@@ -68,6 +72,7 @@ bool BetGame3Cay::init()
 
 
 	this->addChild(bme);
+	this->addChild(spec);
 	this->addChild(buser1);
     this->addChild(buser2);
     this->addChild(buser3);
@@ -107,11 +112,14 @@ bool BetGame3Cay::init()
 
 FrameBet* BetGame3Cay::getFrameBetByPos(int pos)
 {
+	if(pos==-1)
+		pos=100;
 	if (this->getChildByTag(pos) == NULL) 
 	{
 		return NULL; 
 	}
-	return (FrameBet*)this->getChildByTag(pos);
+		return (FrameBet*)this->getChildByTag(pos);
+
 }
 
 void BetGame3Cay::setVisibleAllFrameBet()

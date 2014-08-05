@@ -10,6 +10,7 @@
 #include "mUtils.h"
 #include "SimpleAudioEngine.h"
 #include "_Card_.h"
+#include "GameServer.h"
 
 CardBaCay::~CardBaCay()
 {
@@ -156,7 +157,7 @@ void CardBaCay::playSound(string pathSound)
 void CardBaCay::givePocker()
 {
 	playSound("sounds/deal_card.mp3");
-
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	string virtualList = listUser + listUser + listUser;
 	CCLOG("list virtual %s",virtualList.c_str());
 	vector<string> arrVirtuals = mUtils::splitString(virtualList,';');
@@ -195,6 +196,10 @@ void CardBaCay::givePocker()
         case kuser6:
             give_next(CARD_6, w_card_notme, h_card_notme, xCardPos_u6, yCardPos_u6, count_vir);
             break;
+		case kuser0:
+			if(myself->IsSpectator())
+			give_next(CARD_0, w_card_notme, h_card_notme, xCardPos_me, yCardPos_me, count_vir);
+			break;
 		default:
 			break;
 		}
@@ -376,11 +381,12 @@ int CardBaCay::getPosUserByName(string pName)
 	}
 
 	int vt = -1;
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	vector<string> list = mUtils::splitString(listUser,';');
 	for (int i = 0; i < list.size(); i++)
 	{
 		vector<string> info = mUtils::splitString(list[i],'|');
-		if (strcmp(myName.c_str(), info[0].c_str()) == 0)
+		if (strcmp(myName.c_str(), info[0].c_str()) == 0 || myself->IsSpectator())
 		{
 			vt = i;
 			break;

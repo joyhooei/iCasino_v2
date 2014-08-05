@@ -445,7 +445,7 @@ void BaCayChuong::eventListUser(string listusers)
 	layerBet->setVisibleAllFrameBet();
 
 	vector<string> list = mUtils::splitString(listusers,';');
-    if(!myself->IsSpectator())
+    if(myself->IsSpectator())
     {
         if(list.size()<7)
         {
@@ -583,6 +583,7 @@ void BaCayChuong::whenGameStart(){
 void BaCayChuong::whenResuiltGame(string rg){
 	CCLOG("resuilt game: %s",rg.c_str());
 	//thanhhv3|3|3|2|1000;dautv3|2|1|1|-1000
+		boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	if (this->getChildByTag(123) != NULL)
 	{
 		this->removeChildByTag(123);
@@ -631,6 +632,13 @@ void BaCayChuong::whenResuiltGame(string rg){
                 layerBet->setResuit4AllUser(kuser6, "1", strResuilt);
                 layerNumbers->showNumberByPos(kuser6, strScore);
                 break;
+			case kuser0:
+				if(myself->IsSpectator())
+					{
+				layerNumbers->showNumberByPos(kuser0, strScore);
+				layerBet->setResuit4AllUser(kuser0, "1", strResuilt);
+				}
+				break;
 			default:
 				break;
 			}
@@ -754,11 +762,11 @@ void BaCayChuong::specMode()
 	btn_View->setEnabled(false);
 	btn_Squeezing->setEnabled(false);
     */
-    getButtonByTag(dTag_btnReady)->setEnabled(false);
-    getButtonByTag(dTag_btnUnready)->setEnabled(false);
-    getButtonByTag(dTag_btnTurnAll)->setEnabled(false);
-    getButtonByTag(dTag_btnView)->setEnabled(false);
-    getButtonByTag(dTag_btnSqueez)->setEnabled(false);
-    getButtonByTag(dTag_btnBet)->setEnabled(false);
+    getButtonByTag(dTag_btnReady)->setVisible(false);
+    getButtonByTag(dTag_btnUnready)->setVisible(false);
+    getButtonByTag(dTag_btnTurnAll)->setVisible(false);
+    getButtonByTag(dTag_btnView)->setVisible(false);
+    getButtonByTag(dTag_btnSqueez)->setVisible(false);
+    getButtonByTag(dTag_btnBet)->setVisible(false);
     
 }

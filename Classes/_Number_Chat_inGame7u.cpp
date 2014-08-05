@@ -114,8 +114,13 @@ void Number_Chat_inGame7u::runAction2(float dt) {
 	{
 		int pos = arrPos.at(i);
 		double numberDouble = arrNumberDouble.at(i);
-
+			CCLog("---%u",numberDouble);
 		Number *number = new Number(numberDouble);
+		if(numberDouble>1000000)
+			{
+				CCLog("---%u",numberDouble);
+		number->setScale(0.5);
+		}
 		CCPoint point;
 
 		switch (pos) {

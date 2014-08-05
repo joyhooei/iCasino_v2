@@ -60,6 +60,7 @@ private:
 	string listUser;
 	UIImageView *chuong;
     Button *btn_xem;
+	boost::shared_ptr<User> myself;
 };
 
 #endif
