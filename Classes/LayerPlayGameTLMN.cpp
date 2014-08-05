@@ -655,7 +655,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_LIST_USER_UPDATE(){
 	if (listUser == NULL) return;
 	layerChats->showChatByPos(-1, "Cập nhật người chơi");
     CCLog("event_EXT_EVENT_LIST_USER_UPDATE %s", listUser->c_str());
-
+	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
 }
 
 void LayerPlayGameTLMN::event_EXT_EVENT_START_GAME_NOTIF(){

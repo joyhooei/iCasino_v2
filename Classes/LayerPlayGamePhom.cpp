@@ -153,6 +153,8 @@ string LayerPlayGamePhom::convertResponseToString(int inInt) {
 LayerPlayGamePhom::LayerPlayGamePhom() {
     
     this->myName = SceneManager::getSingleton().getMyName();
+	this->isRegistSittingDown = false;
+	this->isRegistStandUp = false;
     
     this->setAnchorPoint(ccp(0, 0));
     this->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
@@ -267,6 +269,16 @@ void LayerPlayGamePhom::createButtons() {
     Button *btnHaPhom = createButtonWithTitle_Position("Hạ", ccp(WIDTH_DESIGN - space , space * 2 + heiButton));
     Button *btnUUU = createButtonWithTitle_Position("Ù", ccp(WIDTH_DESIGN - space * 4 - widButton * 3, space));
     
+	Button *btnSitting = createButtonWithTitle_Position("Ngồi chơi", btnReady->getPosition());
+	//Button *btnStandUp = createButtonWithTitle_Position("Đứng xem", ccp(WIDTH_DESIGN - space, HEIGHT_DESIGN - space - heiButton));
+	Button *btnStandUp = Button::create();
+	btnStandUp->setTouchEnabled(true);
+	btnStandUp->setScale9Enabled(false);
+	btnStandUp->loadTextures("menu_standup.png", "menu_standup_hover.png", "");
+	btnStandUp->setAnchorPoint(ccp(1, 0));
+	btnStandUp->setPosition(ccp(WIDTH_DESIGN - space, HEIGHT_DESIGN - space - heiButton));
+	btnStandUp->setScale(0.5);
+
     btnReady->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionReady));
     btnSortCard->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionSortCards));
     btnHitCard->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionHitCards));
@@ -275,7 +287,10 @@ void LayerPlayGamePhom::createButtons() {
     btnHaPhom->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionHaPhom));
     btnPush->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionPush));
     btnUUU->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionUUU));
-    
+	btnSitting->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionSitting));
+	btnStandUp->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionStandUp));
+
+
     btnReady->setTag(kTagButtonReady);
     btnSortCard->setTag(kTagButtonSort);
     btnHitCard->setTag(kTagButtonHit);
@@ -284,6 +299,8 @@ void LayerPlayGamePhom::createButtons() {
     btnHaPhom->setTag(kTagButtonHaPhom);
     btnPush->setTag(kTagButtonPush);
     btnUUU->setTag(kTagButtonU);
+	btnSitting->setTag(kTagButtonSitting);
+	btnStandUp->setTag(kTagButtonStandUp);
     
 	btnReady->setEnabled(false);
     btnSortCard->setEnabled(false);
@@ -293,6 +310,8 @@ void LayerPlayGamePhom::createButtons() {
     btnHaPhom->setEnabled(false);
     btnPush->setEnabled(false);
     btnUUU->setEnabled(false);
+	btnSitting->setEnabled(false);
+	btnStandUp->setEnabled(false);
     
     layerButtons->addWidget(btnSortCard);
     layerButtons->addWidget(btnHitCard);
@@ -302,6 +321,8 @@ void LayerPlayGamePhom::createButtons() {
     layerButtons->addWidget(btnPush);
     layerButtons->addWidget(btnUUU);
     layerButtons->addWidget(btnReady);
+	layerButtons->addWidget(btnSitting);
+	layerButtons->addWidget(btnStandUp);
 }
 
 void LayerPlayGamePhom::createNumbers() {
@@ -596,6 +617,49 @@ void LayerPlayGamePhom::actionUUU(CCObject *pSender, TouchEventType pType) {
     }
 }
 
+void LayerPlayGamePhom::actionSitting(CCObject *pSender, TouchEventType pType) {
+	if (pType == TOUCH_EVENT_BEGAN) {
+		if (isSpector) {
+			if (isStartedGame) {
+				if (!isRegistSittingDown){
+					layerChats->showChatByPos(-1, "Bạn vừa đăng ký tham gia chơi, vui lòng chờ!");
+					isRegistSittingDown = true;
+				}
+			} else {
+				// join game
+				boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+				GameServer::getSingleton().getSmartFox()->Send(request);
+				isRegistSittingDown = false;
+			}
+		}
+
+		((Button*) pSender)->setEnabled(false);
+	}
+}
+
+void LayerPlayGamePhom::actionStandUp(CCObject *pSender, TouchEventType pType) {
+	if (pType == TOUCH_EVENT_BEGAN) {
+		//return;
+		Button *btn = ((Button*) pSender);
+		btn->setEnabled(false);
+
+		if (!isSpector) {
+			if (isStartedGame) {
+				if (!isRegistStandUp){
+					layerChats->showChatByPos(-1, "Bạn vừa đăng ký đứng xem ở ván kế tiếp");
+					isRegistStandUp = true;
+				}
+
+			} else {
+				boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+				GameServer::getSingleton().getSmartFox()->Send(request);
+				isRegistStandUp = false;
+			}
+		}
+
+	}
+}
+
 void LayerPlayGamePhom::actionPushMulti(CCObject *pSender, TouchEventType pType) {
 	if (pType == TOUCH_EVENT_BEGAN) {
 		CCLog("actionPushMulti");
@@ -862,14 +926,19 @@ void LayerPlayGamePhom::event_EXT_EVENT_READY_RES() {
 
 void LayerPlayGamePhom::event_EXT_SRVNTF_PLAYER_LIST() {
     boost::shared_ptr<string> list = param->GetUtfString("lu");
+	CCLog("myName= %s", myName.c_str());
+	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+
     CCLog("EXT_SRVNTF_PLAYER_LIST = %s", list->c_str());
     
 	if (list != NULL)
 	{
 		if (!isSpector) {
+			CCLog("la user");
 			getButtonByTag(kTagButtonReady)->setEnabled(true);
 		} else {
-			// đã có người mới vào và cập nhật lại các vị trí nên sẽ tự reset card
+			CCLog("la khach");
+			getButtonByTag(kTagButtonReady)->setEnabled(false);
 			layerCards->resetGame();
 		}
 
@@ -1363,6 +1432,62 @@ void LayerPlayGamePhom::OnSmartFoxUserExitRoom(unsigned long long ptrContext, bo
 	if( ptrNotifiedUser->IsItMe() ){
 		//close window - tricks by HoangDD
 		layerButtons->eventTouchBtnBack(NULL, TOUCH_EVENT_ENDED);
+	}
+}
+
+void LayerPlayGamePhom::OnSmartFoxRoomVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
+
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueRoom = (*ptrEvetnParams)["room"];
+	boost::shared_ptr<Room> room = ((boost::static_pointer_cast<Room>(ptrEventParamValueRoom)));
+	//
+	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
+	string s = *rv->GetStringValue();
+	CCLOG("Room %s update RoomVariables: %s", room->Name()->c_str(), s.c_str());
+
+
+	/*
+	boost::shared_ptr<RoomVariable> rv = rooms->at(idx)->GetVariable("params");
+	vector<string> lstBet = mUtils::splitString( *rv->GetStringValue(), '@' );
+	lstBet.at(1).compare("1")==0?"Đang chơi":"Chưa chơi"
+	*/
+
+	vector<string> lstBet = mUtils::splitString( s, '@' );
+	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
+
+	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+
+	if (isStartedGame) {
+		CCLOG("Game dang choi");
+		if (isSpector) {
+			CCLOG("Ban la khach");
+			getButtonByTag(kTagButtonSort)->setEnabled(false);
+			getButtonByTag(kTagButtonStandUp)->setEnabled(false);
+			getButtonByTag(kTagButtonSitting)->setEnabled(true);
+		}
+		else {
+			CCLOG("Ban la nguoi choi");
+			getButtonByTag(kTagButtonStandUp)->setEnabled(true);
+			getButtonByTag(kTagButtonSort)->setEnabled(true);
+			getButtonByTag(kTagButtonSitting)->setEnabled(false);
+			getButtonByTag(kTagButtonReady)->setEnabled(false);
+		}
+	}
+	else {
+		CCLOG("Game chua bat dau");
+		// Game đang ko diễn ra, có thể gửi đi thông báo đứng xem
+		if (!isSpector && isRegistStandUp) {
+			boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			isRegistStandUp = false;
+		}
+
+		// có thể gửi đi thông báo muốn ngồi vào bàn chơi
+		if (isSpector && isRegistSittingDown) {
+			boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			isRegistSittingDown = false;
+		}
 	}
 }
 

@@ -24,6 +24,8 @@
 #include "_Chat_inGame_.h"
 
 #include "Requests/ExtensionRequest.h"
+#include "Requests/SpectatorToPlayerRequest.h"
+#include "Requests/PlayerToSpectatorRequest.h"
 
 using namespace cocos2d;
 using namespace cocos2d::ui;
@@ -102,6 +104,9 @@ private:
 	string dstphsString; // danh sach cac bo phom co the gui
 	int cardid_push;
 	bool isSpector;
+	bool isStartedGame;
+	bool isRegistSittingDown;
+	bool isRegistStandUp;
     
     // mảng lưu các tên và thông tin tương ứng để hiển thị
     vector<string> arrName;
@@ -151,12 +156,15 @@ public:
     void actionPush(CCObject *pSender, TouchEventType pType);
     void actionUUU(CCObject *pSender, TouchEventType pType);
 	void actionPushMulti(CCObject *pSender, TouchEventType pType);
+	void actionSitting(CCObject *pSender, TouchEventType pType);
+	void actionStandUp(CCObject *pSender, TouchEventType pType);
     
     // event server
     virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
     virtual void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	virtual void OnSmartFoxRoomVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
     void sendRequestJoinGame(float dt);
     vector<string> split(string &S, const char &str);
