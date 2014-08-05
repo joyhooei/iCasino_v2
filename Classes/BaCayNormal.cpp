@@ -399,7 +399,7 @@ void BaCayNormal::callBackFunction_LatBai(CCNode *pSend){
 
 void BaCayNormal::eventListUserUpdate(string listusers)
 {
-	
+	playSound("sounds/game/ring_ring.mp3");
 	layerAvatars->setListUserForBaCay(listusers);
 	layerCards->setMyName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
 	layerCards->setListUser(listusers);
@@ -520,6 +520,7 @@ void BaCayNormal::whenGameStart(){
 
 	if(!flagChiaBai){
 		layerCards->givePocker();
+        
 	}
 }
 
@@ -628,4 +629,10 @@ void BaCayNormal::callBackFuntion_Endgive(CCNode *pSend)
 	getButtonByTag(dTag_btnSqueez)->setEnabled(true);
 	getButtonByTag(dTag_btnView)->setEnabled(true);
 	getButtonByTag(dTag_btnTurnAll)->setEnabled(true);
+}
+
+void BaCayNormal::playSound( string soundPath )
+{
+	if( mUtils::isSoundOn() )
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
 }

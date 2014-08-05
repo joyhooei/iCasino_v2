@@ -28,6 +28,7 @@ bool LayerBaCayAvatar::init()
 	this->myName = SceneManager::getSingleton().getMyName();
 
 	Avatar *me = new Avatar(false);
+    me->setTouchEnabled(false);
 	Avatar *user1 = new Avatar(false);
 	Avatar *user2 = new Avatar(false);
 	Avatar *user3 = new Avatar(false);
@@ -457,5 +458,6 @@ void LayerBaCayAvatar::stopAllTimer()
 	getUserByPos(kuser3)->stopTimer();
     getUserByPos(kuser4)->stopTimer();
     getUserByPos(kuser5)->stopTimer();
+    getUserByPos(kuser6)->stopTimer();
     
 }

@@ -58,6 +58,7 @@ public:
 	~BaCayNormal();
 	void onExit();
 
+    void playSound(string soundPath );
 	void createBackgrounds();
 	void createAvatars();
 	void createButtons();

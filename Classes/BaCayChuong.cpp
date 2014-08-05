@@ -115,7 +115,7 @@ void BaCayChuong::createAvatars(){
 	layerAvatars = LayerBaCayAvatar::create();
 	layerAvatars->resetAll();
 	//layerAvatars->getUserByPos(k)->setVisible(false);
-	//layerAvatars->getUserByPos(kUserBot)->setTouchEnabled(false);
+	layerAvatars->getUserByPos(kUserBot)->setTouchEnabled(false);
 	this->addChild(layerAvatars);
 }
 
@@ -137,7 +137,7 @@ void BaCayChuong::createButtons(){
 	Button* btn_Unready	= createButtonWithTitle_Pos("Hủy SS",ccp(WIDTH_DESIGN - w_Button - _space,_space));
 	Button* btn_Bet	= createButtonWithTitle_Pos("Đặt cược", ccp(WIDTH_DESIGN - w_Button * 2 - _space * 2 ,_space));
 	Button* btn_TurnUpAll = createButtonWithTitle_Pos("Lật bài", ccp(WIDTH_DESIGN - w_Button * 2 - _space * 2, _space));
-	Button* btn_View = createButtonWithTitle_Pos("Xem Bài", ccp(WIDTH_DESIGN - w_Button - _space, h_Button + _space * 2));
+	Button* btn_View = createButtonWithTitle_Pos("Xem Bài", ccp(WIDTH_DESIGN - w_Button - _space, h_Button + _space * 2-5));
 	Button* btn_Squeezing = createButtonWithTitle_Pos("Nặn Bài", ccp(WIDTH_DESIGN - w_Button - _space, _space));
 
 	btn_Ready->addTouchEventListener(this,toucheventselector(BaCayChuong::btn_ready_click));
@@ -710,7 +710,7 @@ void BaCayChuong::btn_NanBai_click(CCObject *sender, TouchEventType type){
 // 
 void BaCayChuong::callBackFunction_LatBai(CCNode *pSend){
 	if(_list_cards != ""){
-		layerCard->turnUpAllCards(_list_cards, kUserMe);
+		layerCard->turnUpAllCards(_list_cards, kuser0);
 		getButtonByTag(dTag_btnSqueez)->setEnabled(false);
 		getButtonByTag(dTag_btnView)->setEnabled(false);
 	}

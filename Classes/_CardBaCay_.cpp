@@ -149,12 +149,13 @@ void CardBaCay::setMyName(string name)
 
 void CardBaCay::playSound(string pathSound)
 {
+    if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(pathSound.c_str());
 }
 
 void CardBaCay::givePocker()
 {
-	//CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/deal_card.mp3");
+	playSound("sounds/deal_card.mp3");
 
 	string virtualList = listUser + listUser + listUser;
 	CCLOG("list virtual %s",virtualList.c_str());

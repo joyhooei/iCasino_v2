@@ -515,27 +515,27 @@ void Lieng::action_UserRejoinGame(string lsUser){
 					layerCards->createCardBack(kuser1);
 				}
             case kuser2:
-                if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                if (layerCards->getListCards_2()->count() != 3 && info[2] != "0")
                 {
                     layerCards->createCardBack(kuser2);
                 }
                 case kuser3:
-                    if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                    if (layerCards->getListCards_3()->count() != 3 && info[2] != "0")
                     {
                         layerCards->createCardBack(kuser3);
                     }
                 case kuser4:
-                    if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                    if (layerCards->getListCards_4()->count() != 3 && info[2] != "0")
                     {
                         layerCards->createCardBack(kuser4);
                     }
                 case kuser5:
-                    if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                    if (layerCards->getListCards_5()->count() != 3 && info[2] != "0")
                     {
                         layerCards->createCardBack(kuser5);
                     }
                 case kuser6:
-                    if (layerCards->getListCards_1()->count() != 3 && info[2] != "0")
+                    if (layerCards->getListCards_6()->count() != 3 && info[2] != "0")
                     {
                         layerCards->createCardBack(kuser6);
                     }
@@ -577,9 +577,9 @@ void Lieng::moveButtonRight(){
 	int w_Button = 129;
 	int h_Button = 44;
 
-	getButtonByTag(dTag_btnFollow)->setPosition(ccp(WIDTH_DESIGN - w_Button -105 , h_Button + 20));
+	getButtonByTag(dTag_btnFollow)->setPosition(ccp(WIDTH_DESIGN - w_Button , h_Button + 20));
 	getButtonByTag(dTag_btnBet)->setPosition(ccp(WIDTH_DESIGN - w_Button , 10));
-	getButtonByTag(dTag_btnFold)->setPosition(ccp(WIDTH_DESIGN - w_Button * 2 - 10, 10));
+	getButtonByTag(dTag_btnFold)->setPosition(ccp(WIDTH_DESIGN - w_Button-110, 10));
 }
 
 void Lieng::resetButtonLocation(){
@@ -844,6 +844,7 @@ void Lieng::btn_To_click(CCObject *sender, TouchEventType type){
 
 void Lieng::btn_Up_click(CCObject *sender, TouchEventType type){
 	if(type == TOUCH_EVENT_ENDED){
+        layerAvatars->stopAllTimer();
 		boost::shared_ptr<ISFSObject> params (new SFSObject());
 		boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 		params->PutInt("gbv", minBet);
@@ -855,6 +856,7 @@ void Lieng::btn_Up_click(CCObject *sender, TouchEventType type){
 
 void Lieng::btn_Theo_click(CCObject *sender, TouchEventType type){
 	if(type == TOUCH_EVENT_ENDED){
+        layerAvatars->stopAllTimer();
 		boost::shared_ptr<ISFSObject> params (new SFSObject());
 		boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 		params->PutInt("bet", 3);
