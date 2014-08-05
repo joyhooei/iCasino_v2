@@ -17,7 +17,7 @@ LayerBuyAvatar::LayerBuyAvatar()
 {
     nodeListAvatar = NULL;
     //
-	currChoice = 0;
+	currChoice = -1;
     GameServer::getSingleton().addListeners(this);
 }
 
@@ -94,6 +94,16 @@ void LayerBuyAvatar::tableCellTouched(cocos2d::extension::CCTableView *table, co
 		if( c ){
 			c->initWithSpriteFrameName(true?"assest/ratio_active.png":"assest/ratio_disable.png");
 		}
+		//Uncheck other cell
+		for( int i = 0; i<7; i++ ){
+			CCTableViewCell* cc = (CCTableViewCell*)table->cellAtIndex(i);
+			if( cc==NULL )
+				continue;
+			CCSprite* c = (CCSprite*)cc->getChildByTag( tag_Choice );
+			if( c ){
+				c->initWithSpriteFrameName(currChoice==i?"assest/ratio_active.png":"assest/ratio_disable.png");
+			}
+		}
 	}
 }
 
@@ -150,7 +160,6 @@ CCTableViewCell* LayerBuyAvatar::tableCellAtIndex(cocos2d::extension::CCTableVie
 			coin->setString( CCString::createWithFormat("%d Chips", m_lstAvatars.at(idx).money)->getCString() );
 		}
 
-		currChoice = idx;
 		CCSprite* c = (CCSprite*)cell->getChildByTag( tag_Choice );
 		if( c ){
 			c->initWithSpriteFrameName(currChoice==idx?"assest/ratio_active.png":"assest/ratio_disable.png");

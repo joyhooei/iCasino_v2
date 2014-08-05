@@ -228,6 +228,7 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 		vector<string> lstParams = mUtils::splitString( *rv->GetStringValue(), '@' );
 		// counting players
 		int currPlayers = atoi( lstParams.at(2).c_str() );
+		bool isPlaying = (lstParams.at(1).compare("1")==0);
 		int numOfPlayers = atoi ( boost::to_string(ro->MaxUsers()).c_str() );
 		// get idroom to left
 		int a = -1;
@@ -251,7 +252,12 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 			mLayer->setRoomID( ro->Id() );
 			return;
 		}
-        boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro, "", id2Left, currPlayers==numOfPlayers));
+		//check
+		boolean isSpectator = (currPlayers==numOfPlayers);
+		if( !isSpectator )
+			isSpectator = isPlaying;
+
+        boost::shared_ptr<IRequest> request (new JoinRoomRequest(ro, "", id2Left, isSpectator));
         GameServer::getSingleton().getSmartFox()->Send(request);
     }else{
 		//Uncheck other cell
