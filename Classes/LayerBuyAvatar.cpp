@@ -7,7 +7,6 @@
 //
 
 #include "LayerBuyAvatar.h"
-#include "LayerBuyAvatar.h"
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
 using namespace cocos2d;
@@ -18,11 +17,17 @@ LayerBuyAvatar::LayerBuyAvatar()
 {
     nodeListAvatar = NULL;
     //
+	currChoice = 0;
     GameServer::getSingleton().addListeners(this);
 }
 
 LayerBuyAvatar::~LayerBuyAvatar()
 {
+	for( int i = 0; i<m_lstAvatarsImg.size(); i++ ){
+		if( m_lstAvatarsImg.at(i)!=NULL )
+			CC_SAFE_DELETE( m_lstAvatarsImg.at(i) );
+	}
+	//
     GameServer::getSingleton().removeListeners(this);
     //
     CC_SAFE_RELEASE(nodeListAvatar);
@@ -67,6 +72,7 @@ bool LayerBuyAvatar::onAssignCCBMemberVariable(CCObject *pTarget, const char *pM
 
 void LayerBuyAvatar::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {
+	m_lstAvatars.clear();
     //Init for table
     tblAvatar = CCTableView::create(this, nodeListAvatar->getContentSize());
     tblAvatar->setDirection(kCCScrollViewDirectionHorizontal);
@@ -82,6 +88,13 @@ void LayerBuyAvatar::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 // hàm khi click vào 1 hành của table view
 void LayerBuyAvatar::tableCellTouched(cocos2d::extension::CCTableView *table, cocos2d::extension::CCTableViewCell *cell){
 //    CCLOG("Roomid: %d",cell->getObjectID());
+	if( currChoice != cell->getObjectID() ){
+		currChoice = cell->getObjectID();
+		CCSprite* c = (CCSprite*)cell->getChildByTag( tag_Choice );
+		if( c ){
+			c->initWithSpriteFrameName(true?"assest/ratio_active.png":"assest/ratio_disable.png");
+		}
+	}
 }
 
 // Hàm set giá trị width height cho 1 cell table view
@@ -94,11 +107,13 @@ CCTableViewCell* LayerBuyAvatar::tableCellAtIndex(cocos2d::extension::CCTableVie
     CCTableViewCell *cell = table->dequeueCell();
     if (!cell) {
         cell = new CCTableViewCell();
+		cell->setObjectID( idx );
         cell->autorelease();
         //Chon
         CCSprite* ready = CCSprite::createWithSpriteFrameName("assest/ratio_disable.png");
         ready->setPosition(ccp(15, 119));
         ready->setAnchorPoint(ccp(0, 0));
+		ready->setTag(tag_Choice);
         cell->addChild(ready);
         //lable chon
         CCLabelTTF *labelChon = CCLabelTTF::create("Chọn", "Helvetica", 14);
@@ -106,27 +121,47 @@ CCTableViewCell* LayerBuyAvatar::tableCellAtIndex(cocos2d::extension::CCTableVie
         labelChon->setAnchorPoint(ccp(0, 0));
         cell->addChild(labelChon);
         //avatar
-        CCSprite* avatar = CCSprite::createWithSpriteFrameName("assest/icon_default.png");
-        avatar->setPosition(ccp(0, 18));
-        avatar->setAnchorPoint(ccp(0, 0));
-        avatar->cocos2d::CCNode::setScale(93/avatar->getContentSize().width, 93/avatar->getContentSize().height);
-        cell->addChild(avatar);
+		CCNode* nodeAvatar = CCNode::create();
+		nodeAvatar->setTag( tag_NodeAvatar );
+		nodeAvatar->setPosition(ccp(0, 18));
+		nodeAvatar->setAnchorPoint(ccp(0, 0));
+		nodeAvatar->setContentSize(ccp(93, 93));
+		cell->addChild(nodeAvatar);
+		//load avatar
+		m_lstImageDownloaders.at(idx)->setPointerNodeImage( nodeAvatar );
+		m_lstImageDownloaders.at(idx)->downLoadImage(m_lstAvatars.at(idx).url);
         //Coin
-        CCLabelTTF *coin = CCLabelTTF::create("20 Ecoins", "Helvetica", 14);
+        CCLabelTTF *coin = CCLabelTTF::create( CCString::createWithFormat("%d Chips", m_lstAvatars.at(idx).money)->getCString() , "Helvetica", 14);
         coin->setPosition(ccp(95/2, 0));
         coin->setAnchorPoint(ccp(0.5, 0));
+		coin->setTag(tag_Money);
         cell->addChild(coin);
     }
     else
-    {
-        //;;;;
+	{
+		cell->setObjectID( idx );
+        CCNode* nodeAvatar = cell->getChildByTag( tag_NodeAvatar );
+		if( nodeAvatar ){
+			m_lstImageDownloaders.at(idx)->setPointerNodeImage( nodeAvatar );
+			m_lstImageDownloaders.at(idx)->downLoadImage(m_lstAvatars.at(idx).url);
+		}
+		CCLabelTTF* coin = (CCLabelTTF*)cell->getChildByTag( tag_Money );
+		if( coin ){
+			coin->setString( CCString::createWithFormat("%d Chips", m_lstAvatars.at(idx).money)->getCString() );
+		}
+
+		currChoice = idx;
+		CCSprite* c = (CCSprite*)cell->getChildByTag( tag_Choice );
+		if( c ){
+			c->initWithSpriteFrameName(currChoice==idx?"assest/ratio_active.png":"assest/ratio_disable.png");
+		}
     }
     return cell;
 }
 
 // Hàm gán giá trị số hàng của table view
 unsigned int LayerBuyAvatar::numberOfCellsInTableView(cocos2d::extension::CCTableView *table){
-    return 10;
+    return m_lstAvatars.size();
 }
 
 void LayerBuyAvatar::OnExtensionResponse(unsigned long long ptrContext,boost::shared_ptr<BaseEvent> ptrEvent){
@@ -144,12 +179,33 @@ void LayerBuyAvatar::OnExtensionResponse(unsigned long long ptrContext,boost::sh
     if(strcmp("aGLA", cmd->c_str())==0){
 		CCLOG("aGLR=%s", param->GetUtfString("aGLR")->c_str());
 //        //Insert datas to textfield
-//        txtName->setText( param->GetUtfString("aN")->c_str() );
-//        txtPhoneNumber->setText( param->GetUtfString("aMo")->c_str() );
-//        txtEmail->setText( param->GetUtfString("aM")->c_str() );
-//        txtFavour->setText( "" );
-//        txtStatus->setText( "" );
-//        btnSex->setPosition(ccp(*param->GetBool("aS")==true ? 198 : 140, btnSex->getPositionY()));
+		vector<string> lstAvatars = mUtils::splitString( *param->GetUtfString("aGLR"), '|' );
+		//SAFE RELEASE
+		m_lstAvatars.clear();
+		for( int i = 0; i<m_lstAvatarsImg.size(); i++ ){
+			if( m_lstAvatarsImg.at(i)!=NULL )
+				CC_SAFE_DELETE(m_lstAvatarsImg.at(i));
+		}
+		//
+		for( int i = 0; i<lstAvatars.size(); i++ ){
+			vector<string> infos = mUtils::splitString( lstAvatars.at(i), ',' );
+			//1,http: //bestteam.publicvm.com/avatars_sell/1.png,/var/www/html/avatars_sell/1.png,1.png,100,1,2014-07-13 00:00:00.0
+			if( infos.size()<7 )
+				continue;
+			AvatarInfo info;
+			info.id = atoi( infos.at(0).c_str() );
+			info.url = infos.at(1);
+			info.filename = infos.at(2);
+			info.filepath = infos.at(3);
+			info.money = atoi( infos.at(4).c_str() );
+			info.status = atoi( infos.at(5).c_str() );
+			info.timeCreate = infos.at(6);
+			m_lstAvatars.push_back( info );
+			//
+			ImageDownloader* imagedownloader = new ImageDownloader();
+			m_lstImageDownloaders.push_back( imagedownloader );
+		}
+		tblAvatar->reloadData();
 	}else if(strcmp("aBA", cmd->c_str())==0){
 		
 	}

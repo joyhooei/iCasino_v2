@@ -13,6 +13,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "GameServer.h"
+#include "ImageDownloader.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -28,8 +29,28 @@ class LayerBuyAvatar
 , public PlayerCallBack
 {
 private:
+	enum{
+		tag_NodeAvatar = 100,
+		tag_Money,
+		tag_Choice
+	};
+	struct AvatarInfo{
+		int id;
+		string url;
+		string filename;
+		string filepath;
+		long money;
+		int status;
+		string timeCreate;
+	};
     CCNode* nodeListAvatar;
     CCTableView* tblAvatar;
+
+	vector<AvatarInfo> m_lstAvatars;
+	vector<CCNode*> m_lstAvatarsImg;
+	vector<ImageDownloader*> m_lstImageDownloaders;
+
+	int currChoice;
 public:
     LayerBuyAvatar();
     virtual ~LayerBuyAvatar();
