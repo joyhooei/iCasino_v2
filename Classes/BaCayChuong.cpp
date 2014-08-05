@@ -60,6 +60,7 @@ BaCayChuong::BaCayChuong(){
 
 	layerChat = Number_Chat_inGame7u::create();
 	this->addChild(layerChat);
+	
 
 	CCLOG("Da khoi tao het cac du lieu can thiet ....");
 	GameServer::getSingleton().addListeners(this);

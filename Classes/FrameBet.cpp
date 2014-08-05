@@ -79,6 +79,7 @@ void FrameBet::setFrameSize(float toSize){
 // SetValue Bet
 void FrameBet::setValueBet(std::string value){
     money->setText(value);
+	money->setTextHorizontalAlignment(CCTextAlignment::kCCTextAlignmentRight);
     if(money->getContentSize().width>frame->getContentSize().width){
         frame->setScaleX((money->getContentSize().width+15)/frame->getContentSize().width);
         money->setScaleX(1/frame->getScaleX());

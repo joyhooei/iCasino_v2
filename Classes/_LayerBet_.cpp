@@ -43,13 +43,20 @@ bool BetGame3Cay::init()
 	//FrameBet *bottom = FrameBet::create();
 
 	bme->setPosition(ccp(460,70));
+	bme->setScale(0.8);
 	spec->setPosition(CCPointZero);
 	buser1->setPosition(ccp(130,140));
+	buser1->setScale(0.8);
 	buser2->setPosition(ccp(130,340));
-	buser3->setPosition(ccp(260, 300));
-    buser4->setPosition(ccp(470, 300));
-    buser5->setPosition(ccp(595, 330));
-    buser6->setPosition(ccp(590, 140));
+	buser2->setScale(0.8);
+	buser3->setPosition(ccp(340, 383));
+	buser3->setScale(0.8);
+    buser4->setPosition(ccp(570, 410));
+	buser4->setScale(0.8);
+    buser5->setPosition(ccp(660, 400));
+	buser5->setScale(0.8);
+    buser6->setPosition(ccp(660, 230));
+	buser6->setScale(0.8);
 
 	bme->setTag(kuser0);
 	spec->setTag(100);
