@@ -43,7 +43,8 @@ public:
 	void setListUserForBaCay(string listUser);
 
 	Avatar* getUserByPos(int pos);
-    UIButton *btn_xem;
+    UIButton *btn_vaochoi;
+	UIButton *btn_dungday;
 
 	int getPosByName(string name);
 	string getNameByPos(int pos);
@@ -54,7 +55,7 @@ public:
 	void runTimer(int posUser);
 	void stopAllTimer();
     void vaoBanChoi(CCObject* obj, TouchEventType type);
-    void meIsSpec();
+    void playerToSpec();
     void specToPlayer();
 private:
 	string myName;

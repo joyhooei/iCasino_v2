@@ -253,7 +253,7 @@ void LayerChonBanChoi::tableCellTouched(cocos2d::extension::CCTableView *table, 
 			return;
 		}
 		//check
-		Boolean isSpectator = (currPlayers==numOfPlayers);
+		boolean isSpectator = (currPlayers==numOfPlayers);
 		if( !isSpectator )
 			isSpectator = isPlaying;
 

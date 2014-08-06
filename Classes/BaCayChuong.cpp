@@ -446,16 +446,32 @@ void BaCayChuong::eventListUser(string listusers)
 	layerBet->setVisibleAllFrameBet();
 
 	vector<string> list = mUtils::splitString(listusers,';');
-    if(!myself->IsSpectator())
+    if(myself->IsSpectator()==true)
     {
         if(list.size()<7)
         {
             layerAvatars->specToPlayer();
-        }
-        layerAvatars->meIsSpec();
-        specMode();
-        
-    }
+        }else
+			{
+				layerAvatars->btn_dungday->setEnabled(false);
+				layerAvatars->btn_vaochoi->setEnabled(false);
+				layerAvatars->btn_dungday->setTouchEnabled(false);
+				layerAvatars->btn_vaochoi->setTouchEnabled(false);
+				}
+			
+        specMode();   
+    }else
+		{
+			getButtonByTag(dTag_btnReady)->setTouchEnabled(true);
+			getButtonByTag(dTag_btnUnready)->setTouchEnabled(true);
+			getButtonByTag(dTag_btnTurnAll)->setTouchEnabled(true);
+			getButtonByTag(dTag_btnView)->setTouchEnabled(true);
+			getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
+			getButtonByTag(dTag_btnBet)->setTouchEnabled(true);
+			if(list.size()>2)
+			layerAvatars->playerToSpec();
+			
+		}
   
 	for (int i = 0; i< list.size(); i++)
 	{
@@ -756,18 +772,21 @@ void BaCayChuong::callBackFuntion_Endgive(CCNode *pSend)
 }
 void BaCayChuong::specMode()
 {
-    /*btn_Ready->setEnabled(false);
-	btn_Unready->setEnabled(false);
-	btn_Bet->setEnabled(false);
-	btn_TurnUpAll->setEnabled(false);
-	btn_View->setEnabled(false);
-	btn_Squeezing->setEnabled(false);
-    */
+	CCLog("spec mode");
+
+    
     getButtonByTag(dTag_btnReady)->setEnabled(false);
     getButtonByTag(dTag_btnUnready)->setEnabled(false);
     getButtonByTag(dTag_btnTurnAll)->setEnabled(false);
     getButtonByTag(dTag_btnView)->setEnabled(false);
     getButtonByTag(dTag_btnSqueez)->setEnabled(false);
     getButtonByTag(dTag_btnBet)->setEnabled(false);
+
+	getButtonByTag(dTag_btnReady)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnUnready)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnTurnAll)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnView)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnSqueez)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnBet)->setTouchEnabled(false);
     
 }

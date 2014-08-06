@@ -57,7 +57,7 @@ public:
 	BaCayNormal();
 	~BaCayNormal();
 	void onExit();
-
+	void specMode();
     void playSound(string soundPath );
 	void createBackgrounds();
 	void createAvatars();

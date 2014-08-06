@@ -406,7 +406,33 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 
 	vector<string> arrUser = mUtils::splitString(listusers,';');
 	vector<string> first = mUtils::splitString(arrUser[0],'|');
+	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	if(myself->IsSpectator()==true)
+	{
+		specMode();  
+		if(arrUser.size()<7)
+		{
+			layerAvatars->specToPlayer();
+		}else
+		{
+			layerAvatars->btn_dungday->setEnabled(false);
+			layerAvatars->btn_vaochoi->setEnabled(false);
+			layerAvatars->btn_dungday->setTouchEnabled(false);
+			layerAvatars->btn_vaochoi->setTouchEnabled(false);
+		}
 
+		 
+	}else
+	{
+		getButtonByTag(dTag_btnReady)->setTouchEnabled(true);
+		getButtonByTag(dTag_btnUnready)->setTouchEnabled(true);
+		getButtonByTag(dTag_btnTurnAll)->setTouchEnabled(true);
+		getButtonByTag(dTag_btnView)->setTouchEnabled(true);
+		getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
+		if(arrUser.size()>2)
+			layerAvatars->playerToSpec();
+
+	}
 	if(strcmp(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(), first[0].c_str()) == 0)
 	{
 		getButtonByTag(dTag_btnReady)->setTitleText("Chia Bài");
@@ -635,4 +661,24 @@ void BaCayNormal::playSound( string soundPath )
 {
 	if( mUtils::isSoundOn() )
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(soundPath.c_str());
+}
+void BaCayNormal::specMode()
+{
+	CCLog("spec mode");
+
+
+	getButtonByTag(dTag_btnReady)->setEnabled(false);
+	getButtonByTag(dTag_btnUnready)->setEnabled(false);
+	getButtonByTag(dTag_btnTurnAll)->setEnabled(false);
+	getButtonByTag(dTag_btnView)->setEnabled(false);
+	getButtonByTag(dTag_btnSqueez)->setEnabled(false);
+	
+
+	getButtonByTag(dTag_btnReady)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnUnready)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnTurnAll)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnView)->setTouchEnabled(false);
+	getButtonByTag(dTag_btnSqueez)->setTouchEnabled(false);
+	
+
 }

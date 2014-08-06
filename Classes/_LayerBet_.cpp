@@ -51,7 +51,7 @@ bool BetGame3Cay::init()
 	buser2->setScale(0.8);
 	buser3->setPosition(ccp(340, 383));
 	buser3->setScale(0.8);
-    buser4->setPosition(ccp(570, 410));
+    buser4->setPosition(ccp(570, 383));
 	buser4->setScale(0.8);
     buser5->setPosition(ccp(660, 400));
 	buser5->setScale(0.8);

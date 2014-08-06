@@ -12,6 +12,8 @@
 #include "GameServer.h"
 #include "mUtils.h"
 #include "AllData.h"
+#include "Requests/SpectatorToPlayerRequest.h"
+#include "Requests/PlayerToSpectatorRequest.h"
 
 LayerBaCayAvatar::~LayerBaCayAvatar()
 {
@@ -22,15 +24,33 @@ bool LayerBaCayAvatar::init()
 {
 	if (!CCLayer::init()) return false;
 	myself = GameServer::getSingleton().getSmartFox()->MySelf();
-    btn_xem = UIButton::create();
-    btn_xem->setTouchEnabled(true);
-    btn_xem->loadTextures("ready.png", "ready_selected.png", "");
-    btn_xem->setTitleText("Chơi ngay");
-    btn_xem->setPosition(ccp(700,50));
-    btn_xem->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
-    btn_xem->setEnabled(false);
-    
-    this->addChild(btn_xem);
+	UILayer *ul = UILayer::create();
+
+    btn_vaochoi = UIButton::create();
+    btn_vaochoi->setTouchEnabled(true);
+    btn_vaochoi->loadTextures("ready.png", "ready_selected.png", "");
+    btn_vaochoi->setTitleText("Vào bàn");
+	btn_vaochoi->setScale(0.8);
+    btn_vaochoi->setPosition(ccp(65,87));
+	btn_vaochoi->setTitleFontSize(20);
+    btn_vaochoi->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
+    btn_vaochoi->setEnabled(false);
+	btn_vaochoi->setTag(1);
+
+	btn_dungday = UIButton::create();
+	btn_dungday->setTouchEnabled(true);
+	btn_dungday->loadTextures("ready.png", "ready_selected.png", "");
+	btn_dungday->setTitleText("Đứng dậy");
+	btn_dungday->setScale(0.8);
+	btn_dungday->setPosition(ccp(65,87));
+	btn_dungday->setTitleFontSize(20);
+	btn_dungday->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
+	btn_dungday->setEnabled(false);
+	btn_dungday->setTag(2);
+
+    ul->addWidget(btn_dungday);
+	ul->addWidget(btn_vaochoi);
+    this->addChild(ul);
     
 	this->setAnchorPoint(ccp(0, 0));
 	this->setPosition(ccp(0, 0));
@@ -479,18 +499,40 @@ void LayerBaCayAvatar::stopAllTimer()
 }
 void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
 {
+	UIButton *abc = (UIButton*)obj;
+	int tag= abc->getTag();
     if(type==TOUCH_EVENT_ENDED)
-    CCLog("da vao");
+		if(tag==1)
+		{
+			boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			CCLog("da vao");
+			btn_vaochoi->setEnabled(false);
+			btn_dungday->setEnabled(true);
+		}
+		else
+			{
+				boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+				GameServer::getSingleton().getSmartFox()->Send(request);
+				btn_vaochoi->setEnabled(true);
+				btn_dungday->setEnabled(false);
+				}
 }
-void LayerBaCayAvatar::meIsSpec()
+void LayerBaCayAvatar::playerToSpec()
 {
-    
     CCLog("Dang xem...");
+	btn_vaochoi->setTouchEnabled(false);
+	btn_vaochoi->setEnabled(false);
+	btn_dungday->setTouchEnabled(true);
+	btn_dungday->setEnabled(true);
+
     
 }
 void LayerBaCayAvatar::specToPlayer()
 {
     CCLog("is Player");
-    btn_xem->setTouchEnabled(true);
-    btn_xem->setEnabled(true);
+    btn_vaochoi->setTouchEnabled(true);
+    btn_vaochoi->setEnabled(true);
+	btn_dungday->setTouchEnabled(false);
+	btn_dungday->setEnabled(false);
 }
