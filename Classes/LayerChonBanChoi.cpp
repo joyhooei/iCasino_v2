@@ -14,7 +14,7 @@
 #include "CustomTableViewCell.h"
 #include "LayerPasswordRoom.h"
 
-#include "Requests/JoinRoomRequest.h"
+#include "Requests/JoinRoomRequest.h" 
 #include "Requests/SetUserVariablesRequest.h"
 #include "Entities/Variables/UserVariable.h"
 #include "Entities/Variables/SFSUserVariable.h"
