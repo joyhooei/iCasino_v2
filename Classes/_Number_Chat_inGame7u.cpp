@@ -57,11 +57,12 @@ void Number_Chat_inGame7u::runAction(float dt) {
 		string numberString = arrNumberString.at(i);
 
 		Number *number = new Number(numberString);
+		number->setScale(0.6);
 		CCPoint point;
 
 		switch (pos) {
             case kuser0:
-                point.setPoint(WIDTH_DESIGN/2-number->getSize().width/2,80);
+                point.setPoint(WIDTH_DESIGN/2-number->getSize().width/2+60,80);
                 dem0++;
                 break;
             case kuser1:

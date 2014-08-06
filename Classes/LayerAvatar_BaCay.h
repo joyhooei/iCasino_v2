@@ -43,6 +43,7 @@ public:
 	void setListUserForBaCay(string listUser);
 
 	Avatar* getUserByPos(int pos);
+    UIButton *btn_xem;
 
 	int getPosByName(string name);
 	string getNameByPos(int pos);
@@ -59,7 +60,7 @@ private:
 	string myName;
 	string listUser;
 	UIImageView *chuong;
-    Button *btn_xem;
+    
 	boost::shared_ptr<User> myself;
 };
 

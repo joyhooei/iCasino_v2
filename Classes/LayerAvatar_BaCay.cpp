@@ -22,12 +22,14 @@ bool LayerBaCayAvatar::init()
 {
 	if (!CCLayer::init()) return false;
 	myself = GameServer::getSingleton().getSmartFox()->MySelf();
-    btn_xem = Button::create();
+    btn_xem = UIButton::create();
+    btn_xem->setTouchEnabled(true);
     btn_xem->loadTextures("ready.png", "ready_selected.png", "");
     btn_xem->setTitleText("Chơi ngay");
     btn_xem->setPosition(ccp(700,50));
-    btn_xem->addTouchEventListener(this, (SEL_TouchEvent)&LayerBaCayAvatar::vaoBanChoi);
+    btn_xem->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
     btn_xem->setEnabled(false);
+    
     this->addChild(btn_xem);
     
 	this->setAnchorPoint(ccp(0, 0));
@@ -332,7 +334,7 @@ void LayerBaCayAvatar::updateUsers()
   
     
 	vector<string> arrUser = mUtils::splitString(listUser,';');
-    CCLog("nums of player: %d",arrUser.size());
+ 
 
 	if (arrUser.size() == 0)
 	{
@@ -389,12 +391,7 @@ void LayerBaCayAvatar::updateUsers()
 	avaUser6->setName("");
 	avaUser6->setMoney("");
 	avaUser6->setAI("");
-	//if(myself->IsSpectator())
-	//{
-	//	meIsSpec();
 
-	//}else
-//{
 	for (int i = 0; i < arrUser.size(); i++)
 	{
 		vector<string> info = mUtils::splitString(arrUser[i],'|');
@@ -445,7 +442,7 @@ void LayerBaCayAvatar::updateUsers()
 			}
 		}
 	}//for
-	//}//else
+
 }
 
 string LayerBaCayAvatar::getNameByPos(int pos)
@@ -487,63 +484,13 @@ void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
 }
 void LayerBaCayAvatar::meIsSpec()
 {
-    btn_xem->setEnabled(true);
-    btn_xem->setTouchEnabled(true);
+    
     CCLog("Dang xem...");
-
-
-	if (listUser == "")
-	{
-		return;
-	}
-	
-
-
-	vector<string> arrUser = mUtils::splitString(listUser,';');
-	if (arrUser.size() == 0)
-	{
-		return;
-	}
-	for (int i = 0; i < arrUser.size(); i++)
-	{
-		vector<string> info = mUtils::splitString(arrUser[i],'|');
-		int pos = getPosByName(info[0]);
-		if (pos < 0)
-		{
-			continue;
-		}
-
-		if (GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0]) != NULL)
-		{
-			boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("aN")->GetStringValue();
-			boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("amf")->GetDoubleValue();
-			boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("aal")->GetStringValue();
-
-			int _money = (money != NULL) ? (int)*money : 0;
-			string _url = (url != NULL) ? url->c_str() : "";
-			string _name = (name != NULL) ? name->c_str() : info[0];
-
-			Avatar *_user = getUserByPos(pos);
-			_user->setVisibleLayerInvite(false);
-			_user->setName(_name);
-			_user->setFlag(i == 0);
-			_user->setAI(info[0]);
-			_user->setIcon(_url);
-			//user->setAI(aI);
-			_user->setMoney(_money);
-			if (pos == kuser0)
-			{
-				_user->setVisible(true);
-				_user->setTouchEnabled(false);
-			}
-			else {
-				_user->setVisibleLayerInvite(false);
-			}
-		}
-	}//for
     
 }
 void LayerBaCayAvatar::specToPlayer()
 {
     CCLog("is Player");
+    btn_xem->setTouchEnabled(true);
+    btn_xem->setEnabled(true);
 }
