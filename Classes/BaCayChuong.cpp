@@ -446,7 +446,7 @@ void BaCayChuong::eventListUser(string listusers)
 	layerBet->setVisibleAllFrameBet();
 
 	vector<string> list = mUtils::splitString(listusers,';');
-    if(myself->IsSpectator())
+    if(!myself->IsSpectator())
     {
         if(list.size()<7)
         {
@@ -763,11 +763,11 @@ void BaCayChuong::specMode()
 	btn_View->setEnabled(false);
 	btn_Squeezing->setEnabled(false);
     */
-    getButtonByTag(dTag_btnReady)->setVisible(false);
-    getButtonByTag(dTag_btnUnready)->setVisible(false);
-    getButtonByTag(dTag_btnTurnAll)->setVisible(false);
-    getButtonByTag(dTag_btnView)->setVisible(false);
-    getButtonByTag(dTag_btnSqueez)->setVisible(false);
-    getButtonByTag(dTag_btnBet)->setVisible(false);
+    getButtonByTag(dTag_btnReady)->setEnabled(false);
+    getButtonByTag(dTag_btnUnready)->setEnabled(false);
+    getButtonByTag(dTag_btnTurnAll)->setEnabled(false);
+    getButtonByTag(dTag_btnView)->setEnabled(false);
+    getButtonByTag(dTag_btnSqueez)->setEnabled(false);
+    getButtonByTag(dTag_btnBet)->setEnabled(false);
     
 }
