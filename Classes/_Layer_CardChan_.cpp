@@ -106,11 +106,18 @@ bool _Layer_CardChan_::init()
 	dianoc->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 32.5));
 	dianoc->setEnabled(false);
 	uLayer->addWidget(dianoc);
+
+	UIImageView *img = UIImageView::create();
+	img->loadTexture("back_chan1.png");
+	img->setPosition(ccp(20, 10));
+	dianoc->addChild(img);
+
 	countNoc = UILabel::create();
 	countNoc->setText("");
-	countNoc->setFontSize(24);
-	countNoc->setColor(ccRED);
-	dianoc->addChild(countNoc);
+	countNoc->setFontSize(17);
+	countNoc->setColor(ccYELLOW);
+	countNoc->setPosition(ccp(10, 20));
+	img->addChild(countNoc);
 
 	w_cardhand = 34;
 	h_cardhand = 125;
@@ -123,12 +130,12 @@ bool _Layer_CardChan_::init()
 	// Vi tri cac la bai cua tri
 	left_chi_left = (123);
 	left_chi_right = (680);
-	left_chi_me = (510 + w_card * 2);
+	left_chi_me = (510 + w_card * 2) + w_card / 2;
 	left_chi_top = (365) - w_card;
 
 	bottom_chi_left = 206;
 	bottom_chi_right = 237;
-	bottom_chi_me = 125;
+	bottom_chi_me = 95;
 	bottom_chi_top = 320;
 
 	//Vi tri cac la bai duoi tay

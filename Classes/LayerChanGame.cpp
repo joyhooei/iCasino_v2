@@ -185,7 +185,7 @@ void LayerChanGame::createButtons(){
 	int _space = 20;
 
 	Button *btnReady = createButtonWithTitle_Pos("Sẵn Sàng",ccp(WIDTH_DESIGN - w_Button - _space, _space));
-	Button *btnBoc = createButtonWithTitle_Pos("Bốc", ccp(WIDTH_DESIGN - w_Button - _space, _space));
+	Button *btnBoc = createButton_Chan("Bốc",ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 5),"U.png","U_press.png");
 
 	Button *btnEate = createButton_Chan("Ăn", ccp(WIDTH_DESIGN/ 2, 60), "an.png", "an_press.png");
 	Button *btnU = createButton_Chan("Ù", ccp(WIDTH_DESIGN/ 2, 10), "U.png", "U_press.png");
@@ -300,9 +300,19 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			if (strcmp(_usrn.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0) {
 				if(gameStarted){
 					layerCardChan->setMyListCards(_lc);
+					getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+					getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+					getButtonByTag(cTag_btnBoc)->setEnabled(true);
+
 					getButtonByTag(cTag_btnU)->setEnabled(true);
 					getButtonByTag(cTag_btnChiu)->setEnabled(true);
+
+					getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+					getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
 					getButtonByTag(cTag_btnEate)->setEnabled(true);
+
+					getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
+					getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
 					getButtonByTag(cTag_btnTake)->setEnabled(true);
 				}
 				flagChiaBai = true;
@@ -375,7 +385,9 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			CCLOG("Resuilt code Draw: %ld",*rescode);
 			if (*rescode == 0) {
 				getButtonByTag(cTag_btnTake)->setEnabled(false);
-				getButtonByTag(cTag_btnBoc)->setEnabled(false);
+
+				getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+				getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
 
 				getButtonByTag(cTag_btnEate)->loadTextureNormal("an.png");
 				getButtonByTag(cTag_btnEate)->setTouchEnabled(true);
@@ -485,7 +497,9 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			if (*rscode == 0)
 			{
 				getButtonByTag(cTag_btnDuoi)->setEnabled(false);
-				getButtonByTag(cTag_btnBoc)->setEnabled(false);
+
+				getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+				getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
 
 				getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
 				getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
@@ -552,6 +566,10 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		} else {
 			CCLOG("Co the xuong U");
 			hideAllButton();
+			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+			getButtonByTag(cTag_btnBoc)->setEnabled(true);
+
 			getButtonByTag(cTag_btnU)->setEnabled(false);
 			getButtonByTag(cTag_btnChiu)->setEnabled(false);
 			Chat *toast = new Chat("Bạn đã báo Ù lá bài này, đợi xem có nhà nào báo ù nữa không !", -1);
@@ -858,7 +876,8 @@ void LayerChanGame::whenUserTakeCards(long rscode){
 		getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
 		getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
 
-		getButtonByTag(cTag_btnBoc)->setEnabled(false);
+		getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+		getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
 
 		getButtonByTag(cTag_btnTake)->setEnabled(false);
 		getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh_Disable.png");
@@ -892,7 +911,9 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 		if (_count == 0) {
 			getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
 			getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
-			getButtonByTag(cTag_btnBoc)->setEnabled(false);
+
+			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
 
 			getButtonByTag(cTag_btnTake)->loadTextureNormal("danh.png");
 			getButtonByTag(cTag_btnTake)->setEnabled(true);
@@ -901,7 +922,9 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 		}else{
 			getButtonByTag(cTag_btnEate)->loadTextureNormal("an.png");
 			getButtonByTag(cTag_btnEate)->setTouchEnabled(true);
-			getButtonByTag(cTag_btnBoc)->setEnabled(true);
+
+			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U.png");
+			getButtonByTag(cTag_btnBoc)->setTouchEnabled(true);
 		}
 	}
 	else{
@@ -911,7 +934,8 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 		getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
 		getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
 
-		getButtonByTag(cTag_btnBoc)->setEnabled(false);
+		getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+		getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
 
 		getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh_Disable.png");
 		getButtonByTag(cTag_btnDuoi)->setTouchEnabled(false);
@@ -1235,6 +1259,8 @@ void LayerChanGame::resuiltGame(string resuilt)
 }
 
 void LayerChanGame::setEndGame(){
+	layerAvatars->stopAllTimer();
+	stopTimer_Me();
 	currentPlayer = "";
 	mylistCard = "";
 
@@ -1245,6 +1271,8 @@ void LayerChanGame::setEndGame(){
 	layerCardChan->resetAllCards();
 	layerAvatars->stopAllTimer();
 
+	getButtonByTag(cTag_btnBoc)->loadTextureNormal("U.png");
+	getButtonByTag(cTag_btnBoc)->setTouchEnabled(true);
 	getButtonByTag(cTag_btnBoc)->setEnabled(false);
 
 	getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
@@ -1300,6 +1328,7 @@ void LayerChanGame::wait10s(CCObject *data){
 	getButtonByTag(cTag_btnTake)->setEnabled(false);
 	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 	getButtonByTag(cTag_btnEate)->setEnabled(false);
+	getButtonByTag(cTag_btnBoc)->setEnabled(false);
 }
 
 void LayerChanGame::notificationCallBack(bool isOK, int tag){
@@ -1370,6 +1399,8 @@ void LayerChanGame::btn_Chiu_Click(CCObject *sender, TouchEventType type){
 
 void LayerChanGame::hideAllButton(){
 	getButtonByTag(cTag_btnReady)->setEnabled(false);
+
+	//getButtonByTag(cTag_btnBoc)->setEnabled(false);
 	getButtonByTag(cTag_btnBoc)->setEnabled(false);
 
 	getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");

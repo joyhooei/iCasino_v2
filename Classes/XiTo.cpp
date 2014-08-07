@@ -48,6 +48,7 @@ XiTo::XiTo():luotChia(0),chiathem(0){
     luotChia = 0;
     chiathem = 0;
     luotChiathem = 2;
+	count_player = 0;
     
     uidTo = "";
     typeTo = "";
@@ -77,7 +78,7 @@ XiTo::XiTo():luotChia(0),chiathem(0){
 
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
-	getButtonByTag(dTag_btnReady)->setEnabled(true);
+	//getButtonByTag(dTag_btnReady)->setEnabled(true);
 }
 
 XiTo::~XiTo(){
@@ -173,6 +174,9 @@ void XiTo::createButtons(){
 	float h_Button = 44;
 
 	Button* btnReady = createButtonWithTitle_Pos("Sẵn Sàng",ccp(WIDTH_DESIGN - w_Button - 20, 10));
+	Button* btnJoinGame = createButtonWithTitle_Pos("Vào bàn",ccp(WIDTH_DESIGN - w_Button - 20, 10));
+	Button* btnStandUp = createButtonWithTitle_Pos("Đứng dậy",ccp(WIDTH_DESIGN - w_Button - 20, h_Button + 20));
+
 	Button* btnFold = createButtonWithTitle_Pos("Úp", ccp(WIDTH_DESIGN - w_Button - 20, 10));
 	Button* btnGive = createButtonWithTitle_Pos("Nhường", ccp(WIDTH_DESIGN - w_Button * 2 - 40, 10));
 	Button* btnBet = createButtonWithTitle_Pos("Tố", ccp(WIDTH_DESIGN - w_Button * 3 - 60, 10));
@@ -183,6 +187,9 @@ void XiTo::createButtons(){
 	Button* btnDouble = createButtonWithTitle_Pos("X2", ccp(WIDTH_DESIGN - w_Button*2 - 40, h_Button*2 + 30));
 
 	btnReady->addTouchEventListener(this, toucheventselector(XiTo::btn_ready_click));
+	btnJoinGame->addTouchEventListener(this, toucheventselector(XiTo::btn_JoinGame_click));
+	btnStandUp->addTouchEventListener(this, toucheventselector(XiTo::btn_StandUp_click));
+
 	btnFold->addTouchEventListener(this, toucheventselector(XiTo::btn_Up_click));
 	btnFollow->addTouchEventListener(this, toucheventselector(XiTo::btn_Theo_click));
 	btnGive->addTouchEventListener(this, toucheventselector(XiTo::btn_Nhuong_click));
@@ -193,6 +200,9 @@ void XiTo::createButtons(){
 	btnDouble->addTouchEventListener(this, toucheventselector(XiTo::btn_To_X2_click));
 
 	btnReady->setTag(dTag_btnReady);
+	btnJoinGame->setTag(dTag_btnJoinGame);
+	btnStandUp->setTag(dTag_btnStandUp);
+
 	btnFold->setTag(dTag_btnFold);
 	btnFollow->setTag(dTag_btnFollow);
 	btnGive->setTag(dTag_btnGive);
@@ -214,6 +224,9 @@ void XiTo::createButtons(){
 	B3->addObject(btnDouble);
 
 	btnReady->setEnabled(false);
+	btnJoinGame->setEnabled(false);
+	btnStandUp->setEnabled(false);
+
 	btnFold->setEnabled(false);
 	btnFollow->setEnabled(false);
 	btnGive->setEnabled(false);
@@ -224,6 +237,9 @@ void XiTo::createButtons(){
 	btnDouble->setEnabled(false);
 
 	layerButtons->addWidget(btnReady);
+	layerButtons->addWidget(btnJoinGame);
+	layerButtons->addWidget(btnStandUp);
+
 	layerButtons->addWidget(btnFold);
 	layerButtons->addWidget(btnFollow);
 	layerButtons->addWidget(btnGive);
@@ -422,6 +438,7 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
         CCLOG("Game Start");
 		layerAvatar->setUnReadyAllUser();
 		getButtonByTag(dTag_btnReady)->setEnabled(false);
+		getButtonByTag(dTag_btnStandUp)->setEnabled(false);
         flag_StartGame = true;
         chiaBai();
     }
@@ -649,7 +666,16 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     else if(strcmp("endntf", cmd->c_str()) == 0){
         //whenEndGame();
 		setVisibleButtonPlay();
-		getButtonByTag(dTag_btnReady)->setEnabled(true);
+		if (GameServer::getSingleton().getSmartFox()->MySelf()->IsSpectator())
+		{
+			if(count_player < 5){
+				getButtonByTag(dTag_btnJoinGame)->setEnabled(true);
+			}
+		}
+		else{
+			getButtonByTag(dTag_btnReady)->setEnabled(true);
+			getButtonByTag(dTag_btnStandUp)->setEnabled(true);
+		}
     }
 
 	else if (strcmp("expmntf", cmd->c_str()) ==  0)
@@ -732,8 +758,32 @@ void XiTo::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_p
 void XiTo::updateUsers(string listUser){
     layerAvatar->resetAll();
 
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf(); 
+
     vector<string> list = mUtils::splitString(listUser, ';');
+	count_player = (int)list.size();
+	CCLOG("player count %d ", count_player);
     boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+
+	//Nếu là khách xem
+	if(myself->IsSpectator() == true)
+	{
+		getButtonByTag(dTag_btnReady)->setEnabled(false);
+		CCLOG("Jumpe to here !");
+		if (list.size() < 5)
+		{
+			getButtonByTag(dTag_btnJoinGame)->setEnabled(true);
+		}
+		else
+		{
+			getButtonByTag(dTag_btnJoinGame)->setEnabled(false);
+		}
+	}
+	//Nếu không phải là khách-> là 1 người chơi, hiện thị button ready
+	else
+	{
+		getButtonByTag(dTag_btnReady)->setEnabled(true);
+	}
 
     for(int i = 0; i < list.size(); i++){
         if(lastRoom == NULL){
@@ -1767,6 +1817,20 @@ void XiTo::btn_ready_click(CCObject *sender, TouchEventType type){
         boost::shared_ptr<IRequest> request (new ExtensionRequest(EXT_EVENT_READY_REQ,parameter,lastRoom));
         GameServer::getSingleton().getSmartFox()->Send(request);
     }
+}
+
+void XiTo::btn_JoinGame_click(CCObject *sender, TouchEventType type){
+	if (type == TOUCH_EVENT_ENDED)
+	{
+
+	}
+}
+
+void XiTo::btn_StandUp_click(CCObject *sender, TouchEventType type){
+	if (type == TOUCH_EVENT_ENDED)
+	{
+
+	}
 }
 
 void XiTo::btn_To_click(CCObject *sender, TouchEventType type){

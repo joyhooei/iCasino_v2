@@ -72,6 +72,7 @@ private:
     int luotChia;
     int chiathem;
     int luotChiathem;
+	int count_player;
     
     string _list_user;
     string my_DealCards;
@@ -160,6 +161,9 @@ public:
     void setVisibleButtonPlay();
     
     void btn_ready_click(CCObject *sender, TouchEventType type);
+	void btn_JoinGame_click(CCObject *sender, TouchEventType type);
+	void btn_StandUp_click(CCObject *sender, TouchEventType type);
+
     void btn_To_click(CCObject *sender, TouchEventType type);
     void btn_Theo_click(CCObject *sender, TouchEventType type);
     void btn_Up_click(CCObject *sender, TouchEventType type);
