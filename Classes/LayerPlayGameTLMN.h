@@ -39,6 +39,7 @@ private:
     
     string myName;
     string currentPlaying;
+	string listUser;
 	bool isNewTurn;
 	bool isSpector;
 	bool isStartedGame;
@@ -77,6 +78,7 @@ public:
     string convertResponseToString(int inInt);
     Button* createButtonWithTitle_Position(const char *title, CCPoint pPoint);
     Button* getButtonByTag(int tag);
+	bool isSpectator();
     
     // actions
     void actionReady(CCObject *pSender, TouchEventType pType);

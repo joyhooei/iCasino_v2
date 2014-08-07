@@ -81,6 +81,7 @@ void BaCayChuong::onExit()
 }
 
 void BaCayChuong::createBackgrounds(){
+	
 	BackgroundInGame *bg = BackgroundInGame::create();
 	this->addChild(bg);
 	int id = atoi(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GroupId()->c_str());
@@ -99,6 +100,8 @@ void BaCayChuong::createBackgrounds(){
 	{
 		result = name + " - cược:" + moneyConvert;
 	}
+	
+
 	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
 	nameGame->setPosition(ccp(400-5, 213+10));
 	nameGame->setColor(ccWHITE);
@@ -448,6 +451,8 @@ void BaCayChuong::eventListUser(string listusers)
 	vector<string> list = mUtils::splitString(listusers,';');
     if(myself->IsSpectator()==true)
     {
+		Chat *toast = new Chat("Bạn đang xem...",-1);
+		this->addChild(toast);
         if(list.size()<7)
         {
             layerAvatars->specToPlayer();
@@ -462,6 +467,7 @@ void BaCayChuong::eventListUser(string listusers)
         specMode();   
     }else
 		{
+			layerButtons->getButtonByTag(103)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnReady)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnUnready)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnTurnAll)->setTouchEnabled(true);
@@ -595,6 +601,8 @@ void BaCayChuong::whenGameStart(){
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
 	getButtonByTag(dTag_btnBet)->setEnabled(false);
 	layerAvatars->setUnReadyAllUser();
+	layerAvatars->btn_vaochoi->setTouchEnabled(false);
+	layerAvatars->btn_dungday->setEnabled(false);
 }
 
 void BaCayChuong::whenResuiltGame(string rg){
@@ -665,10 +673,13 @@ void BaCayChuong::whenResuiltGame(string rg){
 
 void BaCayChuong::whenGameEnd(){
 
+	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	layerCard->resetGame();
 	layerBet->getLayerResuilt()->removeAllChildrenWithCleanup(true);
 
 	getButtonByTag(dTag_btnReady)->setEnabled(true);
+	if(myself->IsSpectator()==true)
+		specMode();
 	flagDatCuoc = false;
 	flagChiaBai = false;
 	_list_cards = "";
@@ -764,17 +775,24 @@ void BaCayChuong::callBackFunction_LatBai(CCNode *pSend){
 
 void BaCayChuong::callBackFuntion_Endgive(CCNode *pSend)
 {
+	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	CCLOG("Nhay vao call back");
 	flagChiaBai = true;
+	if(myself->IsSpectator()==true)
+		{
+			specMode();
+			}
+else{
 	getButtonByTag(dTag_btnSqueez)->setEnabled(true);
 	getButtonByTag(dTag_btnView)->setEnabled(true);
 	getButtonByTag(dTag_btnTurnAll)->setEnabled(true);
+	}
 }
 void BaCayChuong::specMode()
 {
 	CCLog("spec mode");
 
-    
+	layerButtons->getButtonByTag(103)->setTouchEnabled(false);
     getButtonByTag(dTag_btnReady)->setEnabled(false);
     getButtonByTag(dTag_btnUnready)->setEnabled(false);
     getButtonByTag(dTag_btnTurnAll)->setEnabled(false);
