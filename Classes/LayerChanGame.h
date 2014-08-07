@@ -105,6 +105,7 @@ private:
 	_Layer_CardChan_ *layerCardChan;
 
 	UILabel *lblDetail;
+	CCProgressTimer *timer_Me;
 
 public:
 	LayerChanGame();
@@ -171,7 +172,9 @@ public:
 	void OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
-
+	void startTimer_Me();
+	void callbackTimer(CCNode *pSender);
+	void stopTimer_Me();
 	void callBackFunction_LatBai(CCNode *pSend);
 };
 

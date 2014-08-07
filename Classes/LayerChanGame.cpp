@@ -79,10 +79,6 @@ LayerChanGame::LayerChanGame(){
 	GameServer::getSingleton().addListeners(this);
 	this->scheduleOnce(schedule_selector(LayerChanGame::sendRequestJoinGame),1.0f);
 
-	//displayLayerXuongU();
-	//displayLayerKetQua("");
-	//XuongU();
-
 	SceneManager::getSingleton().hideLoading();
 }
 
@@ -167,43 +163,53 @@ void LayerChanGame::createAvatars(){
 }
 
 void LayerChanGame::createCards(){
+
 	layerCardChan = _Layer_CardChan_::create();
 	this->addChild(layerCardChan);
 }
 
 void LayerChanGame::createButtons(){
 	layerButtons = LayerButtonInGame::create();
+	layerButtons->hideButtonInChanGame();
 	this->addChild(layerButtons);
+
+	CCSprite * time = CCSprite::create("timerme.png");
+	timer_Me = CCProgressTimer::create(time);
+	timer_Me->setAnchorPoint(ccp(0.5,0));
+	timer_Me->setType(kCCProgressTimerTypeRadial);
+	timer_Me->setPosition(ccp(WIDTH_DESIGN/2, 3.5));
+	this->addChild(timer_Me);
 
 	int w_Button = 129;
 	int h_Button = 44;
 	int _space = 20;
 
 	Button *btnReady = createButtonWithTitle_Pos("Sẵn Sàng",ccp(WIDTH_DESIGN - w_Button - _space, _space));
-	Button *btnTake = createButtonWithTitle_Pos("Đánh",ccp(WIDTH_DESIGN - w_Button - _space, _space));
 	Button *btnBoc = createButtonWithTitle_Pos("Bốc", ccp(WIDTH_DESIGN - w_Button - _space, _space));
-	Button *btnDuoi = createButtonWithTitle_Pos("Dưới", ccp(WIDTH_DESIGN - w_Button - _space, _space));
 
-	Button *btnEate = createButtonWithTitle_Pos("Ăn", ccp(WIDTH_DESIGN - w_Button - _space, h_Button + 30));
-
-	Button *btnU = createButton_Chan("Ù", ccp(WIDTH_DESIGN/ 2 - 57 / 2, 60),"U.png", "U_press.png");
-	Button *btnChiu = createButton_Chan("Chíu", ccp(WIDTH_DESIGN / 2 - 57 / 2, 10), "U.png", "U_press.png");
+	Button *btnEate = createButton_Chan("Ăn", ccp(WIDTH_DESIGN/ 2, 60), "an.png", "an_press.png");
+	Button *btnU = createButton_Chan("Ù", ccp(WIDTH_DESIGN/ 2, 10), "U.png", "U_press.png");
+	Button *btnChiu = createButton_Chan("Chíu", ccp(WIDTH_DESIGN / 2 - btnU->getContentSize().width / 2 - 75 / 2 + 9, 7), "chiu.png", "chiu_press.png");
+	Button *btnTake = createButton_Chan("Đánh", ccp(WIDTH_DESIGN / 2 + btnU->getContentSize().width / 2 + 75 / 2 - 9, 7), "danh.png", "danh_press.png");
+	Button *btnDuoi = createButton_Chan("Dưới", ccp(WIDTH_DESIGN / 2 + btnU->getContentSize().width / 2 + 75 / 2 - 9, 7), "danh.png", "danh_press.png");
 
 	btnReady->setEnabled(true);
-	btnTake->setEnabled(false);
 	btnBoc->setEnabled(false);
-	btnDuoi->setEnabled(false);
+
 	btnEate->setEnabled(false);
 	btnU->setEnabled(false);
 	btnChiu->setEnabled(false);
+	btnTake->setEnabled(false);
+	btnDuoi->setEnabled(false);
 
 	btnReady->setTag(cTag_btnReady);
-	btnTake->setTag(cTag_btnTake);
 	btnBoc->setTag(cTag_btnBoc);
-	btnDuoi->setTag(cTag_btnDuoi);
+
 	btnEate->setTag(cTag_btnEate);
 	btnU->setTag(cTag_btnU);
 	btnChiu->setTag(cTag_btnChiu);
+	btnTake->setTag(cTag_btnTake);
+	btnDuoi->setTag(cTag_btnDuoi);
 
 	btnReady->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_ready_click));
 	btnTake->addTouchEventListener(this, toucheventselector(LayerChanGame::btn_take_click));
@@ -220,7 +226,6 @@ void LayerChanGame::createButtons(){
 	layerButtons->addWidget(btnEate);
 	layerButtons->addWidget(btnU);
 	layerButtons->addWidget(btnChiu);
-
 }
 
 void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -297,6 +302,8 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 					layerCardChan->setMyListCards(_lc);
 					getButtonByTag(cTag_btnU)->setEnabled(true);
 					getButtonByTag(cTag_btnChiu)->setEnabled(true);
+					getButtonByTag(cTag_btnEate)->setEnabled(true);
+					getButtonByTag(cTag_btnTake)->setEnabled(true);
 				}
 				flagChiaBai = true;
 			}
@@ -323,6 +330,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 				toast->setPositionY(HEIGHT_DESIGN / 2);
 				this->addChild(toast);
 				layerAvatars->stopAllTimer();
+				stopTimer_Me();
 			}
 		}
 		CCLOG("EXT_SRVNTF_NOC_COUNT");
@@ -368,18 +376,23 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			if (*rescode == 0) {
 				getButtonByTag(cTag_btnTake)->setEnabled(false);
 				getButtonByTag(cTag_btnBoc)->setEnabled(false);
-				getButtonByTag(cTag_btnEate)->setEnabled(true);
+
+				getButtonByTag(cTag_btnEate)->loadTextureNormal("an.png");
+				getButtonByTag(cTag_btnEate)->setTouchEnabled(true);
+
+				getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
 				getButtonByTag(cTag_btnDuoi)->setEnabled(true);
+				getButtonByTag(cTag_btnDuoi)->setTouchEnabled(true);
 			}
 		}
 		CCLOG("EXT_EVENT_RES_DRAW_CARD");
 	}
 
 	//dưới card
-	else if(strcmp(EXT_EVENT_RES_DUOI_CARD.c_str(), cmd->c_str())==0){
+	else if(strcmp(EXT_EVENT_RES_DUOI_CARD.c_str(), cmd->c_str()) == 0){
 		boost::shared_ptr<long> rescode = param->GetInt("rscode");
 		if (rescode != NULL) {
-
+			
 		}
 		CCLOG("EXT_EVENT_RES_DUOI_CARD");
 	}
@@ -473,8 +486,14 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			{
 				getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 				getButtonByTag(cTag_btnBoc)->setEnabled(false);
-				getButtonByTag(cTag_btnEate)->setEnabled(false);
+
+				getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+				getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
+
+				getButtonByTag(cTag_btnTake)->loadTextureNormal("danh.png");
 				getButtonByTag(cTag_btnTake)->setEnabled(true);
+				getButtonByTag(cTag_btnTake)->setTouchEnabled(true);
+
 				layerCardChan->refreshListCard();
 			}
 		}
@@ -488,13 +507,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		{
 			if (*rscode == 0)
 			{
-// 				CCLOG("Co the xuong U");
-// 				hideAllButton();
-// 				getButtonByTag(cTag_btnU)->setEnabled(false);
-// 				getButtonByTag(cTag_btnChiu)->setEnabled(false);
-// 				layerCardChan->scaleCardsHand_whenU();
-// 				layerCardChan->moveCardChi_whenU();
-// 				XuongU();
+
 			}
 
 		}
@@ -791,8 +804,12 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 
 	CCLOG("From %d to %d", fpos, tpos);
 	layerCardChan->takeCards(fpos, tpos, cardnu, cardsu, crdorg);
-	if (crdorg == 3 && tpos == kUserMe){
+	if (crdorg == 3 || crdorg == 2 && tpos == kUserMe){
+		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+
+		getButtonByTag(cTag_btnTake)->loadTextureNormal("danh.png");
 		getButtonByTag(cTag_btnTake)->setEnabled(true);
+		getButtonByTag(cTag_btnTake)->setTouchEnabled(true);
 	}
 }
 
@@ -819,8 +836,8 @@ Button* LayerChanGame::createButton_Chan(const char* pName, CCPoint pPoint, cons
 	button->setTitleText(pName);
 	button->setTitleColor(ccRED);
 	button->setTitleFontSize(20);
-	button->setTitleFontSize(button->getContentSize().height / 2);
-	button->setAnchorPoint(ccp(0, 0));
+	button->setTitleFontSize(button->getContentSize().height / 3);
+	button->setAnchorPoint(ccp(0.5, 0));
 	button->setPosition(pPoint);
 
 	return button;
@@ -838,9 +855,15 @@ void LayerChanGame::playSounds(string url){
 //When user take Cards
 void LayerChanGame::whenUserTakeCards(long rscode){
 	if(rscode == 0){
-		getButtonByTag(cTag_btnEate)->setEnabled(false);
+		getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+		getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
+
 		getButtonByTag(cTag_btnBoc)->setEnabled(false);
-		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+
+		getButtonByTag(cTag_btnTake)->setEnabled(false);
+		getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh_Disable.png");
+		getButtonByTag(cTag_btnTake)->setEnabled(true);
+		getButtonByTag(cTag_btnDuoi)->setTouchEnabled(false);
 	}else{
 		CCLOG("Ăn không đúng Chắn, Cạ");
 		Chat *toast = new Chat("Ăn không đúng Chắn Cạ", -1);
@@ -851,24 +874,47 @@ void LayerChanGame::whenUserTakeCards(long rscode){
 // set current player
 void LayerChanGame::setCurrentPlayer(string uid,int _count){
 	CCLOG("Current user %s", uid.c_str());
-
 	layerAvatars->stopAllTimer();
+	stopTimer_Me();
+
 	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0) {
+
+		startTimer_Me();
+
 		getButtonByTag(cTag_btnReady)->setEnabled(false);
+
+		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+
+		getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
 		getButtonByTag(cTag_btnTake)->setEnabled(true);
+		getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
+
 		if (_count == 0) {
-			getButtonByTag(cTag_btnEate)->setEnabled(false);
+			getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+			getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
 			getButtonByTag(cTag_btnBoc)->setEnabled(false);
+
+			getButtonByTag(cTag_btnTake)->loadTextureNormal("danh.png");
+			getButtonByTag(cTag_btnTake)->setEnabled(true);
+			getButtonByTag(cTag_btnTake)->setTouchEnabled(true);
+
 		}else{
-			getButtonByTag(cTag_btnEate)->setEnabled(true);
+			getButtonByTag(cTag_btnEate)->loadTextureNormal("an.png");
+			getButtonByTag(cTag_btnEate)->setTouchEnabled(true);
 			getButtonByTag(cTag_btnBoc)->setEnabled(true);
 		}
 	}
 	else{
-		getButtonByTag(cTag_btnTake)->setEnabled(false);
-		getButtonByTag(cTag_btnEate)->setEnabled(false);
+		getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
+		getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
+
+		getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+		getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
+
 		getButtonByTag(cTag_btnBoc)->setEnabled(false);
-		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+
+		getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh_Disable.png");
+		getButtonByTag(cTag_btnDuoi)->setTouchEnabled(false);
 
 		int pos = getPosUserByName(uid, _list_user);
 		if (countUser == 2)
@@ -1039,8 +1085,6 @@ void LayerChanGame::error_AnBao(long rscode, string uid){
 
 	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) != 0)
 	{
-		//boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(uid)->GetVariable("aN")->GetStringValue();
-
 		Chat *toast = new Chat("" + uid + " bị ngồi im do " + str, -1);
 		toast->setPositionY(HEIGHT_DESIGN / 2);
 		this->addChild(toast);
@@ -1060,12 +1104,14 @@ void LayerChanGame::whenConguoi_ChoU(string uid){
 	string myName = "";
 	myName = GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str();
 
+	stopTimer_Me();
+	layerAvatars->stopAllTimer();
+
 	if(strcmp(uid.c_str(),myName.c_str()) == 0){
 		Chat *toast = new Chat("Bạn có thể Ù lá bài này", -1);
-		toast->setPositionY(HEIGHT_DESIGN/2);
+		toast->setPositionY(HEIGHT_DESIGN / 2);
 		this->addChild(toast);
-		// Hiển thị button Ù
-		getButtonByTag(cTag_btnU)->setEnabled(true);
+
 		if(strcmp(myName.c_str(),currentPlayer.c_str()) == 0)
 		{
 
@@ -1074,25 +1120,37 @@ void LayerChanGame::whenConguoi_ChoU(string uid){
 		{
 			
 		}
-
 	}else{
-		Chat *toast = new Chat(""+uid+" Đang chờ Ù, Đợi nhà này sướng", -1);
-		toast->setPositionY(HEIGHT_DESIGN/2);
+		Chat *toast = new Chat("" + uid + " Đang chờ Ù, Đợi nhà này sướng", -1);
+		toast->setPositionY(HEIGHT_DESIGN / 2);
 		this->addChild(toast);
 
-		hideAllButton();
+		//hideAllButton();
 
 		//start timer của người chơi chờ Ù
-		switch(getPosUserByName(uid,_list_user)){
-		case kUserLeft:
-			layerAvatars->getUserByPos(kUserLeft)->startTimer();
-			break;
-		case kUserRight:
-			layerAvatars->getUserByPos(kUserRight)->startTimer();
-			break;
-		case kUserTop:
-			layerAvatars->getUserByPos(kUserTop)->startTimer();
-			break;
+		if (countUser == 2)
+		{
+			if (getPosUserByName(uid,_list_user) == kUserMe)
+			{
+				//startTimer_Me();
+			}
+			else
+			{
+				layerAvatars->getUserByPos(kUserTop)->startTimer();
+			}
+			
+		}else{
+			switch(getPosUserByName(uid,_list_user)){
+			case kUserLeft:
+				layerAvatars->getUserByPos(kUserLeft)->startTimer();
+				break;
+			case kUserRight:
+				layerAvatars->getUserByPos(kUserRight)->startTimer();
+				break;
+			case kUserTop:
+				layerAvatars->getUserByPos(kUserTop)->startTimer();
+				break;
+			}
 		}
 	}
 }
@@ -1107,12 +1165,11 @@ void LayerChanGame::whenConguoi_Chiu(string uid){
 		Chat *toast = new Chat("Có thể chíu lá bài này", -1);
 		toast->setPositionY(HEIGHT_DESIGN / 2);
 		this->addChild(toast);
-		getButtonByTag(cTag_btnChiu)->setEnabled(true);
 	}
 	else
 	{
 		if(strcmp(myName.c_str(),currentPlayer.c_str()) == 0){
-			hideAllButton();
+			//hideAllButton();
 		}
 	}
 }
@@ -1147,6 +1204,30 @@ void LayerChanGame::XuongU(){
 
 void LayerChanGame::resuiltGame(string resuilt)
 {
+	vector<string> arrResuilt = splitString(resuilt,';');
+
+	string _cuoc = (strcmp(arrResuilt[4].c_str(), "") != 0) ? arrResuilt[4] : arrResuilt[5];
+	vector<string> arrCuoc = splitString(_cuoc,':');
+
+	LayerGameChan_KetQua *kq = LayerGameChan_KetQua::create();
+	string ketqua = "";
+
+	for(int  i = 0; i < arrCuoc.size(); i++){
+		ketqua += kq->identifyCuoc_sac(arrCuoc[i]) + " ";
+	}
+
+	CCLabelTTF *lblCuoc = CCLabelTTF::create();
+	lblCuoc->setString(ketqua.c_str());
+	lblCuoc->setAnchorPoint(ccp(0.5, 0.5));
+	lblCuoc->setFontSize(24);
+	lblCuoc->setColor(ccRED);
+	lblCuoc->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 130));
+	lblCuoc->setTag(201);
+	this->addChild(lblCuoc);
+
+	CCActionInterval *scale = CCScaleTo::create(0.5, 1.5);
+	lblCuoc->runAction(scale);
+
 	CCString *p = CCString::create(resuilt);
 	CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::displayResuitGame),p);
 	CCDelayTime *delay = CCDelayTime::create(6.0);
@@ -1165,14 +1246,28 @@ void LayerChanGame::setEndGame(){
 	layerAvatars->stopAllTimer();
 
 	getButtonByTag(cTag_btnBoc)->setEnabled(false);
+
+	getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
+	getButtonByTag(cTag_btnDuoi)->setTouchEnabled(true);
 	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+
+	getButtonByTag(cTag_btnEate)->loadTextureNormal("an.png");
+	getButtonByTag(cTag_btnEate)->setTouchEnabled(true);
 	getButtonByTag(cTag_btnEate)->setEnabled(false);
+
+	getButtonByTag(cTag_btnTake)->loadTextureNormal("danh.png");
+	getButtonByTag(cTag_btnTake)->setTouchEnabled(true);
 	getButtonByTag(cTag_btnTake)->setEnabled(false);
+
+
 	getButtonByTag(cTag_btnU)->setEnabled(false);
 	getButtonByTag(cTag_btnChiu)->setEnabled(false);
 	getButtonByTag(cTag_btnReady)->setEnabled(true);
 
-	
+	if (this->getChildByTag(201) != NULL)
+	{
+		this->removeChildByTag(201);
+	}
 }
 
 void LayerChanGame::displayResuitGame(CCObject *data){
@@ -1187,7 +1282,7 @@ void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
 	this->addChild(toast);
 
 	CCString *p = CCString::create(lc);
-	hideAllButton();
+	//hideAllButton();
 	CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::wait10s),p);
 	CCDelayTime *delay = CCDelayTime::create(6.0);
 	this->runAction(CCSequence::create(delay, callfun, NULL));
@@ -1202,6 +1297,9 @@ void LayerChanGame::wait10s(CCObject *data){
 	layerCardChan->setCardsResuilt(str);
 	getButtonByTag(cTag_btnChiu)->setEnabled(false);
 	getButtonByTag(cTag_btnU)->setEnabled(false);
+	getButtonByTag(cTag_btnTake)->setEnabled(false);
+	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+	getButtonByTag(cTag_btnEate)->setEnabled(false);
 }
 
 void LayerChanGame::notificationCallBack(bool isOK, int tag){
@@ -1272,8 +1370,11 @@ void LayerChanGame::btn_Chiu_Click(CCObject *sender, TouchEventType type){
 
 void LayerChanGame::hideAllButton(){
 	getButtonByTag(cTag_btnReady)->setEnabled(false);
-	getButtonByTag(cTag_btnEate)->setEnabled(false);
 	getButtonByTag(cTag_btnBoc)->setEnabled(false);
+
+	getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+	getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
+	getButtonByTag(cTag_btnEate)->setEnabled(false);
 	getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 	getButtonByTag(cTag_btnTake)->setEnabled(false);
 }
@@ -1288,4 +1389,25 @@ void LayerChanGame::callBackFunction_LatBai(CCNode *pSend){
 		getButtonByTag(cTag_btnEate)->setEnabled(true);
 		getButtonByTag(cTag_btnDuoi)->setEnabled(true);
 	}
+}
+
+void LayerChanGame::startTimer_Me(){
+	stopTimer_Me();
+	CCProgressTo *actionTimer = CCProgressTo::create(60, 100);
+	timer_Me->runAction(CCSequence::create(actionTimer,
+		CCCallFuncN::create(this, callfuncN_selector(LayerChanGame::callbackTimer)),
+		NULL));
+}
+void LayerChanGame::callbackTimer(CCNode *pSender){
+	stopTimer_Me();
+}
+void LayerChanGame::stopTimer_Me(){
+	if (timer_Me == NULL) {
+		return;
+	}
+
+	if (timer_Me->numberOfRunningActions() > 0) {
+		timer_Me->stopAllActions();
+	}
+	timer_Me->setPercentage(0);
 }

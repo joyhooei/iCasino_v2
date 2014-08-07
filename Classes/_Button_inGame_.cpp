@@ -37,6 +37,11 @@ bool LayerButtonInGame::init() {
 	Button *btnChat = createButtonWith_Style_Position(3, ccp(dis * 3 + widButton2 * 2, dis));
 	Button *btnCoin = createButtonWith_Style_Position(4, ccp(dis * 4 + widButton2 * 3, dis));
 
+	btnBack->setTag(101);
+	btnSetting->setTag(102);
+	btnChat->setTag(103);
+	btnCoin->setTag(104);
+
 	btnBack->addTouchEventListener(this, toucheventselector(LayerButtonInGame::eventTouchBtnBack));
 	btnSetting->addTouchEventListener(this, toucheventselector(LayerButtonInGame::eventTouchBtnSetting));
 	btnChat->addTouchEventListener(this, toucheventselector(LayerButtonInGame::eventTouchBtnChat));
@@ -165,4 +170,17 @@ void LayerButtonInGame::callbackFromChatWindow( CCNode*, void* data )
 	boost::shared_ptr<ISFSObject> parameters(new SFSObject());
 	boost::shared_ptr<IRequest> request (new PublicMessageRequest((char*)data, parameters, GameServer::getSingleton().getSmartFox()->LastJoinedRoom())); 
 	GameServer::getSingleton().getSmartFox()->Send(request);
+}
+
+Button *LayerButtonInGame::getButtonByTag(int tag){
+	if(this->getWidgetByTag(tag) != NULL){
+		return (Button*)this->getWidgetByTag(tag);
+	}
+	return NULL;
+}
+
+void LayerButtonInGame::hideButtonInChanGame(){
+	getButtonByTag(102)->setEnabled(false);
+	getButtonByTag(103)->setEnabled(false);
+	getButtonByTag(104)->setEnabled(false);
 }

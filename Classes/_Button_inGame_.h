@@ -41,6 +41,9 @@ public:
 	//Callback
 	void callbackFromChatWindow(CCNode*, void*);
 
+	Button *getButtonByTag(int tag);
+	void hideButtonInChanGame();
+
 };
 
 #endif /* defined(__iCasino_v2___Button_inGame___) */
