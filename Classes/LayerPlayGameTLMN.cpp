@@ -308,6 +308,20 @@ Button* LayerPlayGameTLMN::getButtonByTag(int tag) {
     return button;
 }
 
+bool LayerPlayGameTLMN::isSpectator() {
+	vector<string> arr = split(this->listUser, '-');
+	int size = arr.size();
+	for (int i = 0; i < size; i++){
+		vector<string> arrInfo = split(arr.at(i), '_');
+		if (arrInfo.size() < 2) continue;
+		string name = arrInfo.at(1);
+		CCLog("LayerPlayGameTLMN::isSpectator(): name= %s", name.c_str());
+		if (name == myName) return false;
+	}
+
+	return true;
+}
+
 void LayerPlayGameTLMN::actionReady(CCObject *pSender, TouchEventType pType) {
     if (pType == TOUCH_EVENT_BEGAN){
         CCLOG("clicked ready!");
@@ -565,9 +579,16 @@ void LayerPlayGameTLMN::OnSmartFoxRoomVariableUpdate(unsigned long long ptrConte
 		CCLOG("Game dang choi");
 		if (isSpector) {
 			CCLOG("Ban la khach");
-			getButtonByTag(kTagButtonSort)->setEnabled(false);
-			getButtonByTag(kTagButtonStandUp)->setEnabled(false);
-			getButtonByTag(kTagButtonSitting)->setEnabled(true);
+			if (isSpectator() == false) {
+				// la user
+				// join game
+				boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+				GameServer::getSingleton().getSmartFox()->Send(request);
+			} else {
+				getButtonByTag(kTagButtonSort)->setEnabled(false);
+				getButtonByTag(kTagButtonStandUp)->setEnabled(false);
+				getButtonByTag(kTagButtonSitting)->setEnabled(true);
+			}
 		}
 		else {
 			CCLOG("Ban la nguoi choi");
@@ -602,6 +623,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_USER_JOIN_NOTIF(){
     if (listUser != NULL) {
         CCLog("listUser= %s", listUser->c_str());
         
+		this->listUser = (string)(listUser->c_str());
         layerAvatars->setListUserByTienLen(listUser->c_str());
         
         // thông tin tiền hiện tại của Users
@@ -952,10 +974,12 @@ void LayerPlayGameTLMN::event_EXT_EVENT_GAME_CHANGE_NOTIF(){
                 
                 // chu phong
                 layerAvatars->setFlag(layerAvatars->getPosByName(name), (atoi(flag.c_str()) == 1));
-                
+                vector<int> arrID = layerCards->getIDFromString_TienLen(listID);
+				int pos = layerAvatars->getPosByAccountID(name);
+
                 // chia bai cho minh
                 if (name == myName){
-                    layerCards->actionDealCard(layerCards->getIDFromString_TienLen(listID));
+                    layerCards->actionDealCard(arrID);
                     if (tenUserToiLuot == myName) {
                         getButtonByTag(kTagButtonHit)->setEnabled(true);
                         if (atoi(isfr.c_str()) == 0) {
@@ -963,7 +987,9 @@ void LayerPlayGameTLMN::event_EXT_EVENT_GAME_CHANGE_NOTIF(){
                             getButtonByTag(kTagButtonNextTurn)->setEnabled(true);
                         }
                     }
-                }
+                } else {
+					layerCards->setCountCardByPos(pos, arrID.size());
+				}
             }
         }
         
