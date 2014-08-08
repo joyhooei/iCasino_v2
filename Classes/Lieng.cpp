@@ -99,12 +99,12 @@ void Lieng::createBackgrounds(){
 	string name = "Liêng";
 	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
 
-	result = "";
+	string result = "";
 	if (name.length() > 0 && moneyConvert.length() > 0)
 	{
 		result = name + " - cược:" + moneyConvert;
 	}
-	nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
 	nameGame->setPosition(ccp(400-5, 213+10));
 	nameGame->setColor(ccWHITE);
 	nameGame->setOpacity(150);
@@ -455,7 +455,6 @@ void Lieng::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_
 
 void Lieng::action_UpdateListUser(string lsUser)
 {
-	   boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	layerAvatars->setListUserForBaCay(lsUser);
 	layerCards->setListUser(lsUser);
 	if (checkPlaying(lsUser))
@@ -473,40 +472,6 @@ void Lieng::action_UpdateListUser(string lsUser)
 	layerBet->setVisibleAllFrameBet();
 
 	vector<string> list = mUtils::splitString(_list_user,';');
-	if(myself->IsSpectator()==true)
-	{
-		nameGame->setString("Bạn đang xem...");
-		layerAvatars->status->setString("Bạn đang xem...");
-		if(list.size()<7)
-		{
-			layerAvatars->specToPlayer();
-		}else
-		{
-			layerAvatars->btn_dungday->setEnabled(false);
-			layerAvatars->btn_vaochoi->setEnabled(false);
-			layerAvatars->btn_dungday->setTouchEnabled(false);
-			layerAvatars->btn_vaochoi->setTouchEnabled(false);
-			layerButtons->getButtonByTag(103)->setTouchEnabled(true);
-		}
-
-		specMode();   
-	}else
-	{
-		nameGame->setString(result.c_str());
-		layerAvatars->status->setString("Bạn đang xem...");
-		layerAvatars->status->setString("");
-		layerButtons->getButtonByTag(103)->setTouchEnabled(true);
-		getButtonByTag(dTag_btnReady)->setTouchEnabled(true);
-		getButtonByTag(dTag_btnUnready)->setTouchEnabled(true);
-		getButtonByTag(dTag_btnView)->setTouchEnabled(true);
-		getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
-		getButtonByTag(dTag_btnBet)->setTouchEnabled(true);
-		getButtonByTag(dTag_btnFold)->setTouchEnabled(true);
-		getButtonByTag(dTag_Complete)->setTouchEnabled(true);
-		if(list.size()>2)
-			layerAvatars->playerToSpec();
-
-	}
 	for (int i = 0; i < list.size(); i++)
 	{
 		vector<string> info = mUtils::splitString(list[i],'|');
@@ -650,8 +615,6 @@ void Lieng::whenGameStart(){
 	getButtonByTag(dTag_btnReady)->setEnabled(false);
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
 	flag_Complete_Click = false;
-	layerAvatars->btn_vaochoi->setTouchEnabled(false);
-	layerAvatars->btn_dungday->setEnabled(false);
 	layerAvatars->setUnReadyAllUser();
 }
 
@@ -659,6 +622,7 @@ void Lieng::whenGameEnd(){
     
     layerAvatars->stopAllTimer();
 	getButtonByTag(dTag_Complete)->setEnabled(true);
+
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
 	getButtonByTag(dTag_btnView)->setEnabled(false);
 	getButtonByTag(dTag_btnSqueez)->setEnabled(false);
@@ -676,21 +640,18 @@ void Lieng::whenGameEnd(){
 	_list_cards = "";
 	real = false;
 	flag_Complete_Click = true;
-	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-	if(myself->IsSpectator()==true)
-	this->runAction(CCSequence::create(CCDelayTime::create(5),CCCallFunc::create(this, callfunc_selector(Lieng::deleteResuiltGame)),NULL));
+	//this->runAction(CCSequence::create(CCDelayTime::create(15),CCCallFunc::create(this, callfunc_selector(Lieng::deleteResuiltGame)),NULL));
 }
 
 void Lieng::deleteResuiltGame(){
-	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-	if (myself->IsSpectator()!=true)
+	//if (flag_Complete_Click == false && checkPlaying(_list_user) == false)
 	{
+		getButtonByTag(dTag_Complete)->setEnabled(false);
 		getButtonByTag(dTag_btnReady)->setEnabled(true);
-	}
-	getButtonByTag(dTag_Complete)->setEnabled(false);
+
 		layerCards->resetGame();
 		layerBet->getLayerResuilt()->removeAllChildrenWithCleanup(true);
-	
+	}
 }
 
 void Lieng::whenResuiltGame(string rg){
@@ -851,13 +812,9 @@ void Lieng::callBackFuntion_Endgive(CCNode *pSend)
 {
 	flagChiaBai = true;
 	action_To(currentTo, currentBetal);
+
 	getButtonByTag(dTag_btnSqueez)->setEnabled(true);
 	getButtonByTag(dTag_btnView)->setEnabled(true);
-	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-	if(myself->IsSpectator()==true)
-	{
-		specMode();
-	}
 }
 
 void Lieng::btn_To_click(CCObject *sender, TouchEventType type){
@@ -913,30 +870,4 @@ void Lieng::btn_Complete_click(CCObject *sender, TouchEventType type){
 	{
 		deleteResuiltGame();
 	}
-}
-void Lieng::specMode()
-{
-	CCLog("spec mode");
-
-	layerButtons->getButtonByTag(103)->setTouchEnabled(false);
-	getButtonByTag(dTag_btnReady)->setEnabled(false);
-	getButtonByTag(dTag_btnUnready)->setEnabled(false);
-
-	getButtonByTag(dTag_btnView)->setEnabled(false);
-	getButtonByTag(dTag_btnSqueez)->setEnabled(false);
-	getButtonByTag(dTag_btnBet)->setEnabled(false);
-	getButtonByTag(dTag_Complete)->setEnabled(false);
-	getButtonByTag(dTag_btnFold)->setEnabled(false);
-	getButtonByTag(dTag_btnFollow)->setEnabled(false);
-
-	getButtonByTag(dTag_btnReady)->setTouchEnabled(false);
-	getButtonByTag(dTag_btnUnready)->setTouchEnabled(false);
-
-	getButtonByTag(dTag_btnView)->setTouchEnabled(false);
-	getButtonByTag(dTag_btnSqueez)->setTouchEnabled(false);
-	getButtonByTag(dTag_btnBet)->setTouchEnabled(false);
-	getButtonByTag(dTag_btnFold)->setTouchEnabled(false);
-	getButtonByTag(dTag_Complete)->setTouchEnabled(false);
-	getButtonByTag(dTag_btnFollow)->setTouchEnabled(false);
-
 }

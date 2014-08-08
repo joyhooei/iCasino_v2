@@ -98,11 +98,10 @@ public:
 	void whenUserBet(string uid, long gameBet);
 
 	void deleteResuiltGame();
-	void specMode();
+
 	Button* createButtonWithTitle_Pos(const char *pName, CCPoint pPoint);
 	Button* getButtonByTag(int pTag);
-	CCLabelTTF *nameGame;
-	string result;
+
 	//Các sự kiện Button trong game
 	void btn_ready_click(CCObject *sender, TouchEventType type);
 	void btn_Unready_click(CCObject *sender, TouchEventType type);

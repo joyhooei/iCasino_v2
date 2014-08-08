@@ -462,7 +462,6 @@ void BaCayChuong::eventListUser(string listusers)
 				layerAvatars->btn_vaochoi->setEnabled(false);
 				layerAvatars->btn_dungday->setTouchEnabled(false);
 				layerAvatars->btn_vaochoi->setTouchEnabled(false);
-				layerButtons->getButtonByTag(103)->setTouchEnabled(true);
 				}
 			
         specMode();   
