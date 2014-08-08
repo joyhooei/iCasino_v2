@@ -574,11 +574,18 @@ void LayerPlayGameTLMN::OnSmartFoxRoomVariableUpdate(unsigned long long ptrConte
 	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
 
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+	isSpector = isSpectator();
+
+	if (!isStartedGame && isSpector) {
+		isStartedGame = true;
+		return;
+	}
 
 	if (isStartedGame) {
 		CCLOG("Game dang choi");
 		if (isSpector) {
 			CCLOG("Ban la khach");
+			getButtonByTag(kTagButtonReady)->setEnabled(false);
 			if (isSpectator() == false) {
 				// la user
 				// join game
@@ -677,7 +684,9 @@ void LayerPlayGameTLMN::event_EXT_EVENT_LIST_USER_UPDATE(){
 	if (listUser == NULL) return;
 	layerChats->showChatByPos(-1, "Cập nhật người chơi");
     CCLog("event_EXT_EVENT_LIST_USER_UPDATE %s", listUser->c_str());
+	this->listUser = (string)(listUser->c_str());
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+	isSpector = isSpectator();
 }
 
 void LayerPlayGameTLMN::event_EXT_EVENT_START_GAME_NOTIF(){

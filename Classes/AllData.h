@@ -54,6 +54,7 @@ enum{
     kTagButtonNextTurn,
 	kTagButtonSitting,
 	kTagButtonStandUp,
+	kTagButtonBack,
 	// CoTuong
 	kXeXanh,
 	kMaXanh,

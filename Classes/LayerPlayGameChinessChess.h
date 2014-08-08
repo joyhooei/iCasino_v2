@@ -19,10 +19,15 @@
 #include "LogicInChess.h"
 #include "NotificationCallback.h"
 #include "ImageDownloader.h"
+#include "PopupLayer.h"
+
+#include "Requests/SpectatorToPlayerRequest.h"
+#include "Requests/PlayerToSpectatorRequest.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
+
 
 class LayerPlayGameChinessChess 
 	: public cocos2d::CCLayer
@@ -161,6 +166,7 @@ private:
 	bool isIamTheFirst;
 	bool isRedChess;  // ktra xem minh la quan do hay quan den
 	bool isRegistSitdown;
+	bool isRegistStandUp;
 
 	string myName;
 	string nameCurrentTurn;
@@ -180,6 +186,10 @@ private:
 	ImageDownloader* imagedownloader4Red;
 	ImageDownloader* imagedownloader4Black;
 
+	PopupLayer *popup;
+	UILayer *menuLayer;
+	CCSprite *menuBgr;
+
 public:
 	LayerPlayGameChinessChess();
 	virtual ~LayerPlayGameChinessChess();
@@ -191,9 +201,18 @@ public:
 	CCPoint getPositionFromIndex(int id);
 	int getIndexFromPosition(CCPoint pos);
 	void setPointVisiable(int id, bool isShow);
+	void actionMenu();
+	void hideMenu();
+	void showMenu();
+	void showChat(string mes);
+	Button* createButtonWithTitle_Position(const char *title, CCPoint pPoint);
+
 	//Callback
 	void callbackFromChatWindow(CCNode*, void*);
 	void notificationCallBack(bool, int tag); 
+	void actionBack(CCObject *pSender, TouchEventType pType);
+	void actionSit(CCObject *pSender, TouchEventType pType);
+	void actionStand(CCObject *pSender, TouchEventType pType);
 
 	CREATE_FUNC(LayerPlayGameChinessChess);
 
@@ -219,6 +238,7 @@ public:
 	virtual void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
+	virtual void OnSmartFoxRoomVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
 	void event_EXT_EVENT_START();             // = “s”();
 	void event_EXT_EVENT_NEXT_TURN();         // = "nt"();
