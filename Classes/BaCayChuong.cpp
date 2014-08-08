@@ -452,8 +452,7 @@ void BaCayChuong::eventListUser(string listusers)
     if(myself->IsSpectator()==true)
     {
 		nameGame->setString("Bạn đang xem...");
-		Chat *toast = new Chat("Bạn đang xem...",-1);
-		this->addChild(toast);
+		//tát
         if(list.size()<7)
         {
             layerAvatars->specToPlayer();
