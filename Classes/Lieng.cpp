@@ -476,7 +476,7 @@ void Lieng::action_UpdateListUser(string lsUser)
 	if(myself->IsSpectator()==true)
 	{
 		nameGame->setString("Bạn đang xem...");
-		layerAvatars->status->setString("Bạn đang xem...");
+		
 		if(list.size()<7)
 		{
 			layerAvatars->specToPlayer();
@@ -493,8 +493,6 @@ void Lieng::action_UpdateListUser(string lsUser)
 	}else
 	{
 		nameGame->setString(result.c_str());
-		layerAvatars->status->setString("Bạn đang xem...");
-		layerAvatars->status->setString("");
 		layerButtons->getButtonByTag(103)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnReady)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnUnready)->setTouchEnabled(true);

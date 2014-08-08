@@ -83,12 +83,12 @@ void BaCayNormal::createBackgrounds(){
 	string name = "Ba Cây Thường";
 	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
 
-	string result = "";
+	result = "";
 	if (name.length() > 0 && moneyConvert.length() > 0)
 	{
 		result = name + " - cược:" + moneyConvert;
 	}
-	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	nameGame= CCLabelTTF::create(result.c_str(), "", 16);
 	nameGame->setPosition(ccp(400-5, 213+10));
 	nameGame->setColor(ccWHITE);
 	nameGame->setOpacity(150);
@@ -409,6 +409,7 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	if(myself->IsSpectator()==true)
 	{
+		nameGame->setString("Bạn đang xem...");
 		specMode();  
 		getButtonByTag(dTag_btnReady)->setVisible(false);
 		if(arrUser.size()<7)
@@ -426,6 +427,7 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 		 
 	}else
 	{
+		nameGame->setString(result.c_str());
 		getButtonByTag(dTag_btnReady)->setVisible(true);
 		getButtonByTag(dTag_btnReady)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnUnready)->setTouchEnabled(true);

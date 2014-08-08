@@ -95,14 +95,14 @@ void BaCayChuong::createBackgrounds(){
 	string name = "Ba Cây Chương";
 	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
 
-	string result = "";
+	result = "";
 	if (name.length() > 0 && moneyConvert.length() > 0)
 	{
 		result = name + " - cược:" + moneyConvert;
 	}
 	
 
-	CCLabelTTF *nameGame= CCLabelTTF::create(result.c_str(), "", 16);
+	nameGame= CCLabelTTF::create(result.c_str(), "", 16);
 	nameGame->setPosition(ccp(400-5, 213+10));
 	nameGame->setColor(ccWHITE);
 	nameGame->setOpacity(150);
@@ -451,6 +451,7 @@ void BaCayChuong::eventListUser(string listusers)
 	vector<string> list = mUtils::splitString(listusers,';');
     if(myself->IsSpectator()==true)
     {
+		nameGame->setString("Bạn đang xem...");
 		Chat *toast = new Chat("Bạn đang xem...",-1);
 		this->addChild(toast);
         if(list.size()<7)
@@ -468,6 +469,7 @@ void BaCayChuong::eventListUser(string listusers)
         specMode();   
     }else
 		{
+			nameGame->setString(result.c_str());
 			layerButtons->getButtonByTag(103)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnReady)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnUnready)->setTouchEnabled(true);
