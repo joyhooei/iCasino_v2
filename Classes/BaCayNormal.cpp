@@ -410,11 +410,13 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 	if(myself->IsSpectator()==true)
 	{
 		specMode();  
+		getButtonByTag(dTag_btnReady)->setVisible(false);
 		if(arrUser.size()<7)
 		{
 			layerAvatars->specToPlayer();
 		}else
 		{
+			
 			layerAvatars->btn_dungday->setEnabled(false);
 			layerAvatars->btn_vaochoi->setEnabled(false);
 			layerAvatars->btn_dungday->setTouchEnabled(false);
@@ -424,11 +426,13 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 		 
 	}else
 	{
+		getButtonByTag(dTag_btnReady)->setVisible(true);
 		getButtonByTag(dTag_btnReady)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnUnready)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnTurnAll)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnView)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
+		layerbutton->getButtonByTag(103)->setTouchEnabled(true);
 		if(arrUser.size()>2)
 			layerAvatars->playerToSpec();
 
@@ -543,7 +547,8 @@ void BaCayNormal::whenGameStart(){
 	layerAvatars->setUnReadyAllUser();
 	getButtonByTag(dTag_btnReady)->setEnabled(false);
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
-
+	layerAvatars->btn_vaochoi->setTouchEnabled(false);
+	layerAvatars->btn_dungday->setEnabled(false);
 	if(!flagChiaBai){
 		layerCards->givePocker();
         
@@ -552,7 +557,7 @@ void BaCayNormal::whenGameStart(){
 
 void BaCayNormal::whenResuiltGame(string rg){
 	//dautv3|4|8|3|1000;dautv|1|1|2|-1000
-
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	if (this->getChildByTag(123) != NULL)
 	{
 		this->removeChildByTag(123);
@@ -604,9 +609,14 @@ void BaCayNormal::whenResuiltGame(string rg){
                 case kuser6:
                     layerBet->setResuit4AllUser(kuser6, "1", strResuilt);
                     layerNumbers->showNumberByPos(kuser6, mon);
-                    
                     break;
-
+				case kuser0:
+					if(myself->IsSpectator())
+					{
+						layerNumbers->showNumberByPos(kuser0, mon);
+						layerBet->setResuit4AllUser(kuser0, "1", strResuilt);
+					}
+					break;
 			default:
 				break;
 			}
@@ -651,6 +661,11 @@ void BaCayNormal::LatBai(string listCard,string uid, bool tua){
 
 void BaCayNormal::callBackFuntion_Endgive(CCNode *pSend)
 {
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	if(myself->IsSpectator()==true)
+	{
+		specMode();
+	}
 	flagChiaBai =  true;
 	getButtonByTag(dTag_btnSqueez)->setEnabled(true);
 	getButtonByTag(dTag_btnView)->setEnabled(true);
@@ -666,7 +681,7 @@ void BaCayNormal::specMode()
 {
 	CCLog("spec mode");
 
-
+	layerbutton->getButtonByTag(103)->setTouchEnabled(false);
 	getButtonByTag(dTag_btnReady)->setEnabled(false);
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
 	getButtonByTag(dTag_btnTurnAll)->setEnabled(false);

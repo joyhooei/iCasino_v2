@@ -521,6 +521,7 @@ void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
 void LayerBaCayAvatar::playerToSpec()
 {
     CCLog("Dang xem...");
+
 	btn_vaochoi->setTouchEnabled(false);
 	btn_vaochoi->setEnabled(false);
 	btn_dungday->setTouchEnabled(true);
@@ -530,7 +531,7 @@ void LayerBaCayAvatar::playerToSpec()
 }
 void LayerBaCayAvatar::specToPlayer()
 {
-    CCLog("is Player");
+    CCLog("đang trống ");
     btn_vaochoi->setTouchEnabled(true);
     btn_vaochoi->setEnabled(true);
 	btn_dungday->setTouchEnabled(false);

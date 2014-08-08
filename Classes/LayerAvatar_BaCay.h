@@ -51,7 +51,6 @@ public:
 	//
 
 	void updateUsers();
-
 	void runTimer(int posUser);
 	void stopAllTimer();
     void vaoBanChoi(CCObject* obj, TouchEventType type);
