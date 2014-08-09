@@ -63,7 +63,11 @@ public:
     // Time
     void runTimer(int posUser);
     void stopAllTimer();
-    
+
+	// dựa vào listUser và myAI, xác định xem mình là khách hay là người chơi
+	bool isSpectator();
+	bool isStartedGame();
+
 private:
 	enum NAME_GAME {
 		PHOM = 1,
@@ -76,7 +80,10 @@ private:
 	string myName;
 	string myAI;
     string listUser;
-    
+    char char1; 
+	char char2;
+	// thanhhv1:10000;thanhhv2:20000;   ==> char1=';'    char2=':'
+
     // mảng chứa
     vector<string> arrName;
     vector<string> arrFlag;

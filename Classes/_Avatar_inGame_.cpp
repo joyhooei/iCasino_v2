@@ -188,6 +188,8 @@ void LayerAvatarInGame::setListUserByTienLen(string listUser) {
 }
 
 void LayerAvatarInGame::formatAndStore(const char &c1, const char &c2) {
+	char1 = c1;
+	char2 = c2;
     vector<string> arrUsers = getArrSplit(this->listUser, c1);
 
     // release arr
@@ -564,6 +566,19 @@ void LayerAvatarInGame::stopAllTimer() {
 }
 
 
+bool LayerAvatarInGame::isSpectator() {
+	vector<string> arr = getArrSplit(this->listUser, char1);
+	int size = arr.size();
+	for (int i = 0; i < size; i++){
+		vector<string> arrInfo = getArrSplit(arr.at(i), char2);
+		if (arrInfo.size() < 2) continue;
+		string ai = arrInfo.at(1);
+		if (ai == myAI) return false;
+	}
+
+	return true;
+}
+
 void LayerAvatarInGame::setPosChuong(int pos){
 	bool meIsBoss = false;
     switch (pos) {
@@ -616,4 +631,20 @@ void LayerAvatarInGame::resetAll(){
 	this->getUserByPos(kUserLeft)->setVisibleLayerInvite(true);
 	this->getUserByPos(kUserRight)->setVisibleLayerInvite(true);
 	this->getUserByPos(kUserTop)->setVisibleLayerInvite(true);
+}
+
+bool LayerAvatarInGame::isStartedGame()
+{
+	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
+	string s = *rv->GetStringValue();
+
+	vector<string> lstBet = getArrSplit( s, '@' );
+	bool isStartedGame=false;
+	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
+	if (isStartedGame) {
+		CCLog("Ban dang choi!");
+	} else CCLog("Ban chua choi!");
+
+	return isStartedGame;
 }

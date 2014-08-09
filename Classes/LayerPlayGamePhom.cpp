@@ -45,6 +45,7 @@ enum EXT_RESPONSE {
 	EXT_EVENT_RES_PUSH_CARD,
     //
     EXT_EVENT_REQ_JOIN_GAME,
+	EXT_EVENT_REQ_LEAVE_GAME,
     EXT_EVENT_REQ_ORDER_CARDS,
     EXT_EVENT_REQ_DRAW_CARD,
     EXT_EVENT_REQ_DISCARD,
@@ -95,6 +96,7 @@ int LayerPlayGamePhom::convertResponseToInt(string inString) {
 	if (inString == "rspusc") return EXT_EVENT_RES_PUSH_CARD;
     //
     if (inString == "rqjg") return EXT_EVENT_REQ_JOIN_GAME;
+	if (inString == "rqlg") return EXT_EVENT_REQ_LEAVE_GAME;
     if (inString == "rodrc") return EXT_EVENT_REQ_ORDER_CARDS;
     if (inString == "rqdrwc") return EXT_EVENT_REQ_DRAW_CARD;
     if (inString == "rqhofc") return EXT_EVENT_REQ_DISCARD;
@@ -139,6 +141,7 @@ string LayerPlayGamePhom::convertResponseToString(int inInt) {
 	if (inInt == EXT_EVENT_RES_PUSH_CARD) return "rspusc";
     //
     if (inInt == EXT_EVENT_REQ_JOIN_GAME) return  "rqjg";
+	if (inInt == EXT_EVENT_REQ_LEAVE_GAME) return "rqlg";
     if (inInt == EXT_EVENT_REQ_ORDER_CARDS) return "rodrc";
     if (inInt == EXT_EVENT_REQ_DRAW_CARD) return "rqdrwc";
     if (inInt == EXT_EVENT_REQ_DISCARD) return "rqhofc";
@@ -259,18 +262,26 @@ void LayerPlayGamePhom::createButtons() {
     int heiButton = 44;
     int space = 10;
     
-    // Chia bài
-    Button *btnReady = createButtonWithTitle_Position("Sẵn sàng", ccp(WIDTH_DESIGN - space, space));
-    Button *btnSortCard = createButtonWithTitle_Position("Xếp", ccp(WIDTH_DESIGN - space, space));
-    Button *btnHitCard = createButtonWithTitle_Position("Đánh", ccp(WIDTH_DESIGN - space * 2 - widButton, space));
-    Button *btnGiveCard = createButtonWithTitle_Position("Bốc", ccp(WIDTH_DESIGN - space, space * 2 + heiButton));
-    Button *btnEatCard = createButtonWithTitle_Position("Ăn", ccp(WIDTH_DESIGN - space * 3 - widButton * 2, space));
-    Button *btnPush = createButtonWithTitle_Position("Gửi", ccp(WIDTH_DESIGN - space * 3 - widButton * 2, space));
-    Button *btnHaPhom = createButtonWithTitle_Position("Hạ", ccp(WIDTH_DESIGN - space , space * 2 + heiButton));
-    Button *btnUUU = createButtonWithTitle_Position("Ù", ccp(WIDTH_DESIGN - space * 4 - widButton * 3, space));
-    
-	Button *btnSitting = createButtonWithTitle_Position("Ngồi chơi", btnReady->getPosition());
-	//Button *btnStandUp = createButtonWithTitle_Position("Đứng xem", ccp(WIDTH_DESIGN - space, HEIGHT_DESIGN - space - heiButton));
+	createButtonWith_Tag_Title_Position(kTagButtonReady, "Sẵn sàng", ccp(WIDTH_DESIGN - space, space));
+	createButtonWith_Tag_Title_Position(kTagButtonSort, "Xếp", ccp(WIDTH_DESIGN - space, space));
+	createButtonWith_Tag_Title_Position(kTagButtonHit, "Đánh", ccp(WIDTH_DESIGN - space * 2 - widButton, space));
+	createButtonWith_Tag_Title_Position(kTagButtonGive, "Bốc", ccp(WIDTH_DESIGN - space, space * 2 + heiButton));
+	createButtonWith_Tag_Title_Position(kTagButtonEat, "Ăn", ccp(WIDTH_DESIGN - space * 3 - widButton * 2, space));
+	createButtonWith_Tag_Title_Position(kTagButtonPush, "Gửi", ccp(WIDTH_DESIGN - space * 3 - widButton * 2, space));
+	createButtonWith_Tag_Title_Position(kTagButtonHaPhom, "Hạ", ccp(WIDTH_DESIGN - space , space * 2 + heiButton));
+	createButtonWith_Tag_Title_Position(kTagButtonU, "Ù", ccp(WIDTH_DESIGN - space * 4 - widButton * 3, space));
+	createButtonWith_Tag_Title_Position(kTagButtonSitting, "Ngồi chơi", getButtonByTag(kTagButtonReady)->getPosition());
+	//
+	getButtonByTag(kTagButtonReady)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionReady));
+	getButtonByTag(kTagButtonSort)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionSortCards));
+	getButtonByTag(kTagButtonHit)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionHitCards));
+	getButtonByTag(kTagButtonGive)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionGiveCards));
+	getButtonByTag(kTagButtonEat)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionEatCards));
+	getButtonByTag(kTagButtonHaPhom)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionHaPhom));
+	getButtonByTag(kTagButtonPush)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionPush));
+	getButtonByTag(kTagButtonU)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionUUU));
+	getButtonByTag(kTagButtonSitting)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionSitting));
+
 	Button *btnStandUp = Button::create();
 	btnStandUp->setTouchEnabled(true);
 	btnStandUp->setScale9Enabled(false);
@@ -278,51 +289,12 @@ void LayerPlayGamePhom::createButtons() {
 	btnStandUp->setAnchorPoint(ccp(1, 0));
 	btnStandUp->setPosition(ccp(WIDTH_DESIGN - space, HEIGHT_DESIGN - space - heiButton));
 	btnStandUp->setScale(0.5);
-
-    btnReady->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionReady));
-    btnSortCard->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionSortCards));
-    btnHitCard->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionHitCards));
-    btnGiveCard->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionGiveCards));
-    btnEatCard->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionEatCards));
-    btnHaPhom->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionHaPhom));
-    btnPush->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionPush));
-    btnUUU->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionUUU));
-	btnSitting->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionSitting));
-	btnStandUp->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionStandUp));
-
-
-    btnReady->setTag(kTagButtonReady);
-    btnSortCard->setTag(kTagButtonSort);
-    btnHitCard->setTag(kTagButtonHit);
-    btnGiveCard->setTag(kTagButtonGive);
-    btnEatCard->setTag(kTagButtonEat);
-    btnHaPhom->setTag(kTagButtonHaPhom);
-    btnPush->setTag(kTagButtonPush);
-    btnUUU->setTag(kTagButtonU);
-	btnSitting->setTag(kTagButtonSitting);
 	btnStandUp->setTag(kTagButtonStandUp);
-    
-	btnReady->setEnabled(false);
-    btnSortCard->setEnabled(false);
-    btnHitCard->setEnabled(false);
-    btnGiveCard->setEnabled(false);
-    btnEatCard->setEnabled(false);
-    btnHaPhom->setEnabled(false);
-    btnPush->setEnabled(false);
-    btnUUU->setEnabled(false);
-	btnSitting->setEnabled(false);
 	btnStandUp->setEnabled(false);
-    
-    layerButtons->addWidget(btnSortCard);
-    layerButtons->addWidget(btnHitCard);
-    layerButtons->addWidget(btnGiveCard);
-    layerButtons->addWidget(btnEatCard);
-    layerButtons->addWidget(btnHaPhom);
-    layerButtons->addWidget(btnPush);
-    layerButtons->addWidget(btnUUU);
-    layerButtons->addWidget(btnReady);
-	layerButtons->addWidget(btnSitting);
+	btnStandUp->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionStandUp));
 	layerButtons->addWidget(btnStandUp);
+	//
+
 }
 
 void LayerPlayGamePhom::createNumbers() {
@@ -378,16 +350,14 @@ void LayerPlayGamePhom::playSound( string soundPath )
 void LayerPlayGamePhom::createButton_PushMulti_By_CardId(int cardid) {
 	Card *card = layerCards->getCardByID(cardid);
 	if (card==NULL) return;
-	Button *button = createButtonWithTitle_Position("Gửi", ccp(card->getPositionX()+60, card->getPositionY()+30));
-	button->setAnchorPoint(ccp(0.5, 0.5));
-	button->setScale(0.5);
-	button->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionPushMulti));
-
-	layerButtons->addWidget(button);
-	arrButtonCanPush.push_back(button);
+	createButtonWith_Tag_Title_Position(kTagButtonPushMulti, "Gửi", ccp(card->getPositionX()+60, card->getPositionY()+30));
+	getButtonByTag(kTagButtonPushMulti)->setAnchorPoint(ccp(0.5, 0.5));
+	getButtonByTag(kTagButtonPushMulti)->setScale(0.5);
+	getButtonByTag(kTagButtonPushMulti)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionPushMulti));
+	arrButtonCanPush.push_back(getButtonByTag(kTagButtonPushMulti));
 }
 
-Button* LayerPlayGamePhom::createButtonWithTitle_Position(const char *title, CCPoint pPoint) {
+void LayerPlayGamePhom::createButtonWith_Tag_Title_Position(int tag, const char *title, CCPoint pPoint) {
     // Create the button
     Button* button = Button::create();
     button->setTouchEnabled(true);
@@ -397,15 +367,28 @@ Button* LayerPlayGamePhom::createButtonWithTitle_Position(const char *title, CCP
     button->setTitleColor(ccBLACK);
     button->setTitleFontSize(button->getContentSize().height / 2);
     button->setAnchorPoint(ccp(1, 0));
-    
     button->setPosition(pPoint);
-    
-    return button;
+	button->setTag(tag);
+	button->setEnabled(false);
+    layerButtons->addWidget(button);
 }
 
 Button* LayerPlayGamePhom::getButtonByTag(int tag) {
     Button *button = (Button*) this->layerButtons->getWidgetByTag(tag);
     return button;
+}
+
+void LayerPlayGamePhom::hideAllButton() {
+	getButtonByTag(kTagButtonReady)->setEnabled(false);
+	getButtonByTag(kTagButtonSort)->setEnabled(false);
+	getButtonByTag(kTagButtonHit)->setEnabled(false);
+	getButtonByTag(kTagButtonGive)->setEnabled(false);
+	getButtonByTag(kTagButtonEat)->setEnabled(false);
+	getButtonByTag(kTagButtonHaPhom)->setEnabled(false);
+	getButtonByTag(kTagButtonPush)->setEnabled(false);
+	getButtonByTag(kTagButtonU)->setEnabled(false);
+	getButtonByTag(kTagButtonSitting)->setEnabled(false);
+	getButtonByTag(kTagButtonStandUp)->setEnabled(false);
 }
 
 void LayerPlayGamePhom::actionReady(CCObject *pSender, TouchEventType pType) {
@@ -629,6 +612,8 @@ void LayerPlayGamePhom::actionSitting(CCObject *pSender, TouchEventType pType) {
 				boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
 				GameServer::getSingleton().getSmartFox()->Send(request);
 				isRegistSittingDown = false;
+
+				sendRequestJoinGame();
 			}
 		}
 
@@ -642,6 +627,8 @@ void LayerPlayGamePhom::actionStandUp(CCObject *pSender, TouchEventType pType) {
 		Button *btn = ((Button*) pSender);
 		btn->setEnabled(false);
 
+
+		isSpector = layerAvatars->isSpectator();
 		if (!isSpector) {
 			if (isStartedGame) {
 				if (!isRegistStandUp){
@@ -654,7 +641,8 @@ void LayerPlayGamePhom::actionStandUp(CCObject *pSender, TouchEventType pType) {
 				boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
 				GameServer::getSingleton().getSmartFox()->Send(request);
 				isRegistStandUp = false;
-				CCLog("-------actionStandUp: isRegistStandUp = false");
+				
+				sendRequestLeaveGame();
 			}
 		}
 
@@ -864,12 +852,23 @@ void LayerPlayGamePhom::OnSmartFoxUserVariableUpdate(unsigned long long ptrConte
 }
 
 void LayerPlayGamePhom::sendRequestJoinGame(float dt) {
-    // join game
-    boost::shared_ptr<ISFSObject> params (new SFSObject());
-    boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-    boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_JOIN_GAME), params, lastRoom));
-    
-    GameServer::getSingleton().getSmartFox()->Send(request);
+    sendRequestJoinGame();
+}
+
+void LayerPlayGamePhom::sendRequestJoinGame() {
+	// join game
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_JOIN_GAME), params, lastRoom));
+	GameServer::getSingleton().getSmartFox()->Send(request);
+}
+
+void LayerPlayGamePhom::sendRequestLeaveGame() {
+	// leave game
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_LEAVE_GAME), params, lastRoom));
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 vector<string> LayerPlayGamePhom::split(string &S, const char &str) {
@@ -927,35 +926,15 @@ void LayerPlayGamePhom::event_EXT_EVENT_READY_RES() {
 
 void LayerPlayGamePhom::event_EXT_SRVNTF_PLAYER_LIST() {
     boost::shared_ptr<string> list = param->GetUtfString("lu");
-	CCLog("myName= %s", myName.c_str());
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
 
     CCLog("EXT_SRVNTF_PLAYER_LIST = %s", list->c_str());
     
 	if (list != NULL)
 	{
-		if (isSpector) {
-			CCLOG("Ban la khach");
-			getButtonByTag(kTagButtonSort)->setEnabled(false);
-			getButtonByTag(kTagButtonStandUp)->setEnabled(false);
-			getButtonByTag(kTagButtonSitting)->setEnabled(true);
-
-			layerCards->resetGame();
-		}
-		else {
-			CCLOG("Ban la nguoi choi");
-			getButtonByTag(kTagButtonStandUp)->setEnabled(true);
-			getButtonByTag(kTagButtonSitting)->setEnabled(false);
-			getButtonByTag(kTagButtonSort)->setEnabled(isStartedGame);
-			getButtonByTag(kTagButtonReady)->setEnabled(!isStartedGame);
-		}
-
-		layerChats->showChatByPos(-1, "Cập nhật người chơi");
+		layerCards->resetGame();
 		playSound("ring_ring.mp3");
 		layerAvatars->setListUserByPhom(list->c_str());
-		//layerCards->resetGame();
-		//this->resetGame();
-		//this->initGame();
 
 		if (levelGame == 0) {
 			// ban dau thi hien luon
@@ -970,6 +949,26 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_PLAYER_LIST() {
 			arrName.clear();
 			arrMoney.clear();
 			arrMoneyDouble.clear();
+		}
+
+		// Check: Vào lại bàn đang chơi dở (isStartedGame=true, isSpector=false)
+		isStartedGame = layerAvatars->isStartedGame();
+		isSpector = layerAvatars->isSpectator();
+		if (isStartedGame && !isSpector) {
+			layerChats->showChatByPos(-1, "Xây dựng lại bàn chơi");
+			getButtonByTag(kTagButtonSitting)->setEnabled(false);
+			getButtonByTag(kTagButtonStandUp)->setEnabled(true);
+			getButtonByTag(kTagButtonSort)->setEnabled(true);
+		} else {
+			layerChats->showChatByPos(-1, "Cập nhật lại bàn chơi");
+			if (!isSpector) {
+				getButtonByTag(kTagButtonReady)->setEnabled(true);
+				getButtonByTag(kTagButtonStandUp)->setEnabled(true);
+				getButtonByTag(kTagButtonSitting)->setEnabled(false);
+			} else {
+				getButtonByTag(kTagButtonSitting)->setEnabled(true);
+				sendRequestLeaveGame();
+			}
 		}
 	}
     
@@ -1021,35 +1020,67 @@ void LayerPlayGamePhom::event_EXT_EVENT_END() {
     getButtonByTag(kTagButtonPush)->setEnabled(false);
     getButtonByTag(kTagButtonU)->setEnabled(false);
     
+	layerAvatars->stopAllTimer();
 
-	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
-	if (isSpector) {
-		CCLog("Ban dang l khach");
+	isSpector = layerAvatars->isSpectator();
+	isStartedGame = layerAvatars->isStartedGame();
+
+	if (!isSpector) {
+		getButtonByTag(kTagButtonStandUp)->setEnabled(true);
+		getButtonByTag(kTagButtonReady)->setTitleText("Sẵn sàng");
+		getButtonByTag(kTagButtonReady)->setEnabled(true);
+	} else {
+		getButtonByTag(kTagButtonStandUp)->setEnabled(false);
+		getButtonByTag(kTagButtonReady)->setEnabled(false);
+	}
+
+	if (isStartedGame) {
+		CCLOG("Game dang choi");
+		if (isSpector) {
+			CCLOG("Ban la khach");
+			getButtonByTag(kTagButtonSort)->setEnabled(false);
+			getButtonByTag(kTagButtonStandUp)->setEnabled(false);
+			getButtonByTag(kTagButtonSitting)->setEnabled(true);
+		}
+		else {
+			CCLOG("Ban la nguoi choi");
+			getButtonByTag(kTagButtonStandUp)->setEnabled(true);
+			getButtonByTag(kTagButtonSort)->setEnabled(true);
+			getButtonByTag(kTagButtonSitting)->setEnabled(false);
+			getButtonByTag(kTagButtonReady)->setEnabled(false);
+		}
 	}
 	else {
-		CCLog("Ban la user");
-		isRegistStandUp ? CCLog("true") : CCLog("false");
-	}
-	
-	// Game đang ko diễn ra, có thể gửi đi thông báo đứng xem
-	if (!isSpector && isRegistStandUp) {
-		CCLog("Gui di thong bao muon dung xem");
-		boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
-		GameServer::getSingleton().getSmartFox()->Send(request);
-		isRegistStandUp = false;
-		CCLog("-------end_game: isRegistStandUp = false");
-	}
-	
-	/*// có thể gửi đi thông báo muốn ngồi vào bàn chơi
-	if (isSpector && isRegistSittingDown) {
-		CCLog("Gui di thong bao muon ngoi choi");
-		boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
-		GameServer::getSingleton().getSmartFox()->Send(request);
-		isRegistSittingDown = false;
-	}*/
-    
-    layerAvatars->stopAllTimer();
+		CCLOG("Game chua bat dau");
+		// Game đang ko diễn ra, có thể gửi đi thông báo đứng xem
+		if (!isSpector && isRegistStandUp) {
+			boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			isRegistStandUp = false;
+			CCLog("-------Room..: Gửi đi thông báo muốn đứng xem!");
 
+			// leave game
+			boost::shared_ptr<ISFSObject> params (new SFSObject());
+			boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+			boost::shared_ptr<IRequest> request2 (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_LEAVE_GAME), params, lastRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request2);
+		}
+
+		// có thể gửi đi thông báo muốn ngồi vào bàn chơi
+		if (isSpector && isRegistSittingDown) {
+			boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			isRegistSittingDown = false;
+			CCLog("-------Room..: Gửi đi thông báo muốn ngồi!");
+
+			// join game
+			boost::shared_ptr<ISFSObject> params (new SFSObject());
+			boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+			boost::shared_ptr<IRequest> request2 (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_JOIN_GAME), params, lastRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request2);
+		}
+	}
+    
 }
 
 void LayerPlayGamePhom::event_EXT_EVENT_GAME_RESULT() {
@@ -1062,6 +1093,9 @@ void LayerPlayGamePhom::event_EXT_EVENT_GAME_RESULT() {
         return;
     }
     
+	hideAllButton();
+	layerAvatars->stopAllTimer();
+
     string rg = resultGame->c_str();
     
     // tam thoi chi hien thi diem ở ô tiền
@@ -1473,16 +1507,17 @@ void LayerPlayGamePhom::OnSmartFoxRoomVariableUpdate(unsigned long long ptrConte
 	CCLOG("Room %s update RoomVariables: %s", room->Name()->c_str(), s.c_str());
 
 
-	/*
-	boost::shared_ptr<RoomVariable> rv = rooms->at(idx)->GetVariable("params");
-	vector<string> lstBet = mUtils::splitString( *rv->GetStringValue(), '@' );
-	lstBet.at(1).compare("1")==0?"Đang chơi":"Chưa chơi"
-	*/
-
 	vector<string> lstBet = mUtils::splitString( s, '@' );
 	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
 
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+	isSpector = layerAvatars->isSpectator();
+	/*if (!isSpector) {
+		getButtonByTag(kTagButtonReady)->setTitleText("Sẵn sàng");
+		getButtonByTag(kTagButtonReady)->setEnabled(true);
+	} else {
+		getButtonByTag(kTagButtonReady)->setEnabled(false);
+	}
 
 	if (isStartedGame) {
 		CCLOG("Game dang choi");
@@ -1504,18 +1539,31 @@ void LayerPlayGamePhom::OnSmartFoxRoomVariableUpdate(unsigned long long ptrConte
 		CCLOG("Game chua bat dau");
 		// Game đang ko diễn ra, có thể gửi đi thông báo đứng xem
 		if (!isSpector && isRegistStandUp) {
-			boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
-			GameServer::getSingleton().getSmartFox()->Send(request);
+			/ *boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+			GameServer::getSingleton().getSmartFox()->Send(request);* /
 			isRegistStandUp = false;
-			CCLog("-------Room..: isRegistStandUp = false");
+			CCLog("-------Room..: Gửi đi thông báo muốn đứng xem!");
+
+			// leave game
+			boost::shared_ptr<ISFSObject> params (new SFSObject());
+			boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+			boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_LEAVE_GAME), params, lastRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request);
 		}
 
 		// có thể gửi đi thông báo muốn ngồi vào bàn chơi
 		if (isSpector && isRegistSittingDown) {
-			boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
-			GameServer::getSingleton().getSmartFox()->Send(request);
+			/ *boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+			GameServer::getSingleton().getSmartFox()->Send(request);* /
 			isRegistSittingDown = false;
+			CCLog("-------Room..: Gửi đi thông báo muốn ngồi!");
+
+			// join game
+			boost::shared_ptr<ISFSObject> params (new SFSObject());
+			boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+			boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_REQ_JOIN_GAME), params, lastRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request);
 		}
-	}
+	}*/
 }
 

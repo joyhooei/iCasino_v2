@@ -69,6 +69,7 @@ private:
 		EXT_EVENT_RES_PUSH_CARD,
         //
         EXT_EVENT_REQ_JOIN_GAME,
+		EXT_EVENT_REQ_LEAVE_GAME,
         EXT_EVENT_REQ_ORDER_CARDS,
         EXT_EVENT_REQ_DRAW_CARD,
         EXT_EVENT_REQ_DISCARD,
@@ -141,9 +142,10 @@ public:
     int    convertResponseToInt(string inString);
     string convertResponseToString(int inInt);
 	void createButton_PushMulti_By_CardId(int cardid);
-    Button* createButtonWithTitle_Position(const char *title, CCPoint pPoint);
-    Button* getButtonByTag(int tag);
-    
+    void createButtonWith_Tag_Title_Position(int tag, const char *title, CCPoint pPoint);
+    void hideAllButton();
+	Button* getButtonByTag(int tag);
+
     // actions
     void actionReady(CCObject *pSender, TouchEventType pType);
     void actionSortCards(CCObject *pSender, TouchEventType pType);
@@ -167,6 +169,8 @@ public:
 	virtual void OnSmartFoxRoomVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 
     void sendRequestJoinGame(float dt);
+	void sendRequestJoinGame();
+	void sendRequestLeaveGame();
     vector<string> split(string &S, const char &str);
     
     void event_EXT_SRVNTF_PUBLIC_MESSAGE();
