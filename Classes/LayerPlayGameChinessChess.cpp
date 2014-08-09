@@ -17,7 +17,6 @@
 #include "LayerSettings.h"
 #include "LayerChatWindow.h"
 #include "LayerChargeMoney.h"
-#include "PopupLayer.h"
 #include "Requests/SpectatorToPlayerRequest.h"
 #include "Requests/PlayerToSpectatorRequest.h"
 
@@ -156,7 +155,7 @@ LayerPlayGameChinessChess::LayerPlayGameChinessChess()
     btnReady=NULL;
     btnUnReady=NULL;
     //
-	popup=NULL;
+	// popup=NULL;
     GameServer::getSingleton().addListeners(this);
     SceneManager::getSingleton().hideLoading();
 
@@ -1024,7 +1023,7 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
 
 
 	// popup - back, sitting, stand up, ...
-	popup = PopupLayer::create("HelloWorld.png");
+	// popup = PopupLayer::create("HelloWorld.png");
 	//this->addChild(popup, 100);
 
 	

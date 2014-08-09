@@ -19,7 +19,7 @@
 #include "LogicInChess.h"
 #include "NotificationCallback.h"
 #include "ImageDownloader.h"
-#include "PopupLayer.h"
+//#include "PopupLayer.h"
 
 #include "Requests/SpectatorToPlayerRequest.h"
 #include "Requests/PlayerToSpectatorRequest.h"
@@ -186,7 +186,7 @@ private:
 	ImageDownloader* imagedownloader4Red;
 	ImageDownloader* imagedownloader4Black;
 
-	PopupLayer *popup;
+	//PopupLayer *popup;
 	UILayer *menuLayer;
 	CCSprite *menuBgr;
 
