@@ -17,8 +17,6 @@
 #include "LayerSettings.h"
 #include "LayerChatWindow.h"
 #include "LayerChargeMoney.h"
-#include "Requests/SpectatorToPlayerRequest.h"
-#include "Requests/PlayerToSpectatorRequest.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;

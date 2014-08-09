@@ -95,6 +95,7 @@ private:
 	bool gameStarted;
 	bool flagChiaBai;
 	bool flagChiu;
+	bool flagTraCuaToMe;
 
 	int countDiscard;
 	int countUser;

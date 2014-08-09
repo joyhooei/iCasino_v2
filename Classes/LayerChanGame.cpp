@@ -62,6 +62,7 @@ LayerChanGame::LayerChanGame(){
 
 	gameStarted = false;
 	flagChiaBai = false;
+	flagTraCuaToMe = false;
 
 	createAvatars();
 	createCards();
@@ -404,7 +405,10 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	else if(strcmp(EXT_EVENT_RES_DUOI_CARD.c_str(), cmd->c_str()) == 0){
 		boost::shared_ptr<long> rescode = param->GetInt("rscode");
 		if (rescode != NULL) {
-			
+			CCLOG("duoi rescode = %d",*rescode);
+			if(*rescode == 0){
+				flagTraCuaToMe = false;
+			}
 		}
 		CCLOG("EXT_EVENT_RES_DUOI_CARD");
 	}
@@ -604,6 +608,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 
 	// game end
 	else if (strcmp(EXT_EVENT_END.c_str(), cmd->c_str())==0){
+		stopTimer_Me();
 		this->runAction(CCSequence::create(CCDelayTime::create(7), CCCallFunc::create(this, callfunc_selector(LayerChanGame::setEndGame)), NULL));
 		CCLOG("EXT_EVENT_END");
 	}
@@ -822,12 +827,22 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 
 	CCLOG("From %d to %d", fpos, tpos);
 	layerCardChan->takeCards(fpos, tpos, cardnu, cardsu, crdorg);
-	if (crdorg == 3 || crdorg == 2 && tpos == kUserMe){
-		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 
-		getButtonByTag(cTag_btnTake)->loadTextureNormal("danh.png");
-		getButtonByTag(cTag_btnTake)->setEnabled(true);
-		getButtonByTag(cTag_btnTake)->setTouchEnabled(true);
+	if(tpos == kUserMe){
+		if (crdorg == 3 || crdorg == 2)
+		{
+			getButtonByTag(cTag_btnDuoi)->setEnabled(false);
+
+			getButtonByTag(cTag_btnTake)->loadTextureNormal("danh.png");
+			getButtonByTag(cTag_btnTake)->setEnabled(true);
+			getButtonByTag(cTag_btnTake)->setTouchEnabled(true);
+		}
+	}
+
+	//Nếu người khác trả cửa vào cửa của mình
+	if(crdorg == 5 && fpos != kUserMe && tpos == kUserMe){
+		CCLOG("Nguoi khac tra cua vao cua chi cua minh");
+		flagTraCuaToMe = true;
 	}
 }
 
@@ -886,6 +901,7 @@ void LayerChanGame::whenUserTakeCards(long rscode){
 	}else{
 		CCLOG("Ăn không đúng Chắn, Cạ");
 		Chat *toast = new Chat("Ăn không đúng Chắn Cạ", -1);
+		toast->setPositionY(HEIGHT_DESIGN / 2);
 		this->addChild(toast);
 	}
 }
@@ -899,11 +915,9 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0) {
 
 		startTimer_Me();
-
 		getButtonByTag(cTag_btnReady)->setEnabled(false);
 
 		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
-
 		getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
 		getButtonByTag(cTag_btnTake)->setEnabled(true);
 		getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
@@ -926,7 +940,22 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U.png");
 			getButtonByTag(cTag_btnBoc)->setTouchEnabled(true);
 		}
+
+		//Nếu người khác chíu con bài mình vừa bốc lên
+		//Sau đó trả cửa 1 con vào cửa trì của mình thì hiện button Dưới
+		if (flagTraCuaToMe == true)
+		{
+			CCLOG("Jumpe to here");
+			getButtonByTag(cTag_btnTake)->setEnabled(false);
+			getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
+			getButtonByTag(cTag_btnDuoi)->setTouchEnabled(true);
+			getButtonByTag(cTag_btnDuoi)->setEnabled(true);
+			/*flagTraCuaToMe = false;*/
+			return;
+		}
+		
 	}
+	//Lượt chơi của người khác
 	else{
 		getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
 		getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
@@ -1184,7 +1213,7 @@ void LayerChanGame::whenConguoi_Chiu(string uid){
 	string myName = "";
 	myName = GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str();
 
-	if (strcmp(uid.c_str(),myName.c_str()) == 0)
+	if (strcmp(uid.c_str(), myName.c_str()) == 0)
 	{
 		Chat *toast = new Chat("Có thể chíu lá bài này", -1);
 		toast->setPositionY(HEIGHT_DESIGN / 2);
@@ -1192,8 +1221,11 @@ void LayerChanGame::whenConguoi_Chiu(string uid){
 	}
 	else
 	{
-		if(strcmp(myName.c_str(),currentPlayer.c_str()) == 0){
-			//hideAllButton();
+		if(strcmp(myName.c_str(), currentPlayer.c_str()) == 0)
+		{
+			Chat *toast = new Chat("test, " + uid + " chíu, chờ xíu", -1);
+			toast->setPositionY(HEIGHT_DESIGN / 2);
+			this->addChild(toast);
 		}
 	}
 }
@@ -1231,7 +1263,7 @@ void LayerChanGame::resuiltGame(string resuilt)
 	vector<string> arrResuilt = splitString(resuilt,';');
 
 	string _cuoc = (strcmp(arrResuilt[4].c_str(), "") != 0) ? arrResuilt[4] : arrResuilt[5];
-	vector<string> arrCuoc = splitString(_cuoc,':');
+	vector<string> arrCuoc = splitString(_cuoc, ':');
 
 	LayerGameChan_KetQua *kq = LayerGameChan_KetQua::create();
 	string ketqua = "";
@@ -1244,7 +1276,7 @@ void LayerChanGame::resuiltGame(string resuilt)
 	lblCuoc->setString(ketqua.c_str());
 	lblCuoc->setAnchorPoint(ccp(0.5, 0.5));
 	lblCuoc->setFontSize(24);
-	lblCuoc->setColor(ccRED);
+	lblCuoc->setColor(ccYELLOW);
 	lblCuoc->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 130));
 	lblCuoc->setTag(201);
 	this->addChild(lblCuoc);
@@ -1265,6 +1297,7 @@ void LayerChanGame::setEndGame(){
 	mylistCard = "";
 
 	flagChiaBai = false;
+	flagTraCuaToMe = false;
 
 	countDiscard = 0;
 
@@ -1307,6 +1340,7 @@ void LayerChanGame::displayResuitGame(CCObject *data){
 void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
 
 	Chat *toast = new Chat("" + uid + " Đã Ù lá bài này, Đợi xem ai báo Ù nữa hay không !", -1);
+	toast->setPositionY(HEIGHT_DESIGN / 2);
 	this->addChild(toast);
 
 	CCString *p = CCString::create(lc);

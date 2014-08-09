@@ -1528,6 +1528,7 @@ void _Layer_CardChan_::doDisCards(){
 	if (count == 0) {
 		CCLOG("Chọn 1 lá bài để đánh");
 		Chat *toast = new Chat("Chọn 1 lá bài để đánh",-1);
+		toast->setPositionY(HEIGHT_DESIGN / 2 - 60);
 		this->addChild(toast);
 	}
 	else{
@@ -1561,6 +1562,7 @@ void _Layer_CardChan_::doChiuCard(){
 	}
 	else{
 		Chat *toast = new Chat("Chọn 1 lá bài để chíu", -1);
+		toast->setPositionY(HEIGHT_DESIGN / 2 - 60);
 		this->addChild(toast);
 	}
 }
@@ -1583,6 +1585,7 @@ void _Layer_CardChan_::doEateCard(){
 	}
 	if (count == 0) {
 		Chat *toast = new Chat("Chọn 1 lá bài để ăn", -1);
+		toast->setPositionY(HEIGHT_DESIGN / 2 - 60);
 		this->addChild(toast);
 	}
 	else{
