@@ -473,7 +473,7 @@ void Lieng::action_UpdateListUser(string lsUser)
 	layerBet->setVisibleAllFrameBet();
 
 	vector<string> list = mUtils::splitString(_list_user,';');
-	if(myself->IsSpectator()==true)
+	if(layerAvatars->isSpect())
 	{
 		nameGame->setString("Bạn đang xem...");
 		
@@ -675,13 +675,13 @@ void Lieng::whenGameEnd(){
 	real = false;
 	flag_Complete_Click = true;
 	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-	if(myself->IsSpectator()==true)
+	if(layerAvatars->isSpect())
 	this->runAction(CCSequence::create(CCDelayTime::create(5),CCCallFunc::create(this, callfunc_selector(Lieng::deleteResuiltGame)),NULL));
 }
 
 void Lieng::deleteResuiltGame(){
 	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-	if (myself->IsSpectator()!=true)
+	if (layerAvatars->isSpect()!=true)
 	{
 		getButtonByTag(dTag_btnReady)->setEnabled(true);
 	}
@@ -852,7 +852,7 @@ void Lieng::callBackFuntion_Endgive(CCNode *pSend)
 	getButtonByTag(dTag_btnSqueez)->setEnabled(true);
 	getButtonByTag(dTag_btnView)->setEnabled(true);
 	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-	if(myself->IsSpectator()==true)
+	if(layerAvatars->isSpect())
 	{
 		specMode();
 	}

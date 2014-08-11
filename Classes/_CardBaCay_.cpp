@@ -11,7 +11,8 @@
 #include "SimpleAudioEngine.h"
 #include "_Card_.h"
 #include "GameServer.h"
-
+#include "LayerAvatar_BaCay.h"
+#include "SceneManager.h"
 CardBaCay::~CardBaCay()
 {
 	
@@ -197,7 +198,7 @@ void CardBaCay::givePocker()
             give_next(CARD_6, w_card_notme, h_card_notme, xCardPos_u6, yCardPos_u6, count_vir);
             break;
 		case kuser0:
-			if(myself->IsSpectator())
+			if(isSpect())
 			give_next(CARD_0, w_card_notme, h_card_notme, xCardPos_me, yCardPos_me, count_vir);
 			break;
 		default:
@@ -386,7 +387,7 @@ int CardBaCay::getPosUserByName(string pName)
 	for (int i = 0; i < list.size(); i++)
 	{
 		vector<string> info = mUtils::splitString(list[i],'|');
-		if (strcmp(myName.c_str(), info[0].c_str()) == 0 || myself->IsSpectator())
+		if (strcmp(myName.c_str(), info[0].c_str()) == 0 || isSpect())
 		{
 			vt = i;
 			break;
@@ -471,4 +472,16 @@ CCArray* CardBaCay::getListCards_5()
 CCArray* CardBaCay::getListCards_6()
 {
 	return CARD_6;
+}
+bool CardBaCay::isSpect() {
+	vector<string> arr = mUtils::splitString(this->listUser, ';');
+	int size = arr.size();
+	for (int i = 0; i < size; i++){
+		vector<string> arrInfo = mUtils::splitString(arr.at(i), '|');
+		if (arrInfo.size() < 2) continue;
+		string ai = arrInfo.at(0);
+		if (ai == SceneManager::getSingleton().getMyName())
+             return false;
+	}
+	return true;
 }

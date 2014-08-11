@@ -89,6 +89,9 @@ public:
 	Button* getButtonByTag(int pTag);
 	string result;
 	CCLabelTTF *nameGame;
+    bool isSpector;
+    boost::shared_ptr<User> myself;
+  
 	//Các sự kiện Button trong game
 	void btn_ready_click(CCObject *sender, TouchEventType type);
 	void btn_Unready_click(CCObject *sender, TouchEventType type);

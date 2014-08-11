@@ -120,7 +120,7 @@ void Number_Chat_inGame7u::runAction2(float dt) {
 		if(numberDouble>1000000)
 			{
 				CCLog("---%u",numberDouble);
-		number->setScale(0.5);
+		number->setScale(0.6);
 		}
 		CCPoint point;
 

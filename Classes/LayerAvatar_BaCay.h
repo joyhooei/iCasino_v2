@@ -46,19 +46,23 @@ public:
     UIButton *btn_vaochoi;
 	UIButton *btn_dungday;
 
+
 	int getPosByName(string name);
 	string getNameByPos(int pos);
 	//
-
+ 
 	void updateUsers();
 	void runTimer(int posUser);
 	void stopAllTimer();
     void vaoBanChoi(CCObject* obj, TouchEventType type);
     void playerToSpec();
     void specToPlayer();
+    bool isSpect();
 private:
 	string myName;
 	string listUser;
+    bool isSpector;
+	string myAI;
 	UIImageView *chuong;
     
 	boost::shared_ptr<User> myself;

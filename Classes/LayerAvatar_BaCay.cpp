@@ -25,7 +25,11 @@ bool LayerBaCayAvatar::init()
 	if (!CCLayer::init()) return false;
 	myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	UILayer *ul = UILayer::create();
-
+    
+    this->myName = SceneManager::getSingleton().getMyName();
+	this->myAI   = SceneManager::getSingleton().getMyName().c_str();
+	this->isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+    
     btn_vaochoi = UIButton::create();
     btn_vaochoi->setTouchEnabled(true);
     btn_vaochoi->loadTextures("ready.png", "ready_selected.png", "");
@@ -35,7 +39,7 @@ bool LayerBaCayAvatar::init()
 	btn_vaochoi->setTitleFontSize(20);
     btn_vaochoi->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
     btn_vaochoi->setEnabled(false);
-	btn_vaochoi->setTag(1);
+	btn_vaochoi->setTag(0);
 
 	btn_dungday = UIButton::create();
 	btn_dungday->setTouchEnabled(true);
@@ -46,7 +50,7 @@ bool LayerBaCayAvatar::init()
 	btn_dungday->setTitleFontSize(20);
 	btn_dungday->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
 	btn_dungday->setEnabled(false);
-	btn_dungday->setTag(2);
+	btn_dungday->setTag(1);
 
     ul->addWidget(btn_dungday);
 	ul->addWidget(btn_vaochoi);
@@ -292,7 +296,7 @@ int LayerBaCayAvatar::getPosByName(string name)
 	{
 		vector<string> info = mUtils::splitString(list[i],'|');
 
-		if ((strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)||myself->IsSpectator())
+		if ((strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)||isSpect()==true)
 		{
 			vt = i;
 			break;
@@ -354,7 +358,7 @@ void LayerBaCayAvatar::updateUsers()
   
     
 	vector<string> arrUser = mUtils::splitString(listUser,';');
- 
+
 
 	if (arrUser.size() == 0)
 	{
@@ -504,18 +508,18 @@ void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
     if(type==TOUCH_EVENT_ENDED)
 		if(tag==1)
 		{
-			boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+            boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+            GameServer::getSingleton().getSmartFox()->Send(request);
+            btn_vaochoi->setEnabled(true);
+            btn_dungday->setEnabled(false);
+            
+			
+		}else{
+            boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
 			GameServer::getSingleton().getSmartFox()->Send(request);
 			CCLog("da vao");
 			btn_vaochoi->setEnabled(false);
 			btn_dungday->setEnabled(true);
-		}
-		else
-			{
-				boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
-				GameServer::getSingleton().getSmartFox()->Send(request);
-				btn_vaochoi->setEnabled(true);
-				btn_dungday->setEnabled(false);
 				}
 }
 void LayerBaCayAvatar::playerToSpec()
@@ -536,4 +540,17 @@ void LayerBaCayAvatar::specToPlayer()
     btn_vaochoi->setEnabled(true);
 	btn_dungday->setTouchEnabled(false);
 	btn_dungday->setEnabled(false);
+}
+bool LayerBaCayAvatar::isSpect() {
+	vector<string> arr = mUtils::splitString(this->listUser, ';');
+	int size = arr.size();
+	for (int i = 0; i < size; i++){
+		vector<string> arrInfo = mUtils::splitString(arr.at(i), '|');
+		if (arrInfo.size() < 2) continue;
+		string ai = arrInfo.at(0);
+		if (strcmp(ai.c_str(), myAI.c_str())==0)
+            return false;
+	}
+    
+	return true;
 }

@@ -65,6 +65,7 @@ BaCayChuong::BaCayChuong(){
 	CCLOG("Da khoi tao het cac du lieu can thiet ....");
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
+     myself = GameServer::getSingleton().getSmartFox()->MySelf();
 }
 
 BaCayChuong::~BaCayChuong(){
@@ -338,7 +339,8 @@ void BaCayChuong::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, bo
 
 	boost::shared_ptr<double> money = ptrNotifiedUser->GetVariable("amf")->GetDoubleValue();
 	boost::shared_ptr<string> uid = (ptrNotifiedUser->Name());
-
+    isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myself->Name()->c_str())->IsSpectator();
+    isSpector = layerAvatars->isSpect();
 	if(uid == NULL || money == NULL)
 		return;
 
@@ -426,9 +428,8 @@ string BaCayChuong::find_Chuong(string listUser){
 
 void BaCayChuong::eventListUser(string listusers)
 {
-    boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
   
-
+  
 	layerAvatars->setListUserForBaCay(listusers);
 	layerAvatars->setPosChuong(layerAvatars->getPosByName(find_Chuong(listusers)));
 	layerCard->setListUser(listusers);
@@ -449,13 +450,18 @@ void BaCayChuong::eventListUser(string listusers)
 	layerBet->setVisibleAllFrameBet();
 
 	vector<string> list = mUtils::splitString(listusers,';');
-    if(myself->IsSpectator()==true)
+    isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myself->Name()->c_str())->IsSpectator();
+    isSpector = layerAvatars->isSpect();
+    if(isSpector==true)
     {
 		nameGame->setString("Bạn đang xem...");
 		//tát
-        if(list.size()<7)
+        if(list.size()<7 && list.size()>1)
         {
             layerAvatars->specToPlayer();
+        }else if(list.size()<1)
+        {
+            layerAvatars->vaoBanChoi(NULL,TOUCH_EVENT_ENDED);
         }else
 			{
 				layerAvatars->btn_dungday->setEnabled(false);
@@ -603,14 +609,15 @@ void BaCayChuong::whenGameStart(){
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
 	getButtonByTag(dTag_btnBet)->setEnabled(false);
 	layerAvatars->setUnReadyAllUser();
-	layerAvatars->btn_vaochoi->setTouchEnabled(false);
+	layerAvatars->btn_vaochoi->setEnabled(false);
 	layerAvatars->btn_dungday->setEnabled(false);
+   
 }
 
 void BaCayChuong::whenResuiltGame(string rg){
 	CCLOG("resuilt game: %s",rg.c_str());
 	//thanhhv3|3|3|2|1000;dautv3|2|1|1|-1000
-		boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+		
 	if (this->getChildByTag(123) != NULL)
 	{
 		this->removeChildByTag(123);
@@ -660,7 +667,7 @@ void BaCayChuong::whenResuiltGame(string rg){
                 layerNumbers->showNumberByPos(kuser6, strScore);
                 break;
 			case kuser0:
-				if(myself->IsSpectator())
+				if(layerAvatars->isSpect())
 					{
 				layerNumbers->showNumberByPos(kuser0, strScore);
 				layerBet->setResuit4AllUser(kuser0, "1", strResuilt);
@@ -675,12 +682,11 @@ void BaCayChuong::whenResuiltGame(string rg){
 
 void BaCayChuong::whenGameEnd(){
 
-	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	
 	layerCard->resetGame();
 	layerBet->getLayerResuilt()->removeAllChildrenWithCleanup(true);
-
 	getButtonByTag(dTag_btnReady)->setEnabled(true);
-	if(myself->IsSpectator()==true)
+	if(layerAvatars->isSpect()==true)
 		specMode();
 	flagDatCuoc = false;
 	flagChiaBai = false;
@@ -777,10 +783,10 @@ void BaCayChuong::callBackFunction_LatBai(CCNode *pSend){
 
 void BaCayChuong::callBackFuntion_Endgive(CCNode *pSend)
 {
-	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	
 	CCLOG("Nhay vao call back");
 	flagChiaBai = true;
-	if(myself->IsSpectator()==true)
+	if(layerAvatars->isSpect()==true)
 		{
 			specMode();
 			}

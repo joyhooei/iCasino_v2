@@ -49,7 +49,7 @@ BaCayNormal::BaCayNormal(){
     
 	layerNumberChat = Number_Chat_inGame7u::create();
 	this->addChild(layerNumberChat);
-
+    layerNumberChat->showNumberByPos(kuser0, 2000000);
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
 }
@@ -406,8 +406,8 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 
 	vector<string> arrUser = mUtils::splitString(listusers,';');
 	vector<string> first = mUtils::splitString(arrUser[0],'|');
-	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-	if(myself->IsSpectator()==true)
+
+	if(layerAvatars->isSpect())
 	{
 		nameGame->setString("Bạn đang xem...");
 		specMode();  
@@ -573,6 +573,7 @@ void BaCayNormal::whenResuiltGame(string rg){
 	for(int i = 0; i < resuilt.size(); i++){
 		vector<string> info = mUtils::splitString(resuilt[i], '|');
         double mon = atof(info[4].c_str());
+     
 		string strResuilt = info[1] + "|" + info[2] + "|" + info[3];
 		if(strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
 			layerBet->setResuit4AllUser(kuser0, "1", strResuilt);
@@ -613,7 +614,7 @@ void BaCayNormal::whenResuiltGame(string rg){
                     layerNumbers->showNumberByPos(kuser6, mon);
                     break;
 				case kuser0:
-					if(myself->IsSpectator())
+					if(layerAvatars->isSpect())
 					{
 						layerNumbers->showNumberByPos(kuser0, mon);
 						layerBet->setResuit4AllUser(kuser0, "1", strResuilt);
@@ -664,7 +665,7 @@ void BaCayNormal::LatBai(string listCard,string uid, bool tua){
 void BaCayNormal::callBackFuntion_Endgive(CCNode *pSend)
 {
 	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
-	if(myself->IsSpectator()==true)
+	if(layerAvatars->isSpect())
 	{
 		specMode();
 	}
