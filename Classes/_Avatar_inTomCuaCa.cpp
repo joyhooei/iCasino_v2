@@ -69,38 +69,51 @@ bool AvatarInTomCuaCa::init() {
 	
 	CCLog("this->myName = SceneManager::getSingleton().getMyName() = %s", this->myName.c_str());
 
-	Avatar *me = new Avatar(true);
-	Avatar *left = new Avatar(false);
-	Avatar *right = new Avatar(false);
-	Avatar *top = new Avatar(false);
-	Avatar *bottom = new Avatar(false);
+	Avatar *me = new Avatar(false);
+	Avatar *user1 = new Avatar(false);
+	Avatar *user2 = new Avatar(false);
+	Avatar *user3 = new Avatar(false);
+	Avatar *user4 = new Avatar(false);
+    Avatar *user5 = new Avatar(false);
 
+    me->setScale(0.8);
+    user1->setScale(0.8);
+    user2->setScale(0.8);
+    user3->setScale(0.8);
+    user4->setScale(0.8);
+    user5->setScale(0.8);
+    
 	me->autorelease();
-	left->autorelease();
-	right->autorelease();
-	top->autorelease();
-	bottom->autorelease();
+	user1->autorelease();
+	user2->autorelease();
+    user3->autorelease();
+	user4->autorelease();
+    user5->autorelease();
 
-	me->setPosition(ccp(10, HEIGHT_DESIGN - 10 - me->getSizeThis().height));
-	top->setPosition(ccp(50,250));
-	bottom->setPosition(ccp(30,80));
-	left->setPosition(ccp(650,250));
-	right->setPosition(ccp(670,80));
+	me->setPosition(ccp(30, 320));
+	user1->setPosition(ccp(80,200));
+	user2->setPosition(ccp(30,80));
+	user3->setPosition(ccp(WIDTH_DESIGN-10-user3->getSizeThis().width,320));
+	user4->setPosition(ccp(WIDTH_DESIGN-60-user4->getSizeThis().width,200));
+    user5->setPosition(ccp(WIDTH_DESIGN-10-user5->getSizeThis().width,80));
 	
 
-	me->setTag(kUserMe);
-	left->setTag(kUserLeft);
-	right->setTag(kUserRight);
-	top->setTag(kUserTop);
-	bottom->setTag(kUserBot);
+	me->setTag(kuser0);
+	user1->setTag(kuser1);
+	user2->setTag(kuser2);
+    user3->setTag(kuser3);
+	user4->setTag(kuser4);
+    user5->setTag(kuser5);
 
 	this->addChild(me);
-	this->addChild(left);
-	this->addChild(right);
-	this->addChild(top);
-	this->addChild(bottom);
+	this->addChild(user1);
+	this->addChild(user2);
+    this->addChild(user3);
+	this->addChild(user4);
+    this->addChild(user5);
 
 	chuong = UIImageView::create();
+    chuong->setScale(0.7);
 	chuong->loadTexture("Chuong.png");
 	chuong->setTouchEnabled(false);
 	chuong->setVisible(false);
@@ -158,11 +171,12 @@ void AvatarInTomCuaCa::setVisibleLayerInvite(int pos, bool isShow) {
 }
 
 void AvatarInTomCuaCa::setUnReadyAllUser() {
-	setReady(kUserMe, false);
-	setReady(kUserLeft, false);
-	setReady(kUserRight, false);
-	setReady(kUserTop, false);
-	setReady(kUserBot, false);
+	setReady(kuser0, false);
+	setReady(kuser1, false);
+	setReady(kuser2, false);
+    setReady(kuser3, false);
+	setReady(kuser4, false);
+    setReady(kuser5, false);
 }
 
 void AvatarInTomCuaCa::resetGame() {
@@ -263,15 +277,17 @@ int AvatarInTomCuaCa::getPosByName(string pName) {
 		for (int i = 0; i < countUser; i++) {
 			if (arrName[i] == pName) {
 				if (i == pos) {
-					return kUserMe;
-				} else if (i == (pos + 1) % countUser) {
-					return kUserRight;
-				} else if (i == (pos + 2) % countUser) {
-					return kUserTop;
-				} else if (i == (pos + 3) % countUser) {
-					return kUserLeft;
-				} else if (i == (pos + 4) % countUser) {
-					return kUserBot;
+					return kuser0;
+				} else if (i == (pos + 1) % 6) {
+					return kuser1;
+				} else if (i == (pos + 2) % 6) {
+					return kuser2;
+				} else if (i == (pos + 3) % 6) {
+					return kuser3;
+				} else if (i == (pos + 4) % 6) {
+					return kuser4;
+				}else if (i == (pos + 5) % 6) {
+					return kuser5;
 				}
 
 				break;
@@ -293,24 +309,25 @@ string AvatarInTomCuaCa::getNameByPos(int pPos) {
 		this->isGuess = false;
 		int countUser = arrName.size();
 		switch (pPos) {
-		case kUserMe:
+		case kuser0:
 			return this->myName;
 			break;
-
-		case kUserRight:
-			return arrName[(pPos + 1) % countUser];
+		case kuser1:
+			return arrName[(pPos + 1) % 6];
+			break;
+		case kuser2:
+			return arrName[(pPos + 2) % 6];
 			break;
 
-		case kUserTop:
-			return arrName[(pPos + 2) % countUser];
+		case kuser3:
+			return arrName[(pPos + 3) % 6];
 			break;
-
-		case kUserLeft:
-			return arrName[(pPos + 3) % countUser];
+		case kuser4:
+			return arrName[(pPos + 4) % 6];
 			break;
-		case kUserBot:
-			return arrName[(pPos + 4) % countUser];
-			break;
+            case kuser5:
+                return arrName[(pPos + 5) % 6];
+                break;
 		}
 	}
 
@@ -327,25 +344,29 @@ string AvatarInTomCuaCa::getAccountIDByPos(int pPos) {
 		this->isGuess = false;
 		int countUser = arrAI.size();
 		switch (pPos) {
-		case kUserMe:
+		case kuser0:
 			return this->myAI;
 			break;
 
-		case kUserRight:
-			return arrAI[(pPos + 1) % countUser];
+		case kuser1:
+			return arrAI[(pPos + 1) % 6];
 			break;
 
-		case kUserTop:
-			return arrAI[(pPos + 2) % countUser];
+		case kuser2:
+			return arrAI[(pPos + 2) % 6];
 			break;
 
-		case kUserLeft:
-			return arrAI[(pPos + 3) % countUser];
+		case kuser3:
+			return arrAI[(pPos + 3) % 6];
 			break;
 
-		case kUserBot:
-			return arrAI[(pPos + 4) % countUser];
+		case kuser4:
+			return arrAI[(pPos + 4) % 6];
 			break;
+                
+            case kuser5:
+                return arrAI[(pPos + 5) % 6];
+                break;
 		}
 	}
 
@@ -369,11 +390,12 @@ void AvatarInTomCuaCa::updateUsers() {
 	// ---
 
 	// 1. Làm "sạch"
-	Avatar *avaMe = getUserByPos(kUserMe);
-	Avatar *avaLeft = getUserByPos(kUserLeft);
-	Avatar *avaRight = getUserByPos(kUserRight);
-	Avatar *avaTop = getUserByPos(kUserTop);
-	Avatar *avaBot = getUserByPos(kUserBot);
+	Avatar *avaMe = getUserByPos(kuser0);
+	Avatar *avauser1 = getUserByPos(kuser1);
+	Avatar *avauser2 = getUserByPos(kuser2);
+    Avatar *avauser3 = getUserByPos(kuser3);
+	Avatar *avauser4 = getUserByPos(kuser4);
+    Avatar *avauser5 = getUserByPos(kuser5);
 
 	avaMe->setVisible(false);
 	avaMe->setTouchEnabled(false);
@@ -386,31 +408,39 @@ void AvatarInTomCuaCa::updateUsers() {
 	if (btnReady == NULL) return;
 	btnReady->setTitleText("Sẵn sàng");
 	btnReady->setEnabled(false);
+	//
+	avauser1->setVisibleLayerInvite(true);
+	avauser1->setReady(false);
+	avauser1->setName("");
+	avauser1->setMoney("");
+	avauser1->setAI("");
+	//
+	avauser2->setVisibleLayerInvite(true);
+	avauser2->setReady(false);
+	avauser2->setName("");
+	avauser2->setMoney("");
+	avauser2->setAI("");
+//
+    avauser3->setVisibleLayerInvite(true);
+	avauser3->setReady(false);
+	avauser3->setName("");
+	avauser3->setMoney("");
+	avauser3->setAI("");
+	//
+	avauser4->setVisibleLayerInvite(true);
+	avauser4->setReady(false);
+	avauser4->setName("");
+	avauser4->setMoney("");
+	avauser4->setAI("");
+    //
+    avauser5->setVisibleLayerInvite(true);
+	avauser5->setReady(false);
+	avauser5->setName("");
+	avauser5->setMoney("");
+	avauser5->setAI("");
 
-	avaLeft->setVisibleLayerInvite(true);
-	avaLeft->setReady(false);
-	avaLeft->setName("");
-	avaLeft->setMoney("");
-	avaLeft->setAI("");
-	//
-	avaRight->setVisibleLayerInvite(true);
-	avaRight->setReady(false);
-	avaRight->setName("");
-	avaRight->setMoney("");
-	avaRight->setAI("");
-	//
-	avaTop->setVisibleLayerInvite(true);
-	avaTop->setReady(false);
-	avaTop->setName("");
-	avaTop->setMoney("");
-	avaTop->setAI("");
-	//
-	avaBot->setVisibleLayerInvite(true);
-	avaBot->setReady(false);
-	avaBot->setName("");
-	avaBot->setMoney("");
-	avaBot->setAI("");
-
+    
+    
 	// 2. Update info :D
 	int length = arrName.size();
 	for (int i = 0; i < length; i++) {
@@ -425,16 +455,16 @@ void AvatarInTomCuaCa::updateUsers() {
 		CCLog("------pos=%d", pos);
 		if (pos < 0)
 			break;
-		if (!isGuess){
-			getUserByPos(kUserBot)->setVisible(false); 
-			getUserByPos(kUserBot)->setTouchEnabled(false);
-			getUserByPos(kUserBot)->setPositionY(-200);
+		/*if (!isGuess){
+			getUserByPos(kuser2)->setVisible(false); 
+			getUserByPos(kuser2)->setTouchEnabled(false);
+			getUserByPos(kuser2)->setPositionY(-200);
 		}
 		else {
-			getUserByPos(kUserBot)->setVisible(true);
-			getUserByPos(kUserBot)->setTouchEnabled(true);
-			getUserByPos(kUserBot)->setPositionY(10);
-		}
+			getUserByPos(kuser2)->setVisible(true);
+			getUserByPos(kuser2)->setTouchEnabled(true);
+			getUserByPos(kuser2)->setPositionY(10);
+		}*/
 		Avatar *user = getUserByPos(pos);
 		user->setName(name);
 		user->setFlag(atoi(flag.c_str()) == 1);
@@ -443,45 +473,51 @@ void AvatarInTomCuaCa::updateUsers() {
 		user->setAI(aI);
 		user->setMoney(money);
 		user->setMoney(moneyDouble);
-		if(pos == kUserMe){
-			this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
-			this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
-			this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
-			this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
+		if(pos == kuser0){
+			this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
+			this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
+            this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
+			this->getUserByPos(kuser4)->setMeIsBoss(meIsBoss);
+            this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
+
 		}
-		if (pos == kUserMe)
+		if (pos == kuser0)
 		{
 			user->setVisible(true);
 			user->setTouchEnabled(true);
 			btnReady->setEnabled(true);
 		}
-		else {
-			user->setVisibleLayerInvite(false);
-		}
+		
+        user->setVisibleLayerInvite(false);
+		
 	}
 }
 
 void AvatarInTomCuaCa::setPosChuong(int pos){
 	bool meIsBoss = false;
 	switch (pos) {
-	case kUserLeft:
-		chuong->setPosition(ccp(640,360));
+	case kuser3:
+		chuong->setPosition(ccp(WIDTH_DESIGN-115,410));
 		chuong->setVisible(true);
 		break;
-	case kUserRight:
-		chuong->setPosition(ccp(655,190));
+	case kuser4:
+		chuong->setPosition(ccp(WIDTH_DESIGN-170,290));
 		chuong->setVisible(true);
 		break;
-	case kUserTop:
-		chuong->setPosition(ccp(40,360));
+	case kuser1:
+		chuong->setPosition(ccp(80,290));
 		chuong->setVisible(true);
 		break;
-	case kUserBot:
-		chuong->setPosition(ccp(15,190));
+	case kuser2:
+		chuong->setPosition(ccp(30,170));
 		chuong->setVisible(true);
-		break;
-	case kUserMe:
-		chuong->setPosition(ccp(175,420));
+        break;
+    case kuser5:
+        chuong->setPosition(ccp(WIDTH_DESIGN-115,170));
+        chuong->setVisible(true);
+        break;
+	case kuser0:
+		chuong->setPosition(ccp(30,410));
 		chuong->setVisible(true);
 		meIsBoss = true;
 		break;
@@ -489,38 +525,44 @@ void AvatarInTomCuaCa::setPosChuong(int pos){
 		break;
 	}
 	//
-	this->getUserByPos(kUserLeft)->setMeIsBoss(meIsBoss);
-	this->getUserByPos(kUserRight)->setMeIsBoss(meIsBoss);
-	this->getUserByPos(kUserBot)->setMeIsBoss(meIsBoss);
-	this->getUserByPos(kUserTop)->setMeIsBoss(meIsBoss);
+
+	this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
+    this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
+    this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
+	this->getUserByPos(kuser4)->setMeIsBoss(meIsBoss);
+    this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
 }
 
 
 void AvatarInTomCuaCa::resetAll(){
-	setFlag(kUserMe, false);
-	setFlag(kUserLeft, false);
-	setFlag(kUserRight, false);
-	setFlag(kUserTop, false);
-	setFlag(kUserBot, false);
+	setFlag(kuser0, false);
+	setFlag(kuser3, false);
+	setFlag(kuser4, false);
+	setFlag(kuser1, false);
+	setFlag(kuser2, false);
+    setFlag(kuser5, false);
 
-	setName(kUserMe, "");
-	setName(kUserLeft, "");
-	setName(kUserRight, "");
-	setName(kUserTop, "");
-	setName(kUserBot, "");
+	setName(kuser0, "");
+	setName(kuser3, "");
+	setName(kuser4, "");
+	setName(kuser1, "");
+	setName(kuser2, "");
+    setName(kuser5, "");
 
-	setMoney(kUserMe, "");
-	setMoney(kUserLeft, "");
-	setMoney(kUserRight, "");
-	setMoney(kUserTop, "");
-	setMoney(kUserBot, "");
+	setMoney(kuser0, "");
+	setMoney(kuser3, "");
+	setMoney(kuser4, "");
+	setMoney(kuser1, "");
+	setMoney(kuser2, "");
+    setMoney(kuser5, "");
 
 	
 
-	this->getUserByPos(kUserLeft)->setVisibleLayerInvite(true);
-	this->getUserByPos(kUserRight)->setVisibleLayerInvite(true);
-	this->getUserByPos(kUserTop)->setVisibleLayerInvite(true);
-	this->getUserByPos(kUserBot)->setVisibleLayerInvite(true);
+	this->getUserByPos(kuser3)->setVisibleLayerInvite(true);
+	this->getUserByPos(kuser4)->setVisibleLayerInvite(true);
+	this->getUserByPos(kuser1)->setVisibleLayerInvite(true);
+	this->getUserByPos(kuser2)->setVisibleLayerInvite(true);
+    this->getUserByPos(kuser5)->setVisibleLayerInvite(true);
 }
 void AvatarInTomCuaCa::showChatByPos(int pos, string mes)
 {
@@ -529,26 +571,29 @@ void AvatarInTomCuaCa::showChatByPos(int pos, string mes)
 	CCPoint point;
 
 	switch (pos) {
-	case kUserMe:
+	case kuser0:
 		point.setPoint((WIDTH_DESIGN/2-newMes->getSize().width/2), 30);
 		
 		break;
 
-	case kUserTop:
+	case kuser1:
 		point.setPoint(50, 320);
 		break;
 
-	case kUserBot:
+	case kuser2:
 		point.setPoint(50, 180);
 		break;
 
-	case kUserLeft:
+	case kuser3:
 		point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 380);
 		break;
 
-	case kUserRight:
+	case kuser4:
 		point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 180);
 		break;
+    	case kuser5:
+            point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 180);
+            break;
 	default:
 		point.setPoint((WIDTH_DESIGN - newMes->getSize().width) / 2, (HEIGHT_DESIGN - newMes->getSize().height) / 2);
 		newMes->setStatusByServer(true);
@@ -574,15 +619,17 @@ int AvatarInTomCuaCa::getPosByAccountID(string aI) {
 		for (int i = 0; i < countUser; i++) {
 			if (arrAI[i] == aI) {
 				if (i == pos) {
-					return kUserMe;
-				} else if (i == (pos + 1) % countUser) {
-					return kUserRight;
-				} else if (i == (pos + 2) % countUser) {
-					return kUserTop;
-				} else if (i == (pos + 3) % countUser) {
-					return kUserLeft;
-				} else if (i == (pos + 4) % countUser) {
-					return kUserBot;
+					return kuser0;
+				} else if (i == (pos + 1) % 6) {
+					return kuser1;
+				} else if (i == (pos + 2) % 6) {
+					return kuser2;
+				} else if (i == (pos + 3) % 6) {
+					return kuser3;
+				} else if (i == (pos + 4) % 6) {
+					return kuser4;
+				} else if (i == (pos + 5) % 6) {
+					return kuser5;
 				}
 
 				break;

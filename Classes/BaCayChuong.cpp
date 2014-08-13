@@ -220,7 +220,7 @@ void BaCayChuong::OnExtensionResponse(unsigned long long ptrContext, boost::shar
 		if (lu != NULL) {
 			_list_users = lu->c_str();
 			eventListUser(_list_users);
-		}	
+            }
 	}
 
 	else if(strcmp(EXT_EVENT_READY_NTF.c_str(), cmd->c_str())==0){
@@ -455,23 +455,22 @@ void BaCayChuong::eventListUser(string listusers)
     if(isSpector==true)
     {
 		nameGame->setString("Bạn đang xem...");
-		//tát
-        if(list.size()<7 && list.size()>1)
+		
+        if(list.size()<7 && list.size()>0)
         {
             layerAvatars->specToPlayer();
-        }else if(list.size()<1)
-        {
-            layerAvatars->vaoBanChoi(NULL,TOUCH_EVENT_ENDED);
-        }else
+        
+        }
+        else
 			{
 				layerAvatars->btn_dungday->setEnabled(false);
 				layerAvatars->btn_vaochoi->setEnabled(false);
 				layerAvatars->btn_dungday->setTouchEnabled(false);
 				layerAvatars->btn_vaochoi->setTouchEnabled(false);
 				layerButtons->getButtonByTag(103)->setTouchEnabled(true);
-				}
+            }
 			
-        specMode();   
+                specMode();
     }else
 		{
 			nameGame->setString(result.c_str());

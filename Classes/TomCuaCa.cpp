@@ -288,22 +288,19 @@ void TomCuaCa::updateUser(string list){
 		if (url != NULL) {
 			_url=url->c_str();
 		}
-		if(myself->IsSpectator())
-			{
-				isSpector(n[0],_name,mon,_url);
-				}
-		else{
-				if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
+
+        if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
 			
-			lAvatar->setName(kUserMe, _name.c_str());
-			lAvatar->getUserByPos(kUserMe)->setMoney(mon);
-			lAvatar->getUserByPos(kUserMe)->setIcon(_url);
-			lAvatar->getUserByPos(kUserMe)->setAI(n[0]);
+            lAvatar->getUserByPos(kuser0)->setVisibleLayerInvite(false);
+			lAvatar->setName(kuser0, _name.c_str());
+			lAvatar->getUserByPos(kuser0)->setMoney(mon);
+			lAvatar->getUserByPos(kuser0)->setIcon(_url);
+			lAvatar->getUserByPos(kuser0)->setAI(n[0]);
 
 			if(n[0]==find_ChuPhong(_list_user)){
-				lAvatar->setPosChuong(kUserMe);
+				lAvatar->setPosChuong(kuser0);
 				_time=1;
-				lAvatar->setFlag(kUserMe, true);
+				lAvatar->setFlag(kuser0, true);
 				btnReady->setTitleText("Bắt đầu");
 				}
 			else{
@@ -313,56 +310,68 @@ void TomCuaCa::updateUser(string list){
 		else{
 			
 			switch (getPosUserByName(n[0], _list_user)) {
-			case kUserLeft:
-				lAvatar->getUserByPos(kUserLeft)->setVisibleLayerInvite(false);
-				lAvatar->setName(kUserLeft, _name.c_str());
-				lAvatar->getUserByPos(kUserLeft)->setMoney(mon);
-				lAvatar->getUserByPos(kUserLeft)->setIcon(_url);
-				lAvatar->getUserByPos(kUserLeft)->setAI(n[0]);
+			case kuser3:
+				lAvatar->getUserByPos(kuser3)->setVisibleLayerInvite(false);
+				lAvatar->setName(kuser3, _name.c_str());
+				lAvatar->getUserByPos(kuser3)->setMoney(mon);
+				lAvatar->getUserByPos(kuser3)->setIcon(_url);
+				lAvatar->getUserByPos(kuser3)->setAI(n[0]);
 				if(n[0]==find_ChuPhong(_list_user)){
-					lAvatar->setFlag(kUserLeft, true);
-					lAvatar->setPosChuong(kUserLeft);
+					lAvatar->setFlag(kuser3, true);
+					lAvatar->setPosChuong(kuser3);
 					_time=0;
 				}
 				break;
-			case kUserRight:
-				lAvatar->getUserByPos(kUserRight)->setVisibleLayerInvite(false);
-				lAvatar->setName(kUserRight, _name.c_str());
-				lAvatar->getUserByPos(kUserRight)->setMoney(mon);
-				lAvatar->getUserByPos(kUserRight)->setIcon(_url);
-				lAvatar->getUserByPos(kUserRight)->setAI(n[0]);
+			case kuser4:
+				lAvatar->getUserByPos(kuser4)->setVisibleLayerInvite(false);
+				lAvatar->setName(kuser4, _name.c_str());
+				lAvatar->getUserByPos(kuser4)->setMoney(mon);
+				lAvatar->getUserByPos(kuser4)->setIcon(_url);
+				lAvatar->getUserByPos(kuser4)->setAI(n[0]);
 				if(n[0]==find_ChuPhong(_list_user)){
-					lAvatar->setFlag(kUserRight, true);
-					lAvatar->setPosChuong(kUserRight);
+					lAvatar->setFlag(kuser4, true);
+					lAvatar->setPosChuong(kuser4);
 					_time=0;
 				}
 				break;
-			case kUserTop:
-				lAvatar->getUserByPos(kUserTop)->setVisibleLayerInvite(false);
-				lAvatar->setName(kUserTop, _name.c_str());
-				lAvatar->getUserByPos(kUserTop)->setMoney(mon);
-				lAvatar->getUserByPos(kUserTop)->setIcon(_url);
-				lAvatar->getUserByPos(kUserTop)->setAI(n[0]);
+			case kuser1:
+				lAvatar->getUserByPos(kuser1)->setVisibleLayerInvite(false);
+				lAvatar->setName(kuser1, _name.c_str());
+				lAvatar->getUserByPos(kuser1)->setMoney(mon);
+				lAvatar->getUserByPos(kuser1)->setIcon(_url);
+				lAvatar->getUserByPos(kuser1)->setAI(n[0]);
 				if(n[0]==find_ChuPhong(_list_user)){
-					lAvatar->setFlag(kUserTop, true);
-					lAvatar->setPosChuong(kUserTop);
+					lAvatar->setFlag(kuser1, true);
+					lAvatar->setPosChuong(kuser1);
 					_time=0;
 				}
 				break;
-			case kUserBot:
-				lAvatar->getUserByPos(kUserBot)->setVisibleLayerInvite(false);
-				lAvatar->setName(kUserBot, _name.c_str());
-				lAvatar->getUserByPos(kUserBot)->setMoney(mon);
-				lAvatar->getUserByPos(kUserBot)->setIcon(_url);
-				lAvatar->getUserByPos(kUserBot)->setAI(n[0]);
+			case kuser2:
+				lAvatar->getUserByPos(kuser2)->setVisibleLayerInvite(false);
+				lAvatar->setName(kuser2, _name.c_str());
+				lAvatar->getUserByPos(kuser2)->setMoney(mon);
+				lAvatar->getUserByPos(kuser2)->setIcon(_url);
+				lAvatar->getUserByPos(kuser2)->setAI(n[0]);
 				if(n[0]==find_ChuPhong(_list_user)){
-					lAvatar->setFlag(kUserBot, true);
-					lAvatar->setPosChuong(kUserBot);
+					lAvatar->setFlag(kuser2, true);
+					lAvatar->setPosChuong(kuser2);
 					_time=0;
 				}
-				
+                break;
+                case kuser5:
+                    lAvatar->getUserByPos(kuser5)->setVisibleLayerInvite(false);
+                    lAvatar->setName(kuser5, _name.c_str());
+                    lAvatar->getUserByPos(kuser5)->setMoney(mon);
+                    lAvatar->getUserByPos(kuser5)->setIcon(_url);
+                    lAvatar->getUserByPos(kuser5)->setAI(n[0]);
+                    if(n[0]==find_ChuPhong(_list_user)){
+                        lAvatar->setFlag(kuser5, true);
+                        lAvatar->setPosChuong(kuser5);
+                        _time=0;
+                    }
+                    break;
 			}//switch
-			}//else
+			//else
 		}
 	}
 }
@@ -396,19 +405,22 @@ int	 TomCuaCa::getPosUserByName(string uid,string _list_user){
 		vector<string> n = TCCsplit(player, '|');
 		if(strcmp(n[0].c_str(), uid.c_str())==0){
 			if(k==vt){
-				return kUserMe;
+				return kuser0;
 			}
-			else if(k==(vt+1)%5){
-				return kUserRight;
+			else if(k==(vt+1)%6){
+				return kuser1;
 			}
-			else if(k==(vt+2)%5){
-				return kUserTop;
+			else if(k==(vt+2)%6){
+				return kuser2;
 			}
-			else if(k==(vt+3)%5){
-				return kUserLeft;
+			else if(k==(vt+3)%6){
+				return kuser3;
 			}
-			else if(k==(vt+4)%5){
-				return kUserBot;
+			else if(k==(vt+4)%6){
+				return kuser4;
+			}
+            else if(k==(vt+5)%6){
+				return kuser5;
 			}
 			break;
 		}
@@ -422,21 +434,24 @@ void TomCuaCa::whenUserReady(string uid){
 		// hiện unready
 		btnUnReady->setTouchEnabled(true);
 		btnUnReady->setVisible(true);
-		lAvatar->getUserByPos(kUserMe)->setReady(true);
+		lAvatar->getUserByPos(kuser0)->setReady(true);
 	}else{
 		switch (getPosUserByName(uid, _list_user)) {
-		case kUserLeft:
-			lAvatar->getUserByPos(kUserLeft)->setReady(true);
+		case kuser3:
+			lAvatar->getUserByPos(kuser3)->setReady(true);
 			break;
-		case kUserRight:
-			lAvatar->getUserByPos(kUserRight)->setReady(true);
+		case kuser4:
+			lAvatar->getUserByPos(kuser4)->setReady(true);
 			break;
-		case kUserTop:
-			lAvatar->getUserByPos(kUserTop)->setReady(true);
+		case kuser1:
+			lAvatar->getUserByPos(kuser1)->setReady(true);
 			break;
-		case kUserBot:
-			lAvatar->getUserByPos(kUserBot)->setReady(true);
+		case kuser2:
+			lAvatar->getUserByPos(kuser2)->setReady(true);
 			break;
+            case kuser5:
+                lAvatar->getUserByPos(kuser5)->setReady(true);
+                break;
 		default:
 			break;
 		}
@@ -447,25 +462,28 @@ void TomCuaCa::whenUserUnready(string uid){
 			btnUnReady->setTouchEnabled(false);
 			btnUnReady->setVisible(false);
 			//hiện ready
-			lAvatar->setReady(kUserMe,false);
+			lAvatar->setReady(kuser0,false);
 			btnReady->setTouchEnabled(true);
 			btnReady->setVisible(true);
 		
 		}
 		else{
 			switch (getPosUserByName(uid, _list_user)) {
-			case kUserLeft:
-				lAvatar->setReady(kUserLeft,false);
+			case kuser3:
+				lAvatar->setReady(kuser3,false);
 				break;
-			case kUserRight:
-				lAvatar->setReady(kUserRight,false);
+			case kuser4:
+				lAvatar->setReady(kuser4,false);
 				break;
-			case kUserTop:
-				lAvatar->setReady(kUserTop,false);
+			case kuser1:
+				lAvatar->setReady(kuser1,false);
 				break;
-			case kUserBot:
-				lAvatar->setReady(kUserBot,false);
+			case kuser2:
+				lAvatar->setReady(kuser2,false);
 				break;
+                case kuser5:
+                    lAvatar->setReady(kuser5,false);
+                    break;
 			default:
 				break;
 			}
@@ -562,11 +580,11 @@ void TomCuaCa::whenGameEnd(){
 	btnGa->setBright(true);
 	btnRuou->setBright(true);
 	btnNai->setBright(true);
-	lAvatar->setReady(kUserMe,false);
-	lAvatar->setReady(kUserTop,false);
-	lAvatar->setReady(kUserLeft,false);
-	lAvatar->setReady(kUserRight,false);
-	lAvatar->setReady(kUserBot,false);
+	lAvatar->setReady(kuser0,false);
+	lAvatar->setReady(kuser1,false);
+	lAvatar->setReady(kuser3,false);
+	lAvatar->setReady(kuser4,false);
+	lAvatar->setReady(kuser2,false);
 	if(mUtils::isSoundOn())
 		{
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
@@ -745,7 +763,7 @@ void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_
 				CCLog("---Bet: %d",_tienBet);
 		
 				boost::shared_ptr<long> oCuoc = param->GetInt("aid");
-				CCLog("---O cuoc: %d",*oCuoc);
+				CCLog("---O cuoc: %ld",*oCuoc);
 
 				char _bet[20];
 				sprintf (_bet, "%d", _tienBet);
@@ -935,7 +953,7 @@ void TomCuaCa::hienKetQua()
 		if(strcmp(info[0].c_str(),GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0)
 		{
 			
-			layerNumbers->showNumberByPos(kUserMe, _money);
+			layerNumbers->showNumberByPos(kuser0, _money);
 			if(_temp[0]!='-'){
 				
 				playSound("sounds/game_tomcuaca/win.mp3");
@@ -949,22 +967,26 @@ void TomCuaCa::hienKetQua()
 		else{
 			switch (getPosUserByName(info[0], _list_user))
 			{
-			case kUserLeft:
-				layerNumbers->showNumberByPos(kUserLeft,_money);
+			case kuser3:
+				layerNumbers->showNumberByPos(kuser3,_money);
 				CCLog("left");
 				break;
-			case kUserRight:
-				layerNumbers->showNumberByPos(kUserRight, _money);
+			case kuser4:
+				layerNumbers->showNumberByPos(kuser4, _money);
 				CCLog("righ");
 				break;
-			case kUserTop:
-				layerNumbers->showNumberByPos(kUserTop, _money);
+			case kuser1:
+				layerNumbers->showNumberByPos(kuser1, _money);
 				CCLog("top");
 				break;
-			case kUserBot:
-				layerNumbers->showNumberByPos(kUserBot, _money);
+			case kuser2:
+				layerNumbers->showNumberByPos(kuser2, _money);
 				CCLog("bot");
 				break;
+                case kuser5:
+                    layerNumbers->showNumberByPos(kuser5, _money);
+                    CCLog("bot");
+                    break;
 			default:
 				break;
 			}//switch
@@ -1209,54 +1231,61 @@ void TomCuaCa::isSpector(string _userID, string _userName, double _userMoney, st
 	this->setTouchEnabled(false);
 	//
 	if(_userID==find_ChuPhong(_list_user)){
-
-		lAvatar->setName(kUserMe, _userName.c_str());
-		lAvatar->getUserByPos(kUserMe)->setMoney(_userMoney);
-		lAvatar->getUserByPos(kUserMe)->setIcon(_userAv);
-		lAvatar->getUserByPos(kUserMe)->setAI(_userID);
-		lAvatar->setPosChuong(kUserMe);
-		lAvatar->setFlag(kUserMe, true);
+	lAvatar->getUserByPos(kuser0)->setVisibleLayerInvite(false);
+		lAvatar->setName(kuser0, _userName.c_str());
+		lAvatar->getUserByPos(kuser0)->setMoney(_userMoney);
+		lAvatar->getUserByPos(kuser0)->setIcon(_userAv);
+		lAvatar->getUserByPos(kuser0)->setAI(_userID);
+		lAvatar->setPosChuong(kuser0);
+		lAvatar->setFlag(kuser0, true);
 	}
 	else{
 		switch (getPosUserByName(_userID, _list_user)) {
-		case kUserLeft:
-			lAvatar->getUserByPos(kUserLeft)->setVisibleLayerInvite(false);
-			lAvatar->setName(kUserLeft, _userName.c_str());
-			lAvatar->getUserByPos(kUserLeft)->setMoney(_userMoney);
-			lAvatar->getUserByPos(kUserLeft)->setIcon(_userAv);
-			lAvatar->getUserByPos(kUserLeft)->setAI(_userID);
+		case kuser3:
+			lAvatar->getUserByPos(kuser3)->setVisibleLayerInvite(false);
+			lAvatar->setName(kuser3, _userName.c_str());
+			lAvatar->getUserByPos(kuser3)->setMoney(_userMoney);
+			lAvatar->getUserByPos(kuser3)->setIcon(_userAv);
+			lAvatar->getUserByPos(kuser3)->setAI(_userID);
 			CCLog("LEFT---%s",_userName.c_str());
 			CCLog("--%d",getPosUserByName(_userID, _list_user));
 			break;
-		case kUserRight:
-			lAvatar->getUserByPos(kUserRight)->setVisibleLayerInvite(false);
-			lAvatar->setName(kUserRight, _userName.c_str());
-			lAvatar->getUserByPos(kUserRight)->setMoney(_userMoney);
-			lAvatar->getUserByPos(kUserRight)->setIcon(_userAv);
-			lAvatar->getUserByPos(kUserRight)->setAI(_userID);		
+		case kuser4:
+			lAvatar->getUserByPos(kuser4)->setVisibleLayerInvite(false);
+			lAvatar->setName(kuser4, _userName.c_str());
+			lAvatar->getUserByPos(kuser4)->setMoney(_userMoney);
+			lAvatar->getUserByPos(kuser4)->setIcon(_userAv);
+			lAvatar->getUserByPos(kuser4)->setAI(_userID);		
 			CCLog("RIGHT---%s",_userName.c_str());
 			CCLog("--%d",getPosUserByName(_userID, _list_user));
 			break;
-		case kUserTop:
-			
-			lAvatar->getUserByPos(kUserTop)->setVisibleLayerInvite(false);
-			lAvatar->setName(kUserTop, _userName.c_str());
-			lAvatar->getUserByPos(kUserTop)->setMoney(_userMoney);
-			lAvatar->getUserByPos(kUserTop)->setIcon(_userAv);
-			lAvatar->getUserByPos(kUserTop)->setAI(_userID);	
+		case kuser1:
+			lAvatar->getUserByPos(kuser1)->setVisibleLayerInvite(false);
+			lAvatar->setName(kuser1, _userName.c_str());
+			lAvatar->getUserByPos(kuser1)->setMoney(_userMoney);
+			lAvatar->getUserByPos(kuser1)->setIcon(_userAv);
+			lAvatar->getUserByPos(kuser1)->setAI(_userID);	
 			CCLog("TOP---%s",_userName.c_str());
 			CCLog("--%d",getPosUserByName(_userID, _list_user));
 			break;
-		case kUserBot:
-			
-			lAvatar->getUserByPos(kUserBot)->setVisibleLayerInvite(false);
-			lAvatar->setName(kUserBot, _userName.c_str());
-			lAvatar->getUserByPos(kUserBot)->setMoney(_userMoney);
-			lAvatar->getUserByPos(kUserBot)->setIcon(_userAv);
-			lAvatar->getUserByPos(kUserBot)->setAI(_userID);
+		case kuser2:
+			lAvatar->getUserByPos(kuser2)->setVisibleLayerInvite(false);
+			lAvatar->setName(kuser2, _userName.c_str());
+			lAvatar->getUserByPos(kuser2)->setMoney(_userMoney);
+			lAvatar->getUserByPos(kuser2)->setIcon(_userAv);
+			lAvatar->getUserByPos(kuser2)->setAI(_userID);
 			CCLog("--BOT---%s",_userName.c_str()); 
 			CCLog("--%d",getPosUserByName(_userID, _list_user));
 			break;
+            case kuser5:
+                lAvatar->getUserByPos(kuser5)->setVisibleLayerInvite(false);
+                lAvatar->setName(kuser5, _userName.c_str());
+                lAvatar->getUserByPos(kuser5)->setMoney(_userMoney);
+                lAvatar->getUserByPos(kuser5)->setIcon(_userAv);
+                lAvatar->getUserByPos(kuser5)->setAI(_userID);
+                CCLog("--BOT---%s",_userName.c_str());
+                CCLog("--%d",getPosUserByName(_userID, _list_user));
+                break;
 		}
 	}
 }

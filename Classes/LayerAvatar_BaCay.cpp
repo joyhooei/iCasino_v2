@@ -504,7 +504,7 @@ void LayerBaCayAvatar::stopAllTimer()
 void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
 {
 	UIButton *abc = (UIButton*)obj;
-	int tag= abc->getTag();
+	int tag=abc->getTag();
     if(type==TOUCH_EVENT_ENDED)
 		if(tag==1)
 		{
