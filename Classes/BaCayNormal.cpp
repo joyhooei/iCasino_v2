@@ -49,7 +49,7 @@ BaCayNormal::BaCayNormal(){
     
 	layerNumberChat = Number_Chat_inGame7u::create();
 	this->addChild(layerNumberChat);
-    layerNumberChat->showNumberByPos(kuser0, 2000000);
+    
 	GameServer::getSingleton().addListeners(this);
 	SceneManager::getSingleton().hideLoading();
 }

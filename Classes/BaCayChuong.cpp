@@ -217,12 +217,9 @@ void BaCayChuong::OnExtensionResponse(unsigned long long ptrContext, boost::shar
 	if(strcmp(EXT_EVENT_LIST_USER_UPDATE.c_str(), cmd->c_str())==0){
 		layerCard->setMyName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str());
 		boost::shared_ptr<string> lu = param->GetUtfString("lu");
-		if (lu != NULL) {
+		if (lu!=NULL) {
 			_list_users = lu->c_str();
 			eventListUser(_list_users);
-            }else
-            {
-                CCLog("ban ko người");
             }
 	}
 
@@ -412,7 +409,7 @@ void BaCayChuong::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::s
 // // //Tìm chương
 string BaCayChuong::find_Chuong(string listUser){
 	string chuong = ""; 
-	if(_list_users != ""){
+	if((_list_users != "")){
 		vector<string> arrUser = mUtils::splitString(listUser, ';');
 		for(int i=0;i<arrUser.size();i++){
 			if(arrUser[i]=="")
@@ -425,17 +422,19 @@ string BaCayChuong::find_Chuong(string listUser){
 		}
 	}
 	return chuong;
+    CCLog("chương---%s",chuong.c_str());
 }
 
-// //******* Xử lý sự kiện nhận được ************///
+////******* Xử lý sự kiện nhận được ************///
 
 void BaCayChuong::eventListUser(string listusers)
 {
-  
-  
+   
 	layerAvatars->setListUserForBaCay(listusers);
-	layerAvatars->setPosChuong(layerAvatars->getPosByName(find_Chuong(listusers)));
+	
 	layerCard->setListUser(listusers);
+    
+    layerAvatars->setPosChuong(layerAvatars->getPosByName(find_Chuong(listusers)));
 	if(strcmp(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(), find_Chuong(listusers).c_str()) == 0)
 	{
 		getButtonByTag(dTag_btnBet)->setEnabled(false);

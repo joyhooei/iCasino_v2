@@ -234,7 +234,6 @@ void LayerBaCayAvatar::setPosChuong(int pos)
 	switch (pos) {
 	case kuser1:
 		chuong->setPosition(ccp(30,210));
-            
 		chuong->setVisible(true);
 		break;
 	case kuser2:
@@ -260,11 +259,15 @@ void LayerBaCayAvatar::setPosChuong(int pos)
     case kuser0:
         chuong->setPosition(ccp(370,110));
         chuong->setVisible(true);
-       
         break;
 	default:
 		break;
 	}
+    if(strcmp(listUser.c_str(),"")==0)
+    {
+        CCLog("lu-%s, pos-%d",listUser.c_str(),pos);
+        chuong->setVisible(false);
+    }
 }
 
 void LayerBaCayAvatar::setUnReadyAllUser()
@@ -352,6 +355,7 @@ void LayerBaCayAvatar::updateUsers()
 {
 	if (listUser == "")
 	{
+        getUserByPos(kuser0)->setVisibleLayerInvite(true);
 		return;
 	}
    
@@ -436,10 +440,7 @@ void LayerBaCayAvatar::updateUsers()
 			string _name = (name != NULL) ? name->c_str() : info[0];
 
 			Avatar *_user = getUserByPos(pos);
-            if(strcmp(listUser.c_str(), "")==0)
-                getUserByPos(kuser0)->setVisibleLayerInvite(true);
-                
-                  _user->setVisibleLayerInvite(false);
+            _user->setVisibleLayerInvite(false);
 			_user->setName(_name);
 			_user->setFlag(i == 0);
 			_user->setAI(info[0]);
@@ -510,24 +511,36 @@ void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
     if(type==TOUCH_EVENT_ENDED)
 		if(tag==1)
 		{
+            //yêu cầu làm khách
             boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
             GameServer::getSingleton().getSmartFox()->Send(request);
             btn_vaochoi->setEnabled(true);
             btn_dungday->setEnabled(false);
-            
+            //yêu cầu rời game
+            boost::shared_ptr<ISFSObject> params (new SFSObject());
+            boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+            boost::shared_ptr<IRequest> req (new ExtensionRequest("rqlg", params, lastRoom));
+            GameServer::getSingleton().getSmartFox()->Send(req);
+
 			
 		}else{
+            //yêu cầu vào chơi
             boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
 			GameServer::getSingleton().getSmartFox()->Send(request);
 			CCLog("da vao");
 			btn_vaochoi->setEnabled(false);
 			btn_dungday->setEnabled(true);
+            //yêu cầu join game
+            boost::shared_ptr<ISFSObject> params (new SFSObject());
+            boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+            boost::shared_ptr<IRequest> req2 (new ExtensionRequest("rqjg", params, lastRoom));
+            GameServer::getSingleton().getSmartFox()->Send(req2);
+
 				}
 }
 void LayerBaCayAvatar::playerToSpec()
 {
-    CCLog("Dang xem...");
-
+    CCLog("đang là người chơi...");
 	btn_vaochoi->setTouchEnabled(false);
 	btn_vaochoi->setEnabled(false);
 	btn_dungday->setTouchEnabled(true);
