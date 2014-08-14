@@ -1303,51 +1303,38 @@ void LayerCardInGame::actionPushCard(int fromPosUser, int toPosUser, int pId) {
     if (pId >= length) pId = length - 1;
     
     Card *card = getCardByID(pId);
-    
-	if (fromPosUser == kUserMe) {
-		removeCardOnHandByID(pId);
-		refreshCardOnHand();
-	}
+	if (card==NULL) return;
 
-	return;
+    switch (fromPosUser) {     
+		case kUserMe:
+			removeCardOnHandByID(pId);
+			refreshCardOnHand();
+			break;
 
-    switch (fromPosUser) {
-        case kUserMe: 
-            removeCardOnHandByID(pId);
-            refreshCardOnHand();
-            break;
-         
         case kUserLeft:
-            if (!card->isVisible()) {
-                card->setVisible(true);
+            if (!card->isVisible())
                 card->setPosition(getStartPositionCardUserLeft_Hit());
-            }
             break;
             
         case kUserRight:
-            if (!card->isVisible()) {
-                card->setVisible(true);
+            if (!card->isVisible())
                 card->setPosition(getStartPositionCardUserRight_Hit());
-            }
             break;
             
         case kUserTop:
-            if (!card->isVisible()) {
-                card->setVisible(true);
+            if (!card->isVisible())
                 card->setPosition(getStartPositionCardUserTop_Hit());
-            }
             break;
 
 		case kUserBot:
-			if (!card->isVisible()) {
-				card->setVisible(true);
+			if (!card->isVisible())
 				card->setPosition(getStartPositionCardUserBot_Hit());
-			}
 			break;
             
         default:
             break;
     }
+	card->setVisible(true);
     
     //actionHaPhomByPos(toPosUser, pId);
 }
@@ -1427,7 +1414,6 @@ void LayerCardInGame::actionHaPhom(vector<int> arrID, vector<int> arrIDPhom) {
             card->runAction(CCMoveTo::create(0.3, ccp(left, top)));
             card->runAction(CCScaleTo::create(0.3, 0.5));
             
-            countCardMe_Phom++;
             dem++;
         //}
         

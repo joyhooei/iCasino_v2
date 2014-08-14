@@ -348,13 +348,25 @@ void LayerPlayGamePhom::playSound( string soundPath )
 }
 
 void LayerPlayGamePhom::createButton_PushMulti_By_CardId(int cardid) {
+	
 	Card *card = layerCards->getCardByID(cardid);
 	if (card==NULL) return;
-	createButtonWith_Tag_Title_Position(kTagButtonPushMulti, "Gửi", ccp(card->getPositionX()+60, card->getPositionY()+30));
-	getButtonByTag(kTagButtonPushMulti)->setAnchorPoint(ccp(0.5, 0.5));
-	getButtonByTag(kTagButtonPushMulti)->setScale(0.5);
-	getButtonByTag(kTagButtonPushMulti)->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionPushMulti));
-	arrButtonCanPush.push_back(getButtonByTag(kTagButtonPushMulti));
+
+	Button* button = Button::create();
+	button->setTouchEnabled(true);
+	button->setScale9Enabled(false);
+	button->loadTextures("ready.png", "ready_selected.png", "");
+	button->setTitleText("Gửi");
+	button->setTitleColor(ccBLACK);
+	button->setTitleFontSize(button->getContentSize().height / 2);
+	button->setAnchorPoint(ccp(0.5, 0.5));
+	button->setScale(0.5);
+	button->addTouchEventListener(this, toucheventselector(LayerPlayGamePhom::actionPushMulti));
+	button->setPosition(ccp(card->getPositionX()+60, card->getPositionY()+30));
+	button->setTag(kTagButtonPushMulti);
+	layerButtons->addWidget(button);
+
+	arrButtonCanPush.push_back(button);
 }
 
 void LayerPlayGamePhom::createButtonWith_Tag_Title_Position(int tag, const char *title, CCPoint pPoint) {
@@ -601,6 +613,8 @@ void LayerPlayGamePhom::actionUUU(CCObject *pSender, TouchEventType pType) {
 
 void LayerPlayGamePhom::actionSitting(CCObject *pSender, TouchEventType pType) {
 	if (pType == TOUCH_EVENT_BEGAN) {
+		isSpector = layerAvatars->isSpectator();
+		isStartedGame = layerAvatars->isStartedGame();
 		if (isSpector) {
 			if (isStartedGame) {
 				if (!isRegistSittingDown){
@@ -629,6 +643,7 @@ void LayerPlayGamePhom::actionStandUp(CCObject *pSender, TouchEventType pType) {
 
 
 		isSpector = layerAvatars->isSpectator();
+		isStartedGame = layerAvatars->isStartedGame();
 		if (!isSpector) {
 			if (isStartedGame) {
 				if (!isRegistStandUp){
@@ -928,10 +943,12 @@ void LayerPlayGamePhom::event_EXT_SRVNTF_PLAYER_LIST() {
     boost::shared_ptr<string> list = param->GetUtfString("lu");
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
 
-    CCLog("EXT_SRVNTF_PLAYER_LIST = %s", list->c_str());
+    
     
 	if (list != NULL)
 	{
+		CCLog("EXT_SRVNTF_PLAYER_LIST = %s", list->c_str());
+
 		layerCards->resetGame();
 		playSound("ring_ring.mp3");
 		layerAvatars->setListUserByPhom(list->c_str());
@@ -995,7 +1012,6 @@ void LayerPlayGamePhom::event_EXT_EVENT_START() {
     playSound("start_game.mp3");
 
     this->resetGame();
-    this->initGame();
 
 	string mes = "Bắt đầu";
 	if (isSpector) mes += ". Bạn là khách, hãy tham gia sau";
