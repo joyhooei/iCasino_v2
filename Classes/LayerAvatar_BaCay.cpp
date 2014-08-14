@@ -415,7 +415,7 @@ void LayerBaCayAvatar::updateUsers()
 	avaUser6->setName("");
 	avaUser6->setMoney("");
 	avaUser6->setAI("");
-
+    
 	for (int i = 0; i < arrUser.size(); i++)
 	{
 		vector<string> info = mUtils::splitString(arrUser[i],'|');
@@ -436,7 +436,10 @@ void LayerBaCayAvatar::updateUsers()
 			string _name = (name != NULL) ? name->c_str() : info[0];
 
 			Avatar *_user = getUserByPos(pos);
-            _user->setVisibleLayerInvite(false);
+            if(strcmp(listUser.c_str(), "")==0)
+                getUserByPos(kuser0)->setVisibleLayerInvite(true);
+                
+                  _user->setVisibleLayerInvite(false);
 			_user->setName(_name);
 			_user->setFlag(i == 0);
 			_user->setAI(info[0]);
@@ -460,11 +463,10 @@ void LayerBaCayAvatar::updateUsers()
 			{
 				_user->setVisible(true);
 				_user->setTouchEnabled(false);
-			}
-			else {
-				_user->setVisibleLayerInvite(false);
+                
 			}
 		}
+		
 	}//for
 
 }

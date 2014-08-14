@@ -220,6 +220,9 @@ void BaCayChuong::OnExtensionResponse(unsigned long long ptrContext, boost::shar
 		if (lu != NULL) {
 			_list_users = lu->c_str();
 			eventListUser(_list_users);
+            }else
+            {
+                CCLog("ban ko người");
             }
 	}
 
@@ -456,7 +459,7 @@ void BaCayChuong::eventListUser(string listusers)
     {
 		nameGame->setString("Bạn đang xem...");
 		
-        if(list.size()<7 && list.size()>0)
+        if(list.size()<7)
         {
             layerAvatars->specToPlayer();
         
@@ -481,7 +484,7 @@ void BaCayChuong::eventListUser(string listusers)
 			getButtonByTag(dTag_btnView)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnBet)->setTouchEnabled(true);
-			if(list.size()>2)
+			//if(list.size()>2)
 			layerAvatars->playerToSpec();
 			
 		}
@@ -512,7 +515,7 @@ void BaCayChuong::eventGameBet_NTF(string uid, int gbv)
 
 void BaCayChuong::action_UserRejoinGame(string lsUser){
 	CCLOG("list user rejoin game %s",lsUser.c_str());
-
+    if(strcmp(lsUser.c_str(), "")==0) return;
 	vector<string> list = mUtils::splitString(lsUser, ';');
 
 	if(strcmp(mUtils::splitString(list[0], '|')[3].c_str(), "1") == 0){

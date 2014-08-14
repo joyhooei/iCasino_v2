@@ -93,7 +93,7 @@ float TomCuaCa::convertResult(string rs)
 	return -1;
 }
 TomCuaCa::TomCuaCa(){
-	meIsSpector=false;
+
 	if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
@@ -652,8 +652,7 @@ void TomCuaCa::createAvatars(){
 	//MY info
 
 	lAvatar = AvatarInTomCuaCa::create();
-	
-lAvatar->resetAll();
+    lAvatar->resetAll();
 	uLayer->addChild(lAvatar);
 	
 }

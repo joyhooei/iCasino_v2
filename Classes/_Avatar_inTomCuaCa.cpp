@@ -572,27 +572,26 @@ void AvatarInTomCuaCa::showChatByPos(int pos, string mes)
 
 	switch (pos) {
 	case kuser0:
-		point.setPoint((WIDTH_DESIGN/2-newMes->getSize().width/2), 30);
-		
+		point.setPoint(40, 400);
 		break;
 
 	case kuser1:
-		point.setPoint(50, 320);
+		point.setPoint(40, 280);
 		break;
 
 	case kuser2:
-		point.setPoint(50, 180);
+		point.setPoint(40, 160);
 		break;
 
 	case kuser3:
-		point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 380);
+		point.setPoint(650, 400);
 		break;
 
 	case kuser4:
-		point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 180);
+		point.setPoint(650, 280);
 		break;
     	case kuser5:
-            point.setPoint(WIDTH_DESIGN - newMes->getSize().width, 180);
+            point.setPoint(650, 160);
             break;
 	default:
 		point.setPoint((WIDTH_DESIGN - newMes->getSize().width) / 2, (HEIGHT_DESIGN - newMes->getSize().height) / 2);

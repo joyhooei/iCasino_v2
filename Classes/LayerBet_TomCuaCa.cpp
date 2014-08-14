@@ -39,7 +39,7 @@ void LayerBet_TomCuaCa::onButtonCreate(CCObject* pSender)
 {
 	
 	CCLOG("mTip: %s", lblMoney->getString());
-	float myTien = floor(sliderMoney->getValue());
+	//float myTien = floor(sliderMoney->getValue());
 	double gameBet = floor(sliderMoney->getValue()/1000)*1000;
 	//EXT_EVENT_GAME_BET_REQ = "gbr";
 	boost::shared_ptr<ISFSObject> params (new SFSObject());
