@@ -193,7 +193,7 @@ public:
 	CardChan* getCardFromPos_take(int pos);
 
 	void doDisCards();
-	void doChiuCard();
+	void doChiuCard(); 
 	void doEateCard();
 	void doDuoiCard();
 	void doViewNoc(string listnoc);

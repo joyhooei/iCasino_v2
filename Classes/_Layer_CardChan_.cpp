@@ -393,6 +393,7 @@ void _Layer_CardChan_::refreshListCard(){
 
 		pCard->runAction(rr);
 		pCard->runAction(mm);
+		pCard->setFlag(false);
 
 		cou++;
 	}
@@ -685,6 +686,10 @@ void _Layer_CardChan_::takeCards(int f_user, int t_user, string cardnu, string c
 		break;
 	case CARD_ORIGINATION_BOC_NOC:
 		CCLOG("Bốc nọc");
+		if (t_user == kUserMe)
+		{
+			refreshListCard();
+		}
 		action_BocNoc(t_user, cardnu, cardsu);
 		break;
 	case CARD_ORIGINATION_AN_CUA_TREN:
@@ -712,6 +717,9 @@ void _Layer_CardChan_::takeCards(int f_user, int t_user, string cardnu, string c
 		break;
 	case CARD_ORIGINATION_BY_DUOI:
 		//playSounds("duoi.mp3");
+		if(t_user == kUserMe){
+			refreshListCard();
+		}
 		CCLOG("Dưới");
 		break;
 	case CARD_ORIGINATION_BY_TRANSFER_TREN_2_DUOI:
@@ -1046,14 +1054,31 @@ void _Layer_CardChan_::action_DanhBai(int f_user, string cardnu, string cardsu){
 void _Layer_CardChan_::action_DanhBai_ME(string cardnu,string cardsu){
 	CCLOG("Tôi đánh");
 	int idCard = -1;
-	for(int i = 0; i < CARD_ME->count(); i++){
+	bool _flag = false;
+	for (int i = 0; i < CARD_ME->count(); i++)
+	{
 		CardChan *pCard = (CardChan *) CARD_ME->objectAtIndex(i);
-		if (pCard->getFlag() && pCard->getNumber() == atoi(cardnu.c_str()) && pCard->getSuite() == atoi(cardsu.c_str()))
-		{
-			idCard = pCard->getID();
+		if (pCard->getFlag()){
+			_flag = true;
 			break;
 		}
-		else{
+	}
+
+	if (_flag == true)
+	{
+		for(int i = 0; i < CARD_ME->count(); i++){
+			CardChan *pCard = (CardChan *) CARD_ME->objectAtIndex(i);
+			if (pCard->getFlag() && pCard->getNumber() == atoi(cardnu.c_str()) && pCard->getSuite() == atoi(cardsu.c_str()))
+			{
+				idCard = pCard->getID();
+				break;
+			}
+		}
+	}
+	else
+	{
+		for(int i = 0; i < CARD_ME->count(); i++){
+			CardChan *pCard = (CardChan *) CARD_ME->objectAtIndex(i);
 			if(pCard->getNumber() == atoi(cardnu.c_str()) && pCard->getSuite() == atoi(cardsu.c_str())){
 				idCard = pCard->getID();
 				break;
@@ -1066,7 +1091,6 @@ void _Layer_CardChan_::action_DanhBai_ME(string cardnu,string cardsu){
 	CCObject *t;
 	CCARRAY_FOREACH(CARD_ME, t){
 		CardChan *pCard =  dynamic_cast<CardChan*>(t);
-		//if (pCard->getFlag() && pCard->getNumber() == atoi(cardnu.c_str()) && pCard->getSuite() == atoi(cardsu.c_str())) {
 		if (pCard->getID() == idCard) {
 			float rotate = -(pCard->getRotation());
 			CCActionInterval *rotateTo = CCRotateBy::create(0.3, rotate);
@@ -1599,7 +1623,7 @@ void _Layer_CardChan_::doDuoiCard(){
 	boost::shared_ptr<Room> lstRooms = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 	boost::shared_ptr<IRequest> request (new ExtensionRequest("rqduoic",params,lstRooms));
 	GameServer::getSingleton().getSmartFox()->Send(request);
-	refreshListCard();
+	//refreshListCard();
 }
 
 void _Layer_CardChan_::doViewNoc(string listnoc){

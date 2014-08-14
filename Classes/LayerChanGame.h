@@ -164,7 +164,7 @@ public:
 	vector<string> splitString(string &S,const char &str);
 
 	Button* createButtonWithTitle_Pos(const char *pName, CCPoint pPoint);
-	Button* createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture,const char* pTextureSelect);
+	Button* createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture,const char* pTextureSelect, int _posChild);
 	Button* getButtonByTag(int pTag);
 
 	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
@@ -177,6 +177,8 @@ public:
 	void callbackTimer(CCNode *pSender);
 	void stopTimer_Me();
 	void callBackFunction_LatBai(CCNode *pSend);
+
+	string identifyCuoc_sac(string _cuoc);
 };
 
 #endif /* defined(__iCasinov2__LayerChanGame__) */

@@ -1,4 +1,4 @@
-﻿//
+//
 //  LayerGameChan_KetQua.cpp
 //  demo
 //
@@ -9,7 +9,6 @@
 #include "LayerGameChan_KetQua.h"
 #include "mUtils.h"
 #include "AllData.h"
-
 LayerGameChan_KetQua::LayerGameChan_KetQua()
 {
 
@@ -40,12 +39,20 @@ bool LayerGameChan_KetQua::init(){
 	img->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2));
 	resuiltKQ->addWidget(img);
 
+
+
 	btnClose = UIButton::create();
 	btnClose->loadTextures("btnChanClose.png","btnChanClose_press.png","");
 	btnClose->setPosition(ccp(WIDTH_DESIGN / 2, img->getPositionY() - img->getContentSize().height / 2));
-	btnClose->setTitleText("Đóng");
-	btnClose->setTitleColor(ccWHITE);
-	btnClose->setTitleFontSize(18);
+
+	UILabelBMFont *title = UILabelBMFont::create();
+	title->setFntFile("tttt.fnt");
+	title->setText("Đóng");
+	title->setColor(ccWHITE);
+	title->setScale(0.7);
+	title->setPositionY(5.0);
+	btnClose->addChild(title);
+
 	btnClose->setEnabled(true);
 	btnClose->addTouchEventListener(this, toucheventselector(LayerGameChan_KetQua::btnClose_LayerResuilt));
 	resuiltKQ->addWidget(btnClose);
@@ -95,6 +102,7 @@ void LayerGameChan_KetQua::displayResuilt(string resuilt){
 	content->setFontSize(20);
 	content->setColor(ccRED);
 	img->addChild(content);
+
 } 
 
 vector<string> LayerGameChan_KetQua::splitString(string &S,const char &str){

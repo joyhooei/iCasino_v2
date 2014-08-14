@@ -16,6 +16,7 @@
 #include "mUtils.h"
 #include "SceneManager.h"
 
+#define kMyFont "UVNVan.fnt"
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
 XiTo::XiTo():luotChia(0),chiathem(0){
@@ -766,21 +767,21 @@ void XiTo::updateUsers(string listUser){
     boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 
 	//Nếu là khách xem
-	if(myself->IsSpectator() == true)
-	{
-		getButtonByTag(dTag_btnReady)->setEnabled(false);
-		CCLOG("Jumpe to here !");
-		if (list.size() < 5)
-		{
-			getButtonByTag(dTag_btnJoinGame)->setEnabled(true);
-		}
-		else
-		{
-			getButtonByTag(dTag_btnJoinGame)->setEnabled(false);
-		}
-	}
-	//Nếu không phải là khách-> là 1 người chơi, hiện thị button ready
-	else
+// 	if(myself->IsSpectator() == true)
+// 	{
+// 		getButtonByTag(dTag_btnReady)->setEnabled(false);
+// 		CCLOG("Jumpe to here !");
+// 		if (list.size() < 5)
+// 		{
+// 			getButtonByTag(dTag_btnJoinGame)->setEnabled(true);
+// 		}
+// 		else
+// 		{
+// 			getButtonByTag(dTag_btnJoinGame)->setEnabled(false);
+// 		}
+// 	}
+// 	//Nếu không phải là khách-> là 1 người chơi, hiện thị button ready
+// 	else
 	{
 		getButtonByTag(dTag_btnReady)->setEnabled(true);
 	}
@@ -1298,18 +1299,18 @@ void XiTo::createLabelVictype(int pos, long vicType){
 
 	CCLOG("Values end of game: %s", getTypeListCards(vicType).c_str());
 
-	Label *vic = Label::create();
-	vic->setFontName("fonts/UVNDaLat_R.TTF");
-	vic->setText(getTypeListCards(vicType).c_str());
+	CCLabelBMFont *vic = CCLabelBMFont::create();
+	vic->setFntFile(kMyFont);
+	vic->setString(getTypeListCards(vicType).c_str());
 
-// 	if(vicType == 0){
-// 		vic->setText("Úp bỏ");
-// 	}
+	if(vicType == 0){
+		vic->setString("Úp bỏ");
+	}
 
 	vic->setColor(ccc3(239,235,117));
-	vic->setFontSize(22);
 	vic->setAnchorPoint(ccp(0,0));
 	vic->setPosition(ccp(x, y));
+	vic->setScale(0.7);
 	layerLabelVictype->addChild(vic);
 }
 
@@ -1338,7 +1339,7 @@ string XiTo::getTypeListCards(long type){
 		txt = "Thùng";
 		break;
 	case 7:
-		txt = "Cũ Lũ";
+		txt = "Cù Lũ";
 		break;
 	case 8:
 		txt = "Tứ Quý";
@@ -1921,12 +1922,23 @@ Button* XiTo::createButtonWithTitle_Pos(const char *pName, CCPoint pPoint) {
 	button->setTouchEnabled(true);
 	button->setScale9Enabled(false);
 	button->loadTextures("ready.png", "ready_selected.png", "");
-	button->setTitleText(pName);
-	button->setTitleColor(ccRED);
-	button->setTitleFontSize(20);
-	button->setTitleFontSize(button->getContentSize().height / 2);
+// 	button->setTitleText(pName);
+// 	button->setTitleColor(ccRED);
+// 	button->setTitleFontSize(20);
+// 	button->setTitleFontSize(button->getContentSize().height / 2);
 	button->setAnchorPoint(ccp(0, 0));
 	button->setScaleX(90 / button->getContentSize().width);
+
+
+	UILabelBMFont *lbl = UILabelBMFont::create();
+	lbl->setFntFile(kMyFont);
+	lbl->setText(pName);
+	lbl->setColor(ccRED);
+	lbl->setPositionY(button->getContentSize().height / 2);
+	lbl->setPositionX(button->getContentSize().width / 2);
+	lbl->setScaleX(1 / button->getScaleX());
+	lbl->setScale(0.7);
+	button->addChild(lbl);
 
 	button->setPosition(pPoint);
 

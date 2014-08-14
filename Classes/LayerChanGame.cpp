@@ -186,13 +186,13 @@ void LayerChanGame::createButtons(){
 	int _space = 20;
 
 	Button *btnReady = createButtonWithTitle_Pos("Sẵn Sàng",ccp(WIDTH_DESIGN - w_Button - _space, _space));
-	Button *btnBoc = createButton_Chan("Bốc",ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 5),"U.png","U_press.png");
+	Button *btnBoc = createButton_Chan("Bốc",ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 5),"U.png","U_press.png",-1);
 
-	Button *btnEate = createButton_Chan("Ăn", ccp(WIDTH_DESIGN/ 2, 60), "an.png", "an_press.png");
-	Button *btnU = createButton_Chan("Ù", ccp(WIDTH_DESIGN/ 2, 10), "U.png", "U_press.png");
-	Button *btnChiu = createButton_Chan("Chíu", ccp(WIDTH_DESIGN / 2 - btnU->getContentSize().width / 2 - 75 / 2 + 9, 7), "chiu.png", "chiu_press.png");
-	Button *btnTake = createButton_Chan("Đánh", ccp(WIDTH_DESIGN / 2 + btnU->getContentSize().width / 2 + 75 / 2 - 9, 7), "danh.png", "danh_press.png");
-	Button *btnDuoi = createButton_Chan("Dưới", ccp(WIDTH_DESIGN / 2 + btnU->getContentSize().width / 2 + 75 / 2 - 9, 7), "danh.png", "danh_press.png");
+	Button *btnEate = createButton_Chan("Ăn", ccp(WIDTH_DESIGN/ 2, 60), "an.png", "an_press.png", -1);
+	Button *btnU = createButton_Chan("Ù", ccp(WIDTH_DESIGN/ 2, 10), "U.png", "U_press.png", -1);
+	Button *btnChiu = createButton_Chan("Chíu", ccp(WIDTH_DESIGN / 2 - btnU->getContentSize().width / 2 - 75 / 2 + 9, 7), "chiu.png", "chiu_press.png", 1);
+	Button *btnTake = createButton_Chan("Đánh", ccp(WIDTH_DESIGN / 2 + btnU->getContentSize().width / 2 + 75 / 2 - 9, 7), "danh.png", "danh_press.png", 2);
+	Button *btnDuoi = createButton_Chan("Dưới", ccp(WIDTH_DESIGN / 2 + btnU->getContentSize().width / 2 + 75 / 2 - 9, 7), "danh.png", "danh_press.png", 2);
 
 	btnReady->setEnabled(true);
 	btnBoc->setEnabled(false);
@@ -306,6 +306,9 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 					getButtonByTag(cTag_btnBoc)->setEnabled(true);
 
 					getButtonByTag(cTag_btnU)->setEnabled(true);
+
+					getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
+					getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
 					getButtonByTag(cTag_btnChiu)->setEnabled(true);
 
 					getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
@@ -337,6 +340,18 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			layerCardChan->setCountNoc((int)*noccount);
 			if (*noccount == 0)
 			{
+				getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
+				getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
+
+				getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh_Disable.png");
+				getButtonByTag(cTag_btnDuoi)->setTouchEnabled(false);
+
+				getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
+				getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
+
+				getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+				getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
+
 				Chat *toast = new Chat("Đã bốc hết nọc, đợi xem có nhà nào báo Ù không !" , -1);
 				toast->setPositionY(HEIGHT_DESIGN / 2);
 				this->addChild(toast);
@@ -623,15 +638,15 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 }//end extensions
 
 void LayerChanGame::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-
+	CCLOG("user variables update !");
 }
 
 void LayerChanGame::OnSmartFoxPublicMessage(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-
+	CCLOG("message from user !");
 }
 
 void LayerChanGame::OnSmartFoxConnectionLost(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
-
+	
 }
 void LayerChanGame::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 
@@ -828,6 +843,7 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 	CCLOG("From %d to %d", fpos, tpos);
 	layerCardChan->takeCards(fpos, tpos, cardnu, cardsu, crdorg);
 
+	//Xet các trường hợp để hiển thị các Button
 	if(tpos == kUserMe){
 		if (crdorg == 3 || crdorg == 2)
 		{
@@ -840,9 +856,50 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 	}
 
 	//Nếu người khác trả cửa vào cửa của mình
-	if(crdorg == 5 && fpos != kUserMe && tpos == kUserMe){
-		CCLOG("Nguoi khac tra cua vao cua chi cua minh");
-		flagTraCuaToMe = true;
+	if(crdorg == 5){
+		if(fpos != kUserMe && tpos == kUserMe){
+			CCLOG("Nguoi khac tra cua vao cua chi cua minh");
+			flagTraCuaToMe = true;
+		}
+		getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu.png");
+		getButtonByTag(cTag_btnChiu)->setTouchEnabled(true);
+	}
+
+	//Khi có người đánh bài
+	if(crdorg == 6){
+		if (fpos == kUserMe)
+		{
+			getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
+			getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
+		}
+		else
+		{
+			getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu.png");
+			getButtonByTag(cTag_btnChiu)->setTouchEnabled(true);
+		}
+	}
+	
+	//Khi có người Bốc bài thành công
+	if (crdorg == 1)
+	{
+		getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu.png");
+		getButtonByTag(cTag_btnChiu)->setTouchEnabled(true);
+	}
+	
+	//Khi có 1 người Dưới bài
+	if(crdorg == 7){
+		if (tpos == kUserMe)
+		{
+			getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
+			getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
+		}
+	}
+
+	//Nếu mình ăn một lá bài
+	if (crdorg == 9 && tpos == kUserMe)
+	{
+		getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
+		getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
 	}
 }
 
@@ -861,18 +918,31 @@ Button* LayerChanGame::createButtonWithTitle_Pos(const char *pName, CCPoint pPoi
 	return button;
 }
 
-Button* LayerChanGame::createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture, const char* pTextureSelect){
+Button* LayerChanGame::createButton_Chan(const char* pName, CCPoint pPoint, const char* pTexture, const char* pTextureSelect, int _posChild){
 	Button* button = Button::create();
 	button->setTouchEnabled(true);
 	button->setScale9Enabled(false);
 	button->loadTextures(pTexture, pTextureSelect, "");
-	button->setTitleText(pName);
-	button->setTitleColor(ccRED);
-	button->setTitleFontSize(20);
-	button->setTitleFontSize(button->getContentSize().height / 3);
+
 	button->setAnchorPoint(ccp(0.5, 0));
 	button->setPosition(pPoint);
 
+	UILabelBMFont *lbl = UILabelBMFont::create();
+	lbl->setFntFile("tttt.fnt");
+	lbl->setText(pName);
+	lbl->setColor(ccRED);
+	lbl->setScale(0.8);
+	lbl->setPositionY(button->getContentSize().height / 2 + 3);
+	if(_posChild == 1){
+		//button Chiu
+		lbl->setPositionX(-4.0);
+	}
+	if (_posChild == 2)
+	{
+		//Button Danh, Duoi
+		lbl->setPositionX(4.0);
+	}
+	button->addChild(lbl);
 	return button;
 }
 
@@ -1265,18 +1335,24 @@ void LayerChanGame::resuiltGame(string resuilt)
 	string _cuoc = (strcmp(arrResuilt[4].c_str(), "") != 0) ? arrResuilt[4] : arrResuilt[5];
 	vector<string> arrCuoc = splitString(_cuoc, ':');
 
-	LayerGameChan_KetQua *kq = LayerGameChan_KetQua::create();
 	string ketqua = "";
 
 	for(int  i = 0; i < arrCuoc.size(); i++){
-		ketqua += kq->identifyCuoc_sac(arrCuoc[i]) + " ";
+		ketqua += identifyCuoc_sac(arrCuoc[i]);
+		if (identifyCuoc_sac(arrCuoc[i]) != "")
+		{
+			ketqua += " ";
+		}
 	}
 
-	CCLabelTTF *lblCuoc = CCLabelTTF::create();
+	CCLOG("ket cuoc: %s",ketqua.c_str());
+	CCLabelBMFont *lblCuoc = CCLabelBMFont::create();
+	lblCuoc->setFntFile("tttt.fnt");
 	lblCuoc->setString(ketqua.c_str());
+
 	lblCuoc->setAnchorPoint(ccp(0.5, 0.5));
-	lblCuoc->setFontSize(24);
-	lblCuoc->setColor(ccYELLOW);
+
+	lblCuoc->setColor(ccRED);
 	lblCuoc->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 130));
 	lblCuoc->setTag(201);
 	this->addChild(lblCuoc);
@@ -1320,9 +1396,11 @@ void LayerChanGame::setEndGame(){
 	getButtonByTag(cTag_btnTake)->setTouchEnabled(true);
 	getButtonByTag(cTag_btnTake)->setEnabled(false);
 
+	getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu.png");
+	getButtonByTag(cTag_btnChiu)->setTouchEnabled(true);
+	getButtonByTag(cTag_btnChiu)->setEnabled(false);
 
 	getButtonByTag(cTag_btnU)->setEnabled(false);
-	getButtonByTag(cTag_btnChiu)->setEnabled(false);
 	getButtonByTag(cTag_btnReady)->setEnabled(true);
 
 	if (this->getChildByTag(201) != NULL)
@@ -1475,4 +1553,63 @@ void LayerChanGame::stopTimer_Me(){
 		timer_Me->stopAllActions();
 	}
 	timer_Me->setPercentage(0);
+}
+
+string LayerChanGame::identifyCuoc_sac(string _cuoc){
+	int cuoc = atoi(_cuoc.c_str());
+	switch(cuoc){
+	case 0:
+		return "Xuông";
+	case 1:
+		return "Thông";
+	case 2:
+		return "Chì";
+	case 3:
+		return "Thiên Ù";
+	case 4:
+		return "Địa Ù";
+	case 5:
+		return "Tôm";
+	case 6:
+		return "Lèo";
+	case 7:
+		return "Bạch Định";
+	case 8:
+		return "Tám Đỏ";
+	case 9:
+		return "Kính Tứ Chi";
+	case 10:
+		return "Thập thành";
+	case 11:
+		return "Có Thiên Khai";
+	case 12:
+		return "Ăn Bòn";
+	case 13:
+		return "Ù Bòn";
+	case 14:
+		return "Có Chíu";
+	case 15:
+		return "Chíu Ù";
+	case 16:
+		return "Bạch Thủ";
+	case 17:
+		return "Hoa Rơi cửa phật";
+	case 18:
+		return "Nhà lầu xe hơi, hoa rơi cửa phật";
+	case 19:
+		return "Cá lội sân đình";
+	case 20:
+		return "Cá nhảy đầu thuyền";
+	case 21:
+		return "Chùa đổ nát hoa";
+	case 22:
+		return "Đôi Lèo";
+	case 23:
+		return "Đôi tám đỏ";
+	case 24:
+		return "Đôi Tôm";
+	case 25:
+		return "Bạch thủ Chi";
+	}
+	return "";
 }
