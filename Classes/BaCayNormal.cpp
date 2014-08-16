@@ -405,7 +405,7 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 	layerCards->setListUser(listusers);
 
 	vector<string> arrUser = mUtils::splitString(listusers,';');
-	vector<string> first = mUtils::splitString(arrUser[0],'|');
+	
 
 	if(layerAvatars->isSpect())
 	{
@@ -414,7 +414,8 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 		getButtonByTag(dTag_btnReady)->setVisible(false);
 		if(arrUser.size()<7)
 		{
-			layerAvatars->specToPlayer();
+            if(layerAvatars->isStartedGame()!=true)
+                layerAvatars->specToPlayer();
 		}else
 		{
 			
@@ -435,10 +436,12 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 		getButtonByTag(dTag_btnView)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
 		layerbutton->getButtonByTag(103)->setTouchEnabled(true);
-		if(arrUser.size()>2)
+            if(layerAvatars->isStartedGame()!=true)
 			layerAvatars->playerToSpec();
 
 	}
+    if(strcmp(listusers.c_str(), "")==0) return;
+    vector<string> first = mUtils::splitString(arrUser[0],'|');
 	if(strcmp(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(), first[0].c_str()) == 0)
 	{
 		getButtonByTag(dTag_btnReady)->setTitleText("Chia Bài");
@@ -453,6 +456,7 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 
 void BaCayNormal::whenUserRejoinOrGuess(string listUser){
 
+    if(strcmp(listUser.c_str(), "")==0) return;
 	vector<string> list = mUtils::splitString(listUser, ';');
 
 	if(strcmp(mUtils::splitString(list[0], '|')[1].c_str(), "1") == 0){

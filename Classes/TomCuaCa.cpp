@@ -94,6 +94,7 @@ float TomCuaCa::convertResult(string rs)
 }
 TomCuaCa::TomCuaCa(){
 
+
 	if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
@@ -231,7 +232,9 @@ TomCuaCa::TomCuaCa(){
 	createAvatars();
 	createButtons();
 	this->addChild(uLayer);
-	
+    NumberInTomCuaCa *a = NumberInTomCuaCa::create();
+    a->showNumberByPos(kuser0, "7000000");
+    this->addChild(a);
 	 _id_me =((boost::shared_ptr<string>)(GameServer::getSingleton().getSmartFox()->MySelf()->Name()));
 	
 }

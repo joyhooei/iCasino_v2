@@ -62,12 +62,36 @@ bool AvatarInTomCuaCa::init() {
 
 	this->setAnchorPoint(ccp(0, 0));
 	this->setPosition(ccp(0, 0));
+	UILayer *ul = UILayer::create();
 
 	this->typeGame = 0;
 	this->myName = SceneManager::getSingleton().getMyName();
 	this->myAI   = SceneManager::getSingleton().getMyName();
-	
-	CCLog("this->myName = SceneManager::getSingleton().getMyName() = %s", this->myName.c_str());
+	btn_vaochoi = UIButton::create();
+    btn_vaochoi->setTouchEnabled(true);
+    btn_vaochoi->loadTextures("ready.png", "ready_selected.png", "");
+    btn_vaochoi->setTitleText("Vào bàn");
+	btn_vaochoi->setScale(0.8);
+    btn_vaochoi->setPosition(ccp(65,87));
+	btn_vaochoi->setTitleFontSize(20);
+    btn_vaochoi->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
+    btn_vaochoi->setEnabled(false);
+	btn_vaochoi->setTag(0);
+    
+	btn_dungday = UIButton::create();
+	btn_dungday->setTouchEnabled(true);
+	btn_dungday->loadTextures("ready.png", "ready_selected.png", "");
+	btn_dungday->setTitleText("Đứng dậy");
+	btn_dungday->setScale(0.8);
+	btn_dungday->setPosition(ccp(65,87));
+	btn_dungday->setTitleFontSize(20);
+	btn_dungday->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
+	btn_dungday->setEnabled(false);
+	btn_dungday->setTag(1);
+    ul->addWidget(btn_vaochoi);
+    ul->addWidget(btn_dungday);
+	this->addChild(ul);
+    CCLog("this->myName = SceneManager::getSingleton().getMyName() = %s", this->myName.c_str());
 
 	Avatar *me = new Avatar(false);
 	Avatar *user1 = new Avatar(false);
@@ -637,4 +661,86 @@ int AvatarInTomCuaCa::getPosByAccountID(string aI) {
 	}
 
 	return -1;
+}
+bool AvatarInTomCuaCa::isSpect() {
+	vector<string> arr = mUtils::splitString(this->listUser, ';');
+	int size = arr.size();
+	for (int i = 0; i < size; i++){
+		vector<string> arrInfo = mUtils::splitString(arr.at(i), '|');
+		if (arrInfo.size() < 2) continue;
+		string ai = arrInfo.at(0);
+		if (strcmp(ai.c_str(), myAI.c_str())==0)
+            return false;
+	}
+    
+	return true;
+}
+bool AvatarInTomCuaCa::isStartedGame()
+{
+	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
+	string s = *rv->GetStringValue();
+    
+	vector<string> lstBet = mUtils::splitString( s, '@' );
+	bool isStartedGame=false;
+	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
+	if (isStartedGame) {
+		CCLog("Ban dang choi!");
+	} else CCLog("Ban chua choi!");
+    
+	return isStartedGame;
+}
+void AvatarInTomCuaCa::vaoBanChoi(CCObject *obj,TouchEventType type)
+{
+	UIButton *abc = (UIButton*)obj;
+	int tag=abc->getTag();
+    if(type==TOUCH_EVENT_ENDED)
+		if(tag==1)
+		{
+            //yêu cầu làm khách
+            boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+            GameServer::getSingleton().getSmartFox()->Send(request);
+            btn_vaochoi->setEnabled(true);
+            btn_dungday->setEnabled(false);
+            //yêu cầu rời game
+            boost::shared_ptr<ISFSObject> params (new SFSObject());
+            boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+            boost::shared_ptr<IRequest> req (new ExtensionRequest("rqlg", params, lastRoom));
+            GameServer::getSingleton().getSmartFox()->Send(req);
+            
+			
+		}///
+        else{
+            //yêu cầu vào chơi
+            boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+			GameServer::getSingleton().getSmartFox()->Send(request);
+			CCLog("da vao");
+			btn_vaochoi->setEnabled(false);
+			btn_dungday->setEnabled(true);
+            //yêu cầu join game
+            boost::shared_ptr<ISFSObject> params (new SFSObject());
+            boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+            
+            boost::shared_ptr<IRequest> req2 (new ExtensionRequest("rqjg", params, lastRoom));
+            GameServer::getSingleton().getSmartFox()->Send(req2);
+            
+        }
+}
+void AvatarInTomCuaCa::playerToSpec()
+{
+    CCLog("đang là người chơi...");
+	btn_vaochoi->setTouchEnabled(false);
+	btn_vaochoi->setEnabled(false);
+	btn_dungday->setTouchEnabled(true);
+	btn_dungday->setEnabled(true);
+    
+    
+}
+void AvatarInTomCuaCa::specToPlayer()
+{
+    CCLog("đang trống ");
+    btn_vaochoi->setTouchEnabled(true);
+    btn_vaochoi->setEnabled(true);
+	btn_dungday->setTouchEnabled(false);
+	btn_dungday->setEnabled(false);
 }

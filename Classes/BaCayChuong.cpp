@@ -345,7 +345,7 @@ void BaCayChuong::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, bo
 		return;
 
 	int _money = (int)(*money);
-
+/*
 	switch(layerAvatars->getPosByName(uid->c_str()))
 	{
 	case kuser0:
@@ -371,7 +371,7 @@ void BaCayChuong::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, bo
             break;
 	default:
 		break;
-	}
+	}*/
 }
 
 
@@ -422,7 +422,7 @@ string BaCayChuong::find_Chuong(string listUser){
 		}
 	}
 	return chuong;
-    CCLog("chương---%s",chuong.c_str());
+  
 }
 
 ////******* Xử lý sự kiện nhận được ************///
@@ -460,7 +460,8 @@ void BaCayChuong::eventListUser(string listusers)
 		
         if(list.size()<7)
         {
-            layerAvatars->specToPlayer();
+            if(layerAvatars->isStartedGame()!=true)
+                layerAvatars->specToPlayer();
         
         }
         else
@@ -484,7 +485,8 @@ void BaCayChuong::eventListUser(string listusers)
 			getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnBet)->setTouchEnabled(true);
 			//if(list.size()>2)
-			layerAvatars->playerToSpec();
+            if(layerAvatars->isStartedGame()!=true)
+                    layerAvatars->playerToSpec();
 			
 		}
   
@@ -683,7 +685,6 @@ void BaCayChuong::whenResuiltGame(string rg){
 
 void BaCayChuong::whenGameEnd(){
 
-	
 	layerCard->resetGame();
 	layerBet->getLayerResuilt()->removeAllChildrenWithCleanup(true);
 	getButtonByTag(dTag_btnReady)->setEnabled(true);

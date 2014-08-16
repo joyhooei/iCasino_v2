@@ -523,7 +523,8 @@ void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
             GameServer::getSingleton().getSmartFox()->Send(req);
 
 			
-		}else{
+		}///
+        else{
             //yêu cầu vào chơi
             boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
 			GameServer::getSingleton().getSmartFox()->Send(request);
@@ -568,4 +569,19 @@ bool LayerBaCayAvatar::isSpect() {
 	}
     
 	return true;
+}
+bool LayerBaCayAvatar::isStartedGame()
+{
+	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
+	string s = *rv->GetStringValue();
+    
+	vector<string> lstBet = mUtils::splitString( s, '@' );
+	bool isStartedGame=false;
+	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
+	if (isStartedGame) {
+		CCLog("Ban dang choi!");
+	} else CCLog("Ban chua choi!");
+    
+	return isStartedGame;
 }

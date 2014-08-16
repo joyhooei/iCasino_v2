@@ -53,33 +53,36 @@ void NumberInTomCuaCa::runAction(float dt) {
 		string numberString = arrNumberString.at(i);
 
 		Number *number = new Number(numberString);
+        number->setScale(0.7);
 		CCPoint point;
 
 		switch (pos) {
-		case kUserLeft:
-			point.setPoint(650, 250 + demLeft * number->getSize().height);
+		case kuser0:
+			point.setPoint(50, 350);
+                
 			demLeft++;
 			break;
-
-		case kUserRight:
-			point.setPoint(700-number->getSize().width/2, 80 + demRight * number->getSize().height);
-			demRight++;
-			break;
-
-		case kUserTop:
-			point.setPoint(50, 250 + demTop * number->getSize().height);
-			demTop++;
-			break;
-
-		case kUserBot: 
-			point.setPoint(30, 80 + demTop * number->getSize().height);
-			demBot++;
-			break;
-
-		case kUserMe:
-			point.setPoint((WIDTH_DESIGN - number->getSize().width) / 2, 70 + demMe * number->getSize().height);
-			demMe++;
-			break;
+            case kuser1:
+                point.setPoint(50, 220);
+                demLeft++;
+                break;
+            case kuser2:
+                point.setPoint(20, 80);
+                demLeft++;
+                break;
+            case kuser3:
+                point.setPoint(630, 360);
+                demLeft++;
+                break;
+            case kuser4:
+                point.setPoint(630, 210);
+                demLeft++;
+                break;
+            case kuser5:
+                point.setPoint(630, 90);
+                demLeft++;
+                break;
+		
 		}
 		number->setPositionStart(point);
 		this->addChild(number);
@@ -103,32 +106,34 @@ void NumberInTomCuaCa::runAction2(float dt) {
 		double numberDouble = arrNumberDouble.at(i);
 
 		Number *number = new Number(numberDouble);
+        number->setScale(0.7);
 		CCPoint point;
 
 		switch (pos) {
-		case kUserLeft:
-			point.setPoint(650, 250 + demLeft * number->getSize().height);
-			demLeft++;
-			break;
-
-		case kUserRight:
-			point.setPoint(700-number->getSize().width/2, 80 + demRight * number->getSize().height);
-			demRight++;
-			break;
-
-		case kUserTop:
-			point.setPoint(50, 250 + demTop * number->getSize().height);
-			demTop++;
-			break;
-
-		case kUserBot:
-			point.setPoint(30, 80 + demTop * number->getSize().height);
-			demMe++;
-			break;
-		case kUserMe:
-			point.setPoint((WIDTH_DESIGN - number->getSize().width) / 2, 70 + demMe * number->getSize().height);
-			demMe++;
-			break;
+            case kuser0:
+                point.setPoint(650, 250 + demLeft * number->getSize().height);
+                demLeft++;
+                break;
+            case kuser1:
+                point.setPoint(650, 250 + demLeft * number->getSize().height);
+                demLeft++;
+                break;
+            case kuser2:
+                point.setPoint(650, 250 + demLeft * number->getSize().height);
+                demLeft++;
+                break;
+            case kuser3:
+                point.setPoint(650, 250 + demLeft * number->getSize().height);
+                demLeft++;
+                break;
+            case kuser4:
+                point.setPoint(650, 250 + demLeft * number->getSize().height);
+                demLeft++;
+                break;
+            case kuser5:
+                point.setPoint(650, 250 + demLeft * number->getSize().height);
+                demLeft++;
+                break;
 		}
 		number->setPositionStart(point);
 		this->addChild(number);
