@@ -59,10 +59,12 @@ LayerChanGame::LayerChanGame(){
 
 	countDiscard = 0;
 	countUser = 0;
+	_noccount = -1;
 
 	gameStarted = false;
 	flagChiaBai = false;
 	flagTraCuaToMe = false;
+	flag_MeDraw = false;
 
 	createAvatars();
 	createCards();
@@ -337,9 +339,14 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		boost::shared_ptr<long> noccount = param->GetInt("noccount");
 		if (noccount != NULL) {
 			CCLOG("noc count: %ld",*noccount);
-			layerCardChan->setCountNoc((int)*noccount);
-			if (*noccount == 0)
+			_noccount = (int)*noccount;
+			layerCardChan->setCountNoc((int)_noccount);
+			
+			if (_noccount == 0)
 			{
+				getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+				getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+
 				getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
 				getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
 
@@ -400,6 +407,10 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if(rescode != NULL){
 			CCLOG("Resuilt code Draw: %ld",*rescode);
 			if (*rescode == 0) {
+				if (_noccount == 0)
+				{
+					return;
+				}
 				getButtonByTag(cTag_btnTake)->setEnabled(false);
 
 				getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
@@ -606,6 +617,20 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		{
 			CCLOG("Các lá bài còn trong nọc: %s", nocdetl->c_str());
 			layerCardChan->setListNoc(nocdetl->c_str());
+			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+
+			getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
+			getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
+
+			getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh_Disable.png");
+			getButtonByTag(cTag_btnDuoi)->setTouchEnabled(false);
+
+			getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
+			getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
+
+			getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+			getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
 		}
 	}
 
@@ -843,6 +868,8 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 	CCLOG("From %d to %d", fpos, tpos);
 	layerCardChan->takeCards(fpos, tpos, cardnu, cardsu, crdorg);
 
+	if(_noccount == 0) return;
+	
 	//Xet các trường hợp để hiển thị các Button
 	if(tpos == kUserMe){
 		if (crdorg == 3 || crdorg == 2)
@@ -857,6 +884,10 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 
 	//Nếu người khác trả cửa vào cửa của mình
 	if(crdorg == 5){
+		if (tpos == kUserMe)
+		{
+			flag_MeDraw = false;
+		}
 		if(fpos != kUserMe && tpos == kUserMe){
 			CCLOG("Nguoi khac tra cua vao cua chi cua minh");
 			flagTraCuaToMe = true;
@@ -871,6 +902,7 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 		{
 			getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
 			getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
+			flag_MeDraw = false;
 		}
 		else
 		{
@@ -884,6 +916,10 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 	{
 		getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu.png");
 		getButtonByTag(cTag_btnChiu)->setTouchEnabled(true);
+		if (tpos == kUserMe)
+		{
+			flag_MeDraw = true;
+		}
 	}
 	
 	//Khi có 1 người Dưới bài
@@ -892,6 +928,7 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 		{
 			getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
 			getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
+			flag_MeDraw = false;
 		}
 	}
 
@@ -987,6 +1024,17 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 		startTimer_Me();
 		getButtonByTag(cTag_btnReady)->setEnabled(false);
 
+		if(flag_MeDraw == true){
+			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+
+			getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
+			getButtonByTag(cTag_btnDuoi)->setTouchEnabled(true);
+			getButtonByTag(cTag_btnDuoi)->setEnabled(true);
+			getButtonByTag(cTag_btnTake)->setEnabled(false);
+			return;
+		}
+		
 		getButtonByTag(cTag_btnDuoi)->setEnabled(false);
 		getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
 		getButtonByTag(cTag_btnTake)->setEnabled(true);
@@ -1020,7 +1068,6 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 			getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
 			getButtonByTag(cTag_btnDuoi)->setTouchEnabled(true);
 			getButtonByTag(cTag_btnDuoi)->setEnabled(true);
-			/*flagTraCuaToMe = false;*/
 			return;
 		}
 		
@@ -1374,8 +1421,10 @@ void LayerChanGame::setEndGame(){
 
 	flagChiaBai = false;
 	flagTraCuaToMe = false;
+	flag_MeDraw = false;
 
 	countDiscard = 0;
+	_noccount = -1;
 
 	layerCardChan->resetAllCards();
 	layerAvatars->stopAllTimer();

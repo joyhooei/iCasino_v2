@@ -96,9 +96,11 @@ private:
 	bool flagChiaBai;
 	bool flagChiu;
 	bool flagTraCuaToMe;
+	bool flag_MeDraw;
 
 	int countDiscard;
 	int countUser;
+	int _noccount;
 
 	LayerAvatarInGame *layerAvatars;
 	LayerButtonInGame *layerButtons;
