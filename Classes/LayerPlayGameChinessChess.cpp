@@ -940,10 +940,12 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
 		showChat("Bạn đang ở chế độ khách!");
 	}
 
-	lblYouIsGuess = CCLabelTTF::create("Bạn đang là khách!", "", 24);
+	lblYouIsGuess = CCLabelTTF::create("Bạn đang là khách!", "", 15);
 	lblYouIsGuess->setColor(ccWHITE);
-	lblYouIsGuess->setPosition(btnPeace->getPosition());
-	//this->addChild(lblYouIsGuess);
+	lblYouIsGuess->setOpacity(100);
+	lblYouIsGuess->setAnchorPoint(CCPointZero);
+	lblYouIsGuess->setPosition(ccp(10, 30));
+	this->addChild(lblYouIsGuess);
 
 	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
@@ -1615,7 +1617,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 			btnReMove->setVisible(false);
 			btnPeace->setVisible(false);
 			btnLose->setVisible(false);
-			//lblYouIsGuess->setVisible(true);
+			lblYouIsGuess->setVisible(true);
 
 			CCLog("Khach!");
 			int sizeInfo = arrInfo.size();
@@ -1720,7 +1722,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 			btnPeace->setVisible(true);
 			btnLose->setVisible(true);
 
-			//lblYouIsGuess->setVisible(false);
+			lblYouIsGuess->setVisible(false);
 		}
 
         int sizeInfo = arrInfo.size();
