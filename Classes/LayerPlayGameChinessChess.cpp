@@ -725,7 +725,7 @@ void LayerPlayGameChinessChess::onButtonLose(CCObject* pSender){
 	hideMenu();
     /**/
 	if (isSpector){
-		showChat("Bạn đang ở chế độ khách!");
+		//showChat("Bạn đang ở chế độ khách!");
 		return;
 	}
 
@@ -746,7 +746,7 @@ void LayerPlayGameChinessChess::onButtonPeace(CCObject* pSender){
 	hideMenu();
 	if (isSpector)
 	{
-		showChat("Bạn đang ở chế độ khách!");
+		//showChat("Bạn đang ở chế độ khách!");
 		return;
 	}
 
@@ -821,7 +821,7 @@ void LayerPlayGameChinessChess::onButtonRemove(CCObject* pSender){
 	hideMenu();
 
 	if (isSpector) {
-		showChat("Bạn đang ở chế độ khách!");
+		//showChat("Bạn đang ở chế độ khách!");
 		return;
 	}
 
@@ -943,7 +943,7 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
 	lblYouIsGuess = CCLabelTTF::create("Bạn đang là khách!", "", 24);
 	lblYouIsGuess->setColor(ccWHITE);
 	lblYouIsGuess->setPosition(btnPeace->getPosition());
-	this->addChild(lblYouIsGuess);
+	//this->addChild(lblYouIsGuess);
 
 	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
@@ -1612,10 +1612,10 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 		// Begin
 		if (isSpector) {
 
-			btnReMove->setEnabled(false);
-			btnPeace->setEnabled(false);
-			btnLose->setEnabled(false);
-			lblYouIsGuess->setVisible(true);
+			btnReMove->setVisible(false);
+			btnPeace->setVisible(false);
+			btnLose->setVisible(false);
+			//lblYouIsGuess->setVisible(true);
 
 			CCLog("Khach!");
 			int sizeInfo = arrInfo.size();
@@ -1716,11 +1716,11 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 			btnReady->setEnabled(true);
 			btnReady->setVisible(true);
 
-			btnReMove->setEnabled(true);
-			btnPeace->setEnabled(true);
-			btnLose->setEnabled(true);
+			btnReMove->setVisible(true);
+			btnPeace->setVisible(true);
+			btnLose->setVisible(true);
 
-			lblYouIsGuess->setVisible(false);
+			//lblYouIsGuess->setVisible(false);
 		}
 
         int sizeInfo = arrInfo.size();
