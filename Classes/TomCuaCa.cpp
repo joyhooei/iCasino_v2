@@ -232,9 +232,7 @@ TomCuaCa::TomCuaCa(){
 	createAvatars();
 	createButtons();
 	this->addChild(uLayer);
-    NumberInTomCuaCa *a = NumberInTomCuaCa::create();
-    a->showNumberByPos(kuser0, "7000000");
-    this->addChild(a);
+
 	 _id_me =((boost::shared_ptr<string>)(GameServer::getSingleton().getSmartFox()->MySelf()->Name()));
 	
 }
@@ -254,13 +252,76 @@ vector<string> TomCuaCa::TCCsplit(string &S,const char &str){
 		return arrStr;
 	}
 void TomCuaCa::updateUser(string list){
-	lAvatar->resetAll();
+    lAvatar->setListUser(list);
 	vector<string> listUser;
 	listUser = TCCsplit(list, ';');
 	CCLOG("Do dai: %ld",listUser.size());
-	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	
 	boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+    isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())->IsSpectator();
+    isSpector=lAvatar->isSpect();
+    if(lAvatar->isSpect()==true)
+    {
+		nameGame->setString("Bạn đang xem...");
+		
+        if(listUser.size()<7)
+        {
+            CCLog("here");
+           if(lAvatar->isStartedGame()!=true)
+                lAvatar->specToPlayer();
+            
+        }
+        else
+        {
+            lAvatar->btn_dungday->setEnabled(false);
+            lAvatar->btn_vaochoi->setEnabled(false);
+            lAvatar->btn_vaochoi->setTouchEnabled(false);
+            lButton->getButtonByTag(103)->setTouchEnabled(true);
+            
+        }
+        
+        specMode();
+    }else
+    {
+        nameGame->setString(result.c_str());
+        if(lAvatar->isStartedGame()!=true)
+            lAvatar->playerToSpec();
+        btnReady->setTouchEnabled(true);
+        btnUnReady->setTouchEnabled(true);
+        btnTom->setTouchEnabled(true);
+        btnCua->setTouchEnabled(true);
+        btnCa->setTouchEnabled(true);
+        btnGa->setTouchEnabled(true);
+        btnRuou->setTouchEnabled(true);
+        btnNai->setTouchEnabled(true);
+        
+    }
+	
+    if(strcmp(list.c_str(),"")==0)
+    {
+        CCLog("return here");
+        lAvatar->setPosChuong(-1);
+        return;
+    }
+    lAvatar->setPosChuong(lAvatar->getPosByName(find_ChuPhong(list)));
+	if(strcmp(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(), (find_ChuPhong(list).c_str())) == 0)
+	{
+        _time=1;
+        lAvatar->setFlag(kuser0, true);
+		//lButton->getButtonByTag(dTag_btnBet)->setEnabled(false);
+		btnReady->setTitleText("Bắt đầu");
+	}
+	else
+	{
+		//lButton->getButtonByTag(dTag_btnBet)->setEnabled(true);
+        btnReady->setTitleText("Sẵn sàng");
+	}
+
+   /* if(strcmp(list.c_str(),"")==0)
+    {
+        CCLog("return here");
+        return;
+    }
 	for(int i=0;i<listUser.size();i++){
 		if(lastRoom==NULL){
 			return;
@@ -376,7 +437,7 @@ void TomCuaCa::updateUser(string list){
 			}//switch
 			//else
 		}
-	}
+	}*/
 }
 string TomCuaCa::find_ChuPhong(string listUser){
 	vector<string> arrUser = TCCsplit(listUser,';');
@@ -609,6 +670,7 @@ bool TomCuaCa::init(){
 	for (int i = 0; i < arrName.size(); i++) {
 		lAvatar->setMoney(lAvatar->getPosByName(arrName[i]), arrMoneyDouble[i]);
 	}
+    isSpector=false;
 	arrName.clear();
 	arrMoney.clear();
 	arrMoneyDouble.clear();
@@ -632,7 +694,7 @@ void TomCuaCa::createBackgrounds(){
 	
 	string moneyConvert = mu.convertMoneyEx(atoi(money.c_str()));
 
-	string result = "";
+	result = "";
 	if (name->length() > 0 && moneyConvert.length() > 0)
 	{
 		result = name->getCString();
@@ -686,7 +748,8 @@ void TomCuaCa::OnExtensionResponse(unsigned long long ptrContext, boost::shared_
 					if (lu != NULL) {
 						CCLOG("List user: %s",lu->c_str());
 							_list_user = *lu;
-							updateUser(*lu);
+							updateUser(_list_user);
+                        
 
 					}else{
 							_list_user = "";
@@ -1065,6 +1128,9 @@ void TomCuaCa::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost
 	//arrName.push_back(name);
 	//arrMoney.push_back(money);
 	//arrMoneyDouble.push_back(moneyDouble);
+  //  isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())->IsSpectator();
+    //isSpector = lAvatar->isSpect();
+
 }
 void TomCuaCa::playSound( string soundPath )
 {
@@ -1217,77 +1283,23 @@ string TomCuaCa::convertMoneyFromDouble_Detail(double money) {
 
 
 }
-void TomCuaCa::isSpector(string _userID, string _userName, double _userMoney, string _userAv)
+void TomCuaCa::specMode()
 {
-
-	
-	nameGame= CCLabelTTF::create("Bạn đang xem...", "", 16);
-	nameGame->setPosition(ccp(400, 60));
-	nameGame->setColor(ccWHITE);
-	nameGame->setOpacity(150);
-	uLayer->addChild(nameGame);
-	uLayer->setTouchEnabled(false);
+	CCLog("spec mode");
+    
 	btnReady->setEnabled(false);
-	btnUnReady->setEnabled(false);
-	lAvatar->setTouchEnabled(false);
-	this->setTouchEnabled(false);
-	//
-	if(_userID==find_ChuPhong(_list_user)){
-	lAvatar->getUserByPos(kuser0)->setVisibleLayerInvite(false);
-		lAvatar->setName(kuser0, _userName.c_str());
-		lAvatar->getUserByPos(kuser0)->setMoney(_userMoney);
-		lAvatar->getUserByPos(kuser0)->setIcon(_userAv);
-		lAvatar->getUserByPos(kuser0)->setAI(_userID);
-		lAvatar->setPosChuong(kuser0);
-		lAvatar->setFlag(kuser0, true);
-	}
-	else{
-		switch (getPosUserByName(_userID, _list_user)) {
-		case kuser3:
-			lAvatar->getUserByPos(kuser3)->setVisibleLayerInvite(false);
-			lAvatar->setName(kuser3, _userName.c_str());
-			lAvatar->getUserByPos(kuser3)->setMoney(_userMoney);
-			lAvatar->getUserByPos(kuser3)->setIcon(_userAv);
-			lAvatar->getUserByPos(kuser3)->setAI(_userID);
-			CCLog("LEFT---%s",_userName.c_str());
-			CCLog("--%d",getPosUserByName(_userID, _list_user));
-			break;
-		case kuser4:
-			lAvatar->getUserByPos(kuser4)->setVisibleLayerInvite(false);
-			lAvatar->setName(kuser4, _userName.c_str());
-			lAvatar->getUserByPos(kuser4)->setMoney(_userMoney);
-			lAvatar->getUserByPos(kuser4)->setIcon(_userAv);
-			lAvatar->getUserByPos(kuser4)->setAI(_userID);		
-			CCLog("RIGHT---%s",_userName.c_str());
-			CCLog("--%d",getPosUserByName(_userID, _list_user));
-			break;
-		case kuser1:
-			lAvatar->getUserByPos(kuser1)->setVisibleLayerInvite(false);
-			lAvatar->setName(kuser1, _userName.c_str());
-			lAvatar->getUserByPos(kuser1)->setMoney(_userMoney);
-			lAvatar->getUserByPos(kuser1)->setIcon(_userAv);
-			lAvatar->getUserByPos(kuser1)->setAI(_userID);	
-			CCLog("TOP---%s",_userName.c_str());
-			CCLog("--%d",getPosUserByName(_userID, _list_user));
-			break;
-		case kuser2:
-			lAvatar->getUserByPos(kuser2)->setVisibleLayerInvite(false);
-			lAvatar->setName(kuser2, _userName.c_str());
-			lAvatar->getUserByPos(kuser2)->setMoney(_userMoney);
-			lAvatar->getUserByPos(kuser2)->setIcon(_userAv);
-			lAvatar->getUserByPos(kuser2)->setAI(_userID);
-			CCLog("--BOT---%s",_userName.c_str()); 
-			CCLog("--%d",getPosUserByName(_userID, _list_user));
-			break;
-            case kuser5:
-                lAvatar->getUserByPos(kuser5)->setVisibleLayerInvite(false);
-                lAvatar->setName(kuser5, _userName.c_str());
-                lAvatar->getUserByPos(kuser5)->setMoney(_userMoney);
-                lAvatar->getUserByPos(kuser5)->setIcon(_userAv);
-                lAvatar->getUserByPos(kuser5)->setAI(_userID);
-                CCLog("--BOT---%s",_userName.c_str());
-                CCLog("--%d",getPosUserByName(_userID, _list_user));
-                break;
-		}
-	}
+    btnUnReady->setEnabled(false);
+    lButton->getButtonByTag(103)->setTouchEnabled(true);
+    
+    
+    btnReady->setTouchEnabled(false);
+    btnUnReady->setTouchEnabled(false);
+    btnTom->setTouchEnabled(false);
+    btnCua->setTouchEnabled(false);
+    btnCa->setTouchEnabled(false);
+    btnGa->setTouchEnabled(false);
+    btnRuou->setTouchEnabled(false);
+    btnNai->setTouchEnabled(false);
+   
+    
 }

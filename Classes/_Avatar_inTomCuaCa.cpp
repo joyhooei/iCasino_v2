@@ -71,8 +71,8 @@ bool AvatarInTomCuaCa::init() {
     btn_vaochoi->setTouchEnabled(true);
     btn_vaochoi->loadTextures("ready.png", "ready_selected.png", "");
     btn_vaochoi->setTitleText("Vào bàn");
-	btn_vaochoi->setScale(0.8);
-    btn_vaochoi->setPosition(ccp(65,87));
+	
+    btn_vaochoi->setPosition(ccp(320,36));
 	btn_vaochoi->setTitleFontSize(20);
     btn_vaochoi->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
     btn_vaochoi->setEnabled(false);
@@ -82,14 +82,14 @@ bool AvatarInTomCuaCa::init() {
 	btn_dungday->setTouchEnabled(true);
 	btn_dungday->loadTextures("ready.png", "ready_selected.png", "");
 	btn_dungday->setTitleText("Đứng dậy");
-	btn_dungday->setScale(0.8);
-	btn_dungday->setPosition(ccp(65,87));
+	btn_dungday->setPosition(ccp(320,36));
 	btn_dungday->setTitleFontSize(20);
 	btn_dungday->addTouchEventListener(this,toucheventselector(LayerBaCayAvatar::vaoBanChoi));
 	btn_dungday->setEnabled(false);
 	btn_dungday->setTag(1);
     ul->addWidget(btn_vaochoi);
     ul->addWidget(btn_dungday);
+    
 	this->addChild(ul);
     CCLog("this->myName = SceneManager::getSingleton().getMyName() = %s", this->myName.c_str());
 
@@ -144,10 +144,6 @@ bool AvatarInTomCuaCa::init() {
 	chuong->setAnchorPoint(ccp(0,0));
 	chuong->setPosition(ccp(0,0));
 	this->addChild(chuong);
-
-
-
-
 	return true;
 }
 
@@ -209,63 +205,7 @@ void AvatarInTomCuaCa::resetGame() {
 }
 
 
-void AvatarInTomCuaCa::formatAndStore(const char &c1, const char &c2) {
-	vector<string> arrUsers = getArrSplit1(this->listUser, c1);
 
-	// release arr
-	arrName.clear();
-	arrFlag.clear();
-	arrURL.clear();
-	arrAI.clear();
-	arrMoney.clear();
-	arrMoneyDouble.clear();
-
-	for (int i = 0; i < arrUsers.size(); i++) {
-		vector<string> arr = getArrSplit1(arrUsers[i], c2);
-		if (arr.size() < 3)
-		{
-			continue;
-		}
-		string id = arr[0];
-		string name = arr[1];
-		string flag = arr[2];
-
-
-		
-		arrFlag.push_back(flag);
-
-		// url icon
-		boost::shared_ptr<User> userInfo = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(name);
-
-		if (userInfo == NULL)
-		{
-			continue;
-		}
-		boost::shared_ptr<string> url = userInfo->GetVariable("aal")->GetStringValue();
-		arrURL.push_back(url->c_str());
-
-		// Money
-		boost::shared_ptr<double> amf = userInfo->GetVariable("amf")->GetDoubleValue();
-		arrMoneyDouble.push_back(*amf);
-		arrMoney.push_back(((int)(*amf)));
-
-		// account ID
-		boost::shared_ptr<string> aI = userInfo->Name();
-		if (aI != NULL){
-			CCLog("---------aI= %s", aI->c_str());
-			arrAI.push_back(aI->c_str());
-		}
-
-		// account Name
-		boost::shared_ptr<string> aN = userInfo->GetVariable("aN")->GetStringValue();
-		if (aN != NULL) {
-			CCLog("---------aN= %s", aN->c_str());
-			arrName.push_back(aN->c_str());
-		}
-	}
-
-	updateUsers();
-}
 
 Avatar* AvatarInTomCuaCa::getUserByPos(int pos){
 	if (pos < 0) return NULL;
@@ -286,39 +226,58 @@ int AvatarInTomCuaCa::getIndexInArrByAccountID(string aI) {
 	return -1;
 }
 int AvatarInTomCuaCa::getPosByName(string pName) {
-	return getPosByAccountID(pName);
-	int pos = getIndexInArrByName(this->myName);
-
-	if (pos == -1)
+    int vt = -1;
+	if (this->listUser == "")
 	{
-		isGuess = true;
-		return (getIndexInArrByName(pName));
+		return vt;
 	}
-	// tra lai vi tri
-	else{
-		isGuess = false;
-		int countUser = arrName.size();
-		for (int i = 0; i < countUser; i++) {
-			if (arrName[i] == pName) {
-				if (i == pos) {
-					return kuser0;
-				} else if (i == (pos + 1) % 6) {
-					return kuser1;
-				} else if (i == (pos + 2) % 6) {
-					return kuser2;
-				} else if (i == (pos + 3) % 6) {
-					return kuser3;
-				} else if (i == (pos + 4) % 6) {
-					return kuser4;
-				}else if (i == (pos + 5) % 6) {
-					return kuser5;
-				}
-
-				break;
-			}
+	
+	vector<string> list = mUtils::splitString(listUser,';');
+	for (int i = 0; i < list.size(); i++)
+	{
+		vector<string> info = mUtils::splitString(list[i],'|');
+        
+		if ((strcmp(info[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)||isSpect()==true)
+		{
+			vt = i;
+			break;
 		}
 	}
+    
+	for (int i = 0; i < list.size(); i++)
+	{
+		if (strcmp(list[i].c_str(), "") == 0)
+		{
+			continue;
+		}
+        
+		vector<string> info = mUtils::splitString(list[i],'|');
+		if (strcmp(info[0].c_str(), pName.c_str()) == 0)
+		{
+			if(i == vt){
+				return kuser0;
+                
+			}
+			else if(i == (vt + 1) % 6){
+				return kuser1;
+			}
+			else if(i == (vt + 2) % 6){
+				return kuser2;
+			}
+			else if(i == (vt + 3) % 6){
+				return kuser3;
+			}
+            else if(i == (vt + 4) % 6){
+				return kuser4;
+			}
+            else if(i == (vt + 5) % 6){
+				return kuser5;
+			}
 
+			break;
+		}
+	}
+    
 	return -1;
 }
 
@@ -366,7 +325,6 @@ string AvatarInTomCuaCa::getAccountIDByPos(int pPos) {
 	}
 	else {
 		this->isGuess = false;
-		int countUser = arrAI.size();
 		switch (pPos) {
 		case kuser0:
 			return this->myAI;
@@ -397,124 +355,116 @@ string AvatarInTomCuaCa::getAccountIDByPos(int pPos) {
 	return "";
 }
 void AvatarInTomCuaCa::updateUsers() {
-	if (arrName.size() != arrFlag.size() || arrName.size() != arrURL.size() || arrURL.size() != arrAI.size()) {
+	if (this->listUser == "")
+	{
+        getUserByPos(kuser0)->setVisibleLayerInvite(true);
 		return;
 	}
-
-	// Mỗi khi nhảy tới đây thì cần làm 2 việc sau:
-	// 1. Làm "sạch" toàn bộ các Avatar: 
-	//   1.1 Avatar của mình: ẩn đi, trạng thái ready=false, BtnReady -> title="Sẵn sàng", -> visible=false
-	//                        ai="";
-	//	 1.2 Avatar user khác hiện lên các InviteUser, ready=false
-	//   1.3 Toàn bộ thông tin về tiền được reset
-	// 2. Cập nhật lại thông tin: 
-	//   2.0: 
-	//	 2.1: nếu của mình thì hiện lên Avatar, BtnReady->visible=true 
-	//   2.2: các user khác thì cập nhật & ẩn đi Invite
-	// ---
-
-	// 1. Làm "sạch"
-	Avatar *avaMe = getUserByPos(kuser0);
-	Avatar *avauser1 = getUserByPos(kuser1);
-	Avatar *avauser2 = getUserByPos(kuser2);
-    Avatar *avauser3 = getUserByPos(kuser3);
-	Avatar *avauser4 = getUserByPos(kuser4);
-    Avatar *avauser5 = getUserByPos(kuser5);
-
-	avaMe->setVisible(false);
+    
+	vector<string> arrUser = mUtils::splitString(this->listUser,';');
+    
+	if (arrUser.size() == 0)
+	{
+		return;
+	}
+    
+	Avatar *avaMe    = getUserByPos(kuser0);
+	Avatar *avaUser1 = getUserByPos(kuser1);
+	Avatar *avaUser2 = getUserByPos(kuser2);
+	Avatar *avaUser3 = getUserByPos(kuser3);
+	Avatar *avaUser4 = getUserByPos(kuser4);
+    Avatar *avaUser5 = getUserByPos(kuser5);
+   
+    
+	avaMe->setVisible(true);
 	avaMe->setTouchEnabled(false);
 	avaMe->setReady(false);
 	avaMe->setName("");
 	avaMe->setMoney("");
 	avaMe->setAI("");
-	Button* btnReady = NULL;
-	
-	if (btnReady == NULL) return;
-	btnReady->setTitleText("Sẵn sàng");
-	btnReady->setEnabled(false);
+    
+	avaUser1->setVisibleLayerInvite(true);
+	avaUser1->setReady(false);
+	avaUser1->setName("");
+	avaUser1->setMoney("");
+	avaUser1->setAI("");
 	//
-	avauser1->setVisibleLayerInvite(true);
-	avauser1->setReady(false);
-	avauser1->setName("");
-	avauser1->setMoney("");
-	avauser1->setAI("");
+	avaUser2->setVisibleLayerInvite(true);
+	avaUser2->setReady(false);
+	avaUser2->setName("");
+	avaUser2->setMoney("");
+	avaUser2->setAI("");
 	//
-	avauser2->setVisibleLayerInvite(true);
-	avauser2->setReady(false);
-	avauser2->setName("");
-	avauser2->setMoney("");
-	avauser2->setAI("");
-//
-    avauser3->setVisibleLayerInvite(true);
-	avauser3->setReady(false);
-	avauser3->setName("");
-	avauser3->setMoney("");
-	avauser3->setAI("");
+	avaUser3->setVisibleLayerInvite(true);
+	avaUser3->setReady(false);
+	avaUser3->setName("");
+	avaUser3->setMoney("");
+	avaUser3->setAI("");
 	//
-	avauser4->setVisibleLayerInvite(true);
-	avauser4->setReady(false);
-	avauser4->setName("");
-	avauser4->setMoney("");
-	avauser4->setAI("");
+	avaUser4->setVisibleLayerInvite(true);
+	avaUser4->setReady(false);
+	avaUser4->setName("");
+	avaUser4->setMoney("");
+	avaUser4->setAI("");
     //
-    avauser5->setVisibleLayerInvite(true);
-	avauser5->setReady(false);
-	avauser5->setName("");
-	avauser5->setMoney("");
-	avauser5->setAI("");
-
+    avaUser5->setVisibleLayerInvite(true);
+	avaUser5->setReady(false);
+	avaUser5->setName("");
+	avaUser5->setMoney("");
+	avaUser5->setAI("");
+    //
+    CCLog("avata listuser: %s",this->listUser.c_str());
     
-    
-	// 2. Update info :D
-	int length = arrName.size();
-	for (int i = 0; i < length; i++) {
-		string name = arrName[i];
-		string flag = arrFlag[i];
-		string url  = arrURL[i];
-		string aI = arrAI[i];
-		int money = arrMoney[i];
-		double moneyDouble = arrMoneyDouble.at(i);
-
-		int pos = getPosByAccountID(aI);
-		CCLog("------pos=%d", pos);
+	for (int i = 0; i < arrUser.size(); i++)
+	{
+		vector<string> info = mUtils::splitString(arrUser[i],'|');
+		int pos = getPosByName(info[0]);
+        CCLog("avatar pos: %d",pos);
 		if (pos < 0)
-			break;
-		/*if (!isGuess){
-			getUserByPos(kuser2)->setVisible(false); 
-			getUserByPos(kuser2)->setTouchEnabled(false);
-			getUserByPos(kuser2)->setPositionY(-200);
-		}
-		else {
-			getUserByPos(kuser2)->setVisible(true);
-			getUserByPos(kuser2)->setTouchEnabled(true);
-			getUserByPos(kuser2)->setPositionY(10);
-		}*/
-		Avatar *user = getUserByPos(pos);
-		user->setName(name);
-		user->setFlag(atoi(flag.c_str()) == 1);
-		bool meIsBoss = (atoi(flag.c_str()) == 1);
-		user->setIcon(url);
-		user->setAI(aI);
-		user->setMoney(money);
-		user->setMoney(moneyDouble);
-		if(pos == kuser0){
-			this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
-			this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
-            this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
-			this->getUserByPos(kuser4)->setMeIsBoss(meIsBoss);
-            this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
-
-		}
-		if (pos == kuser0)
 		{
-			user->setVisible(true);
-			user->setTouchEnabled(true);
-			btnReady->setEnabled(true);
+			continue;
+		}
+        
+		if (GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0]) != NULL)
+		{
+			boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("aN")->GetStringValue();
+			boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("amf")->GetDoubleValue();
+			boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0])->GetVariable("aal")->GetStringValue();
+            
+			int _money = (money != NULL) ? (int)*money : 0;
+			string _url = (url != NULL) ? url->c_str() : "";
+			string _name = (name != NULL) ? name->c_str() : info[0];
+            CCLog("update _money = %d",_money);
+			Avatar *_user = getUserByPos(pos);
+            _user->setVisibleLayerInvite(false);
+			_user->setName(_name);
+			_user->setFlag(i == 0);
+			_user->setAI(info[0]);
+            _user->setIcon(_url);
+			_user->setMoney(_money);
+			//
+			bool meIsBoss = (i == 0);
+			if(pos == kuser0){
+                
+				this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
+				this->getUserByPos(kuser4)->setMeIsBoss(meIsBoss);
+                this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
+
+			}
+		
+
+            
+			if (pos == kuser0)
+			{
+				_user->setVisible(true);
+				_user->setTouchEnabled(false);
+                
+			}
 		}
 		
-        user->setVisibleLayerInvite(false);
-		
-	}
+	}//for
 }
 
 void AvatarInTomCuaCa::setPosChuong(int pos){
@@ -546,10 +496,11 @@ void AvatarInTomCuaCa::setPosChuong(int pos){
 		meIsBoss = true;
 		break;
 	default:
+            chuong->setVisible(false);
 		break;
 	}
 	//
-
+    
 	this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
     this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
     this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
@@ -669,6 +620,8 @@ bool AvatarInTomCuaCa::isSpect() {
 		vector<string> arrInfo = mUtils::splitString(arr.at(i), '|');
 		if (arrInfo.size() < 2) continue;
 		string ai = arrInfo.at(0);
+        CCLog("ai---%s",ai.c_str());
+        CCLog("MyAi---%s",myAI.c_str());
 		if (strcmp(ai.c_str(), myAI.c_str())==0)
             return false;
 	}
@@ -743,4 +696,9 @@ void AvatarInTomCuaCa::specToPlayer()
     btn_vaochoi->setEnabled(true);
 	btn_dungday->setTouchEnabled(false);
 	btn_dungday->setEnabled(false);
+}
+void AvatarInTomCuaCa::setListUser(string list)
+{
+    this->listUser= list;
+    updateUsers();
 }

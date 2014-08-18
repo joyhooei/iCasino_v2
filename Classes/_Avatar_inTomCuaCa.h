@@ -46,7 +46,6 @@ public:
 	UIButton *btn_dungday;
 
 	//
-	void formatAndStore(const char &c1, const char &c2);
 
 	Avatar* getUserByPos(int pos);
 	int getIndexInArrByName(string name);
@@ -64,6 +63,7 @@ public:
     void vaoBanChoi(CCObject *obj,TouchEventType type);
     void playerToSpec();
     void specToPlayer();
+    void setListUser(string list);
 private:
 
 

@@ -484,8 +484,7 @@ void BaCayChuong::eventListUser(string listusers)
 			getButtonByTag(dTag_btnView)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
 			getButtonByTag(dTag_btnBet)->setTouchEnabled(true);
-			//if(list.size()>2)
-            if(layerAvatars->isStartedGame()!=true)
+        if(list.size()>1 && layerAvatars->isStartedGame()!=true)
                     layerAvatars->playerToSpec();
 			
 		}

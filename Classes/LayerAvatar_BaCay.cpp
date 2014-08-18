@@ -97,13 +97,13 @@ bool LayerBaCayAvatar::init()
     user5->setTag(kuser5);
     user6->setTag(kuser6);
     
-    me->setScale(0.9);
-    user1->setScale(0.9);
-    user2->setScale(0.9);
-    user3->setScale(0.9);
-    user4->setScale(0.9);
-    user5->setScale(0.9);
-    user6->setScale(0.9);
+    me->setScale(0.7);
+    user1->setScale(0.7);
+    user2->setScale(0.7);
+    user3->setScale(0.7);
+    user4->setScale(0.7);
+    user5->setScale(0.7);
+    user6->setScale(0.7);
     
 
 	this->addChild(me);
@@ -117,6 +117,7 @@ bool LayerBaCayAvatar::init()
 
 	chuong = UIImageView::create();
 	chuong->loadTexture("Chuong.png");
+    chuong->setScale(0.7);
 	chuong->setTouchEnabled(false);
 	chuong->setVisible(false);
 	chuong->setAnchorPoint(ccp(0,0));
@@ -233,31 +234,31 @@ void LayerBaCayAvatar::setPosChuong(int pos)
 {
 	switch (pos) {
 	case kuser1:
-		chuong->setPosition(ccp(30,210));
+		chuong->setPosition(ccp(32,190));
 		chuong->setVisible(true);
 		break;
 	case kuser2:
-		chuong->setPosition(ccp(30,380));
+		chuong->setPosition(ccp(32,360));
 		chuong->setVisible(true);
 		break;
 	case kuser3:
-		chuong->setPosition(ccp(240,460));
+		chuong->setPosition(ccp(243,440));
 		chuong->setVisible(true);
 		break;
 	case kuser4:
-        chuong->setPosition(ccp(540,460));
+        chuong->setPosition(ccp(478,440));
         chuong->setVisible(true);
 		break;
 	case kuser5:
-		chuong->setPosition(ccp(WIDTH_DESIGN-125,380));
+		chuong->setPosition(ccp(WIDTH_DESIGN-125,360));
 		chuong->setVisible(true);
 		break;
     case kuser6:
-        chuong->setPosition(ccp(WIDTH_DESIGN-125,210));
+        chuong->setPosition(ccp(WIDTH_DESIGN-125,190));
         chuong->setVisible(true);
         break;
     case kuser0:
-        chuong->setPosition(ccp(370,110));
+        chuong->setPosition(ccp(370,90));
         chuong->setVisible(true);
         break;
 	default:
@@ -423,6 +424,7 @@ void LayerBaCayAvatar::updateUsers()
 	for (int i = 0; i < arrUser.size(); i++)
 	{
 		vector<string> info = mUtils::splitString(arrUser[i],'|');
+        int _pos = info.size();
 		int pos = getPosByName(info[0]);
 		if (pos < 0)
 		{
@@ -447,7 +449,8 @@ void LayerBaCayAvatar::updateUsers()
 			//
 			bool meIsBoss = (i == 0);
 			if(pos == kuser0){
-                
+                _user->setVisible(true);
+				_user->setTouchEnabled(false);
 				this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
 				this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);
 				this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
@@ -455,17 +458,14 @@ void LayerBaCayAvatar::updateUsers()
                 this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
                 this->getUserByPos(kuser6)->setMeIsBoss(meIsBoss);
 			}
-			//
+                if(i!=0)
+                    if(strcmp(info[_pos-1].c_str(), "1")==0)
+                        _user->setReady(true);
+            
+			
 			_user->setIcon(_url);
-			//user->setAI(aI);
 			_user->setMoney(_money);
-
-			if (pos == kuser0)
-			{
-				_user->setVisible(true);
-				_user->setTouchEnabled(false);
-                
-			}
+            
 		}
 		
 	}//for
@@ -526,7 +526,7 @@ void LayerBaCayAvatar::vaoBanChoi(CCObject *obj,TouchEventType type)
 		}///
         else{
             //yêu cầu vào chơi
-            boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+         boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
 			GameServer::getSingleton().getSmartFox()->Send(request);
 			CCLog("da vao");
 			btn_vaochoi->setEnabled(false);

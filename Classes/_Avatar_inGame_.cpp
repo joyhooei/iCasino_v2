@@ -544,9 +544,8 @@ void LayerAvatarInGame::updateUsers() {
 				user->setTouchEnabled(true);
 				//btnReady->setEnabled(true);
 			}
-			else {
 				user->setVisibleLayerInvite(false);
-			}
+			
     }
 }
 

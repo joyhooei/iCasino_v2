@@ -99,19 +99,19 @@ void CardBaCay::initGame()
 
     //
     xCardPos_me=370;
-    yCardPos_me=175;
-    xCardPos_u1=140;
+    yCardPos_me=155;
+    xCardPos_u1=130;
     yCardPos_u1=205;
-    xCardPos_u2=140;
-    yCardPos_u2=302;
+    xCardPos_u2=125;
+    yCardPos_u2=280;
     xCardPos_u3=264;
     yCardPos_u3=345;
     xCardPos_u4=492;
     yCardPos_u4=345;
-    xCardPos_u5=610;
+    xCardPos_u5=600;
     yCardPos_u5=302;
-    xCardPos_u6=605;
-    yCardPos_u6=205;
+    xCardPos_u6=600;
+    yCardPos_u6=195;
 	
 	w_card_me = 50;
 	w_card_notme = 30;

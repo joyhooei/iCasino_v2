@@ -42,20 +42,20 @@ bool BetGame3Cay::init()
 
 	//FrameBet *bottom = FrameBet::create();
 
-	bme->setPosition(ccp(460,70));
+	bme->setPosition(ccp(440,70));
 	bme->setScale(0.8);
 	spec->setPosition(CCPointZero);
-	buser1->setPosition(ccp(130,140));
+	buser1->setPosition(ccp(110,115));
 	buser1->setScale(0.8);
-	buser2->setPosition(ccp(130,340));
+	buser2->setPosition(ccp(110,350));
 	buser2->setScale(0.8);
-	buser3->setPosition(ccp(340, 383));
+	buser3->setPosition(ccp(325, 383));
 	buser3->setScale(0.8);
-    buser4->setPosition(ccp(570, 383));
+    buser4->setPosition(ccp(555, 383));
 	buser4->setScale(0.8);
-    buser5->setPosition(ccp(660, 400));
+    buser5->setPosition(ccp(660, 390));
 	buser5->setScale(0.8);
-    buser6->setPosition(ccp(660, 230));
+    buser6->setPosition(ccp(660, 220));
 	buser6->setScale(0.8);
 
 	bme->setTag(kuser0);
@@ -144,16 +144,16 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
 	float x = -1, y = -1;
 	switch(pos){
 	case kuser0:
-		x = 500;
-		y = 70;
+		x = 490;
+		y = 50;
 		break;
 	case kuser1:
-        x = 170;
-		y = 160;
+        x = 160;
+		y = 155;
 		break;
 	case kuser2:
-		x = 170;
-		y = 340;
+		x = 160;
+		y = 325;
 		break;
 	case kuser3:
 		x = 300;
@@ -164,11 +164,11 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
         y = 310;
         break;
     case kuser5:
-        x = 650;
-        y = 330;
+        x = 630;
+        y = 340;
         break;
     case kuser6:
-        x = 640;
+        x = 635;
         y = 160;
         break;
 	}
@@ -204,7 +204,7 @@ void BetGame3Cay::setResuit4AllUser(int pos, string resuilt, string score){
 	CCLabelTTF *ket =  CCLabelTTF::create(txt.c_str(), "fonts/UVNDaLat_R.TTF", 22.0);
 	ket->setColor(ccc3(239,235,117));
 	ket->setPosition(ccp(x, y));
-	//layerResuilt->addChild(ket);
+	layerResuilt->addChild(ket);
 }
 
 CCLayer* BetGame3Cay::getLayerResuilt(){
