@@ -439,6 +439,8 @@ void BaCayChuong::eventListUser(string listusers)
 	{
 		getButtonByTag(dTag_btnBet)->setEnabled(false);
 		getButtonByTag(dTag_btnReady)->setTitleText("Chia Bài");
+        getButtonByTag(dTag_btnReady)->setEnabled(true);
+        getButtonByTag(dTag_btnUnready)->setEnabled(false);
 	}
 	else
 	{

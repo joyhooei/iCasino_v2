@@ -458,14 +458,15 @@ void LayerBaCayAvatar::updateUsers()
                 this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
                 this->getUserByPos(kuser6)->setMeIsBoss(meIsBoss);
 			}
-                if(i!=0)
-                    if(strcmp(info[_pos-1].c_str(), "1")==0)
+            if(i!=0){
+                if(strcmp(info[_pos-1].c_str(), "1")==0){
                         _user->setReady(true);
-            
-			
-			_user->setIcon(_url);
-			_user->setMoney(_money);
-            
+                }
+            }
+                _user->setIcon(_url);
+                _user->setMoney(_money);
+            if(strcmp(info[1].c_str(),"0")==0)
+                _user->setReady(false);
 		}
 		
 	}//for
