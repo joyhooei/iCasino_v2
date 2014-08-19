@@ -307,136 +307,16 @@ void TomCuaCa::updateUser(string list){
 	{
         _time=1;
         lAvatar->setFlag(kuser0, true);
-		//lButton->getButtonByTag(dTag_btnBet)->setEnabled(false);
+		
 		btnReady->setTitleText("Bắt đầu");
 	}
 	else
 	{
-		//lButton->getButtonByTag(dTag_btnBet)->setEnabled(true);
+		
         btnReady->setTitleText("Sẵn sàng");
 	}
 
-   /* if(strcmp(list.c_str(),"")==0)
-    {
-        CCLog("return here");
-        return;
-    }
-	for(int i=0;i<listUser.size();i++){
-		if(lastRoom==NULL){
-			return;
-		}
-		if(listUser[i].c_str()==NULL)
-			continue;
-		string player = listUser[i];
-		vector<string> n = TCCsplit(player, '|');
 
-		if(GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])==NULL){
-			continue;
-		}
-		double mon;
-		int _money = 0;
-		string _name = "";
-		string _url = "";
-
-		boost::shared_ptr<string> name = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("aN")->GetStringValue();
-		boost::shared_ptr<double> money = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("amf")->GetDoubleValue();
-		boost::shared_ptr<string> url = GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(n[0])->GetVariable("aal")->GetStringValue();
-		if (name != NULL) {
-			_name = name->c_str();
-		}
-		if(money != NULL){
-			_money = (int)*money;
-			mon= (int)*money;
-		}
-		if (url != NULL) {
-			_url=url->c_str();
-		}
-
-        if(strcmp(n[0].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-			
-            lAvatar->getUserByPos(kuser0)->setVisibleLayerInvite(false);
-			lAvatar->setName(kuser0, _name.c_str());
-			lAvatar->getUserByPos(kuser0)->setMoney(mon);
-			lAvatar->getUserByPos(kuser0)->setIcon(_url);
-			lAvatar->getUserByPos(kuser0)->setAI(n[0]);
-
-			if(n[0]==find_ChuPhong(_list_user)){
-				lAvatar->setPosChuong(kuser0);
-				_time=1;
-				lAvatar->setFlag(kuser0, true);
-				btnReady->setTitleText("Bắt đầu");
-				}
-			else{
-				btnReady->setTitleText("Sẵn sàng");
-				}
-		}
-		else{
-			
-			switch (getPosUserByName(n[0], _list_user)) {
-			case kuser3:
-				lAvatar->getUserByPos(kuser3)->setVisibleLayerInvite(false);
-				lAvatar->setName(kuser3, _name.c_str());
-				lAvatar->getUserByPos(kuser3)->setMoney(mon);
-				lAvatar->getUserByPos(kuser3)->setIcon(_url);
-				lAvatar->getUserByPos(kuser3)->setAI(n[0]);
-				if(n[0]==find_ChuPhong(_list_user)){
-					lAvatar->setFlag(kuser3, true);
-					lAvatar->setPosChuong(kuser3);
-					_time=0;
-				}
-				break;
-			case kuser4:
-				lAvatar->getUserByPos(kuser4)->setVisibleLayerInvite(false);
-				lAvatar->setName(kuser4, _name.c_str());
-				lAvatar->getUserByPos(kuser4)->setMoney(mon);
-				lAvatar->getUserByPos(kuser4)->setIcon(_url);
-				lAvatar->getUserByPos(kuser4)->setAI(n[0]);
-				if(n[0]==find_ChuPhong(_list_user)){
-					lAvatar->setFlag(kuser4, true);
-					lAvatar->setPosChuong(kuser4);
-					_time=0;
-				}
-				break;
-			case kuser1:
-				lAvatar->getUserByPos(kuser1)->setVisibleLayerInvite(false);
-				lAvatar->setName(kuser1, _name.c_str());
-				lAvatar->getUserByPos(kuser1)->setMoney(mon);
-				lAvatar->getUserByPos(kuser1)->setIcon(_url);
-				lAvatar->getUserByPos(kuser1)->setAI(n[0]);
-				if(n[0]==find_ChuPhong(_list_user)){
-					lAvatar->setFlag(kuser1, true);
-					lAvatar->setPosChuong(kuser1);
-					_time=0;
-				}
-				break;
-			case kuser2:
-				lAvatar->getUserByPos(kuser2)->setVisibleLayerInvite(false);
-				lAvatar->setName(kuser2, _name.c_str());
-				lAvatar->getUserByPos(kuser2)->setMoney(mon);
-				lAvatar->getUserByPos(kuser2)->setIcon(_url);
-				lAvatar->getUserByPos(kuser2)->setAI(n[0]);
-				if(n[0]==find_ChuPhong(_list_user)){
-					lAvatar->setFlag(kuser2, true);
-					lAvatar->setPosChuong(kuser2);
-					_time=0;
-				}
-                break;
-                case kuser5:
-                    lAvatar->getUserByPos(kuser5)->setVisibleLayerInvite(false);
-                    lAvatar->setName(kuser5, _name.c_str());
-                    lAvatar->getUserByPos(kuser5)->setMoney(mon);
-                    lAvatar->getUserByPos(kuser5)->setIcon(_url);
-                    lAvatar->getUserByPos(kuser5)->setAI(n[0]);
-                    if(n[0]==find_ChuPhong(_list_user)){
-                        lAvatar->setFlag(kuser5, true);
-                        lAvatar->setPosChuong(kuser5);
-                        _time=0;
-                    }
-                    break;
-			}//switch
-			//else
-		}
-	}*/
 }
 string TomCuaCa::find_ChuPhong(string listUser){
 	vector<string> arrUser = TCCsplit(listUser,';');

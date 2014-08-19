@@ -459,7 +459,7 @@ void LayerBaCayAvatar::updateUsers()
                 this->getUserByPos(kuser6)->setMeIsBoss(meIsBoss);
 			}
             if(i!=0){
-                if(strcmp(info[_pos-1].c_str(), "1")==0){
+                if(strcmp(info[_pos-1].c_str(), "1")==0 && isStartedGame()!=true){
                         _user->setReady(true);
                 }
             }
