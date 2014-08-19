@@ -87,6 +87,8 @@ public:
 	FrameBet* betNai;
 	LayerButtonInGame* lButton;
 	CCLabelTTF *nameGame;
+    string result;
+
 
 	TomCuaCa();
 	~TomCuaCa();
@@ -115,7 +117,7 @@ public:
 	int getPosUserByName(string uid,string _list_user);
 	void playSound(string soundPath);
 	void clickBtn(CCObject* obj, TouchEventType type);
-
+    bool isSpector;
 
 	int convertResponseToInt(string inString);
 	string convertResponseToString(int inInt);
@@ -127,11 +129,11 @@ public:
 	void hienKetQua();
 	void hienOketqua();
 	virtual void onExit();
-
+    void specMode();
 	string convertMoney(int money);
 	string convertMoneyFromDouble(double money);
 	string convertMoneyFromDouble_Detail(double money);
-	void isSpector(string _userID, string _userName, double _userMoney, string _userAv);
+	
 };
 
 #endif /* defined(__iCasino_v2__TomCuaCa__) */

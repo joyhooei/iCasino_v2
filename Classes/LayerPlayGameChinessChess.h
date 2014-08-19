@@ -167,11 +167,13 @@ private:
 	bool isRedChess;  // ktra xem minh la quan do hay quan den
 	bool isRegistSitdown;
 	bool isRegistStandUp;
+	bool isClickedBack;
 
 	string myName;
 	string nameCurrentTurn;
 	string player1;
 	string player2;
+	int countUser;
 	int indexCurrent;
 	int indexTarget;
 	int timeRestBlack;
@@ -189,6 +191,10 @@ private:
 	//PopupLayer *popup;
 	UILayer *menuLayer;
 	CCSprite *menuBgr;
+
+	CCLabelTTF *lblYouIsGuess;
+
+	void showToast(string mes);
 
 public:
 	LayerPlayGameChinessChess();
@@ -269,7 +275,7 @@ public:
 	Chess* getChessByName_Side(int name, int side);
 
 	int convertID(int id);
-	void moveChess(int fromID, int toID);
+	void moveChess(int fromID, int toID, bool isCheckChieuTuong);
 
 	void updateTimer(float dt);
 	string convertTimer(int time);

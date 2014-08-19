@@ -58,6 +58,7 @@ public:
     void playerToSpec();
     void specToPlayer();
     bool isSpect();
+    bool isStartedGame();
 private:
 	string myName;
 	string listUser;

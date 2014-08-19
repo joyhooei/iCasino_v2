@@ -455,7 +455,7 @@ void Lieng::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shared_
 
 void Lieng::action_UpdateListUser(string lsUser)
 {
-	   boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+    boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	layerAvatars->setListUserForBaCay(lsUser);
 	layerCards->setListUser(lsUser);
 	if (checkPlaying(lsUser))
@@ -479,6 +479,7 @@ void Lieng::action_UpdateListUser(string lsUser)
 		
 		if(list.size()<7)
 		{
+            if(layerAvatars->isStartedGame()!=true)
 			layerAvatars->specToPlayer();
 		}else
 		{
@@ -501,7 +502,7 @@ void Lieng::action_UpdateListUser(string lsUser)
 		getButtonByTag(dTag_btnBet)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnFold)->setTouchEnabled(true);
 		getButtonByTag(dTag_Complete)->setTouchEnabled(true);
-		if(list.size()>2)
+		if(layerAvatars->isStartedGame()!=true)
 			layerAvatars->playerToSpec();
 
 	}
@@ -517,6 +518,7 @@ void Lieng::action_UpdateListUser(string lsUser)
 
 void Lieng::action_UserRejoinGame(string lsUser){
 
+    if(strcmp(lsUser.c_str(), "")==true) return;
 	if (checkPlaying(lsUser) && layerCards->getListCards_0()->count() == 0)
 	{
 		moveButtonRight();
@@ -595,6 +597,7 @@ void Lieng::action_LatBai(string listCard,string uid, bool tua)
 }
 
 bool Lieng::checkPlaying(string _list){
+    if(strcmp(_list.c_str(), "")==0) return false;
 	CCLOG("Jump to here check playing %s", _list.c_str());
 	vector<string> info = mUtils::splitString(_list, ';');
 	vector<string> firt = mUtils::splitString(info[0], '|');
@@ -677,6 +680,7 @@ void Lieng::whenGameEnd(){
 	 boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
 	if(layerAvatars->isSpect())
 	this->runAction(CCSequence::create(CCDelayTime::create(5),CCCallFunc::create(this, callfunc_selector(Lieng::deleteResuiltGame)),NULL));
+    deleteResuiltGame();
 }
 
 void Lieng::deleteResuiltGame(){

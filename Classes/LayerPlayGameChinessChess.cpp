@@ -21,6 +21,11 @@
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
+void LayerPlayGameChinessChess::showToast(string mes) {
+	Chat *noti = new Chat(mes, -1);
+	this->addChild(noti);
+}
+
 void LayerPlayGameChinessChess::playSound( string soundPath )
 {
 	if( mUtils::isSoundOn() )
@@ -309,20 +314,16 @@ CCPoint LayerPlayGameChinessChess::convertPoint_TableToLayer(CCPoint point) {
 }
 
 void LayerPlayGameChinessChess::ccTouchesEnded(CCSet *pTouches, CCEvent *event){
-	//CCLog("Touch!!!!!!!!!!!!!");
-	//hideMenu();
+	if (isClickedBack) return;
+
+	hideMenu();
 
 	if (isSpector) {
-		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
-		this->addChild(noti);
+		showChat("Bạn đang ở chế độ khách!");
 		return;
 	}
 
 	if (this->nameCurrentTurn != myName){
-// 		Chat *noti = new Chat("Chưa tới lượt!", -1);
-// 		noti->setPositionY(70);
-// 		noti->setPositionX(nodeTableChess->getContentSize().width/2 - noti->getSize().width/2);
-// 		nodeTableChess->addChild(noti, 100);
 		return; 
 	}
 
@@ -630,6 +631,8 @@ void LayerPlayGameChinessChess::actionMenu() {
 }
 
 void LayerPlayGameChinessChess::hideMenu() {
+	if (menuLayer == NULL || menuBgr == NULL) return;
+
 	if (menuLayer->isVisible()) {
 		menuLayer->setVisible(false);
 		menuLayer->getWidgetByTag(kTagButtonBack)->setTouchEnabled(false);
@@ -699,6 +702,12 @@ void LayerPlayGameChinessChess::onButtonMoney(CCObject* pSender){
 }
 void LayerPlayGameChinessChess::onButtonChat(CCObject* pSender){
 	hideMenu();
+
+	if (isSpector) {
+		showChat("Bạn đang ở chế độ khách!");
+		return;
+	}
+
 	LayerChatWindow* l = SceneManager::getSingleton().getLayerChatWindow();
 	l->setCallbackFunc(this,callfuncND_selector(LayerButtonInGame::callbackFromChatWindow));
 	SceneManager::getSingleton().showLayerChatWindow();
@@ -715,17 +724,13 @@ void LayerPlayGameChinessChess::callbackFromChatWindow( CCNode*, void* data )
 void LayerPlayGameChinessChess::onButtonLose(CCObject* pSender){
 	hideMenu();
     /**/
-	if (isSpector)
-	{
-		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
-		this->addChild(noti);
+	if (isSpector){
+		//showChat("Bạn đang ở chế độ khách!");
 		return;
 	}
 
 	if (!isStartedGame) {
-		Chat *noti = new Chat("Chưa bắt đầu game!", -1);
-		this->addChild(noti, 100);
-
+		showChat("Chưa bắt đầu game!");
 		return;
 	}
 	
@@ -741,15 +746,12 @@ void LayerPlayGameChinessChess::onButtonPeace(CCObject* pSender){
 	hideMenu();
 	if (isSpector)
 	{
-		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
-		this->addChild(noti);
+		//showChat("Bạn đang ở chế độ khách!");
 		return;
 	}
 
 	if (!isStartedGame) {
-		Chat *noti = new Chat("Chưa bắt đầu game!", -1);
-		this->addChild(noti, 100);
-
+		showChat("Chưa bắt đầu game!");
 		return;
 	}
 
@@ -819,13 +821,12 @@ void LayerPlayGameChinessChess::onButtonRemove(CCObject* pSender){
 	hideMenu();
 
 	if (isSpector) {
-		showChat("Bạn đang ở chế độ khách!");
+		//showChat("Bạn đang ở chế độ khách!");
 		return;
 	}
 
 	if (!isStartedGame) {
-		Chat *noti = new Chat("Chưa bắt đầu game!", -1);
-		this->addChild(noti, 100);
+		showChat("Chưa bắt đầu game!");
 		return;
 	}
 
@@ -917,6 +918,11 @@ bool LayerPlayGameChinessChess::onAssignCCBMemberVariable(CCObject *pTarget, con
     
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnReady", CCMenuItem*, btnReady);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnReadyHover", CCMenuItem*, btnUnReady);
+
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnLose", CCMenuItem*, btnLose);
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnPeace", CCMenuItem*, btnPeace);    
+	CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "btnReMove", CCMenuItem*, btnReMove);
+
     return true;
 }
 
@@ -924,28 +930,32 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
 {	
 	myName = SceneManager::getSingleton().getMyName();
 	isRegistSitdown = false;
+	isClickedBack = false;
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
 	if (isSpector) {
-		CCLog("Minh la khach!");
 		isRedChess = false;
 		btnReady->setEnabled(false);
 		btnReady->setVisible(false);
 
-		Chat *noti = new Chat("Bạn đang ở chế độ khách!", -1);
-		this->addChild(noti);
+		showChat("Bạn đang ở chế độ khách!");
 	}
-	else CCLog("Minh la Player");
 
+	lblYouIsGuess = CCLabelTTF::create("Bạn đang là khách!", "", 15);
+	lblYouIsGuess->setColor(ccWHITE);
+	lblYouIsGuess->setOpacity(100);
+	lblYouIsGuess->setAnchorPoint(CCPointZero);
+	lblYouIsGuess->setPosition(ccp(10, 30));
+	this->addChild(lblYouIsGuess);
 
 	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
 	string s = *rv->GetStringValue();
 
-	vector<string> lstBet = mUtils::splitString( s, '@' );
-	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
-	if (isStartedGame) {
-		CCLog("Ban dang choi!");
-	} else CCLog("Ban chua choi!");
+// 	vector<string> lstBet = mUtils::splitString( s, '@' );
+// 	lstBet.at(1).compare("1")==0 ? (isStartedGame = true) : (isStartedGame = false);
+// 	if (isStartedGame) {
+// 		CCLog("Ban dang choi!");
+// 	} else CCLog("Ban chua choi!");
 
 	
 
@@ -1077,6 +1087,7 @@ Button* LayerPlayGameChinessChess::createButtonWithTitle_Position(const char *ti
 void LayerPlayGameChinessChess::actionBack(CCObject *pSender, TouchEventType pType) {
 	if (pType == TOUCH_EVENT_BEGAN) {
 		CCLog("actionBack");
+		isClickedBack = true;
 
 		GameServer::getSingleton().removeListeners(this);
 		this->removeAllChildrenWithCleanup(true);
@@ -1123,7 +1134,14 @@ void LayerPlayGameChinessChess::actionSit(CCObject *pSender, TouchEventType pTyp
 
 void LayerPlayGameChinessChess::actionStand(CCObject *pSender, TouchEventType pType) {
 	if (pType == TOUCH_EVENT_BEGAN) {
+		hideMenu();
+
 		if (!isSpector) {
+			if (countUser < 2) {
+				showChat("Không thể đứng lên khi phòng chỉ có mỗi bạn!");
+				return;
+			}
+
 			if (isStartedGame) {
 				if (!isRegistStandUp){
 					showChat("Bạn vừa đăng ký đứng xem ở ván kế tiếp");
@@ -1139,7 +1157,6 @@ void LayerPlayGameChinessChess::actionStand(CCObject *pSender, TouchEventType pT
 			}
 		}
 
-		hideMenu();
 	}
 }
 
@@ -1202,12 +1219,13 @@ void LayerPlayGameChinessChess::OnSmartFoxRoomVariableUpdate(unsigned long long 
 	boost::shared_ptr<void> ptrEventParamValueRoom = (*ptrEvetnParams)["room"];
 	boost::shared_ptr<Room> room = ((boost::static_pointer_cast<Room>(ptrEventParamValueRoom)));
 	//
+	return;
 	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
 	string s = *rv->GetStringValue();
 	CCLOG("Room %s update RoomVariables: %s", room->Name()->c_str(), s.c_str());
 
 	vector<string> lstBet = mUtils::splitString( s, '@' );
-	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
+	lstBet.at(1).compare("1")==0 ? (isStartedGame = true) : (isStartedGame = false);
 
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
 	if (isSpector) {
@@ -1423,17 +1441,48 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_END(){
 
 	chieuTuongBlack->setVisible(false);
 	chieuTuongRed->setVisible(false);
+
+	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+	if (isSpector) {
+		btnReady->setEnabled(false);
+		btnReady->setVisible(false);
+		btnUnReady->setEnabled(false);
+		btnUnReady->setVisible(false);
+	}
+
+	if (!isSpector && isRegistStandUp) {
+		boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+		GameServer::getSingleton().getSmartFox()->Send(request);
+		isRegistStandUp = false;
+	}
+
+	if (isSpector && isRegistSitdown) {
+		boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
+		GameServer::getSingleton().getSmartFox()->Send(request);
+		isRegistSitdown = false;
+	}
 }
 
 void LayerPlayGameChinessChess::event_EXT_EVENT_READY_NTF(){
     boost::shared_ptr<string> name = param->GetUtfString("uid");
     
+	if (isSpector) {
+		if (name->c_str() == player1) {
+			readyRed->setVisible(true);
+		}
+		else {
+			readyBlack->setVisible(true);
+		}
+
+		return;
+	}
+
     if (name != NULL ) {
         CCLog("event_EXT_EVENT_READY_NTF:: name=%s", name->c_str());
         
         if (name->c_str() == myName){
 			readyBlack->setVisible(true);
-			timeToReady=-1;
+			timeToReady = -1;
 		}
         else readyRed->setVisible(true);
     }
@@ -1447,8 +1496,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_GAME_RESULT(){
     if (name != NULL && result != NULL && wt != NULL) {
         //name=thanhhv2, result=-0|0
         CCLog("event_EXT_EVENT_GAME_RESULT:: name=%s, result=%s, wt=%d", name->c_str(), result->c_str(), *wt);
-        Chat *noti = new Chat("Kết thúc ván", -1);
-		this->addChild(noti);
+        showChat("Kết thúc ván");
 
         string lsmoney = result->c_str();
 		if (lsmoney.length() < 2) return;
@@ -1543,6 +1591,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
         string ls = listUser->c_str();
         vector<string> arrInfo = split(ls, ';');
 		
+		countUser = arrInfo.size();
 		
 		lblNameRed->setString("--");
 		lblMoneyRed->setString("--");
@@ -1564,6 +1613,11 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 		// nếu mình là khách (isSpector=true)
 		// Begin
 		if (isSpector) {
+
+			btnReMove->setVisible(false);
+			btnPeace->setVisible(false);
+			btnLose->setVisible(false);
+			lblYouIsGuess->setVisible(true);
 
 			CCLog("Khach!");
 			int sizeInfo = arrInfo.size();
@@ -1589,6 +1643,8 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 				//4 black
 				imagedownloader4Red->setPointerNodeImage( nodeAvatarRed );
 				imagedownloader4Red->downLoadImage( *url );
+
+				CCLog("name= %s", player1.c_str());
 			}
 			else {
 				player2 = name;
@@ -1605,14 +1661,13 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 				imagedownloader4Black->setPointerNodeImage( nodeAvatarBlack );
 				imagedownloader4Black->downLoadImage( *url );
 			}
-			
-			//
+		
 			if (sizeInfo < 2) {
-				lblNameRed->setString("--");
+				/*lblNameRed->setString("--");
 				lblMoneyRed->setString("--");
 				lblWinRateRed->setString("--");
 				imagedownloader4Red->setPointerNodeImage(nodeAvatarRed);
-				imagedownloader4Red->downLoadImage("");
+				imagedownloader4Red->downLoadImage("");*/
 				return;
 			}
 			arr = split(arrInfo[1], '|');
@@ -1658,10 +1713,16 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 			return;
 		}
 		// End
-        
+ 
 		else {
 			btnReady->setEnabled(true);
 			btnReady->setVisible(true);
+
+			btnReMove->setVisible(true);
+			btnPeace->setVisible(true);
+			btnLose->setVisible(true);
+
+			lblYouIsGuess->setVisible(false);
 		}
 
         int sizeInfo = arrInfo.size();
@@ -1751,10 +1812,10 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_MOVE_NTF(){
         // nếu mình đi sau thì ko cần convert
 		bool isPlayer1 = (player1.length() > 0 && player1==nameCurrentTurn);
         if (isRedChess /*|| isPlayer1*/) {
-            moveChess(convertID(moveFrom), convertID(moveTo));
+            moveChess(convertID(moveFrom), convertID(moveTo), true);
         }
         else {
-            moveChess(moveFrom, moveTo);
+            moveChess(moveFrom, moveTo, true);
         }
     }
 }
@@ -1792,6 +1853,8 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_UNDO_MOVE_NTF() {
 	// EXT_FIELD_LIST_MOVE= "lm"
 	//
 	//idside,from,to,fromIdChess,toIdChess;... ( từ lần di chuyển gần nhất tới lâu nhất )
+	// thanhhv3,67,31,4,0;thanhhv1,2,22,2,7;
+	// 
 	CCLog("event_EXT_EVENT_UNDO_MOVE_NTF");
 	boost::shared_ptr<string> lm = param->GetUtfString("lm");
 	if (lm==NULL) return;
@@ -1815,97 +1878,41 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_UNDO_MOVE_NTF() {
 		int moveFrom = toID;
 		int moveTo   = fromID;
 		if (isRedChess) {
-			moveChess(convertID(moveFrom), convertID(moveTo));
+			moveChess(convertID(moveFrom), convertID(moveTo), false);
 		}
 		else {
-			moveChess(moveFrom, moveTo);
+			moveChess(moveFrom, moveTo, false);
 		}
 
 		// kiểm tra xem IDChessUndo2 có phải 1 quân cờ hay ko, nếu phải thì hiện hình :D
-		int kChess=-1;
-		if (name != myName) {
-			// minh quan do tren ban co
-			switch (IDChessUndo2) {
-				case 0:
-					kChess = kTotDo;
-					break;
-				case 1:
-					kChess = kSiDo;
-					break;
-				case 2:
-					kChess = kTuongjDo;
-					break;
-				case 3:
-					kChess = kMaDo;
-					break;
-				case 4:
-					kChess = kPhaoDo;
-					break;
-				case 5:
-					kChess = kXeDo;
-					break;
-				case 6:
-					kChess = kTuongDo;
-					break;
-			}
+		int chessName = IDChessUndo2;
+		int chessSide = -1;
+		if (name != myName || (isSpector && name != player2)) {
+			chessSide = 1;
 		}
 		else {
-			switch (IDChessUndo2) {
-			case 0:
-				kChess = kTotXanh;
-				break;
-			case 1:
-				kChess = kSiXanh;
-				break;
-			case 2:
-				kChess = kTuongjXanh;
-				break;
-			case 3:
-				kChess = kMaXanh;
-				break;
-			case 4:
-				kChess = kPhaoXanh;
-				break;
-			case 5:
-				kChess = kXeXanh;
-				break;
-			case 6:
-				kChess = kTuongXanh;
+			chessSide = 2;
+		}
+
+		isRedChess?(toID=convertID(toID)):toID;
+		Chess *chess;
+		// tim kiem quan co tuong ung va dat lai vi tri toID
+		for (int i = 0; i < arrChess.size(); i++) 
+		{
+			chess = arrChess.at(i);
+			if (chess->getName() == chessName && chess->getSide() == chessSide && !chess->isVisible()) {
+
+				chess->setVisible(true);
+				chess->setIDPos(toID);
+				chess->setPosition(getPositionFromIndex(toID));
+				chess->setClick(false);
+
+				logicChess->setChessIDBySide(IDChessUndo2, chessSide, toID);
 				break;
 			}
 		}
 
-		if (kChess < 0) continue;
-		else {
-			isRedChess?(toID=convertID(toID)):toID;
-			Chess *chess;
-			// tim kiem quan co tuong ung va dat lai vi tri toID
-			for (int i = 0; i < arrChess.size(); i++) 
-			{
-				chess = arrChess.at(i);
-				if (chess->getIDName() == kChess && !chess->isVisible()) {
-					chess->setVisible(true);
-					chess->setIDPos(toID);
-					chess->setPosition(getPositionFromIndex(toID));
-					chess->setClick(false);
-
-					logicChess->setChessIDBySide(IDChessUndo2, (isRedChess)?2:1, toID);
-					break;
-				}
-			}
-		}
 	}
-
-	/*int PAWN = 0;   // tốt
-	int BISHOP = 1;   // sỹ
-	int ELEPHANT = 2; // tượng
-	int KNIGHT = 3;   // mã
-	int CANNON = 4;	  // pháo
-	int ROOK = 5;	  // xe
-	int KING = 6;	  // tướng
-	int EMPTY = 7;*/  
-
-	
 
 }
 
@@ -1961,7 +1968,7 @@ int LayerPlayGameChinessChess::convertID(int id) {
     return (rowC * 9 + colC);
 }
 
-void LayerPlayGameChinessChess::moveChess(int fromID, int toID) {
+void LayerPlayGameChinessChess::moveChess(int fromID, int toID, bool isCheckChieuTuong) {
 	bool isPlayer1 = (player1.length() > 0 && nameCurrentTurn==player1);
 
     if (isRedChess /*|| isPlayer1*/) {
@@ -2004,27 +2011,29 @@ void LayerPlayGameChinessChess::moveChess(int fromID, int toID) {
 		listChessRed = logicChess->getArrayLostPieces(RED);
 		listChessBlack = logicChess->getArrayLostPieces(BLACK);
 
-		if (!logicChess->IsKingSafe(BLACK)) {
-			CCActionInterval *blink = CCBlink::create(2, 3);
-			chieuTuongRed->runAction(blink);
-		}
-		if (!logicChess->IsKingSafe(RED)) {
-			CCActionInterval *blink = CCBlink::create(2, 3);
-			chieuTuongBlack->runAction(blink);
-		}
+		if (isCheckChieuTuong)
+			if (!logicChess->IsKingSafe(BLACK)) {
+				CCActionInterval *blink = CCBlink::create(2, 3);
+				chieuTuongRed->runAction(blink);
+			}
+			if (!logicChess->IsKingSafe(RED)) {
+				CCActionInterval *blink = CCBlink::create(2, 3);
+				chieuTuongBlack->runAction(blink);
+			}
 	}
 	else {
 		listChessRed = logicChess->getArrayLostPieces(BLACK);
 		listChessBlack = logicChess->getArrayLostPieces(RED);
 
-		if (!logicChess->IsKingSafe(RED)) {
-			CCActionInterval *blink = CCBlink::create(2, 3);
-			chieuTuongRed->runAction(blink);
-		}
-		if (!logicChess->IsKingSafe(BLACK)) {
-			CCActionInterval *blink = CCBlink::create(2, 3);
-			chieuTuongBlack->runAction(blink);
-		}
+		if (isCheckChieuTuong)
+			if (!logicChess->IsKingSafe(RED)) {
+				CCActionInterval *blink = CCBlink::create(2, 3);
+				chieuTuongRed->runAction(blink);
+			}
+			if (!logicChess->IsKingSafe(BLACK)) {
+				CCActionInterval *blink = CCBlink::create(2, 3);
+				chieuTuongBlack->runAction(blink);
+			}
 	}
 	vector<string> arrChessRed = split(listChessRed, '_');
 	vector<string> arrChessBlack = split(listChessBlack, '_');

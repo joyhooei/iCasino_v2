@@ -42,10 +42,10 @@ public:
 
 	void setUnReadyAllUser();
 	void resetGame();
-
+    UIButton *btn_vaochoi;
+	UIButton *btn_dungday;
 
 	//
-	void formatAndStore(const char &c1, const char &c2);
 
 	Avatar* getUserByPos(int pos);
 	int getIndexInArrByName(string name);
@@ -58,8 +58,12 @@ public:
 	void updateUsers();
 	void showChatByPos(int pos, string mes);
 	// Time
-
-
+    bool isSpect();
+    bool isStartedGame();
+    void vaoBanChoi(CCObject *obj,TouchEventType type);
+    void playerToSpec();
+    void specToPlayer();
+    void setListUser(string list);
 private:
 
 

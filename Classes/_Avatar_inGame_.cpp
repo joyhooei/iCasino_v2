@@ -476,25 +476,25 @@ void LayerAvatarInGame::updateUsers() {
 	btnReady->setEnabled(false);*/
 
 	avaLeft->setVisibleLayerInvite(true);
-	avaLeft->setReady(false);
+	//avaLeft->setReady(false);
 	avaLeft->setName("");
 	avaLeft->setMoney("");
 	avaLeft->setAI("");
 	//
 	avaRight->setVisibleLayerInvite(true);
-	avaRight->setReady(false);
+	//avaRight->setReady(false);
 	avaRight->setName("");
 	avaRight->setMoney("");
 	avaRight->setAI("");
 	//
 	avaTop->setVisibleLayerInvite(true);
-	avaTop->setReady(false);
+	//avaTop->setReady(false);
 	avaTop->setName("");
 	avaTop->setMoney("");
 	avaTop->setAI("");
 	//
 	avaBot->setVisibleLayerInvite(true);
-	avaBot->setReady(false);
+	//avaBot->setReady(false);
 	avaBot->setName("");
 	avaBot->setMoney("");
 	avaBot->setAI("");
@@ -544,9 +544,8 @@ void LayerAvatarInGame::updateUsers() {
 				user->setTouchEnabled(true);
 				//btnReady->setEnabled(true);
 			}
-			else {
 				user->setVisibleLayerInvite(false);
-			}
+			
     }
 }
 
