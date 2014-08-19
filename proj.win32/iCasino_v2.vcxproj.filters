@@ -268,7 +268,7 @@
     <ClCompile Include="..\Classes\_Number_Chat_inGame7u.cpp">
       <Filter>Classes\Children</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Game1\Classes\PopupLayer.cpp">
+    <ClCompile Include="..\Classes\Layer_GivePocker_Chan.cpp">
       <Filter>Classes\Children</Filter>
     </ClCompile>
   </ItemGroup>
@@ -547,7 +547,7 @@
     <ClInclude Include="..\Classes\_Number_Chat_inGame7u.h">
       <Filter>Classes\Children</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Game1\Classes\PopupLayer.h">
+    <ClInclude Include="..\Classes\Layer_GivePocker_Chan.h">
       <Filter>Classes\Children</Filter>
     </ClInclude>
   </ItemGroup>

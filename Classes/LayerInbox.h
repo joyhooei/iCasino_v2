@@ -39,7 +39,8 @@ private:
     
     struct StructEmail{
         long id;
-        string user;
+		string fromUser;
+		string toUser;
         string datetime;
         string content;
     };
@@ -60,6 +61,11 @@ public:
     CREATE_FUNC(LayerInbox);
     
     void loadAllMyDatas();
+
+	void processGLMIMessage(string msg);
+	void processRGLSIMMessage(string msg);
+
+	CCNode* createLabel4Cell(int tag, const char* text, CCSize size, CCPoint point);
     
     // CCBSelectorResolver interfaces
     virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, const char* pSelectorName);

@@ -92,6 +92,7 @@ void GameServer::initServer( )
 	mSmartFox->AddEventListener(SFSEvent::ROOM_JOIN_ERROR, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnSmartFoxRoomJoinError, (unsigned long long)this)));
 	mSmartFox->AddEventListener(SFSEvent::ROOM_CREATION_ERROR, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnSmartFoxRoomCreationError, (unsigned long long)this)));
 	mSmartFox->AddEventListener(SFSEvent::ROOM_ADD, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnSmartFoxRoomAdd, (unsigned long long)this)));
+	mSmartFox->AddEventListener(SFSEvent::ROOM_REMOVE, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnSmartFoxRoomDestroy, (unsigned long long)this)));
 	mSmartFox->AddEventListener(SFSEvent::ROOM_VARIABLES_UPDATE, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnSmartFoxRoomVariableUpdate, (unsigned long long)this)));
 	mSmartFox->AddEventListener(SFSEvent::ROOM_PASSWORD_STATE_CHANGE, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnSmartFoxRoomPasswordStateChange, (unsigned long long)this)));
 	mSmartFox->AddEventListener(SFSEvent::ROOM_PASSWORD_STATE_CHANGE_ERROR, boost::shared_ptr<EventListenerDelegate> (new EventListenerDelegate(GameServer::OnSmartFoxRoomPasswordStateChangeError, (unsigned long long)this)));
@@ -292,6 +293,9 @@ void GameServer::OnSmartFoxNtf(eEventTags tag, unsigned long long ptrContext, bo
 			case tag_EventRoomAdd:
 				iTer->second->OnSmartFoxRoomAdd(ptrContext, ptrEvent);
 				break;
+			case tag_EventRoomDestroy:
+				iTer->second->OnSmartFoxRoomDestroy(ptrContext, ptrEvent);
+				break;
 			case tag_EventRoomVariableUpdate:
 				iTer->second->OnSmartFoxRoomVariableUpdate(ptrContext, ptrEvent);
 				break;
@@ -341,4 +345,9 @@ void GameServer::OnDebugMessage( unsigned long long ptrContext, boost::shared_pt
 	boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["message"];
 	boost::shared_ptr<string> ptrNotifiedMsg = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
 	CCLOG("GameServer::OnDebugMessage() - %s", ptrNotifiedMsg->c_str());
+}
+
+void GameServer::OnSmartFoxRoomDestroy( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	GameServer::getSingleton().OnSmartFoxNtf(tag_EventRoomDestroy, ptrContext, ptrEvent );
 }

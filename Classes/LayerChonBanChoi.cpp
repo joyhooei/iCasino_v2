@@ -615,3 +615,16 @@ void LayerChonBanChoi::OnSmartFoxRoomVariableUpdate( unsigned long long ptrConte
 	string s = *rv->GetStringValue();
 	CCLOG("Room %s update RoomVariables: %s", room->Name()->c_str(), s.c_str());
 }
+
+void LayerChonBanChoi::OnSmartFoxRoomDestroy( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	//A Room was removed
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEventParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueRoom = (*ptrEventParams)["room"];
+	boost::shared_ptr<Room> ptrNotifiedRoom = ((boost::static_pointer_cast<Room>))(ptrEventParamValueRoom);
+
+	CCLOG("Room %s destroyed!", ptrNotifiedRoom->Name()->c_str());
+	if( ptrNotifiedRoom->IsJoined() ){
+		CCLOG("Destroy mie roi con dau");
+	}
+}

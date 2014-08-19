@@ -340,7 +340,7 @@ public:
 				//Push to vector and continues
 				if( minPos!=0 )
 					arrStr.push_back( S.substr( 0, minPos ) );
-				arrStr.push_back(currRegx);
+				//arrStr.push_back(currRegx);
 				S = S.substr( minPos+currRegx.length(), S.length()-minPos-currRegx.length() );
 			}
 		}while(S.length()>=4);

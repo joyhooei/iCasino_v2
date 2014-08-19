@@ -191,6 +191,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LayerUpdateInfo.cpp" />
     <ClCompile Include="..\Classes\LayerUserInfo.cpp" />
     <ClCompile Include="..\Classes\LayerUserInfo_Details.cpp" />
+    <ClCompile Include="..\Classes\Layer_GivePocker_Chan.cpp" />
     <ClCompile Include="..\Classes\Lieng.cpp" />
     <ClCompile Include="..\Classes\LogicInChess.cpp" />
     <ClCompile Include="..\Classes\Nan3Cay.cpp" />
@@ -280,6 +281,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\LayerUpdateInfo.h" />
     <ClInclude Include="..\Classes\LayerUserInfo.h" />
     <ClInclude Include="..\Classes\LayerUserInfo_Details.h" />
+    <ClInclude Include="..\Classes\Layer_GivePocker_Chan.h" />
     <ClInclude Include="..\Classes\Lieng.h" />
     <ClInclude Include="..\Classes\LoadingCustomLoader.h" />
     <ClInclude Include="..\Classes\LogicInChess.h" />
