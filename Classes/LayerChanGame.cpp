@@ -15,8 +15,10 @@
 #include "SliderCustomLoader.h"
 #include "SceneManager.h"
 #include "LayerGameChan_KetQua.h"
+#include "Layer_GivePocker_Chan.h"
 #include "AllData.h"
 
+#define kTag_layerGive 200
 #define PI 3.141592653589
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
@@ -52,6 +54,9 @@ LayerChanGame::LayerChanGame(){
 	EXT_EVENT_REQ_CHIU_CARD = "rqchiuc";
 	EXT_EVENT_REQ_NOC_DETAIL = "rqnocdtl"; 
 	EXT_EVENT_RES_CHIU_CARD = "rschiuc";
+
+	EXT_SRVNTF_BOC_CAI = "ntfbocc";
+	EXT_EVENT_REQ_BOC_CAI = "rqbocc";
 
 	_list_user = "";
 	mylistCard = "";
@@ -271,10 +276,19 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			_user = user->c_str();
 			setUserReady(_user);
 		}
-
-		//wwhen user list user
 		CCLOG("user ready: %s",_user.c_str());
 		CCLOG("EXT_SRVNTF_USER_READY");
+	}
+
+	//Bốc cái
+	else if (strcmp(EXT_SRVNTF_BOC_CAI.c_str(), cmd->c_str()) == 0)
+	{
+		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+		if (usrn != NULL)
+		{
+			eventBocCai(usrn->c_str());
+		}
+		CCLOG("EXT_SRVNTF_BOC_CAI");
 	}
 
 	// game start
@@ -299,39 +313,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 			_lc = lc->c_str();
 		}
 
-		if (!flagChiaBai) {
-			if (strcmp(_usrn.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0) {
-				if(gameStarted){
-					layerCardChan->setMyListCards(_lc);
-					getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
-					getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
-					getButtonByTag(cTag_btnBoc)->setEnabled(true);
-
-					getButtonByTag(cTag_btnU)->setEnabled(true);
-
-					getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
-					getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
-					getButtonByTag(cTag_btnChiu)->setEnabled(true);
-
-					getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
-					getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
-					getButtonByTag(cTag_btnEate)->setEnabled(true);
-
-					getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
-					getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
-					getButtonByTag(cTag_btnTake)->setEnabled(true);
-				}
-				flagChiaBai = true;
-			}
-		}else{
-			if (strcmp(_usrn.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0) {
-				mylistCard = mUtils::splitString(_lc, '/')[0];
-				if (mylistCard != "") {
-					layerCardChan->sortMyListCards(mylistCard);
-				}
-			}
-		}
-		CCLOG("EXT_EVENT_LISTCARD_NTF");
+		eventListCard(_usrn, _lc);
 	}
 
 	//noc count
@@ -683,6 +665,72 @@ void LayerChanGame::sendRequestJoinGame(float dt){
 	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 	boost::shared_ptr<IRequest> request (new ExtensionRequest("rqjg", params, lastRoom));
 	GameServer::getSingleton().getSmartFox()->Send(request);
+}
+
+void LayerChanGame::eventBocCai(string user){
+	CCLOG("user boc cai: %s", user.c_str());
+	Layer_GivePocker_Chan *layerGive = Layer_GivePocker_Chan::create();
+	bool iBoc = false;
+	if (strcmp(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(), user.c_str()) == 0)
+	{
+		iBoc = true;
+	}
+	layerGive->setIsPlayerBocCai(iBoc);
+	layerGive->setPlayerBocCai(user);
+	layerGive->setListusers(_list_user);
+	layerGive->setTag(kTag_layerGive);
+	this->addChild(layerGive);
+	layerGive->startGivePocker();
+}
+
+void LayerChanGame::eventListCard(string _usrn, string _lc){
+	if (!flagChiaBai) {
+		if (strcmp(_usrn.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0) {
+			if(gameStarted){
+				CCString *p = CCString::create(_lc);
+				CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::delayListCardFirst),p);
+				CCDelayTime *delay = CCDelayTime::create(0.9);
+				this->runAction(CCSequence::create(delay, callfun, NULL));
+			}
+			flagChiaBai = true;
+		}
+	}else{
+		if (strcmp(_usrn.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0) {
+			mylistCard = mUtils::splitString(_lc, '/')[0];
+			if (mylistCard != "") {
+				layerCardChan->sortMyListCards(mylistCard);
+			}
+		}
+	}
+}
+
+void LayerChanGame::delayListCardFirst(CCObject *data){
+	CCString *resuilt = (CCString *) data;
+	string _lc = string(resuilt->getCString());
+
+	if (this->getChildByTag(kTag_layerGive) != NULL)
+	{
+		this->removeChildByTag(kTag_layerGive);
+	}
+
+	layerCardChan->setMyListCards(_lc);
+	getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+	getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+	getButtonByTag(cTag_btnBoc)->setEnabled(true);
+
+	getButtonByTag(cTag_btnU)->setEnabled(true);
+
+	getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
+	getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
+	getButtonByTag(cTag_btnChiu)->setEnabled(true);
+
+	getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+	getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
+	getButtonByTag(cTag_btnEate)->setEnabled(true);
+
+	getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
+	getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
+	getButtonByTag(cTag_btnTake)->setEnabled(true);
 }
 
 // tìm vị trí người chơi so với mình
@@ -1594,6 +1642,7 @@ void LayerChanGame::callbackTimer(CCNode *pSender){
 	stopTimer_Me();
 }
 void LayerChanGame::stopTimer_Me(){
+
 	if (timer_Me == NULL) {
 		return;
 	}

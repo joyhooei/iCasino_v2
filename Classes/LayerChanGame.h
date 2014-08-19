@@ -53,7 +53,7 @@ enum{
 
 class LayerChanGame : public CCLayer,public PlayerCallBack, public NotificationCallBack{
 private:
-	//Recei
+	//Gửi đi
 	string EXT_EVENT_READY_REQ;
 	string EXT_EVENT_REQ_DISCARD;
 	string EXT_EVENT_REQ_DRAW_CARD;
@@ -61,7 +61,7 @@ private:
 	string EXT_EVENT_REQ_DUOI_CARD;
 	string EXT_EVENT_REQ_TRENTAY_DETAIL;
 
-	//send
+	//Nhận về
 	string EXT_SRVNTF_GAME_MASTER_INFO;
 	string EXT_SRVNTF_PLAYER_LIST;
 	string EXT_SRVNTF_USER_READY;
@@ -83,10 +83,15 @@ private:
 	string EXT_EVENT_RES_U;
 	string EXT_EVENT_REQ_U;
 	string EXT_EVENT_REQ_CHIU_CARD;
-	//xem noc
+	//Xem nọc
 	string EXT_EVENT_REQ_NOC_DETAIL;
-	//chiu thanh cong
+	//Chíu thành công
 	string EXT_EVENT_RES_CHIU_CARD;
+
+	//Server gửi bản tin bốc cái
+	string EXT_SRVNTF_BOC_CAI;
+	//Client gửi yêu cầu bốc cái
+	string EXT_EVENT_REQ_BOC_CAI;
 
 	string _list_user;
 	string mylistCard;
@@ -119,6 +124,10 @@ public:
 	void createCards();
 	void createButtons();
 	void sendRequestJoinGame(float dt);
+
+	void eventBocCai(string user);
+	void eventListCard(string user, string listCards);
+	void delayListCardFirst(CCObject *data);
 
 	void notificationCallBack(bool isOK, int tag);
 

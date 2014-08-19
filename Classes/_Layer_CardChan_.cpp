@@ -9,6 +9,7 @@
 
 #define PI 3.141592653589
 #define kTag_buttonNoc 123
+#define kTag_layerGive 124
 
 using namespace Sfs2X;
 
