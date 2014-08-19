@@ -451,17 +451,11 @@ void AvatarInTomCuaCa::updateUsers() {
 				this->getUserByPos(kuser3)->setMeIsBoss(meIsBoss);
 				this->getUserByPos(kuser4)->setMeIsBoss(meIsBoss);
                 this->getUserByPos(kuser5)->setMeIsBoss(meIsBoss);
-
-			}
-		
-
-            
-			if (pos == kuser0)
-			{
-				_user->setVisible(true);
+                _user->setVisible(true);
 				_user->setTouchEnabled(false);
-                
 			}
+            if(info[3]=="1")
+                _user->setReady(true);
 		}
 		
 	}//for
@@ -620,8 +614,6 @@ bool AvatarInTomCuaCa::isSpect() {
 		vector<string> arrInfo = mUtils::splitString(arr.at(i), '|');
 		if (arrInfo.size() < 2) continue;
 		string ai = arrInfo.at(0);
-        CCLog("ai---%s",ai.c_str());
-        CCLog("MyAi---%s",myAI.c_str());
 		if (strcmp(ai.c_str(), myAI.c_str())==0)
             return false;
 	}
@@ -630,18 +622,20 @@ bool AvatarInTomCuaCa::isSpect() {
 }
 bool AvatarInTomCuaCa::isStartedGame()
 {
-	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
-	string s = *rv->GetStringValue();
+    boost::shared_ptr<Room> ro = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+    vector<string> rParams = mUtils::splitString( *ro->GetVariable("params")->GetStringValue(), '@' );
+    //Param: Money@isPlaying@Number Of Player
+    //0: rParams.at(0).c_str()
+    //1: rParams.at(1).c_str()
+    //2: rParams.at(2).c_str()
+    bool isStartedGame=true;
+    isStartedGame=strcmp(rParams.at(1).c_str(),"0")==0?false:true;
+    if(isStartedGame)
+        CCLog("Bàn đang chơi");
+    else
+        CCLog("Bàn chưa chơi");
     
-	vector<string> lstBet = mUtils::splitString( s, '@' );
-	bool isStartedGame=false;
-	lstBet.at(1).compare("1")==0 ? (isStartedGame=true) : (isStartedGame=false);
-	if (isStartedGame) {
-		CCLog("Ban dang choi!");
-	} else CCLog("Ban chua choi!");
-    
-	return isStartedGame;
+    return isStartedGame;
 }
 void AvatarInTomCuaCa::vaoBanChoi(CCObject *obj,TouchEventType type)
 {

@@ -94,7 +94,7 @@ float TomCuaCa::convertResult(string rs)
 }
 TomCuaCa::TomCuaCa(){
 
-
+ 
 	if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
@@ -252,10 +252,15 @@ vector<string> TomCuaCa::TCCsplit(string &S,const char &str){
 		return arrStr;
 	}
 void TomCuaCa::updateUser(string list){
+    
+    boost::shared_ptr<Room> ro = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+    vector<string> rParams = mUtils::splitString( *ro->GetVariable("params")->GetStringValue(), '@' );
+    CCLog("rParammmmmmmm---%s",rParams.at(1).c_str());
     lAvatar->setListUser(list);
 	vector<string> listUser;
 	listUser = TCCsplit(list, ';');
 	CCLOG("Do dai: %ld",listUser.size());
+    CCLog("listuser: %s",list.c_str());
 	
 	boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
     isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())->IsSpectator();
@@ -263,7 +268,7 @@ void TomCuaCa::updateUser(string list){
     if(lAvatar->isSpect()==true)
     {
 		nameGame->setString("Bạn đang xem...");
-		
+		_time=1;
         if(listUser.size()<7)
         {
             CCLog("here");
@@ -279,22 +284,16 @@ void TomCuaCa::updateUser(string list){
             lButton->getButtonByTag(103)->setTouchEnabled(true);
             
         }
-        
-        specMode();
+
     }else
     {
+        _time=0;
         nameGame->setString(result.c_str());
-        if(lAvatar->isStartedGame()!=true)
+        if(listUser.size()>1 && lAvatar->isStartedGame()!=true)
             lAvatar->playerToSpec();
         btnReady->setTouchEnabled(true);
-        btnUnReady->setTouchEnabled(true);
-        btnTom->setTouchEnabled(true);
-        btnCua->setTouchEnabled(true);
-        btnCa->setTouchEnabled(true);
-        btnGa->setTouchEnabled(true);
-        btnRuou->setTouchEnabled(true);
-        btnNai->setTouchEnabled(true);
-        
+        //btnUnReady->setTouchEnabled(true);
+
     }
 	
     if(strcmp(list.c_str(),"")==0)
@@ -859,7 +858,6 @@ void TomCuaCa::clickBtn(CCObject* obj, TouchEventType type)
 		case t_ready:
 			{
 					boost::shared_ptr<ISFSObject> parameter (new SFSObject());
-					
 					boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 					boost::shared_ptr<IRequest> request (new ExtensionRequest(convertResponseToString(EXT_EVENT_READY_REQ),parameter,lastRoom));
 					GameServer::getSingleton().getSmartFox()->Send(request);
@@ -1294,12 +1292,7 @@ void TomCuaCa::specMode()
     
     btnReady->setTouchEnabled(false);
     btnUnReady->setTouchEnabled(false);
-    btnTom->setTouchEnabled(false);
-    btnCua->setTouchEnabled(false);
-    btnCa->setTouchEnabled(false);
-    btnGa->setTouchEnabled(false);
-    btnRuou->setTouchEnabled(false);
-    btnNai->setTouchEnabled(false);
+
    
     
 }
