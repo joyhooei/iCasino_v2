@@ -187,10 +187,12 @@ LayerPlayGameChinessChess::LayerPlayGameChinessChess()
 }
 
 void LayerPlayGameChinessChess::updateTimer(float dt) {
-    if ((isStartedGame || isSpector) && nameCurrentTurn.length() > 0) {
+    if (isStartedGame && nameCurrentTurn.length() > 0) {
 		if (timeRestBlack <= 0 || timeRestRed <= 0 || timeForTurnBlack <= 0 || timeForTurnRed <= 0)
 			return;
-        if (nameCurrentTurn == myName) {
+
+		isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+        if (nameCurrentTurn == myName || (isSpector && nameCurrentTurn == player2)) {
             timeRestBlack--;
             lblTotalTimeBlack->setString(convertTimer(timeRestBlack).c_str());
 			timeForTurnBlack--;
