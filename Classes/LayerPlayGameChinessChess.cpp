@@ -21,6 +21,19 @@
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
+bool LayerPlayGameChinessChess::isSpectator() {
+	vector<string> arr = split(this->listUser, ';');
+	int size = arr.size();
+	for (int i = 0; i < size; i++){
+		vector<string> arrInfo = split(arr.at(i), '|');
+		if (arrInfo.size() < 1) continue;
+		string ai = arrInfo.at(0);
+		if (ai == myName) return false;
+	}
+
+	return true;
+}
+
 void LayerPlayGameChinessChess::showToast(string mes) {
 	Chat *noti = new Chat(mes, -1);
 	this->addChild(noti);
@@ -191,8 +204,9 @@ void LayerPlayGameChinessChess::updateTimer(float dt) {
 		if (timeRestBlack <= 0 || timeRestRed <= 0 || timeForTurnBlack <= 0 || timeForTurnRed <= 0)
 			return;
 
-		isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
-        if (nameCurrentTurn == myName || (isSpector && nameCurrentTurn == player2)) {
+		isSpector = isSpectator();
+        
+		if (nameCurrentTurn == myName || (isSpector && nameCurrentTurn == player2)) {
             timeRestBlack--;
             lblTotalTimeBlack->setString(convertTimer(timeRestBlack).c_str());
 			timeForTurnBlack--;
@@ -931,8 +945,10 @@ bool LayerPlayGameChinessChess::onAssignCCBMemberVariable(CCObject *pTarget, con
 void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 {	
 	myName = SceneManager::getSingleton().getMyName();
+	this->listUser = "";
 	isRegistSitdown = false;
 	isClickedBack = false;
+	// ffff
 	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
 	if (isSpector) {
 		isRedChess = false;
@@ -1217,51 +1233,6 @@ void LayerPlayGameChinessChess::OnSmartFoxUserExitRoom(unsigned long long ptrCon
 
 void LayerPlayGameChinessChess::OnSmartFoxRoomVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
 
-	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
-	boost::shared_ptr<void> ptrEventParamValueRoom = (*ptrEvetnParams)["room"];
-	boost::shared_ptr<Room> room = ((boost::static_pointer_cast<Room>(ptrEventParamValueRoom)));
-	//
-	return;
-	boost::shared_ptr<RoomVariable> rv = room->GetVariable("params");
-	string s = *rv->GetStringValue();
-	CCLOG("Room %s update RoomVariables: %s", room->Name()->c_str(), s.c_str());
-
-	vector<string> lstBet = mUtils::splitString( s, '@' );
-	lstBet.at(1).compare("1")==0 ? (isStartedGame = true) : (isStartedGame = false);
-
-	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
-	if (isSpector) {
-		CCLog("Ban la khach");
-		btnReady->setEnabled(false);
-		btnReady->setVisible(false);
-		btnUnReady->setEnabled(false);
-		btnUnReady->setVisible(false);
-
-		showChat("Bạn đang ở chế độ khách!");
-	}
-
-
-	if (isStartedGame) {
-		CCLOG("Game dang choi");
-	}
-	else {
-		CCLOG("Game chua bat dau");
-		// Game đang ko diễn ra, có thể gửi đi thông báo đứng xem
-		if (!isSpector && isRegistStandUp) {
-			boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
-			GameServer::getSingleton().getSmartFox()->Send(request);
-			isRegistStandUp = false;
-			CCLog("Gui di thong bao muon dung len!");
-		}
-
-		// có thể gửi đi thông báo muốn ngồi vào bàn chơi
-		if (isSpector && isRegistSitdown) {
-			boost::shared_ptr<IRequest> request (new SpectatorToPlayerRequest());
-			GameServer::getSingleton().getSmartFox()->Send(request);
-			isRegistSitdown = false;
-			CCLog("Gui di thong bao muon ngoi xuong!");
-		}
-	}
 }
 
 void LayerPlayGameChinessChess::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent){
@@ -1444,7 +1415,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_END(){
 	chieuTuongBlack->setVisible(false);
 	chieuTuongRed->setVisible(false);
 
-	isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();
+	isSpector = isSpectator();
 	if (isSpector) {
 		btnReady->setEnabled(false);
 		btnReady->setVisible(false);
@@ -1586,8 +1557,8 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
     
     if (listUser != NULL) {
         CCLog("event_EXT_EVENT_LIST_USER_UPDATE:: listUser=%s", listUser->c_str());
-		isSpector = GameServer::getSingleton().getSmartFox()->UserManager()->GetUserByName(myName)->IsSpectator();        
-
+		this->listUser = listUser->c_str();
+		isSpector = isSpectator();
         // thanhhv2|r|30.00|isFirstPlay;thanhhv1|b|32.02|isFirstPlay;
         // Dựa vào ds này xác định xem mình là chủ phòng hay ko
         string ls = listUser->c_str();
@@ -1602,6 +1573,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 		imagedownloader4Red->downLoadImage("");
 		lblTimeRed->setString("--");
 		lblTotalTimeRed->setString("--");
+		readyRed->setVisible(false);
 		//
 		lblNameBlack->setString("--");
 		lblMoneyBlack->setString("--");
@@ -1610,7 +1582,7 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE(){
 		imagedownloader4Black->downLoadImage("");
 		lblTimeBlack->setString("--");
 		lblTotalTimeBlack->setString("--");
-		
+		readyBlack->setVisible(false);
 
 		// nếu mình là khách (isSpector=true)
 		// Begin

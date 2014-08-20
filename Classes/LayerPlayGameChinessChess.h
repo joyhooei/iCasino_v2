@@ -170,6 +170,8 @@ private:
 	bool isClickedBack;
 
 	string myName;
+	string listUser;
+	bool isSpectator();
 	string nameCurrentTurn;
 	string player1;
 	string player2;
