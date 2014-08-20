@@ -955,7 +955,7 @@ void LayerPlayGameChinessChess::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pN
 		btnReady->setEnabled(false);
 		btnReady->setVisible(false);
 
-		showChat("Bạn đang ở chế độ khách!");
+		//showChat("Bạn đang ở chế độ khách!");
 	}
 
 	lblYouIsGuess = CCLabelTTF::create("Bạn đang là khách!", "", 15);
