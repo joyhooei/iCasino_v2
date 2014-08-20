@@ -83,8 +83,8 @@ bool LayerChatWindow::init()
 	int numOfCols = 9;
 	int space = 10;
 	int widthOfImage = 50;
-	int startPosX = widthOfPage/2 - (widthOfImage+space)*numOfCols/2;
-	int startPosY = space;
+	int startPosX = widthOfPage/2 - (widthOfImage+space)*numOfCols/2 - 300;
+	int startPosY = space - 100;
 	lstEmo.clear();
 	for( int i = 1; i<=16; i++ ){
 		CCArmature *armature = CCArmature::create(CCString::createWithFormat("onion%d", 1)->getCString());
@@ -141,6 +141,7 @@ void LayerChatWindow::onButtonSend( CCObject* pSender, TouchEventType type )
 		{
 			(m_callback->*m_callbackListener)(this, (void*)txtChat->getStringValue());
 		}
+		CCLOG("chat message: %s", txtChat->getStringValue());
 		SceneManager::getSingleton().hideLayerChatWindow();
 		txtChat->setText("");
 		txtChat->setDetachWithIME(false);

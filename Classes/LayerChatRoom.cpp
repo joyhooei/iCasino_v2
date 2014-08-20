@@ -406,7 +406,7 @@ void LayerChatRoom::setContent2Richtext( RichText* rt, const char* text )
 // 	CCArmatureDataManager::sharedArmatureDataManager()->removeArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
 // 	CCArmatureDataManager::sharedArmatureDataManager()->addArmatureFileInfo(CCString::createWithFormat("onion%d.ExportJson", 1)->getCString());
 	//split content
-	vector<string> lstContents = mUtils::splitStringByListRegex(text, lstRegex);
+	vector<string> lstContents = mUtils::splitStringByListRegex(text, lstRegex, true);
 	for( int i=0; i<lstContents.size(); i++ ){
 		bool check = false;
 		int j=0;

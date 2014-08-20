@@ -318,7 +318,7 @@ public:
 			CCScaleTo::create(0.08f, 1.0f), NULL);
 	}
 
-	static vector<string> splitStringByListRegex(string S, vector<string> lstRegex){
+	static vector<string> splitStringByListRegex(string S, vector<string> lstRegex, bool isKeepRegex = false){
 		vector<string> arrStr;
 		do{
 			//Tìm substr gần nhất
@@ -340,7 +340,8 @@ public:
 				//Push to vector and continues
 				if( minPos!=0 )
 					arrStr.push_back( S.substr( 0, minPos ) );
-				//arrStr.push_back(currRegx);
+				if( isKeepRegex )
+					arrStr.push_back(currRegx);
 				S = S.substr( minPos+currRegx.length(), S.length()-minPos-currRegx.length() );
 			}
 		}while(S.length()>=4);
