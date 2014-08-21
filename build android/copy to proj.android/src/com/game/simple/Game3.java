@@ -56,10 +56,12 @@ import com.facebook.android.Facebook;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
+import com.google.android.gms.ads.*;
+import com.google.android.gms.internal.me;
 
 import android.app.Activity;
+import android.app.ActionBar.LayoutParams;
 import android.content.ActivityNotFoundException;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -71,10 +73,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class Game3 extends Cocos2dxActivity{
@@ -90,15 +96,21 @@ public class Game3 extends Cocos2dxActivity{
 	public static String url = "http://192.168.1.88:8282/Uploader/Upload";
 	static Timer t;
 	static TimerTask reconnect;
+	static AdView adView;
+	static InterstitialAd interAD;
+	static final String AD_UNIT_ID ="ca-app-pub-3782382805494064/7079708833";
+	private static final String INTERAD_UNIT_ID = "ca-app-pub-3782382805494064/8556442037";
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);	
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		printKeyHash();
 		this.self=this;
+		createInterAD();
+		createAd();
 		
 	}
 	  @Override
-	    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	        super.onActivityResult(requestCode, resultCode, data);
 	        if (Session.getActiveSession() != null)
 	            Session.getActiveSession().onActivityResult(
@@ -545,13 +557,88 @@ protected void onResume() {
 	super.onResume();
 }
 
+///QUANG CAO///
+private void createAd(){
+	
+	adView = new AdView(this);
+	adView.setAdUnitId(AD_UNIT_ID);
+	adView.setAdSize(AdSize.BANNER);
+	try {
+		AdView.LayoutParams layoutParams = new AdView.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		
+		RelativeLayout relativeLayout = new RelativeLayout(this);
+		
+		RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		
+		relativeLayout.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+		
+		adView.setLayoutParams(layoutParams);
+		
+		relativeLayout.addView(adView);
+		
+		addContentView(relativeLayout, rlp);
+		
+		AdRequest req = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+		        .addTestDevice("6BAC439445EBA320C6E42298650F159E").build();
+		
+		adView.loadAd(req);
+		
+		
+		
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
+}
 
+public static void turnOnAd () {
+	self.runOnUiThread(new Runnable() {
+		
+		@Override
+		public void run() {
+			adView.setVisibility(View.VISIBLE);	
+			Log.e("-ADs","turn on");
+			
+		}
+	});
+}
+public static void turnOffAd () {
+		self.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				adView.setVisibility(View.INVISIBLE);	
+				Log.e("-ADs","turn off");
+				
+			}
+		});
+			
+}
+private void createInterAD() {
 
+	interAD = new InterstitialAd(this);
+	interAD.setAdUnitId(INTERAD_UNIT_ID);
+	AdRequest interReq = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+	        .addTestDevice("6BAC439445EBA320C6E42298650F159E").build();
+	interAD.loadAd(interReq);
+	interAD.setAdListener(new AdListener() {
+        public void onAdLoaded() {
+            Log.e("ad-","is loaded"); 
+        }
+    });
+}
 
-
-
-
-
-
+public static void showInterAD(){
+	self.runOnUiThread(new Runnable() {
+		
+		@Override
+		public void run() {
+			if(interAD.isLoaded())
+				interAD.show();		
+			Log.e("-IADs","show");
+			
+		}
+	});
+		
+}
 	
 }///main

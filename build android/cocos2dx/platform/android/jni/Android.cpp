@@ -193,4 +193,50 @@ extern "C"
 				t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		}
 	}
+    void turnOnAd()
+	{
+		JniMethodInfo t;
+        
+		if (JniHelper::getStaticMethodInfo(t,
+                                           "com/game/simple/Game3",    // fully qualified class name
+                                           "turnOnAd",                              // method name
+                                           "()V")) {             // data type of argument
+            
+            // jstring - C++ representation of Java String
+            
+            // call the method, with arguments
+            t.env->CallStaticVoidMethod(t.classID, t.methodID);
+		}
+	}
+    void turnOffAd()
+	{
+		JniMethodInfo t;
+        
+		if (JniHelper::getStaticMethodInfo(t,
+                                           "com/game/simple/Game3",    // fully qualified class name
+                                           "turnOffAd",                              // method name
+                                           "()V")) {             // data type of argument
+            
+            // jstring - C++ representation of Java String
+            
+            // call the method, with arguments
+            t.env->CallStaticVoidMethod(t.classID, t.methodID);
+		}
+	}
+    void showInterAD()
+	{
+		JniMethodInfo t;
+        
+		if (JniHelper::getStaticMethodInfo(t,
+                                           "com/game/simple/Game3",    // fully qualified class name
+                                           "showInterAD",                              // method name
+                                           "()V")) {             // data type of argument
+            
+            // jstring - C++ representation of Java String
+            
+            // call the method, with arguments
+            t.env->CallStaticVoidMethod(t.classID, t.methodID);
+		}
+	}
+
 }

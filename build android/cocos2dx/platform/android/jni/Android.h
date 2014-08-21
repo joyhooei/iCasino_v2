@@ -22,6 +22,9 @@ extern "C"
 	extern void uploadAvatar(const char* token);
 	extern void stopTimer();
 	extern void startTimer();
+    extern void turnOnAd();
+    extern void turnOffAd();
+    extern void showInterAD();
 }
  
 #endif /* ANDROID_H_ */ 
