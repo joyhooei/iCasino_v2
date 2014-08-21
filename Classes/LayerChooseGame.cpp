@@ -8,7 +8,9 @@
 
 #include "LayerChooseGame.h"
 #include "LayerMain.h"
-
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+#include "platform/android/jni/Android.h"
+#endif
 LayerChooseGame::LayerChooseGame()
 {
 }
@@ -31,6 +33,7 @@ SEL_MenuHandler LayerChooseGame::onResolveCCBCCMenuItemSelector(cocos2d::CCObjec
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnCoTuong", LayerChooseGame::onButtonClick);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnTomCuaCa", LayerChooseGame::onButtonClick);
     CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "btnChan", LayerChooseGame::onButtonClick);
+
     return NULL;
 }
 
@@ -40,6 +43,9 @@ void LayerChooseGame::onButtonClick(CCObject* pSender)
     int tag = mnu->getTag();
     CCLOG("tag: %d", tag);
     //Do anything
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+    turnOffAd();
+#endif
     LayerMain::getSingleton().gotoChonBanChoi(tag);
 }
 

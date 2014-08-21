@@ -24,7 +24,9 @@
 
 #include "Requests/LogoutRequest.h"
 #include "mUtils.h"
-
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+#include "platform/android/jni/Android.h"
+#endif
 template<> LayerMain* SingLeton<LayerMain>::mSingleton = 0;
 
 LayerMain* LayerMain::getSingletonPtr(void)
@@ -66,16 +68,21 @@ LayerMain::LayerMain()
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerInbox",   LayerInboxLoader::loader());
     ccNodeLoaderLibrary->registerCCNodeLoader("LayerChatRoom",   LayerChatRoomLoader::loader());
 	CCLOG("LayerMain::LayerMain()");
+
+
     //
     GameServer::getSingleton().addListeners(this);
     //
+
     gotoServices();
 }
 
 LayerMain::~LayerMain()
 {
+
     //
     GameServer::getSingleton().removeListeners(this);
+    
 }
 
 void LayerMain::loadAllMyDatas(){
@@ -299,12 +306,16 @@ void LayerMain::gotoRank(){
 }
 
 void LayerMain::logoutAndExit(){
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+    turnOffAd();
+#endif
     removeOldView();
     boost::shared_ptr<IRequest> request (new LogoutRequest());
     //
     SceneManager::getSingleton().gotoLogin();
     currViewTag = tag_ChatRoom;
     CCLOG("Logout");
+
     GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
@@ -328,6 +339,9 @@ void LayerMain::closeOldView(){
         case tag_Service:
             SceneManager::getSingleton().gotoLogin();
             currViewTag = tag_ChatRoom;
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+            turnOffAd();
+#endif
             CCLOG("Logout");
             GameServer::getSingleton().getSmartFox()->Send(request);
             break;
@@ -398,6 +412,9 @@ void LayerMain::onButtonSettings(CCObject* pSender)
 }
 void LayerMain::onButtonBack(CCObject* pSender)
 {
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+    turnOnAd();
+#endif
     CCLOG("onButtonBack");
     closeOldView();
 }

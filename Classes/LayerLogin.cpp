@@ -25,6 +25,7 @@ static string ipDefault = "192.168.1.88";
 
 LayerLogin::LayerLogin()
 {
+    
     txtPassword = NULL;
     txtUsername = NULL;
 
@@ -67,6 +68,10 @@ void LayerLogin::saveInfo(){
 }
 
 void LayerLogin::doLogin(){
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+    showInterAD();
+    turnOnAd();
+#endif
     //login zone when connect success
     boost::shared_ptr<ISFSObject> parameters (new SFSObject());
 	//add the params

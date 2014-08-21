@@ -18,6 +18,7 @@
 #include "SliderCustomLoader.h"
 #include "Requests/LeaveRoomRequest.h"
 
+
 enum TCC_REPONSE {
 	EXT_EVENT_USER_JOIN_NOTIF,      // jrntf
 	EXT_EVENT_READY_NTF,
@@ -94,7 +95,7 @@ float TomCuaCa::convertResult(string rs)
 }
 TomCuaCa::TomCuaCa(){
 
- 
+
 	if(mUtils::isSoundOn())
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
@@ -234,6 +235,8 @@ TomCuaCa::TomCuaCa(){
 	this->addChild(uLayer);
 
 	 _id_me =((boost::shared_ptr<string>)(GameServer::getSingleton().getSmartFox()->MySelf()->Name()));
+    if(lAvatar->isStartedGame()==true)
+        btnReady->setVisible(false);
 	
 }
 vector<string> TomCuaCa::TCCsplit(string &S,const char &str){
@@ -955,7 +958,7 @@ void TomCuaCa::hienOketqua()
 }
 void TomCuaCa::onExit()
 {
-	
+
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
 	GameServer::getSingleton().removeListeners(this);
 	this->removeAllComponents();
