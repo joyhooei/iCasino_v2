@@ -41,7 +41,9 @@ private:
         tag_Rank = 7,
         tag_ChatRoom = 8,
         tag_Guide = 9,
-        tag_Shop = 10
+        tag_Shop = 10,
+		tag_EmailDetails,
+		tag_ComposeEmail
     };
     CCLabelTTF* lblName;
     CCLabelTTF* lblAMF;
@@ -86,6 +88,9 @@ public:
 	void gotoTransferMoney(string toUser);
 
     void gotoMail();
+	void gotoMailDetails();
+	void gotoComposeMail();
+
     void gotoFriends();
     void gotoGuide();
     void gotoChat();

@@ -19,6 +19,8 @@
 #include "SliderCustomLoader.h"
 #include "TextFieldCustomLoader.h"
 #include "LayerChatRoom.h"
+#include "LayerEmailDetails.h"
+#include "LayerComposeEmail.h"
 
 #include "SceneManager.h"
 
@@ -361,6 +363,10 @@ void LayerMain::closeOldView(){
         case tag_ChonBanChoi:
             gotoChooseGame();
             break;
+		case tag_EmailDetails:
+		case tag_ComposeEmail:
+			gotoMail();
+			break;
     }
 }
 
@@ -560,4 +566,38 @@ void LayerMain::keyBackClicked()
 		return;
 	CCLOG("LayerMain::keyBackClicked()");
 	closeOldView();
+}
+
+void LayerMain::gotoMailDetails()
+{
+	if( currViewTag == tag_EmailDetails )
+		return;
+	removeOldView();
+	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	LayerEmailDetails* mLayer;
+	if (ccbReader)
+	{
+		mLayer = (LayerEmailDetails *)ccbReader->readNodeGraphFromFile( "LayerEmailDetails.ccbi" );
+		this->addChild(mLayer, 1, 1);
+		ccbReader->release();
+	}
+	currNodeView = mLayer;
+	currViewTag = tag_EmailDetails;
+}
+
+void LayerMain::gotoComposeMail()
+{
+	if( currViewTag == tag_ComposeEmail )
+		return;
+	removeOldView();
+	ccbReader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	LayerComposeEmail* mLayer;
+	if (ccbReader)
+	{
+		mLayer = (LayerComposeEmail *)ccbReader->readNodeGraphFromFile( "LayerComposeEmail.ccbi" );
+		this->addChild(mLayer, 1, 1);
+		ccbReader->release();
+	}
+	currNodeView = mLayer;
+	currViewTag = tag_ComposeEmail;
 }

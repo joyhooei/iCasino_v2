@@ -11,6 +11,8 @@
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
 
+#include "LayerMain.h"
+
 using namespace cocos2d;
 //using namespace CocosDenshion;
 
@@ -43,6 +45,7 @@ SEL_MenuHandler LayerInbox::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pT
 void LayerInbox::onButtonCreate(CCObject* pSender)
 {
     CCLOG("onButtonCreate");
+	LayerMain::getSingleton().gotoComposeMail();
 }
 
 void LayerInbox::onButtonRefresh(CCObject* pSender)
@@ -75,6 +78,7 @@ void LayerInbox::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 // hàm khi click vào 1 hành của table view
 void LayerInbox::tableCellTouched(cocos2d::extension::CCTableView *table, cocos2d::extension::CCTableViewCell *cell){
 //    CCLOG("Roomid: %d of %s", cell->getObjectID(), table->getTag()==tag_Friends?"Friends":"Historys");
+	LayerMain::getSingleton().gotoMailDetails();
 }
 
 // Hàm set giá trị width height cho 1 cell table view

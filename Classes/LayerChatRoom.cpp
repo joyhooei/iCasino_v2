@@ -123,7 +123,7 @@ void LayerChatRoom::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 		return;
 	boost::shared_ptr<IRequest> request (new JoinRoomRequest(rooms->at(0),""));
 	GameServer::getSingleton().getSmartFox()->Send(request);
-    return;
+	CCLOG("size: w: %lf h: %lf", this->getContentSize().width, this->getContentSize().height);
 }
 
 void LayerChatRoom::tableCellHighlight(CCTableView* table, CCTableViewCell* cell){

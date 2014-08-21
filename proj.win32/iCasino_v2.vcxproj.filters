@@ -271,6 +271,12 @@
     <ClCompile Include="..\Classes\Layer_GivePocker_Chan.cpp">
       <Filter>Classes\Children</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LayerComposeEmail.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LayerEmailDetails.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -549,6 +555,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Layer_GivePocker_Chan.h">
       <Filter>Classes\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerComposeEmail.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerEmailDetails.h">
+      <Filter>Classes\MenuLayers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
