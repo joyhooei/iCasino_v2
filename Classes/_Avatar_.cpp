@@ -127,7 +127,6 @@ timer(NULL)
 		layerWidget->addChild(name);
 		layerWidget->addChild(money);
 
-
 		// invite
 		layerInvite = UILayer::create();
 		layerInvite->setAnchorPoint(ccp(0.5, 0.5));
@@ -140,6 +139,17 @@ timer(NULL)
 		layerWidget->setVisible(false);
 		this->addChild(layerWidget);
 		this->addChild(layerInvite);
+
+		//ntf for Chan (dautv)
+		lblNTF = UILabelBMFont::create();
+		lblNTF->setFntFile("tttt.fnt");
+		lblNTF->setText("");
+		lblNTF->setPosition(ccp(getSizeThis().width / 2, getSizeThis().height / 2));
+		//lblNTF->setScale(1.2);
+		lblNTF->setColor(ccGREEN);
+		lblNTF->setVisible(false);
+		this->addChild(lblNTF);
+
 	}
 	nodeIcon = CCNode::create();
 	nodeIcon->setContentSize( sizeIcon );
@@ -624,4 +634,11 @@ void Avatar::setMeIsBoss( bool isBoss )
 	meIsBoss = isBoss;
 }
 
+void Avatar::setLblNTFChan(const char* text){
+	lblNTF->setText(text);
+	//icon->setColor(ccc3(200,255,255));
+}
 
+UILabelBMFont* Avatar::getLblNTFChan(){
+	return this->lblNTF;
+}

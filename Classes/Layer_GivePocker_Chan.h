@@ -38,6 +38,9 @@ public:
 	void delayTimeturn2();
 	void delayTimeEnd();
 
+	void setIntervalBocNoc();
+	void updateTimer(float dt);
+
 	void NocTouch(CCObject *pSender,TouchEventType type);
 	void BocNoc(CCObject *pSender,TouchEventType type);
 
@@ -57,6 +60,8 @@ public:
 	void chiaBai(vector<int> toPos, vector<int> allTag);
 	void finishGive(UIImageView *img, int tpos);
 
+	void killLayer();
+
 	CREATE_FUNC(Layer_GivePocker_Chan);
 private:
 
@@ -71,6 +76,9 @@ private:
 	UILayer *uLayer;
 	UIImageView *noc;
 	UIImageView *noc2;
+
+	UILabelBMFont *timer;
+	float _startTimmer;
 
 	CCArray *P_NOC;
 

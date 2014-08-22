@@ -25,6 +25,8 @@ bool Layer_GivePocker_Chan::init()
 	countRight = 0;
 	index_Noc = -1;
 
+	_startTimmer = 45;
+
 	flagBocCai = false;
 	flag_ChonNoc = false;
 	isPlayerBocCai = false;
@@ -35,19 +37,19 @@ bool Layer_GivePocker_Chan::init()
 	arrTag.push_back(9);
 
 	c1_leftX = 300;
-	c1_leftY = 240;
+	c1_leftY = 260;
 
 	c2_leftX = 325;
-	c2_leftY = 185;
+	c2_leftY = 205;
 
 	c3_leftX = 350;
-	c3_leftY = 130;
+	c3_leftY = 150;
 	 
 	c4_leftX = 225;
-	c4_leftY = 175;
+	c4_leftY = 195;
 
 	c5_leftX = 250;
-	c5_leftY = 120;
+	c5_leftY = 140;
 
 	c1_rightX = WIDTH_DESIGN - c1_leftX;
 	c1_rightY = HEIGHT_DESIGN - c1_leftY;
@@ -119,6 +121,14 @@ bool Layer_GivePocker_Chan::init()
 	noc2->setTouchEnabled(true);
 	noc2->addTouchEventListener(this, toucheventselector(Layer_GivePocker_Chan::BocNoc));
 	uLayer->addWidget(noc2);
+
+	timer = UILabelBMFont::create();
+	timer->setFntFile("UVNVan.fnt");
+	timer->setText("45");
+	timer->setColor(ccGREEN);
+	timer->setScale(0.7);
+	timer->setVisible(false);
+	uLayer->addChild(timer);
 
 	GameServer::getSingleton().addListeners(this);
 	return true;
@@ -375,6 +385,60 @@ void Layer_GivePocker_Chan::delayTimeEnd(){
 	}
 	toast->setPositionY(HEIGHT_DESIGN / 2);
 	this->addChild(toast);
+	//Add interval đếm ngược ở đây
+	setIntervalBocNoc();
+}
+
+void Layer_GivePocker_Chan::setIntervalBocNoc(){
+	//wid_Avata = 90, hei_Avata = 125
+	CCPoint pPoint;
+	int posBocCai = getPosUserByName(playerBocCai, listusers);
+
+	if (mUtils::splitString(listusers, ';').size() == 2)
+	{
+		if (posBocCai == kUserMe)
+		{
+			pPoint = CCPoint(ccp(WIDTH_DESIGN / 2, 90));
+		}
+		else
+		{
+			pPoint = CCPoint(ccp(WIDTH_DESIGN / 2 + 65, HEIGHT_DESIGN - 115));
+		}
+	}
+	else
+	{
+		switch(posBocCai){
+		case kUserMe:
+			pPoint = CCPoint(ccp(WIDTH_DESIGN / 2, 90));
+			break;
+		case kUserLeft:
+			pPoint = CCPoint(ccp(105, HEIGHT_DESIGN / 2));
+			break;
+		case kUserRight:
+			pPoint = CCPoint(ccp(WIDTH_DESIGN - 105, HEIGHT_DESIGN / 2));
+			break;
+		case kUserTop:
+			pPoint = CCPoint(ccp(WIDTH_DESIGN / 2 + 65, HEIGHT_DESIGN - 115));
+			break;
+		}
+	}
+	
+	timer->setPosition(pPoint);
+	timer->setVisible(true);
+	schedule(schedule_selector(Layer_GivePocker_Chan::updateTimer), 1);
+}
+
+void Layer_GivePocker_Chan::updateTimer(float dt){
+	_startTimmer -= dt;
+	int k = ((int)_startTimmer);
+	if (k < 0)
+	{
+		return;
+	}
+	
+	char time[10] = {0};
+	sprintf(time, "%d", k);
+	timer->setText(time);
 }
 
 void Layer_GivePocker_Chan::test(CCNode* sender, void* data){
@@ -464,14 +528,17 @@ void Layer_GivePocker_Chan::OnExtensionResponse(unsigned long long ptrContext, b
 
 		if (nocdetl != NULL && usrn != NULL)
 		{
-			playerStart = usrn->c_str();
+			//"nocdetl":"dautv3;92:9:2:1"
+			vector<string> _nocdetl = mUtils::splitString(*nocdetl, ';');
+			playerStart = _nocdetl.at(0);
 			CCLOG("player start %s", playerStart.c_str());
 			if (isPlayerBocCai == false)
 			{
-				moveRandomIsNotPlayerBocCai(nocdetl->c_str());
+				moveRandomIsNotPlayerBocCai(_nocdetl.at(1));
 			}
-			else{
-				moveCard4User(nocdetl->c_str(), usrn->c_str());
+			else
+			{
+				moveCard4User(_nocdetl.at(1), _nocdetl.at(0));
 			}
 			CCCallFunc *callfun = CCCallFunc::create(this, callfunc_selector(Layer_GivePocker_Chan::moveCardsToPosition));	
 			this->runAction(CCSequence::create(CCDelayTime::create(0.3), callfun, NULL));
@@ -598,6 +665,11 @@ vector<int> Layer_GivePocker_Chan::sortArrayTag(vector<int> _arr, int position){
 }
 
 void Layer_GivePocker_Chan::moveCard4User(string cards, string user){
+	if (index_Noc == -1)
+	{
+		index_Noc = rand()%(4);
+	}
+	
 	CCLOG("index noc: %d",index_Noc);
 
 	//1-2-3-5-4
@@ -725,4 +797,6 @@ int Layer_GivePocker_Chan::getPosUserByName(string uid,string _list_user){
 	return -1;
 }
 
-
+void Layer_GivePocker_Chan::killLayer(){
+	this->removeFromParentAndCleanup(true);
+}

@@ -62,11 +62,11 @@ LayerChanGame::LayerChanGame(){
 	mylistCard = "";
 	currentPlayer = "";
 
+	countBocCai = 0;
 	countDiscard = 0;
 	countUser = 0;
 	_noccount = -1;
 
-	gameStarted = false;
 	flagChiaBai = false;
 	flagTraCuaToMe = false;
 	flag_MeDraw = false;
@@ -106,13 +106,6 @@ vector<string> LayerChanGame::splitString(string &S,const char &str){
 		t=t2+1; // chuyển sang vị trí sau
 	}
 	return arrStr;
-}
-
-void LayerChanGame::displayLayerXuongU(){
-	CCSprite *xuong = CCSprite::create("XuongU.png");
-	xuong->setAnchorPoint(ccp(0,0));
-	xuong->setPosition(ccp((WIDTH_DESIGN - xuong->getContentSize().width) / 2,HEIGHT_DESIGN - xuong->getContentSize().height - 10));
-	this->addChild(xuong);
 }
 
 void LayerChanGame::displayLayerKetQua(string resuilt){
@@ -242,7 +235,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	boost::shared_ptr<string> cmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
 
 	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
-	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
+	this->param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
 	if(strcmp("hbc", cmd->c_str())==0){
 		return;
 	}
@@ -283,41 +276,21 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	//Bốc cái
 	else if (strcmp(EXT_SRVNTF_BOC_CAI.c_str(), cmd->c_str()) == 0)
 	{
-		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
-		if (usrn != NULL)
-		{
-			eventBocCai(usrn->c_str());
-		}
-		CCLOG("EXT_SRVNTF_BOC_CAI");
+		eventBocCai();
 	}
 
-	// game start
-	else if (strcmp(EXT_EVENT_START.c_str(), cmd->c_str())==0){
-		gameStarted = true;
-		layerAvatars->setUnReadyAllUser();
-		CCLOG("EXT_EVENT_START");
+	else if (strcmp(EXT_EVENT_START.c_str(), cmd->c_str()) == 0)
+	{
+		eventGameStart();
 	}
 
-	//list card ntf
-	else if(strcmp(EXT_EVENT_LISTCARD_NTF.c_str(), cmd->c_str())==0){
-		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
-		boost::shared_ptr<string> lc = param->GetUtfString("lc");
-
-		string _usrn = "";
-		string _lc = "";
-
-		if (usrn != NULL) {
-			_usrn = usrn->c_str();
-		}
-		if (lc != NULL){
-			_lc = lc->c_str();
-		}
-
-		eventListCard(_usrn, _lc);
+	else if(strcmp(EXT_EVENT_LISTCARD_NTF.c_str(), cmd->c_str()) == 0)
+	{
+		eventListCard();
 	}
 
 	//noc count
-	else if (strcmp(EXT_SRVNTF_NOC_COUNT.c_str(), cmd->c_str())==0){
+	else if (strcmp(EXT_SRVNTF_NOC_COUNT.c_str(), cmd->c_str()) == 0){
 		boost::shared_ptr<long> noccount = param->GetInt("noccount");
 		if (noccount != NULL) {
 			CCLOG("noc count: %ld",*noccount);
@@ -541,98 +514,36 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	}
 
 	//Bao co the u
-	else if (strcmp(EXT_SRVNTF_ONE_EXPECTING_U.c_str(), cmd->c_str())==0){
-		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
-		if (usrn != NULL) {
-			whenConguoi_ChoU(usrn->c_str());
-			CCLOG("nguoi cho U: %s",usrn->c_str());
-		}
-		CCLOG("EXT_SRVNTF_ONE_EXPECTING_U");
+	else if (strcmp(EXT_SRVNTF_ONE_EXPECTING_U.c_str(), cmd->c_str()) == 0){
+		eventOne_ExpectingU();
 	}
+
 	//Danh bai
-	else if (strcmp(EXT_EVENT_RES_DISCARD.c_str(), cmd->c_str())==0){
-		boost::shared_ptr<long> rscode = param->GetInt("rscode");
-		if (rscode != NULL) {
-			if (*rscode != 0) {
-				CCLOG("Không đánh được !");
-			}
-		}
-		CCLOG("EXT_EVENT_RES_DISCARD");
+	else if (strcmp(EXT_EVENT_RES_DISCARD.c_str(), cmd->c_str()) == 0)
+	{
+		eventDisCards();
 	}
 
 	//Bài trên tay người Ù
 	else if (strcmp("ntfttdetl", cmd->c_str()) == 0)
 	{
-		boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
-		boost::shared_ptr<string> lc = param->GetUtfString("lc");
-
-		if (usrn == NULL || lc == NULL)
-		{
-			return;
-		}
-		
-		if (strcmp(usrn->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) != 0)
-		{
-			CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/Chan/uroi.mp3");
-			waitPlayer_ReqU(usrn->c_str(), lc->c_str());
-		} else {
-			CCLOG("Co the xuong U");
-			hideAllButton();
-			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
-			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
-			getButtonByTag(cTag_btnBoc)->setEnabled(true);
-
-			getButtonByTag(cTag_btnU)->setEnabled(false);
-			getButtonByTag(cTag_btnChiu)->setEnabled(false);
-			Chat *toast = new Chat("Bạn đã báo Ù lá bài này, đợi xem có nhà nào báo ù nữa không !", -1);
-			toast->setPositionY(HEIGHT_DESIGN / 2);
-			this->addChild(toast);
-			this->runAction(CCSequence::create(CCDelayTime::create(6.0),CCCallFunc::create(this, callfunc_selector(LayerChanGame::XuongU)),NULL));
-			//XuongU();
-		}
+		eventCard_NguoiU();
 	}
 
 	//Bài còn trong nọc
-	else if(strcmp("ntfnocdetl", cmd->c_str()) == 0){
-		boost::shared_ptr<string> nocdetl = param->GetUtfString("nocdetl");
-		if (nocdetl != NULL)
-		{
-			CCLOG("Các lá bài còn trong nọc: %s", nocdetl->c_str());
-			layerCardChan->setListNoc(nocdetl->c_str());
-			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
-			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
-
-			getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
-			getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
-
-			getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh_Disable.png");
-			getButtonByTag(cTag_btnDuoi)->setTouchEnabled(false);
-
-			getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
-			getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
-
-			getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
-			getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
-		}
+	else if(strcmp("ntfnocdetl", cmd->c_str()) == 0)
+	{
+		eventCard_ConTrongNoc();
 	}
 
-	//Resuilt game
-	else if (strcmp(EXT_EVENT_GAME_RESULT.c_str(),cmd->c_str())==0){
-		boost::shared_ptr<string> rg = param->GetUtfString("rg");
-		if( rg != NULL){
-			CCLOG("Resuilt game: %s",rg->c_str());
-			layerAvatars->stopAllTimer();
-			resuiltGame(rg->c_str());
-		}
-
-		CCLOG("EXT_EVENT_GAME_RESULT");
+	else if (strcmp(EXT_EVENT_GAME_RESULT.c_str(),cmd->c_str()) == 0)
+	{
+		eventGameResuilt();
 	}
 
-	// game end
-	else if (strcmp(EXT_EVENT_END.c_str(), cmd->c_str())==0){
-		stopTimer_Me();
-		this->runAction(CCSequence::create(CCDelayTime::create(7), CCCallFunc::create(this, callfunc_selector(LayerChanGame::setEndGame)), NULL));
-		CCLOG("EXT_EVENT_END");
+	else if (strcmp(EXT_EVENT_END.c_str(), cmd->c_str()) == 0)
+	{
+		eventGameEnd();
 	}
 
 	else if(strcmp("rntf",cmd->c_str()) == 0){
@@ -667,34 +578,80 @@ void LayerChanGame::sendRequestJoinGame(float dt){
 	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
-void LayerChanGame::eventBocCai(string user){
-	CCLOG("user boc cai: %s", user.c_str());
-	Layer_GivePocker_Chan *layerGive = Layer_GivePocker_Chan::create();
-	bool iBoc = false;
-	if (strcmp(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(), user.c_str()) == 0)
-	{
-		iBoc = true;
-	}
-	layerGive->setIsPlayerBocCai(iBoc);
-	layerGive->setPlayerBocCai(user);
-	layerGive->setListusers(_list_user);
-	layerGive->setTag(kTag_layerGive);
-	this->addChild(layerGive);
-	layerGive->startGivePocker();
+void LayerChanGame::eventGameStart(){
+	layerAvatars->setUnReadyAllUser();
+	CCLOG("EXT_EVENT_START");
 }
 
-void LayerChanGame::eventListCard(string _usrn, string _lc){
+void LayerChanGame::eventGameEnd(){
+	countBocCai = 0;
+	stopTimer_Me();
+	this->runAction(CCSequence::create(CCDelayTime::create(7), CCCallFunc::create(this, callfunc_selector(LayerChanGame::setEndGame)), NULL));
+	CCLOG("EXT_EVENT_END");
+}
+
+void LayerChanGame::eventGameResuilt(){
+	boost::shared_ptr<string> rg = param->GetUtfString("rg");
+	if( rg != NULL){
+		CCLOG("Resuilt game: %s",rg->c_str());
+		layerAvatars->stopAllTimer();
+		resuiltGame(rg->c_str());
+	}
+
+	CCLOG("EXT_EVENT_GAME_RESULT");
+}
+
+void LayerChanGame::eventBocCai(){
+	boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+	if (usrn != NULL)
+	{
+		countBocCai++;
+		if(countBocCai == 1)
+		{
+			getButtonByTag(cTag_btnReady)->setEnabled(false);
+
+			Layer_GivePocker_Chan *layerGive = Layer_GivePocker_Chan::create();
+			bool iBoc = false;
+			if (strcmp(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(), usrn->c_str()) == 0)
+			{
+				iBoc = true;
+			}
+			layerGive->setIsPlayerBocCai(iBoc);
+			layerGive->setPlayerBocCai(usrn->c_str());
+			layerGive->setListusers(_list_user);
+			layerGive->setTag(kTag_layerGive);
+			this->addChild(layerGive);
+			layerGive->startGivePocker();
+		}
+	}
+	CCLOG("EXT_SRVNTF_BOC_CAI");
+}
+
+void LayerChanGame::eventListCard(){
+	boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+	boost::shared_ptr<string> lc = param->GetUtfString("lc");
+
+	string _usrn = "";
+	string _lc = "";
+
+	if (usrn != NULL) {
+		_usrn = usrn->c_str();
+	}
+	if (lc != NULL){
+		_lc = lc->c_str();
+	}
+
 	if (!flagChiaBai) {
 		if (strcmp(_usrn.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0) {
-			if(gameStarted){
-				CCString *p = CCString::create(_lc);
-				CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::delayListCardFirst),p);
-				CCDelayTime *delay = CCDelayTime::create(0.9);
-				this->runAction(CCSequence::create(delay, callfun, NULL));
-			}
+			CCString *p = CCString::create(_lc);
+			CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::delayListCardFirst),p);
+			CCDelayTime *delay = CCDelayTime::create(0.9);
+			this->runAction(CCSequence::create(delay, callfun, NULL));
 			flagChiaBai = true;
 		}
-	}else{
+	}
+	else
+	{
 		if (strcmp(_usrn.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0) {
 			mylistCard = mUtils::splitString(_lc, '/')[0];
 			if (mylistCard != "") {
@@ -731,6 +688,76 @@ void LayerChanGame::delayListCardFirst(CCObject *data){
 	getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
 	getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
 	getButtonByTag(cTag_btnTake)->setEnabled(true);
+}
+
+void LayerChanGame::eventDisCards(){
+	boost::shared_ptr<long> rscode = param->GetInt("rscode");
+	if (rscode != NULL) {
+		if (*rscode != 0) {
+			CCLOG("Không đánh được !");
+		}
+	}
+	CCLOG("EXT_EVENT_RES_DISCARD");
+}
+
+void LayerChanGame::eventOne_ExpectingU(){
+	boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+	if (usrn != NULL) {
+		whenConguoi_ChoU(usrn->c_str());
+		CCLOG("nguoi cho U: %s",usrn->c_str());
+	}
+	CCLOG("EXT_SRVNTF_ONE_EXPECTING_U");
+}
+
+void LayerChanGame::eventCard_NguoiU(){
+	boost::shared_ptr<string> usrn = param->GetUtfString("usrn");
+	boost::shared_ptr<string> lc = param->GetUtfString("lc");
+
+	if (usrn == NULL || lc == NULL)
+	{
+		return;
+	}
+
+	if (strcmp(usrn->c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) != 0)
+	{
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sounds/Chan/uroi.mp3");
+		waitPlayer_ReqU(usrn->c_str(), lc->c_str());
+	} else {
+		hideAllButton();
+		getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+		getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+		getButtonByTag(cTag_btnBoc)->setEnabled(true);
+
+		getButtonByTag(cTag_btnU)->setEnabled(false);
+		getButtonByTag(cTag_btnChiu)->setEnabled(false);
+		Chat *toast = new Chat("Bạn đã báo Ù lá bài này, đợi xem có nhà nào báo ù nữa không !", -1);
+		toast->setPositionY(HEIGHT_DESIGN / 2);
+		this->addChild(toast);
+		this->runAction(CCSequence::create(CCDelayTime::create(6.0),CCCallFunc::create(this, callfunc_selector(LayerChanGame::XuongU)),NULL));
+	}
+}
+
+void LayerChanGame::eventCard_ConTrongNoc(){
+	boost::shared_ptr<string> nocdetl = param->GetUtfString("nocdetl");
+	if (nocdetl != NULL)
+	{
+		CCLOG("Các lá bài còn trong nọc: %s", nocdetl->c_str());
+		layerCardChan->setListNoc(nocdetl->c_str());
+		getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+		getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+
+		getButtonByTag(cTag_btnTake)->loadTextureNormal("danh_Disable.png");
+		getButtonByTag(cTag_btnTake)->setTouchEnabled(false);
+
+		getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh_Disable.png");
+		getButtonByTag(cTag_btnDuoi)->setTouchEnabled(false);
+
+		getButtonByTag(cTag_btnChiu)->loadTextureNormal("chiu_Disable.png");
+		getButtonByTag(cTag_btnChiu)->setTouchEnabled(false);
+
+		getButtonByTag(cTag_btnEate)->loadTextureNormal("an_Disable.png");
+		getButtonByTag(cTag_btnEate)->setTouchEnabled(false);
+	}
 }
 
 // tìm vị trí người chơi so với mình
@@ -1111,7 +1138,9 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 		//Sau đó trả cửa 1 con vào cửa trì của mình thì hiện button Dưới
 		if (flagTraCuaToMe == true)
 		{
-			CCLOG("Jumpe to here");
+			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+
 			getButtonByTag(cTag_btnTake)->setEnabled(false);
 			getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
 			getButtonByTag(cTag_btnDuoi)->setTouchEnabled(true);
@@ -1306,6 +1335,23 @@ void LayerChanGame::error_AnBao(long rscode, string uid){
 		Chat *toast = new Chat("" + uid + " bị ngồi im do " + str, -1);
 		toast->setPositionY(HEIGHT_DESIGN / 2);
 		this->addChild(toast);
+
+		int posAnBao = getPosUserByName(uid.c_str(), _list_user);
+		if (posAnBao == -1)
+		{
+			return;
+		}
+
+		if (mUtils::splitString(_list_user, ';').size() == 2)
+		{
+			layerAvatars->getUserByPos(kUserTop)->setLblNTFChan("Bị \nBáo");
+			layerAvatars->getUserByPos(kUserTop)->getLblNTFChan()->setVisible(true);
+		}
+		else
+		{
+			layerAvatars->getUserByPos(posAnBao)->setLblNTFChan("Bị \nBáo");
+			layerAvatars->getUserByPos(posAnBao)->getLblNTFChan()->setVisible(true);
+		}
 		return;
 	}
 
@@ -1463,6 +1509,10 @@ void LayerChanGame::resuiltGame(string resuilt)
 
 void LayerChanGame::setEndGame(){
 	layerAvatars->stopAllTimer();
+	layerAvatars->getUserByPos(kUserLeft)->getLblNTFChan()->setVisible(false);
+	layerAvatars->getUserByPos(kUserRight)->getLblNTFChan()->setVisible(false);
+	layerAvatars->getUserByPos(kUserTop)->getLblNTFChan()->setVisible(false);
+
 	stopTimer_Me();
 	currentPlayer = "";
 	mylistCard = "";

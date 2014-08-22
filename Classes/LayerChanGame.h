@@ -93,20 +93,21 @@ private:
 	//Client gửi yêu cầu bốc cái
 	string EXT_EVENT_REQ_BOC_CAI;
 
+	boost::shared_ptr<ISFSObject> param;
 	string _list_user;
 	string mylistCard;
 	string currentPlayer;
 
-	bool gameStarted;
 	bool flagChiaBai;
 	bool flagChiu;
 	bool flagTraCuaToMe;
 	bool flag_MeDraw;
-
+	
+	int countBocCai;
 	int countDiscard;
 	int countUser;
 	int _noccount;
-
+	
 	LayerAvatarInGame *layerAvatars;
 	LayerButtonInGame *layerButtons;
 
@@ -125,9 +126,18 @@ public:
 	void createButtons();
 	void sendRequestJoinGame(float dt);
 
-	void eventBocCai(string user);
-	void eventListCard(string user, string listCards);
+	void eventGameStart();
+	void eventGameEnd();
+	void eventGameResuilt();
+	void eventBocCai();
+	void eventListCard();
 	void delayListCardFirst(CCObject *data);
+
+	void eventDisCards();
+	void eventOne_ExpectingU();
+
+	void eventCard_NguoiU();
+	void eventCard_ConTrongNoc();
 
 	void notificationCallBack(bool isOK, int tag);
 
@@ -153,7 +163,6 @@ public:
 	void resuiltGame(string resuilt);
 	void displayResuitGame(CCObject *data);
 
-	void displayLayerXuongU();
 	void displayLayerKetQua(string resuilt);
 
 	void eventTakeCards(string f_user, string t_user, string cardnu, string cardsu, int crdorg);

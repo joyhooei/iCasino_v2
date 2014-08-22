@@ -627,6 +627,11 @@ void LayerAvatarInGame::resetAll(){
     setMoney(kUserRight, "");
     setMoney(kUserTop, "");
 
+	this->getUserByPos(kUserLeft)->getLblNTFChan()->setVisible(false);
+	this->getUserByPos(kUserRight)->getLblNTFChan()->setVisible(false);
+	this->getUserByPos(kUserTop)->getLblNTFChan()->setVisible(false);
+	//setColor(ccc3(200,255,255));
+
 	this->getUserByPos(kUserLeft)->setVisibleLayerInvite(true);
 	this->getUserByPos(kUserRight)->setVisibleLayerInvite(true);
 	this->getUserByPos(kUserTop)->setVisibleLayerInvite(true);

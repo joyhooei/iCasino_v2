@@ -48,6 +48,9 @@ public:
 	void setAI(string ai);
 	void setMeIsBoss( bool isBoss ); 
     
+	void setLblNTFChan(const char* text);
+	UILabelBMFont* getLblNTFChan();
+
     void startTimer();
     void stopTimer();
     
@@ -87,6 +90,9 @@ private:
 
 	LayerPlayerInfo* layerPlayerInfo;
 	LayerMoiChoi* layerMoiChoi;
+
+	//for Chắn
+	UILabelBMFont *lblNTF;
 };
 
 #endif /* defined(__iCasino_v2__AvatarLayer__) */
