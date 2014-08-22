@@ -116,6 +116,8 @@ private:
 		EXT_EVENT_UNDO_MOVE_REQ,	// = "umr";
 		EXT_EVENT_REPLY_UNDO_MOVE,	// = "rum";
 		EXT_EVENT_UNDO_MOVE_NTF,	// = "umntf";
+		//
+		EXT_EVENT_MOVE_ERROR
 	};
 
 	enum STYLE_DIALOG {
@@ -161,13 +163,12 @@ private:
 // 	CCSprite *iconLose;
 	vector<Chess*> arrChess;
 	bool isSpector; // kiem tra xem minh la Guess(=true) hay Player(=false)?
-	bool isMaster;
 	bool isStartedGame;
-	bool isIamTheFirst;
 	bool isRedChess;  // ktra xem minh la quan do hay quan den
 	bool isRegistSitdown;
 	bool isRegistStandUp;
 	bool isClickedBack;
+	bool isComeBack;
 
 	string myName;
 	string listUser;
@@ -255,6 +256,7 @@ public:
 	void event_EXT_EVENT_GAME_RESULT();       // = "grs"();
 	void event_EXT_EVENT_ERROR_READY_NTF();   // = "e_rntf"();
 	void event_EXT_EVENT_LIST_USER_UPDATE();  // = "luu"();
+	void event_EXT_EVENT_LIST_USER_UPDATE_2();
 	void event_EXT_EVENT_MOVE_NTF();          // = "mntf"();
 	void event_EXT_EVENT_FOR_PEACE_NTF();     // = "fpntf"();
 	void event_EXT_EVENT_UNDO_MOVE_REQ();
@@ -268,6 +270,7 @@ public:
 	CCPoint convertPoint_LayerToTable(CCPoint point);
 	CCPoint convertPoint_TableToLayer(CCPoint point);
 	virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *event);
+	void resetAvatar();
 
 	bool isTouchedChess();
 	void createChess();
@@ -277,6 +280,7 @@ public:
 	Chess* getChessByName_Side(int name, int side);
 
 	int convertID(int id);
+	int convertID_ver(int id);
 	void moveChess(int fromID, int toID, bool isCheckChieuTuong);
 
 	void updateTimer(float dt);

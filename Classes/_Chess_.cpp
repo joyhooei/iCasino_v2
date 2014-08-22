@@ -72,10 +72,10 @@ string Chess::getURL() {
 	string nameString;
 
 	switch (this->side) {
-		case DARK:
+		case 2:
 			sideString = "red";
 			break;
-		case LIGHT:
+		case 1:
 			sideString = "blue";
 	}
 
@@ -169,10 +169,10 @@ string Chess::getURL_hover() {
 	string nameString;
 
 	switch (this->side) {
-		case DARK:
+		case 2:
 			sideString = "red";
 			break;
-		case LIGHT:
+		case 1:
 			sideString = "blue";
 	}
  
