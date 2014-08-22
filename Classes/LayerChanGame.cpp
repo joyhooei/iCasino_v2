@@ -1153,8 +1153,8 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 		//Sau đó trả cửa 1 con vào cửa trì của mình thì hiện button Dưới
 		if (flagTraCuaToMe == true)
 		{
-			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
-			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+// 			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+// 			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
 
 			getButtonByTag(cTag_btnTake)->setEnabled(false);
 			getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
