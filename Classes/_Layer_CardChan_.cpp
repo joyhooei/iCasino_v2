@@ -1,4 +1,4 @@
-﻿
+
 #include "_Layer_CardChan_.h"
 #include "mUtils.h"
 #include "AllData.h"
@@ -227,12 +227,26 @@ bool _Layer_CardChan_::init()
 	rLayer->setPosition(ccp(0,0));
 	this->addChild(rLayer);
 
+	//Button Xem noc
 	UIButton *btn_XemNoc = UIButton::create();
 	btn_XemNoc->setTag(kTag_buttonNoc);
 	btn_XemNoc->loadTextures("dia_noc.png","dia_noc.png","");
 	btn_XemNoc->setPosition(ccp(WIDTH_DESIGN / 2, HEIGHT_DESIGN / 2 + 32.5));
 	btn_XemNoc->setEnabled(false);
 	btn_XemNoc->addTouchEventListener(this, toucheventselector(_Layer_CardChan_::btn_XemNoc_click));
+	
+	UIImageView *iconNoc = UIImageView::create();
+	iconNoc->loadTexture("U.png");
+	btn_XemNoc->addChild(iconNoc);
+
+	UILabelBMFont *lbl = UILabelBMFont::create();
+	lbl->setFntFile("tttt.fnt");
+	lbl->setText("Nọc");
+	lbl->setColor(ccRED);
+	lbl->setScale(0.8);
+	lbl->setPositionY(5);
+	iconNoc->addChild(lbl);
+
 	rLayer->addWidget(btn_XemNoc);
 
 	CCLOG("Init success !");

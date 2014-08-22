@@ -252,6 +252,10 @@ void LayerGameChan_XuongU2::OnExtensionResponse(unsigned long long ptrContext, b
 			}
 		}
 	}
+	else if (strcmp("e", ptrNotifiedCmd->c_str()) == 0)
+	{
+		this->removeFromParentAndCleanup(true);
+	}
 }
 
 bool ButtonXuong::init(){

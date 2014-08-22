@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __iCasinov2__LayerCardChan__
 #define __iCasinov2__LayerCardChan__
 
