@@ -234,11 +234,23 @@ void LayerGameChan_XuongU2::OnExtensionResponse(unsigned long long ptrContext, b
     boost::shared_ptr<string> ptrNotifiedCmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
     
     boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
 
-	CCLOG("cmd (in xuong u) = %s",ptrNotifiedCmd->c_str());
-	if (strcmp("rsuanou",ptrNotifiedCmd->c_str()) == 0)
+	CCLOG("cmd (in xuong u) = %s", ptrNotifiedCmd->c_str());
+	if (strcmp("rsuanou", ptrNotifiedCmd->c_str()) == 0)
 	{
 		CCLOG("nhan duoc respond");
+	}
+	else if (strcmp("ntfanbao", ptrNotifiedCmd->c_str()) == 0)
+	{
+		boost::shared_ptr<long> anbaores = param->GetInt("anbaores");
+		if (anbaores != NULL)
+		{
+			if (*anbaores == 23)
+			{
+				this->removeFromParentAndCleanup(true);
+			}
+		}
 	}
 }
 

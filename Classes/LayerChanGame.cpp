@@ -248,15 +248,14 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 		if( lu != NULL){
 			_lu = lu->c_str();
 			_list_user = lu->c_str();
-			updateUser(_list_user);
-
+			
 			layerCardChan->resetAllCards();
 			layerAvatars->stopAllTimer();
 			hideAllButton();
 			getButtonByTag(cTag_btnU)->setEnabled(false);
 			getButtonByTag(cTag_btnChiu)->setEnabled(false);
-			getButtonByTag(cTag_btnReady)->setEnabled(true);
 
+			updateUser(_list_user);
 			CCLOG("List user update: %s",_list_user.c_str());
 		}
 	}
@@ -741,6 +740,7 @@ void LayerChanGame::eventCard_ConTrongNoc(){
 	boost::shared_ptr<string> nocdetl = param->GetUtfString("nocdetl");
 	if (nocdetl != NULL)
 	{
+		stopTimer_Me();
 		CCLOG("Các lá bài còn trong nọc: %s", nocdetl->c_str());
 		layerCardChan->setListNoc(nocdetl->c_str());
 		getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
@@ -809,7 +809,6 @@ void LayerChanGame::updateUser(string list){
 	vector<string> listUser;
 	listUser = mUtils::splitString(list, ';');
 	countUser = listUser.size();
-	CCLOG("Do dai: %ld",listUser.size());
 	boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 
 	if(countUser == 2){
@@ -850,7 +849,15 @@ void LayerChanGame::updateUser(string list){
 		}
 
 		if(strcmp(n[1].c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str())==0){
-			getButtonByTag(cTag_btnReady)->setEnabled(true);
+			CCLOG("count Boc Cai = %d", countBocCai);
+			if (countBocCai == 0)
+			{
+				getButtonByTag(cTag_btnReady)->setEnabled(true);
+			}
+			else
+			{
+				getButtonByTag(cTag_btnReady)->setEnabled(false);
+			}
 			layerAvatars->setName(kUserMe, _name);
 			layerAvatars->getUserByPos(kUserMe)->setMoney(_money);
 			layerAvatars->getUserByPos(kUserMe)->setAI(n[1]);
@@ -911,6 +918,14 @@ void LayerChanGame::updateUser2Player(vector<string> arrUser){
 		if (pos == kUserMe)
 		{
 			//////////////////////////////////////////////////////////////////////////
+			if (countBocCai == 0)
+			{
+				getButtonByTag(cTag_btnReady)->setEnabled(true);
+			}
+			else
+			{
+				getButtonByTag(cTag_btnReady)->setEnabled(false);
+			}
 		}
 		else{
 			setInfoAvatar(kUserTop, info[1], _name, _money, _url);

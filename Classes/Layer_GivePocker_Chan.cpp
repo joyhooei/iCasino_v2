@@ -248,11 +248,11 @@ void Layer_GivePocker_Chan::addVirtualCard(UIImageView *img){
 	for (int i = 0; i < 5; i++)
 	{
 		UIImageView *a = UIImageView::create();
-		a->setAnchorPoint(ccp(0, 0));
+		a->setAnchorPoint(ccp(0.5, 0.5));
 		a->loadTexture("card_back_chan.png");
-		a->setRotation(i + 4);
+		int _rote = rand()%(15) - 10;
+		a->setRotation((float)_rote);
 		a->setTag(i);
-		a->setPosition(ccp( -img->getContentSize().width/2, -img->getContentSize().height /2));
 		a->setVisible(false);
 		img->addChild(a);
 	}
@@ -648,6 +648,7 @@ void Layer_GivePocker_Chan::finishGive(UIImageView *img, int tpos){
 	}
 
 	img->runAction(CCMoveTo::create(0.4, pPoint));
+	CCLOG("_flag = %s",_flag ? "true" : "false");
 	if (_flag == true)
 	{
 		noc->runAction(CCMoveTo::create(0.4, pPoint));
