@@ -65,6 +65,8 @@ public:
 	void processGLMIMessage(string msg);
 	void processRGLSIMMessage(string msg);
 
+	CCLabelTTF* getLabelFromTagID(CCTableViewCell *cell, int tag);
+
 	CCNode* createLabel4Cell(int tag, const char* text, CCSize size, CCPoint point);
     
     // CCBSelectorResolver interfaces

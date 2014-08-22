@@ -1,1 +1,7 @@
 ﻿Chép đè 2 thư mục trên vào đường dẫn tương ứng
+
+CHO PHAN QUANG CAO:
+vào SDK manager trong eclipse
+install thêm cái extras/google play service
+sau đó import vào eclipse
+vão property cài đặt nó giống như cái facebooj SDK đó

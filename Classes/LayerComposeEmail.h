@@ -16,15 +16,19 @@
 #include <iostream>
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "GameServer.h"
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
+
+using namespace std;
 
 class LayerComposeEmail
 	: public cocos2d::CCLayer
 	, public cocos2d::extension::CCBSelectorResolver
 	, public cocos2d::extension::CCBMemberVariableAssigner
 	, public cocos2d::extension::CCNodeLoaderListener
+	, public PlayerCallBack
 {
 private:
 	CCEditBox* txtTo;
@@ -45,6 +49,8 @@ public:
 
 	void initTextField(CCEditBox* txt, const char* hintText);
 
+	void setDatas(string toUser, string title, string contents);
+
 	CREATE_FUNC(LayerComposeEmail);
 
 	// CCBSelectorResolver interfaces
@@ -56,6 +62,8 @@ public:
 	// selector callbacks
 	void onButtonFind(CCObject* pSender);
 	void onButtonSend(CCObject* pSender);
+	//Server
+	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 };
 
 class LayerComposeEmailLoader : public cocos2d::extension::CCLayerLoader

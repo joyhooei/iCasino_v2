@@ -568,7 +568,7 @@ void LayerMain::keyBackClicked()
 	closeOldView();
 }
 
-void LayerMain::gotoMailDetails()
+void LayerMain::gotoMailDetails(int idMsg, string fromUser, string toUser, string date, string contents)
 {
 	if( currViewTag == tag_EmailDetails )
 		return;
@@ -580,12 +580,13 @@ void LayerMain::gotoMailDetails()
 		mLayer = (LayerEmailDetails *)ccbReader->readNodeGraphFromFile( "LayerEmailDetails.ccbi" );
 		this->addChild(mLayer, 1, 1);
 		ccbReader->release();
+		mLayer->setDatas(idMsg, fromUser, toUser, date, contents);
 	}
 	currNodeView = mLayer;
 	currViewTag = tag_EmailDetails;
 }
 
-void LayerMain::gotoComposeMail()
+void LayerMain::gotoComposeMail(string toUser, string title, string contents)
 {
 	if( currViewTag == tag_ComposeEmail )
 		return;
@@ -597,6 +598,7 @@ void LayerMain::gotoComposeMail()
 		mLayer = (LayerComposeEmail *)ccbReader->readNodeGraphFromFile( "LayerComposeEmail.ccbi" );
 		this->addChild(mLayer, 1, 1);
 		ccbReader->release();
+		mLayer->setDatas(toUser, title, contents);
 	}
 	currNodeView = mLayer;
 	currViewTag = tag_ComposeEmail;

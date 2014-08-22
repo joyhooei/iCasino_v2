@@ -364,7 +364,7 @@ void SceneManager::gotoGameByTag(int typeGame) {
 		{
 			mLayer = (LayerPlayGameChinessChess *)ccbReader->readNodeGraphFromFile( "LayerGameCoTuong.ccbi" );
 			mLayer->setPosition(ccp(-WIDTH_DESIGN / 2, -HEIGHT_DESIGN / 2));
-			this->addChild(mLayer, 1, 1);
+			this->addChild(mLayer, zorder_LayerGaming, tag_LayerGaming);
 			ccbReader->release();
 		}
 		break;

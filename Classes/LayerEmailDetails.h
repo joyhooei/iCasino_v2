@@ -14,23 +14,31 @@
 #define __iCasino_v2___LayerEmailDetails___
 
 #include <iostream>
+#include <string.h>
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "GameServer.h"
 using namespace cocos2d;
 using namespace cocos2d::extension;
 using namespace cocos2d::ui;
+
+using namespace std;
 
 class LayerEmailDetails
 	: public cocos2d::CCLayer
 	, public cocos2d::extension::CCBSelectorResolver
 	, public cocos2d::extension::CCBMemberVariableAssigner
 	, public cocos2d::extension::CCNodeLoaderListener
+	, public PlayerCallBack
 {
 private:
 	CCLabelTTF* lblTitle;
 	CCLabelTTF* lblDate;
 	CCLabelTTF* lblContents;
 
+	int m_idMsg;
+	string m_fromUser;
+	string m_toUser;
 public:
 	LayerEmailDetails();
 	virtual ~LayerEmailDetails();
@@ -40,6 +48,8 @@ public:
 	virtual void onExit();
 
 	void initTextField(CCEditBox* txt, const char* hintText);
+
+	void setDatas(int idMsg, string fromUser, string toUser, string date, string contents);
 
 	CREATE_FUNC(LayerEmailDetails);
 
@@ -52,6 +62,8 @@ public:
 	// selector callbacks
 	void onButtonDelete(CCObject* pSender);
 	void onButtonReply(CCObject* pSender);
+	//Server
+	void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 };
 
 class LayerEmailDetailsLoader : public cocos2d::extension::CCLayerLoader

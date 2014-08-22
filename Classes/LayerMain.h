@@ -88,8 +88,8 @@ public:
 	void gotoTransferMoney(string toUser);
 
     void gotoMail();
-	void gotoMailDetails();
-	void gotoComposeMail();
+	void gotoMailDetails(int idMsg, string fromUser, string toUser, string date, string contents);
+	void gotoComposeMail(string toUser="", string title="", string contents = "");
 
     void gotoFriends();
     void gotoGuide();

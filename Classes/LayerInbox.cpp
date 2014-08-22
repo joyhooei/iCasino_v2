@@ -78,7 +78,8 @@ void LayerInbox::onNodeLoaded( CCNode * pNode,  CCNodeLoader * pNodeLoader)
 // hàm khi click vào 1 hành của table view
 void LayerInbox::tableCellTouched(cocos2d::extension::CCTableView *table, cocos2d::extension::CCTableViewCell *cell){
 //    CCLOG("Roomid: %d of %s", cell->getObjectID(), table->getTag()==tag_Friends?"Friends":"Historys");
-	LayerMain::getSingleton().gotoMailDetails();
+	int idx = cell->getObjectID();
+	LayerMain::getSingleton().gotoMailDetails(lstEmails.at(idx).id, lstEmails.at(idx).fromUser, lstEmails.at(idx).toUser, lstEmails.at(idx).datetime, lstEmails.at(idx).content);
 }
 
 // Hàm set giá trị width height cho 1 cell table view
@@ -92,6 +93,7 @@ CCTableViewCell* LayerInbox::tableCellAtIndex(cocos2d::extension::CCTableView *t
    if (!cell) {
        cell = new CCTableViewCell();
        cell->autorelease();
+	   cell->setObjectID( idx );
        //to user
 	   cell->addChild(createLabel4Cell(tag_User, lstEmails.at(idx).toUser.c_str(), CCSizeMake(160, 40), ccp(0, 0)));
 	   //datetime
@@ -107,17 +109,18 @@ CCTableViewCell* LayerInbox::tableCellAtIndex(cocos2d::extension::CCTableView *t
    }
    else
    {
-//        CCLabelTTF *label = (CCLabelTTF*)cell->getChildByTag(tag_NameGame);
-//        if( label )
-//            label->setString(mUtils::getGameNameByID(100+idx)->getCString());
-//        //
-//        CCLabelTTF *labelLevel = (CCLabelTTF*)cell->getChildByTag(tag_Level);
-//        if( labelLevel )
-//            labelLevel->setString(CCString::createWithFormat("Level: %d", historys[idx].numOfLevel)->getCString());
-//        //
-//        CCLabelTTF *labelWin = (CCLabelTTF*)cell->getChildByTag(tag_WinLose);
-//        if( labelWin )
-//            labelWin->setString(CCString::createWithFormat("Thắng %d/Thua %d", historys[idx].numOfWin, historys[idx].numOfLose)->getCString());
+	   cell->setObjectID( idx );
+       CCLabelTTF *lblUser = (CCLabelTTF*)cell->getChildByTag(tag_User);
+       if( lblUser )
+           lblUser->setString(lstEmails.at(idx).toUser.c_str());
+	   //
+	   CCLabelTTF *lblDate = (CCLabelTTF*)cell->getChildByTag(tag_Date);
+	   if( lblDate )
+		   lblDate->setString(lstEmails.at(idx).datetime.c_str());
+	   //
+	   CCLabelTTF *lblContent = (CCLabelTTF*)cell->getChildByTag(tag_Content);
+	   if( lblContent )
+		   lblContent->setString(lstEmails.at(idx).content.c_str());
    }
     return cell;
 }
@@ -232,4 +235,13 @@ CCNode* LayerInbox::createLabel4Cell( int tag, const char* text, CCSize size, CC
 	node->addChild(label);
 
 	return node;
+}
+
+CCLabelTTF* LayerInbox::getLabelFromTagID( CCTableViewCell *cell, int tag )
+{
+	CCNode* node = cell->getChildByTag(tag);
+	if( node == NULL )
+		return NULL;
+	CCLabelTTF *lbl = (CCLabelTTF*)node->getChildByTag(tag);
+	return lbl;
 }

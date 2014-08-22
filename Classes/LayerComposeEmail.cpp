@@ -8,6 +8,9 @@
 
 #include "LayerComposeEmail.h"
 #include "mUtils.h"
+#include "Requests/ExtensionRequest.h"
+#include "LayerMain.h"
+#include "_Chat_.h"
 
 using namespace cocos2d;
 //using namespace CocosDenshion;
@@ -19,6 +22,8 @@ LayerComposeEmail::LayerComposeEmail()
 	nodeTo = NULL;
 	nodeContents = NULL;
 	nodeTextContent = NULL;
+	//
+	GameServer::getSingleton().addListeners(this);
 }
 
 LayerComposeEmail::~LayerComposeEmail()
@@ -27,6 +32,8 @@ LayerComposeEmail::~LayerComposeEmail()
 	CC_SAFE_RELEASE(nodeTo);
 	CC_SAFE_RELEASE(nodeContents);
 	CC_SAFE_RELEASE(nodeTextContent);
+	//
+	GameServer::getSingleton().removeListeners(this);
 }
 
 // CCBSelectorResolver interface
@@ -44,8 +51,29 @@ void LayerComposeEmail::onButtonFind(CCObject* pSender)
 
 void LayerComposeEmail::onButtonSend(CCObject* pSender)
 {
-	CCLOG("onButtonClose");
-	this->removeFromParentAndCleanup(true);
+	boost::shared_ptr<User> myself = GameServer::getSingleton().getSmartFox()->MySelf();
+	if( strcmp( myself->Name()->c_str(), txtTo->getText()) == 0 || strlen( txtTo->getText() ) < 6 ){
+		Chat *toast = new Chat("Người nhận không đúng!", -1);
+		this->addChild(toast);
+		return;
+	}
+	if( strlen( txtContent->getText() ) == 0 ){
+		Chat *toast = new Chat("Nội dung không được để trống!", -1);
+		this->addChild(toast);
+		return;
+	}
+
+	//sendmi: Send message
+	//aI 
+	// aR
+	// scontent
+	//Send request
+	boost::shared_ptr<ISFSObject> params (new SFSObject());
+	params->PutUtfString("aR", txtTo->getText());
+	params->PutUtfString("scontent", txtContent->getText());
+	params->PutUtfString("aI", myself->Name());
+	boost::shared_ptr<IRequest> request (new ExtensionRequest("sendmi", params));
+	GameServer::getSingleton().getSmartFox()->Send(request);
 }
 
 // CCBMemberVariableAssigner interface
@@ -116,4 +144,23 @@ void LayerComposeEmail::initTextField( CCEditBox* txt, const char* hintText )
 	txt->setPlaceHolder(hintText);
 	txt->setTouchPriority(-128);
 	txt->setAnchorPoint(ccp(0, 1));
+}
+
+void LayerComposeEmail::setDatas( string toUser, string title, string contents )
+{
+	txtTo->setText( toUser.c_str() );
+	txtContent->setText( contents.c_str() );
+}
+
+void LayerComposeEmail::OnExtensionResponse( unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent )
+{
+	boost::shared_ptr<map<string, boost::shared_ptr<void> > > ptrEvetnParams = ptrEvent->Params();
+	boost::shared_ptr<void> ptrEventParamValueCmd = (*ptrEvetnParams)["cmd"];
+	boost::shared_ptr<string> cmd = ((boost::static_pointer_cast<string>)(ptrEventParamValueCmd));
+
+	boost::shared_ptr<void> ptrEventParamValueParams = (*ptrEvetnParams)["params"];
+	boost::shared_ptr<ISFSObject> param = ((boost::static_pointer_cast<ISFSObject>(ptrEventParamValueParams)));
+	if(strcmp("sendmi", cmd->c_str())==0){ //dmi response
+		LayerMain::getSingleton().gotoMail();
+	}
 }
