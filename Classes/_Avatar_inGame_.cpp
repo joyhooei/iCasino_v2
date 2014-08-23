@@ -630,6 +630,8 @@ void LayerAvatarInGame::resetAll(){
 	this->getUserByPos(kUserLeft)->getLblNTFChan()->setVisible(false);
 	this->getUserByPos(kUserRight)->getLblNTFChan()->setVisible(false);
 	this->getUserByPos(kUserTop)->getLblNTFChan()->setVisible(false);
+
+	stopAllBlinkAvatar();
 	//setColor(ccc3(200,255,255));
 
 	this->getUserByPos(kUserLeft)->setVisibleLayerInvite(true);
@@ -651,4 +653,10 @@ bool LayerAvatarInGame::isStartedGame()
 	} else CCLog("Ban chua choi!");
 
 	return isStartedGame;
+}
+
+void LayerAvatarInGame::stopAllBlinkAvatar(){
+	this->getUserByPos(kUserLeft)->removeChildByTag(20);
+	this->getUserByPos(kUserRight)->removeChildByTag(20);
+	this->getUserByPos(kUserTop)->removeChildByTag(20);
 }

@@ -50,6 +50,7 @@ public:
     
 	void setLblNTFChan(const char* text);
 	UILabelBMFont* getLblNTFChan();
+	void setBlinkAvatar();
 
     void startTimer();
     void stopTimer();

@@ -546,7 +546,7 @@ void LayerChanGame::OnExtensionResponse(unsigned long long ptrContext, boost::sh
 	}
 
 	else if(strcmp("rntf",cmd->c_str()) == 0){
-		
+		layerAvatars->stopAllBlinkAvatar();
 		if (this->getChildByTag(172) != NULL)
 		{
 			this->removeChildByTag(172);
@@ -1153,8 +1153,8 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 		//Sau đó trả cửa 1 con vào cửa trì của mình thì hiện button Dưới
 		if (flagTraCuaToMe == true)
 		{
-// 			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
-// 			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
+			getButtonByTag(cTag_btnBoc)->loadTextureNormal("U_Disable.png");
+			getButtonByTag(cTag_btnBoc)->setTouchEnabled(false);
 
 			getButtonByTag(cTag_btnTake)->setEnabled(false);
 			getButtonByTag(cTag_btnDuoi)->loadTextureNormal("danh.png");
@@ -1540,7 +1540,6 @@ void LayerChanGame::setEndGame(){
 	_noccount = -1;
 
 	layerCardChan->resetAllCards();
-	layerAvatars->stopAllTimer();
 
 	getButtonByTag(cTag_btnBoc)->loadTextureNormal("U.png");
 	getButtonByTag(cTag_btnBoc)->setTouchEnabled(true);
@@ -1583,7 +1582,9 @@ void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
 	toast->setPositionY(HEIGHT_DESIGN / 2);
 	this->addChild(toast);
 
-	CCString *p = CCString::create(lc);
+	string strRe = uid + "|" + lc;
+
+	CCString *p = CCString::create(strRe);
 	//hideAllButton();
 	CCCallFuncO *callfun = CCCallFuncO::create(this, callfuncO_selector(LayerChanGame::wait10s),p);
 	CCDelayTime *delay = CCDelayTime::create(6.0);
@@ -1591,8 +1592,30 @@ void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
 }
 
 void LayerChanGame::wait10s(CCObject *data){
+	layerAvatars->stopAllTimer();
 	CCString *lc = (CCString *) data;
-	string str = string(lc->getCString());
+	string strRe = ((CCString *) data)->getCString();
+	vector<string> arrRe = mUtils::splitString(strRe, '|');
+
+	string uid = arrRe.at(0);
+	int pos = getPosUserByName(uid, _list_user);
+	if(mUtils::splitString(_list_user, ';').size() == 2)
+	{
+		if (pos != kUserMe)
+		{
+			layerAvatars->getUserByPos(kUserTop)->setBlinkAvatar();
+		}
+	}
+	else
+	{
+		if (pos != -1 && pos != kUserMe)
+		{
+			layerAvatars->getUserByPos(pos)->setBlinkAvatar();
+		}
+	}
+	
+	string str = arrRe.at(1);
+		//string(lc->getCString());
 	CCLOG("String get ra: %s", str.c_str());
 
 	layerCardChan->scaleCardsHand_whenU();

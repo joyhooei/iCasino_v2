@@ -642,3 +642,16 @@ void Avatar::setLblNTFChan(const char* text){
 UILabelBMFont* Avatar::getLblNTFChan(){
 	return this->lblNTF;
 }
+
+void Avatar::setBlinkAvatar(){
+	CCSprite* blinkAvatar = CCSprite::create("frame_time.png");
+	blinkAvatar->setPosition(ccp(getSizeThis().width / 2, getSizeThis().height / 2));
+	blinkAvatar->setTag(20);
+	this->addChild(blinkAvatar);
+
+	CCActionInterval *blink = CCBlink::create(1, 2);
+	CCActionInterval *action_back = blink->reverse();
+	CCActionInterval* seq = CCSequence::create( blink, action_back, NULL );
+	
+	blinkAvatar->runAction( CCRepeatForever::create(seq) );
+}

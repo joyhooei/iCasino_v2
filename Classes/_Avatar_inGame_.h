@@ -68,6 +68,9 @@ public:
 	bool isSpectator();
 	bool isStartedGame();
 
+	//stop Blink Avatar
+	void stopAllBlinkAvatar();
+
 private:
 	enum NAME_GAME {
 		PHOM = 1,
