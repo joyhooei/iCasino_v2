@@ -1568,6 +1568,11 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_LIST_USER_UPDATE_2() {
 		btnPeace->setVisible(false);
 		btnLose->setVisible(false);
 		lblYouIsGuess->setVisible(true);
+
+		// đảo lại player1 và player2 để đáp ứng NTF_TABLE
+		string tg = player2;
+		player2 = player1;
+		player1 = tg;
 	}
 	else {
 		btnReady->setEnabled(true);
