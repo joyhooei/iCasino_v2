@@ -276,7 +276,7 @@ void LayerPlayGameTLMN::initGame() {
 
     // unready all
     layerAvatars->setUnReadyAllUser();
-
+	layerCards->resetGame();
 }
 
 
@@ -576,6 +576,7 @@ void LayerPlayGameTLMN::event_EXT_EVENT_USER_JOIN_NOTIF(){
     
     if (listUser != NULL) {
         CCLog("listUser= %s", listUser->c_str());
+		if (this->listUser == listUser->c_str()) return;
         
 		this->listUser = (string)(listUser->c_str());
         layerAvatars->setListUserByTienLen(listUser->c_str());
@@ -602,6 +603,11 @@ void LayerPlayGameTLMN::event_EXT_EVENT_USER_JOIN_NOTIF(){
 				getButtonByTag(kTagButtonStandUp)->setEnabled(true);
 				getButtonByTag(kTagButtonSitting)->setEnabled(false);
 			} else {
+				boost::shared_ptr<IRequest> request (new PlayerToSpectatorRequest());
+				GameServer::getSingleton().getSmartFox()->Send(request);
+				isRegistStandUp = false;
+				CCLog("-------Room..: Gửi đi thông báo muốn đứng xem!");
+
 				getButtonByTag(kTagButtonStandUp)->setEnabled(false);
 				getButtonByTag(kTagButtonSitting)->setEnabled(true);
 			}
@@ -652,10 +658,10 @@ void LayerPlayGameTLMN::event_EXT_EVENT_LIST_USER_UPDATE(){
     boost::shared_ptr<string> listUser = param->GetUtfString("lu");
 	if (listUser == NULL) return;
 
-	
-
     CCLog("event_EXT_EVENT_LIST_USER_UPDATE %s", listUser->c_str());
-	this->listUser = (string)(listUser->c_str());
+	if (this->listUser == listUser->c_str()) return;
+
+	this->listUser = (listUser->c_str());
 	layerAvatars->setListUserByTienLen(this->listUser);
 
 	layerCards->resetGame();
@@ -689,6 +695,9 @@ void LayerPlayGameTLMN::event_EXT_EVENT_START_GAME_NOTIF(){
 	isStartedGame = true;
 	
 	getButtonByTag(kTagButtonReady)->setEnabled(false);
+	if (!isSpector) {
+		getButtonByTag(kTagButtonSort)->setEnabled(true);
+	}
 //	getButtonByTag(kTagButtonReady)->setEnabled(false);
 // 	getButtonByTag(kTagButtonStandUp)->setEnabled(true);
 }
@@ -717,6 +726,8 @@ void LayerPlayGameTLMN::event_EXT_EVENT_USER_LEAVE_NOTIF(){
           
     if (listUser != NULL){
         CCLog("listUser= %s", listUser->c_str());
+		if (this->listUser == listUser->c_str()) return;
+
         layerAvatars->setListUserByTienLen(listUser->c_str());
 
 		layerCards->resetGame();

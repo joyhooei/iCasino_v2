@@ -196,6 +196,7 @@ private:
 	CCSprite *menuBgr;
 
 	CCLabelTTF *lblYouIsGuess;
+	CCLabelTTF *lblTestGame;
 
 	void showToast(string mes);
 
