@@ -30,9 +30,12 @@ public:
 	virtual void onExit();
 	CREATE_FUNC(LayerGameChan_KetQua);
 	string identifyCuoc_sac(string _cuoc);
+	string identifyCuoc_Ga(string _cuoc);
+
+	string getNamePlayer(string uid);
 
 	vector<string> splitString(string &S,const char &str);
-	string getCuoc(string cuoc);
+	string getCuoc(string cuoc, bool type);
 
 	void displayResuilt(string resuilt);
 

@@ -23,7 +23,6 @@
 #define V_REGISTER_LOADER_GLUE(NODE_LIBRARY, CLASS) NODE_LIBRARY->registerCCNodeLoader(#CLASS, CLASS##Loader::loader())
 
 LayerChanGame::LayerChanGame(){
-	CCLOG("Nhay vao chan Game");
 	EXT_EVENT_REQ_DISCARD = "rqhofc";
 	EXT_EVENT_READY_REQ = "rr";
 	EXT_EVENT_REQ_DRAW_CARD = "rqdrwc";
@@ -113,13 +112,6 @@ void LayerChanGame::displayLayerKetQua(string resuilt){
 	kq->setTag(171);
 	kq->displayResuilt(resuilt);
 	this->addChild(kq);
-}
-
-void LayerChanGame::btnClose_LayerResuilt(CCObject *sender, TouchEventType type){
-	if (type == TOUCH_EVENT_ENDED)
-	{
-		this->removeChildByTag(171);
-	}
 }
 
 LayerChanGame::~LayerChanGame(){
@@ -695,6 +687,10 @@ void LayerChanGame::eventDisCards(){
 		if (*rscode != 0) {
 			CCLOG("Không đánh được !");
 		}
+		else
+		{
+			flagTraCuaToMe = false;
+		}
 	}
 	CCLOG("EXT_EVENT_RES_DISCARD");
 }
@@ -1204,6 +1200,13 @@ void LayerChanGame::setCurrentPlayer(string uid,int _count){
 
 //set user ready
 void LayerChanGame::setUserReady(string uid){
+	if(strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) == 0)
+	{
+		if (this->getChildByTag(171)!=NULL)
+		{
+			this->removeChildByTag(171);
+		}
+	}
 	int pos = getPosUserByName(uid, _list_user);
 	if (countUser == 2)
 	{

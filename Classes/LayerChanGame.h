@@ -175,8 +175,6 @@ public:
 	void btn_U_Click(CCObject *sender, TouchEventType type);
 	void btn_Chiu_Click(CCObject *sender, TouchEventType type);
 
-	void btnClose_LayerResuilt(CCObject *sender, TouchEventType type);
-
 	void hideAllButton();
 	void resetPositionButton();
 
