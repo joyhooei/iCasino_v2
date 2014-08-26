@@ -1,4 +1,4 @@
-#include "SceneManager.h"
+﻿#include "SceneManager.h"
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
 #include "SliderCustomLoader.h"
@@ -85,7 +85,7 @@ CCScene* SceneManager::createScene()
 	float sTop  = (sizeScreen.height - scaleMin * HEIGHT_DESIGN) / 2;
 
 	// VERSION
-	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.1.18082014", "", 16);
+	CCLabelTTF *nameVersion = CCLabelTTF::create("ver-1.1.22082014", "", 16);
 	nameVersion->setColor(ccWHITE);
 	nameVersion->setPosition(ccp(-WIDTH_DESIGN/2 + 10 + nameVersion->getContentSize().width / 2, -HEIGHT_DESIGN/2 - sTop + 20));
 	layer->addChild(nameVersion, 1001);
