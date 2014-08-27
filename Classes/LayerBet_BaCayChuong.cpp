@@ -10,6 +10,7 @@
 #include "GameServer.h"
 #include "Requests/ExtensionRequest.h"
 #include "mUtils.h"
+#include "AllData.h"
 
 using namespace Sfs2X;
 using namespace cocos2d;
@@ -21,6 +22,8 @@ LayerBet_BaCayChuong::LayerBet_BaCayChuong()
 	lblMoney=NULL;
 	sliderMoney=NULL;
 	spriteMoney=NULL;
+
+	_styleGame = kGameBaCayChuong;
 }
 
 LayerBet_BaCayChuong::~LayerBet_BaCayChuong()
@@ -41,12 +44,25 @@ void LayerBet_BaCayChuong::onButtonCreate(CCObject* pSender)
 	int gameBet = 1000;
 	float sliderWidth =sliderMoney->getContentSize().width;
 	gameBet = ceil(sliderMoney->getValue())*1000;
-	//EXT_EVENT_GAME_BET_REQ = "gbr";
-	boost::shared_ptr<ISFSObject> params (new SFSObject());
-	params->PutInt("gbv", gameBet);
-	boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-	boost::shared_ptr<IRequest> request (new ExtensionRequest("gbr",params,lastRoom));
-	GameServer::getSingleton().getSmartFox()->Send(request);
+
+	CCLOG("gameBet= %d", gameBet);
+
+	if (_styleGame == kGameBaCayChuong) {
+		//EXT_EVENT_GAME_BET_REQ = "gbr";
+		boost::shared_ptr<ISFSObject> params (new SFSObject());
+		params->PutInt("gbv", gameBet);
+		boost::shared_ptr<Room> lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+		boost::shared_ptr<IRequest> request (new ExtensionRequest("gbr",params,lastRoom));
+		GameServer::getSingleton().getSmartFox()->Send(request);
+	} else if (_styleGame == kGameCoTuong) {
+		boost::shared_ptr<ISFSObject> parameter (new SFSObject());
+		parameter->PutLong("amf", gameBet);
+		boost::shared_ptr< Room > lastRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+		boost::shared_ptr<IRequest> request (new ExtensionRequest("umr", parameter, lastRoom));
+		GameServer::getSingleton().getSmartFox()->Send(request);
+	}
+	
+	CCLog("Done!");
 	this->removeFromParentAndCleanup(true);
 }
 
@@ -75,6 +91,10 @@ void LayerBet_BaCayChuong::valueChanged(CCObject *sender, CCControlEvent control
 	// 	spriteMoney->setPosition(ccp(posX+percent*(sliderWidth/delta), spriteMoney->getPositionY()));
 	// 	//HoangDD comment
 	// 	lblMoney->setString( CCString::createWithFormat("%.0f xu", floor(pSlider->getValue())*1000)->getCString() );
+}
+
+void LayerBet_BaCayChuong::setStyleGame(int styleGame) {
+	_styleGame = styleGame;
 }
 
 // CCBMemberVariableAssigner interface

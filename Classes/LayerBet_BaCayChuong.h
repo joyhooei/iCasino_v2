@@ -26,6 +26,8 @@ private:
 	CCLabelTTF *lblMoney;
 	CCControlSlider* sliderMoney;
 	CCSprite* spriteMoney;
+
+	int _styleGame;
 public:
 	LayerBet_BaCayChuong();
 	virtual ~LayerBet_BaCayChuong();
@@ -48,6 +50,7 @@ public:
 	void onButtonClose(CCObject* pSender);
 
 	void valueChanged(CCObject *sender, CCControlEvent controlEvent);
+	void setStyleGame(int styleGame);
 };
 
 class LayerBet_BaCayChuongLoader : public cocos2d::extension::CCLayerLoader

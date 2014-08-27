@@ -78,6 +78,8 @@ private:
 	CCMenuItem* btnReMove;
 	CCMenuItem* btnReady;
 	CCMenuItem* btnUnReady;
+	CCMenuItem* btnSpectator;
+	CCSprite* imgArrow;
 	//Các label hiển thị số lượng quân cờ còn lại
 	CCLabelTTF* lblXeRed_status;
 	CCLabelTTF* lblTotRed_status;
@@ -199,6 +201,7 @@ private:
 	CCLabelTTF *lblTestGame;
 
 	void showToast(string mes);
+	void resetGame();
 
 public:
 	LayerPlayGameChinessChess();
@@ -243,6 +246,7 @@ public:
 	void onButtonRemove(CCObject* pSender);
 	void onButtonReady(CCObject* pSender);
 	void onButtonUnReady(CCObject* pSender);
+	void onButtonSpector(CCObject* pSender);
 	//Server
 	virtual void OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
 	virtual void OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent);
