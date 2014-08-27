@@ -263,6 +263,7 @@ void LayerPlayGameTLMN::createChats() {
 void LayerPlayGameTLMN::initGame() {
     // khởi tạo các giá trị ban đầu hoặc hiển thị các thông tin cần thiết
 	
+	layerCards->resetGame();
     // thông tin tiền hiện tại của Users
     for (int i = 0; i < arrName.size(); i++) {
         layerAvatars->setMoney(layerAvatars->getPosByName(arrName[i]), arrMoneyDouble[i]);
@@ -276,7 +277,6 @@ void LayerPlayGameTLMN::initGame() {
 
     // unready all
     layerAvatars->setUnReadyAllUser();
-	layerCards->resetGame();
 }
 
 
