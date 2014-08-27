@@ -969,6 +969,10 @@ void LayerChanGame::eventTakeCards(string f_user, string t_user, string cardnu, 
 	}
 
 	//Nếu người khác trả cửa vào cửa của mình
+	if(crdorg == 1 || crdorg == 2 || crdorg == 3)
+	{
+		flagTraCuaToMe = false;
+	}
 	if(crdorg == 5){
 		if (tpos == kUserMe)
 		{
