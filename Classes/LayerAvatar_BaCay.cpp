@@ -62,7 +62,7 @@ bool LayerBaCayAvatar::init()
 	this->myName = SceneManager::getSingleton().getMyName();
 
 	Avatar *me = new Avatar(false);
-    me->setTouchEnabled(false);
+   // me->setTouchEnabled(false);
 	Avatar *user1 = new Avatar(false);
 	Avatar *user2 = new Avatar(false);
 	Avatar *user3 = new Avatar(false);
@@ -426,10 +426,15 @@ void LayerBaCayAvatar::updateUsers()
 		vector<string> info = mUtils::splitString(arrUser[i],'|');
         int _pos = info.size();
 		int pos = getPosByName(info[0]);
+        CCLog("%d----",pos);
 		if (pos < 0)
 		{
 			continue;
 		}
+        if(!isSpect())
+            getUserByPos(kuser0)->setTouchEnabled(false);
+        else
+            getUserByPos(kuser0)->setTouchEnabled(true);
 
 		if (GameServer::getSingleton().getSmartFox()->LastJoinedRoom()->GetUserByName(info[0]) != NULL)
 		{
@@ -448,7 +453,7 @@ void LayerBaCayAvatar::updateUsers()
 			_user->setAI(info[0]);
 			//
 			bool meIsBoss = (i == 0);
-			if(pos == kuser0){
+			if(pos == kuser0 && isSpect()!=true){
                 _user->setVisible(true);
 				_user->setTouchEnabled(false);
 				this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
@@ -470,7 +475,7 @@ void LayerBaCayAvatar::updateUsers()
 		}
 		
 	}//for
-
+    
 }
 
 string LayerBaCayAvatar::getNameByPos(int pos)
@@ -559,6 +564,7 @@ void LayerBaCayAvatar::specToPlayer()
 	btn_dungday->setEnabled(false);
 }
 bool LayerBaCayAvatar::isSpect() {
+    
 	vector<string> arr = mUtils::splitString(this->listUser, ';');
 	int size = arr.size();
 	for (int i = 0; i < size; i++){

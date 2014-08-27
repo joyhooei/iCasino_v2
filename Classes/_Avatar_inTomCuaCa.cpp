@@ -444,7 +444,7 @@ void AvatarInTomCuaCa::updateUsers() {
 			_user->setMoney(_money);
 			//
 			bool meIsBoss = (i == 0);
-			if(pos == kuser0){
+			if(pos == kuser0 && isSpect()!=true){
                 
 				this->getUserByPos(kuser1)->setMeIsBoss(meIsBoss);
 				this->getUserByPos(kuser2)->setMeIsBoss(meIsBoss);

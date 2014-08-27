@@ -458,8 +458,8 @@ void BaCayChuong::eventListUser(string listusers)
     isSpector = layerAvatars->isSpect();
     if(isSpector==true)
     {
+        
 		nameGame->setString("Bạn đang xem...");
-		
         if(list.size()<7)
         {
             if(layerAvatars->isStartedGame()!=true)
