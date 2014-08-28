@@ -1909,7 +1909,10 @@ void LayerPlayGameChinessChess::event_EXT_EVENT_CHESS_TABLE_NTF() {
 		logicChess->setChessIDBySide(name, side, convertID_ver(i));
 		chess = getChessByName_Side(name, side);
 		if (chess!=NULL) {
-			chess->setIDPos(convertID_ver(pos));
+			if (!isSpector) {
+				pos = convertID_ver(pos);
+			}
+			chess->setIDPos(pos);
 		}
 		
 	}
