@@ -502,8 +502,14 @@ void Lieng::action_UpdateListUser(string lsUser)
 		getButtonByTag(dTag_btnBet)->setTouchEnabled(true);
 		getButtonByTag(dTag_btnFold)->setTouchEnabled(true);
 		getButtonByTag(dTag_Complete)->setTouchEnabled(true);
-		if(layerAvatars->isStartedGame()!=true)
-			layerAvatars->playerToSpec();
+		if(list.size()>1 && layerAvatars->isStartedGame()!=true)
+        {
+            layerAvatars->playerToSpec();
+            layerAvatars->btn_dungday->setVisible(true);
+        }else
+            layerAvatars->btn_dungday->setVisible(false);
+        
+
 
 	}
 	for (int i = 0; i < list.size(); i++)

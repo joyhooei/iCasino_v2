@@ -95,9 +95,6 @@ float TomCuaCa::convertResult(string rs)
 }
 TomCuaCa::TomCuaCa(){
 
-
-	if(mUtils::isSoundOn())
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
 		_count=100;
 		
 		uLayer = UILayer::create();
@@ -293,7 +290,11 @@ void TomCuaCa::updateUser(string list){
         _time=0;
         nameGame->setString(result.c_str());
         if(listUser.size()>1 && lAvatar->isStartedGame()!=true)
+        {
             lAvatar->playerToSpec();
+            lAvatar->btn_dungday->setVisible(true);
+        }else
+            lAvatar->btn_dungday->setVisible(false);
         btnReady->setTouchEnabled(true);
         //btnUnReady->setTouchEnabled(true);
 
@@ -440,6 +441,7 @@ void TomCuaCa::whenGameStart(){
 	btnReady->setVisible(false);
 	btnUnReady->setTouchEnabled(false);
 	btnUnReady->setVisible(false);
+    
 
 	
 
@@ -474,7 +476,7 @@ void TomCuaCa::whenGameStart(){
 }
 void TomCuaCa::whenResuiltGame(string rg){
 
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
+	
 	this->unscheduleUpdate();
 	loading->setPercent(0);
 	playSound("sounds/game_tomcuaca/quay.mp3");
@@ -531,10 +533,7 @@ void TomCuaCa::whenGameEnd(){
 	lAvatar->setReady(kuser3,false);
 	lAvatar->setReady(kuser4,false);
 	lAvatar->setReady(kuser2,false);
-	if(mUtils::isSoundOn())
-		{
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("sounds/game_tomcuaca/back.mp3",true);
-	}
+
 }
 TomCuaCa::~TomCuaCa(){
     

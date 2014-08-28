@@ -451,6 +451,8 @@ void LayerBaCayAvatar::updateUsers()
 			_user->setName(_name);
 			_user->setFlag(i == 0);
 			_user->setAI(info[0]);
+            _user->setIcon(_url);
+            _user->setMoney(_money);
 			//
 			bool meIsBoss = (i == 0);
 			if(pos == kuser0 && isSpect()!=true){
@@ -468,8 +470,7 @@ void LayerBaCayAvatar::updateUsers()
                         _user->setReady(true);
                 }
             }
-                _user->setIcon(_url);
-                _user->setMoney(_money);
+            
             if(strcmp(info[1].c_str(),"0")==0)
                 _user->setReady(false);
 		}

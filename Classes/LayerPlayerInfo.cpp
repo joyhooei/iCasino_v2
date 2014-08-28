@@ -150,9 +150,18 @@ void LayerPlayerInfo::OnExtensionResponse( unsigned long long ptrContext, boost:
 		lblName->setString( param->GetUtfString("aN")->c_str() );
 		lblSex->setString( param->GetInt("aS")==0?"Giới tính: Nam":"Giới tính: Nữ" );
 		lblAMF->setString( mUtils::convertMoneyEx(*param->GetLong("amf")).c_str()  );
+        //
+        if(strcmp(GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str(),param->GetUtfString("aI")->c_str())==0)
+        {
+            btnInviteFriend->setVisible(false);
+            btnUnFriend->setVisible(false);
+            return;
+        }
+      
 		//Check is friend
 		btnUnFriend->setVisible(GameServer::getSingleton().getSmartFox()->BuddyManager()->ContainsBuddy(mFriendID));
 		btnInviteFriend->setVisible(!GameServer::getSingleton().getSmartFox()->BuddyManager()->ContainsBuddy(mFriendID));
+      
 	}
 }
 

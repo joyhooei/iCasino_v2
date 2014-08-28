@@ -454,8 +454,15 @@ void AvatarInTomCuaCa::updateUsers() {
                 _user->setVisible(true);
 				_user->setTouchEnabled(false);
 			}
-            if(info[3]=="1"&& isStartedGame()!=true)
-                _user->setReady(true);
+            
+                if(info[3]=="1"&& isStartedGame()!=true)
+                    if(i!=0)
+                        _user->setReady(true);
+            
+            
+                if(info[3]=="0")
+                _user->setReady(false);
+
 		}
 		
 	}//for

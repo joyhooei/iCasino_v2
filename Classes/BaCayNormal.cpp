@@ -437,7 +437,13 @@ void BaCayNormal::eventListUserUpdate(string listusers)
 		getButtonByTag(dTag_btnSqueez)->setTouchEnabled(true);
 		layerbutton->getButtonByTag(103)->setTouchEnabled(true);
             if(arrUser.size()>1 && layerAvatars->isStartedGame()!=true)
-			layerAvatars->playerToSpec();
+            {
+                    layerAvatars->playerToSpec();
+                    layerAvatars->btn_dungday->setVisible(true);
+                }else
+                    layerAvatars->btn_dungday->setVisible(false);
+        
+
 
 	}
     if(strcmp(listusers.c_str(), "")==0) return;
