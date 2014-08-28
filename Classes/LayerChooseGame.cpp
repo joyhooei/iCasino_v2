@@ -11,6 +11,9 @@
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/Android.h"
 #endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+#include "IOS.h"
+#endif
 LayerChooseGame::LayerChooseGame()
 {
 }
@@ -45,6 +48,9 @@ void LayerChooseGame::onButtonClick(CCObject* pSender)
     //Do anything
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
     turnOffAd();
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::turnOffAD();
 #endif
     LayerMain::getSingleton().gotoChonBanChoi(tag);
 }

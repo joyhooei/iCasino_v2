@@ -13,6 +13,9 @@
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/Android.h"
 #endif
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "IOS.h"
+#endif
 using namespace Sfs2X;
 using namespace cocos2d;
 
@@ -54,24 +57,27 @@ void LayerInviteFriends::onButtonFacebook(CCObject* pSender){
 	CCLOG("onButtonFacebook");
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 	inviteFB();
-#else
-	CCLog("Ko ho tro nen tang nay !");
 #endif
-
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::loginFB();
+#endif
 }
 void LayerInviteFriends::onButtonGmail(CCObject* pSender){
 	CCLOG("onButtonGmail");
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 	sendEmail("","Play iCasino","Play with meeee");
-#else
-	CCLog("Ko ho tro nen tang nay !");
 #endif
-
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::trySendAnEMail("Let's play iCasino with me! ", true);
+#endif
 }
 void LayerInviteFriends::onButtonSMS(CCObject* pSender){
 	CCLOG("onButtonSMS");
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 	sendSMS("","Play iCasino with me!");
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::trySendSMS();
 #else
 	CCLog("Ko ho tro nen tang nay !");
 #endif

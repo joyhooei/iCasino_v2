@@ -17,6 +17,9 @@
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/Android.h"
 #endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+#include "IOS.h"
+#endif
 #include <boost/format.hpp>
 
 using namespace cocos2d;
@@ -71,6 +74,10 @@ void LayerLogin::doLogin(){
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
     showInterAD();
     turnOnAd();
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::showInterAD();
+    IOS::turnOnAD();
 #endif
     //login zone when connect success
     boost::shared_ptr<ISFSObject> parameters (new SFSObject());

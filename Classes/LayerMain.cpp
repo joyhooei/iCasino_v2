@@ -29,6 +29,9 @@
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/Android.h"
 #endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+#include "IOS.h"
+#endif
 template<> LayerMain* SingLeton<LayerMain>::mSingleton = 0;
 
 LayerMain* LayerMain::getSingletonPtr(void)
@@ -311,6 +314,9 @@ void LayerMain::logoutAndExit(){
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
     turnOffAd();
 #endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::turnOffAD();
+#endif
     removeOldView();
     boost::shared_ptr<IRequest> request (new LogoutRequest());
     //
@@ -420,6 +426,9 @@ void LayerMain::onButtonBack(CCObject* pSender)
 {
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
     turnOnAd();
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::turnOnAD();
 #endif
     CCLOG("onButtonBack");
     closeOldView();
