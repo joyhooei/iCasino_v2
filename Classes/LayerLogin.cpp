@@ -147,7 +147,7 @@ void LayerLogin::onButtonLoginWithFacebook(CCObject* pSender){
 	loginFB();
 #endif
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
-	loginFB();
+	IOS::loginFB();
 #endif
 }
 void LayerLogin::onButtonCreateAccount(CCObject* pSender){
