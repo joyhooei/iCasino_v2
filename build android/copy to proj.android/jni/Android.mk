@@ -126,6 +126,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 ../../Classes/LayerGameChan_XuongU2.cpp \
 ../../Classes/_Number_Chat_inGame7u.cpp \
 ../../Classes/Layer_GivePocker_Chan.cpp \
+../../Classes/LayerComposeEmail.cpp \
+../../Classes/LayerEmailDetails.cpp \
 	../../../../cocos2dx/platform/android/jni/Android.cpp \
     ../../../../lib/smartfox/SmartFox.cpp \
     ../../../../lib/smartfox/Bitswarm/BBox/BBClient.cpp \
@@ -246,7 +248,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
     ../../../../lib/smartfox/Util/XMLParser/XMLParser.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
-$(LOCAL_PATH)/cocos2dx/platform/android/jni
+$(LOCAL_PATH)/../../CrossPlatform/Android
 
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static

@@ -70,6 +70,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -77,6 +78,7 @@ import android.support.v4.content.CursorLoader;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -185,6 +187,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
     	// Game3 should create stencil buffer
     	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
+		
     	return glSurfaceView;
     }
 
@@ -220,7 +223,6 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if(pic==null)
     	{
     		return;
-    		
     	}
     	try {
     		Intent cropIntent = new Intent("com.android.camera.action.CROP"); 
@@ -252,21 +254,25 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
     public static void camera()
     {
  
-    	//---timer---//
-    	//StartReConnect();
-    	//-----------//
-    	try {
-    	    //use standard intent to capture an image
-    	    Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    	    //we will handle the returned data in onActivityResult
-    	    self.startActivityForResult(captureIntent, CAMERA_CAPTURE);
-    	}
-    	catch(ActivityNotFoundException anfe){
-    	    //display an error message
-    	    String errorMessage = "Điện thoại không hỗ trợ !";
-    	    Toast toast = Toast.makeText(self, errorMessage, Toast.LENGTH_SHORT);
-    	    toast.show();
-    	}
+    	self.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+		    	    //use standard intent to capture an image
+		    	    Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		    	    //we will handle the returned data in onActivityResult
+		    	    self.startActivityForResult(captureIntent, CAMERA_CAPTURE);
+		    		}
+		    	catch(ActivityNotFoundException anfe){
+		    	    //display an error message
+		    	    String errorMessage = "Điện thoại không hỗ trợ !";
+		    	    Toast toast = Toast.makeText(self, errorMessage, Toast.LENGTH_SHORT);
+		    	    toast.show();
+		    	}				
+			}
+		});
+    	
     	
     }
     ////////////////////SMS////////////////////////
@@ -388,18 +394,18 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 					                                Toast.LENGTH_SHORT).show();
 					                        } else {
 					                            Toast.makeText(self.getApplicationContext(), 
-					                                "Hủy", 
+					                                "Hủy bỏ", 
 					                                Toast.LENGTH_SHORT).show();
 					                        }
 					                    } else {
 					                        final String requestId = values.getString("request");
 					                        if (requestId != null) {
 					                            Toast.makeText(self.getApplicationContext(), 
-					                                "Đã mời bạn bè !",  
+					                                "Đã mời !",  
 					                                Toast.LENGTH_SHORT).show();
 					                        } else {
 					                            Toast.makeText(self.getApplicationContext(), 
-					                                "Hủy yêu cầu !", 
+					                                "Hủy !", 
 					                                Toast.LENGTH_SHORT).show();
 					                        }
 					                    }   
@@ -436,7 +442,7 @@ public static void uploadAvatar(final String token)
 			  if(cropedImagePath==null)
 			  {
 				  Toast.makeText(self.getApplicationContext(), 
-                          "Chưa chọn ảnh !", 
+                          "Ch∆∞a ch·ªçn ·∫£nh !", 
                           Toast.LENGTH_SHORT).show();
 		    		 return ;
 			  }
@@ -444,7 +450,7 @@ public static void uploadAvatar(final String token)
 		    	{
 		    		 
 				  Toast.makeText(self.getApplicationContext(), 
-                          "Chưa chọn ảnh !", 
+                          "Ch∆∞a ch·ªçn ·∫£nh !", 
                           Toast.LENGTH_SHORT).show();
 		    		 return ;
 		    	}
@@ -489,7 +495,7 @@ public static void uploadAvatar(final String token)
 
 					Log.e("--Upload--","ko the upload ");
 					Toast.makeText(self.getApplicationContext(), 
-                            "Có lỗi trong quá trình upload!", 
+                            "C√≥ l·ªói trong qu√° tr√¨nh upload!", 
                             Toast.LENGTH_SHORT).show();
 				}
 			  }//else
@@ -583,7 +589,7 @@ private void createAd(){
 		
 		adView.loadAd(req);
 		
-		
+		adView.setVisibility(View.INVISIBLE);
 		
 	} catch (Exception e) {
 		// TODO: handle exception
