@@ -102,6 +102,8 @@ private:
 	bool flagChiu;
 	bool flagTraCuaToMe;
 	bool flag_MeDraw;
+	bool flag_AnBao;
+	string reason_anbao;
 	
 	int countBocCai;
 	int countDiscard;

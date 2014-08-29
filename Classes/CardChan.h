@@ -22,6 +22,7 @@ private:
 	//for chan
 	int number;
 	int suite;
+	int pos;
 public:
 	CardChan();
 	~CardChan();
@@ -37,5 +38,8 @@ public:
 	void setSuite(int sui);
 	int getNumber();
 	int getSuite();
+
+	void setPos(int _pos);
+	int getPos();
 };
 #endif /* defined(__AppDemo__CardChan__) */

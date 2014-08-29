@@ -24,6 +24,7 @@ bool CardChan::init(){
 	id_card = 0;
 	number = 0;
 	suite = 0;
+	pos = -1;
 	return true;
 }
 
@@ -66,6 +67,14 @@ int CardChan::getNumber(){
 
 int CardChan::getSuite(){
 	return suite;
+}
+
+void CardChan::setPos(int _pos){
+	pos = _pos;
+}
+
+int CardChan::getPos(){
+	return pos;
 }
 
 

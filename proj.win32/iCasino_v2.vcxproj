@@ -152,6 +152,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LayerChanGame.cpp" />
     <ClCompile Include="..\Classes\LayerChangeAvatar.cpp" />
     <ClCompile Include="..\Classes\LayerChangePassword.cpp" />
+    <ClCompile Include="..\Classes\LayerChanToast.cpp" />
     <ClCompile Include="..\Classes\LayerChargeMoney.cpp" />
     <ClCompile Include="..\Classes\LayerChatRoom.cpp" />
     <ClCompile Include="..\Classes\LayerChatWindow.cpp" />
@@ -244,6 +245,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\LayerChanGame.h" />
     <ClInclude Include="..\Classes\LayerChangeAvatar.h" />
     <ClInclude Include="..\Classes\LayerChangePassword.h" />
+    <ClInclude Include="..\Classes\LayerChanToast.h" />
     <ClInclude Include="..\Classes\LayerChargeMoney.h" />
     <ClInclude Include="..\Classes\LayerChatRoom.h" />
     <ClInclude Include="..\Classes\LayerChatWindow.h" />

@@ -277,6 +277,9 @@
     <ClCompile Include="..\Classes\LayerEmailDetails.cpp">
       <Filter>Classes\MenuLayers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LayerChanToast.cpp">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -560,6 +563,9 @@
       <Filter>Classes\MenuLayers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LayerEmailDetails.h">
+      <Filter>Classes\MenuLayers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LayerChanToast.h">
       <Filter>Classes\MenuLayers</Filter>
     </ClInclude>
   </ItemGroup>

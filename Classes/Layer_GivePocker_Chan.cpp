@@ -1,7 +1,8 @@
 ﻿#include "Layer_GivePocker_Chan.h"
 #include "Requests/ExtensionRequest.h"
-#include "_Chat_.h"
 #include "mUtils.h"
+#include "LayerChanToast.h"
+#include "AllData.h"
 
 #define WIDTH_DESIGN 800
 #define HEIGHT_DESIGN 480
@@ -374,17 +375,16 @@ void Layer_GivePocker_Chan::delayTimeEnd(){
 	B3->runAction(CCMoveTo::create(0.5, B6->getPosition()));
 	flagBocCai = true;
 
-	Chat *toast;
+	string str = "";
 	if (isPlayerBocCai)
 	{
-		toast = new Chat("Bạn hãy chọn 1 bộ bài làm nọc", -1);
+		str = "Bạn hãy chọn 1 bộ bài làm nọc";
 	}
 	else
 	{
-		toast = new Chat("Chờ " + playerBocCai + " Chọn nọc ", -1);
+		str = "Chờ " + playerBocCai + " chọn nọc ";
 	}
-	toast->setPositionY(HEIGHT_DESIGN / 2);
-	this->addChild(toast);
+	LayerChanToast::showToast(this, str, 4);
 	//Add interval đếm ngược ở đây
 	setIntervalBocNoc();
 }

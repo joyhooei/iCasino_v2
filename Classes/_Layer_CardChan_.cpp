@@ -277,6 +277,7 @@ void _Layer_CardChan_::resetAllCards(){
 		pCard->setVisible(false);
 		pCard->setTouchEnabled(false);
 		pCard->setRotation(0);
+		pCard->setPos(-1);
 		pCard->setZOrder(i);
 	}
 	_coutZorder = 0;
@@ -633,18 +634,22 @@ void _Layer_CardChan_::addCard_toDuoiTay_top(CCNode *sender, void *data){
 	switch(*f)
 	{
 	case kUserMe:
+		fcard->setPos(CARD_D_ME_top->count());
 		CARD_D_ME_top->addObject(fcard);
 		swapZorder(CARD_D_ME_bottom, CARD_D_ME_top, count_chiu_me, false);
 		break;
 	case kUserLeft:
+		fcard->setPos(CARD_D_LEFT_top->count());
 		CARD_D_LEFT_top->addObject(fcard);
 		swapZorder(CARD_D_LEFT_bottom, CARD_D_LEFT_top, count_chiu_left, false);
 		break;
 	case kUserRight:
+		fcard->setPos(CARD_D_RIGHT_top->count());
 		CARD_D_RIGHT_top->addObject(fcard);
 		swapZorder(CARD_D_RIGHT_bottom, CARD_D_RIGHT_top, count_chiu_right, false);
 		break;
 	case kUserTop:
+		fcard->setPos(CARD_D_TOP_top->count());
 		CARD_D_TOP_top->addObject(fcard);
 		swapZorder(CARD_D_TOP_bottom, CARD_D_TOP_top, count_chiu_top, false);
 		break;
@@ -838,8 +843,6 @@ void _Layer_CardChan_::action_AnCuaTren(int f_user, int t_user, string cardnu, s
 		break;
 	}
 
-
-	//animation
 	CCMoveTo *moveTo = CCMoveTo::create(0.3, ccp(toX,toY));
 	int *value = new int(f);
 	CCCallFuncND *callfun = CCCallFuncND::create(this, callfuncND_selector(_Layer_CardChan_::addCard_toDuoiTay_top),(void*)value);
@@ -1174,9 +1177,9 @@ void _Layer_CardChan_::action_ChuyenBai(int f_user, int t_user, string cardnu, s
 	if( f_user != -1 && t_user != -1)
 	{
 		if (t_user == kUserMe) {
-			action_ChuyenBai_ME(pos,cardnu,cardsu);
+			action_ChuyenBai_ME(pos, cardnu, cardsu);
 		}else{
-			action_ChuyenBai_NOTME(pos,cardnu,cardsu);
+			action_ChuyenBai_NOTME(pos, cardnu, cardsu);
 		}
 	}
 	if (f_user == -1)
@@ -1196,6 +1199,7 @@ void _Layer_CardChan_::action_ChuyenBai_ME(int pos, string cardnu, string cardsu
 			float rotate = -(pCard->getRotation());
 			int tmp = 0;
 			tmp = count_chiu_me > 0 ? count_chiu_me - 1 : 0;
+			pCard->setPos(CARD_D_ME_bottom->count() - tmp);
 			CCActionInterval *moveTo = CCMoveTo::create(0.4, ccp((CARD_D_ME_bottom->count() - tmp) * w_card + left_d_me, bottom_d_me - 25));
 			CCActionInterval *rotateTo = CCRotateBy::create(0.4, rotate);
 			CCActionInterval *scaleBy = CCScaleBy::create(0.4, w_card / w_cardhand,h_card / h_cardhand);
@@ -1231,6 +1235,7 @@ void _Layer_CardChan_::action_ChuyenBai_NOTME(int pos, string cardnu, string car
 	case kUserLeft:
 		pCard->setPosition(ccp(posCard_LeftX, posCard_LeftY));
 		tmp = count_chiu_left > 0 ? count_chiu_left - 1 : 0;
+		pCard->setPos(CARD_D_LEFT_bottom->count() - tmp);
 		toX = (float)(CARD_D_LEFT_bottom->count() - tmp) * w_card + left_d_left;
 		toY = bottom_d_left - 25;
 		f = kUserLeft;
@@ -1238,6 +1243,7 @@ void _Layer_CardChan_::action_ChuyenBai_NOTME(int pos, string cardnu, string car
 	case kUserRight:
 		pCard->setPosition(ccp(posCard_RightX, posCard_RightY));
 		tmp = count_chiu_right > 0 ? count_chiu_right - 1 : 0;
+		pCard->setPos(CARD_D_RIGHT_bottom->count() - tmp);
 		toX = left_d_right - (float)(CARD_D_RIGHT_bottom->count() - tmp) * w_card;
 		toY = bottom_d_right - 25;
 		f = kUserRight;
@@ -1245,6 +1251,7 @@ void _Layer_CardChan_::action_ChuyenBai_NOTME(int pos, string cardnu, string car
 	case kUserTop:
 		pCard->setPosition(ccp(posCard_TopX, posCard_TopY));
 		tmp = count_chiu_top > 0 ? count_chiu_top - 1 : 0;
+		pCard->setPos(CARD_D_TOP_bottom->count() - tmp);
 		toX = (float)(CARD_D_TOP_bottom->count() - tmp) * w_card + left_d_top;
 		toY = bottom_d_top - 25;
 		f = kUserTop;
@@ -1279,37 +1286,6 @@ void _Layer_CardChan_::action_ChuyenBai_Chiu(int pos, string cardnu, string card
 	float toX = -1;
 	float toY = -1;
 	int f = -1;
-
-// 	if (pos == kUserMe)
-// 	{
-// 		for(int i = 0; i < CARD_ME->count(); i++)
-// 		{
-// 			CardChan *cards = (CardChan *)CARD_ME->objectAtIndex(i);
-// 			if (cards->getNumber() == atoi(cardnu.c_str()) && cards->getSuite() == atoi(cardsu.c_str()))
-// 			{
-// 				cards->setTouchEnabled(false);
-// 				cards->setEnabled(false);
-// 				cards->setVisible(false);
-// 				CARD_ME->removeObjectAtIndex(i);
-// 				break;
-// 			}
-// 		}
-// 
-// 		int tmp = count_chiu_me / 3;
-// 		int cmp = count_chiu_me % 3;
-// 
-// 		pCard = (CardChan *)ALL_CARDS->objectAtIndex(_coutZorder);
-// 		_coutZorder++;
-// 		pCard->loadTexture(findTypeCard(cardnu, cardsu).c_str());
-// 		pCard->setSizeCard(w_card, h_card);
-// 		pCard->setPosition(ccp(400, 120));
-// 		toX = (float)(CARD_D_ME_bottom->count() - tmp * 3 - cmp + tmp) * w_card + left_d_me;
-// 		toY = (bottom_d_me) - (25 / 2) * (cmp + 1);
-// 		count_chiu_me++;
-// 		f = kUserMe;
-// 		CCLOG("tmp = %d", tmp);
-// 	}
-// 	else
 	{
 		CCLOG("Chuyen bai khi nguoi khac chiu");
 		pCard = (CardChan *)ALL_CARDS->objectAtIndex(_coutZorder);
@@ -1388,7 +1364,6 @@ void _Layer_CardChan_::action_ChuyenBai_Chiu(int pos, string cardnu, string card
 	case kUserMe:
 		CARD_D_ME_bottom->addObject(pCard);
 		this->runAction(CCSequence::create(CCDelayTime::create(1.0),CCCallFunc::create(this, callfunc_selector(_Layer_CardChan_::refreshListCard)),NULL));
-		//refreshListCard();
 		break;
 	case kUserLeft:
 		CARD_D_LEFT_bottom->addObject(pCard);
@@ -1578,31 +1553,30 @@ void _Layer_CardChan_::doDisCards(){
 void _Layer_CardChan_::doChiuCard(){
 	//EXT_EVENT_REQ_CHIU_CARD = "rqchiuc";
 	boost::shared_ptr<Room> lstRoom = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
-	int cardnumber = -1;
-	int cardsuite = -1;
-	for(int i = 0; i < (int)CARD_ME->count(); i++)
+	int count = 0;
+	for(int i = 0; i < CARD_ME->count(); i++)
 	{
 		CardChan *pCard = (CardChan*)CARD_ME->objectAtIndex(i);
 		if (pCard->getFlag())
 		{
-			cardnumber = pCard->getNumber();
-			cardsuite = pCard->getSuite();
+			count ++;
+			boost::shared_ptr<ISFSObject> params (new SFSObject());
+			params->PutByte("cardnu", pCard->getNumber());
+			params->PutByte("cardsu", pCard->getSuite());
+			boost::shared_ptr<IRequest> request (new ExtensionRequest("rqchiuc", params, lstRoom));
+			GameServer::getSingleton().getSmartFox()->Send(request);
 			break;
 		}
 	}
-
-	if (cardnumber != -1 && cardsuite != -1)
+	if (count == 0)
 	{
-		boost::shared_ptr<ISFSObject> params (new SFSObject());
-		params->PutByte("cardnu", cardnumber);
-		params->PutByte("cardsu", cardsuite);
-		boost::shared_ptr<IRequest> request (new ExtensionRequest("rqchiuc",params,lstRoom));
-		GameServer::getSingleton().getSmartFox()->Send(request);
-	}
-	else{
 		Chat *toast = new Chat("Chọn 1 lá bài để chíu", -1);
 		toast->setPositionY(HEIGHT_DESIGN / 2 - 60);
 		this->addChild(toast);
+	}
+	else
+	{
+		count == 0;
 	}
 }
 
@@ -1638,7 +1612,6 @@ void _Layer_CardChan_::doDuoiCard(){
 	boost::shared_ptr<Room> lstRooms = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
 	boost::shared_ptr<IRequest> request (new ExtensionRequest("rqduoic",params,lstRooms));
 	GameServer::getSingleton().getSmartFox()->Send(request);
-	//refreshListCard();
 }
 
 void _Layer_CardChan_::doViewNoc(string listnoc){
