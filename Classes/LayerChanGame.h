@@ -144,6 +144,7 @@ public:
 	void notificationCallBack(bool isOK, int tag);
 
 	int getPosUserByName(string uid,string _list_user);
+	string getNamePlayer(string uid);
 	void updateUser(string list);
 	void updateUser2Player(vector<string> arrUser);
 

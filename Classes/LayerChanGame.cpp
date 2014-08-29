@@ -802,6 +802,21 @@ int LayerChanGame::getPosUserByName(string uid,string _list_user){
 	return -1;
 }
 
+string LayerChanGame::getNamePlayer(string uid){
+	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	if (room == NULL)
+	{
+		return uid;
+	}
+	boost::shared_ptr<User> user = room->GetUserByName(uid);
+	if (user == NULL)
+	{
+		return uid;
+	}
+	boost::shared_ptr<string> name = user->GetVariable("aN")->GetStringValue();
+	return name->c_str();
+}
+
 //Update list user
 void LayerChanGame::updateUser(string list){
 	//31:dautv:1;27:dautv3:0
@@ -1354,7 +1369,7 @@ void LayerChanGame::error_AnBao(long rscode, string uid){
 
 	if (strcmp(uid.c_str(), GameServer::getSingleton().getSmartFox()->MySelf()->Name()->c_str()) != 0)
 	{
-		LayerChanToast::showToast(this, "" + uid + " bị ngồi im do " + str, 4);
+		LayerChanToast::showToast(this, "" + getNamePlayer(uid) + " bị ngồi im do " + str, 4);
 
 		int posAnBao = getPosUserByName(uid.c_str(), _list_user);
 		if (posAnBao == -1)
@@ -1413,7 +1428,7 @@ void LayerChanGame::whenConguoi_ChoU(string uid){
 		}
 	}else{
 
-		LayerChanToast::showToast(this, "" + uid + " Đang chờ Ù, Đợi nhà này sướng", 4);
+		LayerChanToast::showToast(this, "" + getNamePlayer(uid) + " Đang chờ Ù, Đợi nhà này sướng", 4);
 
 		//start timer của người chơi chờ Ù
 		if (countUser == 2)
@@ -1456,7 +1471,7 @@ void LayerChanGame::whenConguoi_Chiu(string uid){
 	{
 		if(strcmp(myName.c_str(), currentPlayer.c_str()) == 0)
 		{
-			LayerChanToast::showToast(this, "test, " + uid + " chíu, chờ xíu", 4);
+			LayerChanToast::showToast(this, "test, " + getNamePlayer(uid) + " chíu, chờ xíu", 4);
 		}
 	}
 }
@@ -1586,7 +1601,7 @@ void LayerChanGame::displayResuitGame(CCObject *data){
 
 void LayerChanGame::waitPlayer_ReqU(string uid, string lc){
 
-	LayerChanToast::showToast(this, "" + uid + " Đã Ù lá bài này, Đợi xem ai báo Ù nữa hay không !", 4);
+	LayerChanToast::showToast(this, "" + getNamePlayer(uid) + " Đã Ù lá bài này, Đợi xem ai báo Ù nữa hay không !", 4);
 
 	string strRe = uid + "|" + lc;
 

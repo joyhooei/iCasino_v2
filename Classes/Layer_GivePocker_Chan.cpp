@@ -382,7 +382,7 @@ void Layer_GivePocker_Chan::delayTimeEnd(){
 	}
 	else
 	{
-		str = "Chờ " + playerBocCai + " chọn nọc ";
+		str = "Chờ " + getNamePlayer(playerBocCai) + " chọn nọc ";
 	}
 	LayerChanToast::showToast(this, str, 4);
 	//Add interval đếm ngược ở đây
@@ -796,6 +796,22 @@ int Layer_GivePocker_Chan::getPosUserByName(string uid,string _list_user){
 		}
 	}
 	return -1;
+}
+
+string Layer_GivePocker_Chan::getNamePlayer(string uid){
+	boost::shared_ptr<Room> room = GameServer::getSingleton().getSmartFox()->LastJoinedRoom();
+	if (room == NULL)
+	{
+		return uid;
+	}
+
+	boost::shared_ptr<User> user = room->GetUserByName(uid);
+	if (user == NULL)
+	{
+		return uid;
+	}
+	boost::shared_ptr<string> name = user->GetVariable("aN")->GetStringValue();
+	return name->c_str();
 }
 
 void Layer_GivePocker_Chan::killLayer(){

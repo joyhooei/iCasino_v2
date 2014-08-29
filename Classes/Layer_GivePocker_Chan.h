@@ -56,6 +56,8 @@ public:
 	int getPosUserByName(string uid,string _list_user);
 	void setListusers(string listusers);
 
+	string getNamePlayer(string uid);
+
 	vector<int> sortArrayTag(vector<int> _arr, int position);
 	void chiaBai(vector<int> toPos, vector<int> allTag);
 	void finishGive(UIImageView *img, int tpos);
