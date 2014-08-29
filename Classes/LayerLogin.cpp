@@ -15,7 +15,7 @@
 #include "_Chat_.h"
 #include "mUtils.h"
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-#include "platform/android/jni/Android.h"
+#include "../CrossPlatform/Android/Android.h"
 #endif
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
 #include "IOS.h"
@@ -71,14 +71,7 @@ void LayerLogin::saveInfo(){
 }
 
 void LayerLogin::doLogin(){
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-    showInterAD();
-    turnOnAd();
-#endif
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
-    IOS::showInterAD();
-    IOS::turnOnAD();
-#endif
+
     //login zone when connect success
     boost::shared_ptr<ISFSObject> parameters (new SFSObject());
 	//add the params
@@ -152,8 +145,9 @@ void LayerLogin::onButtonLoginWithFacebook(CCObject* pSender){
 //     }
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 	loginFB();
-#else
-	CCLog("Ko ho tro nen tang nay !");
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+	loginFB();
 #endif
 }
 void LayerLogin::onButtonCreateAccount(CCObject* pSender){

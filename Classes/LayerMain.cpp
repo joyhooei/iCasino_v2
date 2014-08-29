@@ -27,7 +27,7 @@
 #include "Requests/LogoutRequest.h"
 #include "mUtils.h"
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-#include "platform/android/jni/Android.h"
+#include "../CrossPlatform/Android/Android.h"
 #endif
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
 #include "IOS.h"
@@ -131,6 +131,12 @@ void LayerMain::gotoServices(){
 }
 
 void LayerMain::gotoChooseGame(){
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+    showInterAD();
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::showInterAD();
+#endif
     if( currViewTag == tag_ChooseGame )
         return;
     removeOldView();
@@ -311,12 +317,7 @@ void LayerMain::gotoRank(){
 }
 
 void LayerMain::logoutAndExit(){
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-    turnOffAd();
-#endif
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
-    IOS::turnOffAD();
-#endif
+
     removeOldView();
     boost::shared_ptr<IRequest> request (new LogoutRequest());
     //
@@ -347,9 +348,6 @@ void LayerMain::closeOldView(){
         case tag_Service:
             SceneManager::getSingleton().gotoLogin();
             currViewTag = tag_ChatRoom;
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-            turnOffAd();
-#endif
             CCLOG("Logout");
             GameServer::getSingleton().getSmartFox()->Send(request);
             break;
@@ -424,12 +422,7 @@ void LayerMain::onButtonSettings(CCObject* pSender)
 }
 void LayerMain::onButtonBack(CCObject* pSender)
 {
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-    turnOnAd();
-#endif
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
-    IOS::turnOnAD();
-#endif
+
     CCLOG("onButtonBack");
     closeOldView();
 }

@@ -441,6 +441,8 @@ void TomCuaCa::whenGameStart(){
 	btnReady->setVisible(false);
 	btnUnReady->setTouchEnabled(false);
 	btnUnReady->setVisible(false);
+    lAvatar->setUnReadyAllUser();
+
     
 
 	
@@ -957,8 +959,7 @@ void TomCuaCa::hienOketqua()
 }
 void TomCuaCa::onExit()
 {
-
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic("sounds/game_tomcuaca/back.mp3");
+    
 	GameServer::getSingleton().removeListeners(this);
 	this->removeAllComponents();
 	
@@ -991,7 +992,7 @@ void TomCuaCa::OnSmartFoxUserExitRoom(unsigned long long ptrContext, boost::shar
 		lButton->eventTouchBtnBack(NULL, TOUCH_EVENT_ENDED);
 		CCLog("im exit");
 	}
-	updateUser(_list_user);
+	//updateUser(_list_user);
 }
 
 void TomCuaCa::OnSmartFoxUserVariableUpdate(unsigned long long ptrContext, boost::shared_ptr<BaseEvent> ptrEvent) {

@@ -15,7 +15,7 @@
 #include "LayerInviteFriends.h"
 #include "LayerInviteFriendsFacebook.h"
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-#include "platform/android/jni/Android.h"
+#include "../CrossPlatform/Android/Android.h"
 #endif
 #include "SceneManager.h"
 

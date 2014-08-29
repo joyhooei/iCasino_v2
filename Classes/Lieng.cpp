@@ -508,8 +508,6 @@ void Lieng::action_UpdateListUser(string lsUser)
             layerAvatars->btn_dungday->setVisible(true);
         }else
             layerAvatars->btn_dungday->setVisible(false);
-        
-
 
 	}
 	for (int i = 0; i < list.size(); i++)
@@ -657,8 +655,9 @@ void Lieng::whenGameStart(){
 	getButtonByTag(dTag_btnReady)->setEnabled(false);
 	getButtonByTag(dTag_btnUnready)->setEnabled(false);
 	flag_Complete_Click = false;
-	layerAvatars->btn_vaochoi->setTouchEnabled(false);
+	layerAvatars->btn_vaochoi->setEnabled(false);
 	layerAvatars->btn_dungday->setEnabled(false);
+
 	layerAvatars->setUnReadyAllUser();
 }
 

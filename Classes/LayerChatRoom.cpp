@@ -18,7 +18,12 @@
 #include "SceneManager.h"
 #include "Requests/LeaveRoomRequest.h"
 #include "Requests/PublicMessageRequest.h"
-
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+#include "../CrossPlatform/Android/Android.h"
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+#include "IOS.h"
+#endif
 #include "LayerChatWindow.h"
 
 using namespace cocos2d;
@@ -27,6 +32,12 @@ using namespace cocos2d;
 
 LayerChatRoom::LayerChatRoom()
 {
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+    turnOnAd();
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::turnOnAD();
+#endif
     nodeListContents = NULL;
     tblListContents = NULL;
     
@@ -46,6 +57,12 @@ LayerChatRoom::LayerChatRoom()
 
 LayerChatRoom::~LayerChatRoom()
 {
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+    turnOffAd();
+#endif
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
+    IOS::turnOffAD();
+#endif
     GameServer::getSingleton().removeListeners(this);
 	// leave room
 	boost::shared_ptr<IRequest> request (new LeaveRoomRequest());

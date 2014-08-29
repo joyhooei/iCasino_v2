@@ -15,6 +15,7 @@ public:
     static bool tryIsInternetConnection();
     static void trySendSMS();
     static void tryOpenImage();
+    static void inviteFB();
 
 };
 

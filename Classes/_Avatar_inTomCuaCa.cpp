@@ -460,7 +460,7 @@ void AvatarInTomCuaCa::updateUsers() {
                         _user->setReady(true);
             
             
-                if(info[3]=="0")
+                if(info[3]=="0" || i==0)
                 _user->setReady(false);
 
 		}

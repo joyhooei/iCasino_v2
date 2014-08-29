@@ -32,6 +32,11 @@ void IOS::tryOpenImage()
 void IOS::loginFB()
 {
     MyFacebook *fb = [MyFacebook alloc];
+    [fb loginFB];
+}
+void IOS::inviteFB()
+{
+    MyFacebook *fb = [MyFacebook alloc];
     [fb inviteFriends];
 }
 void IOS::turnOnAD()

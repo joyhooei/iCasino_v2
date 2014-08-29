@@ -9,7 +9,7 @@
 #include "LayerChooseGame.h"
 #include "LayerMain.h"
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-#include "platform/android/jni/Android.h"
+#include "../CrossPlatform/Android/Android.h"
 #endif
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
 #include "IOS.h"
@@ -46,12 +46,7 @@ void LayerChooseGame::onButtonClick(CCObject* pSender)
     int tag = mnu->getTag();
     CCLOG("tag: %d", tag);
     //Do anything
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
-    turnOffAd();
-#endif
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
-    IOS::turnOffAD();
-#endif
+
     LayerMain::getSingleton().gotoChonBanChoi(tag);
 }
 
