@@ -670,12 +670,12 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
 		if (GameServer::getSingleton().getSmartFox()->MySelf()->IsSpectator())
 		{
 			if(count_player < 5){
-				getButtonByTag(dTag_btnJoinGame)->setEnabled(true);
+				//getButtonByTag(dTag_btnJoinGame)->setEnabled(true);
 			}
 		}
 		else{
 			getButtonByTag(dTag_btnReady)->setEnabled(true);
-			getButtonByTag(dTag_btnStandUp)->setEnabled(true);
+			//getButtonByTag(dTag_btnStandUp)->setEnabled(true);
 		}
     }
 
