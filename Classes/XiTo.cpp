@@ -667,16 +667,17 @@ void XiTo::OnExtensionResponse(unsigned long long ptrContext, boost::shared_ptr<
     else if(strcmp("endntf", cmd->c_str()) == 0){
         //whenEndGame();
 		setVisibleButtonPlay();
-		if (GameServer::getSingleton().getSmartFox()->MySelf()->IsSpectator())
-		{
-			if(count_player < 5){
-				//getButtonByTag(dTag_btnJoinGame)->setEnabled(true);
-			}
-		}
-		else{
-			getButtonByTag(dTag_btnReady)->setEnabled(true);
-			//getButtonByTag(dTag_btnStandUp)->setEnabled(true);
-		}
+		getButtonByTag(dTag_btnReady)->setEnabled(true);
+// 		if (GameServer::getSingleton().getSmartFox()->MySelf()->IsSpectator())
+// 		{
+// 			if(count_player < 5){
+// 				//getButtonByTag(dTag_btnJoinGame)->setEnabled(true);
+// 			}
+// 		}
+// 		else{
+// 			getButtonByTag(dTag_btnReady)->setEnabled(true);
+// 			//getButtonByTag(dTag_btnStandUp)->setEnabled(true);
+// 		}
     }
 
 	else if (strcmp("expmntf", cmd->c_str()) ==  0)
