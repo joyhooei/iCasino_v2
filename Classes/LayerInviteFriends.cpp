@@ -59,7 +59,7 @@ void LayerInviteFriends::onButtonFacebook(CCObject* pSender){
 	inviteFB();
 #endif
 #if(CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
-    IOS::loginFB();
+    IOS::inviteFB();
 #endif
 }
 void LayerInviteFriends::onButtonGmail(CCObject* pSender){
