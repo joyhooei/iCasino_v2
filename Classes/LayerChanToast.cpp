@@ -70,10 +70,8 @@ LayerChanToast::LayerChanToast(string message){
 }
 
 void LayerChanToast::dissmiss(CCObject *sender){
-	
 	LayerChanToast *pToast = (LayerChanToast*)sender;
 	int index = pToast->getTag();
-	CCLog("Tag = %d", index);
 	arrObject.removeObjectAtIndex(index);
 	pToast->removeFromParentAndCleanup(true);
 
@@ -83,12 +81,12 @@ void LayerChanToast::dissmiss(CCObject *sender){
 		toast->setPositionY(HEIGHT_DESIGN / 3.5 - 26 * i);
 		toast->setTag(i);
 	}
-	if (count == 1)
+	if (count == 0)
 	{
 		curentString = "";
 	}
 	count--;
-	
+	CCLog("count = %d",count);
 }
 
 void LayerChanToast::showMessage(CCNode *target){

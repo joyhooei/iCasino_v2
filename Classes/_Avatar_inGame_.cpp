@@ -659,4 +659,5 @@ void LayerAvatarInGame::stopAllBlinkAvatar(){
 	this->getUserByPos(kUserLeft)->removeChildByTag(20);
 	this->getUserByPos(kUserRight)->removeChildByTag(20);
 	this->getUserByPos(kUserTop)->removeChildByTag(20);
+	this->getUserByPos(kUserBot)->removeChildByTag(20);
 }

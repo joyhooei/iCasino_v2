@@ -79,6 +79,8 @@ bool _Layer_CardChan_::init()
 	this->setPosition(ccp(0, 0));
 	this->setTouchEnabled(false);
 
+	isGuess = false;
+
 	this->sizeScreen = CCDirector::sharedDirector()->getVisibleSize();
 	float scaleX = sizeScreen.width / WIDTH_DESIGN;
 	float scaleY = sizeScreen.height / HEIGHT_DESIGN;
@@ -87,14 +89,6 @@ bool _Layer_CardChan_::init()
 
 	startLeft = (sizeScreen.width - WIDTH_DESIGN) / 2;
 	startTop = (sizeScreen.height - HEIGHT_DESIGN) / 2;
-
-	//Drag drop cards of winner user !
-	pos_Left = (WIDTH_DESIGN - (h_cardhand / 3 + h_card * 2 + 10)) / 2;
-	pos_Right = WIDTH_DESIGN - (WIDTH_DESIGN - (h_cardhand / 3 + h_card * 2 + 10)) / 2;
-	pos_Bottom = HEIGHT_DESIGN / 2 + 50 - (h_card + 5) / 2;
-	pos_Top = HEIGHT_DESIGN / 2 + 55 + h_card;
-	flag_DragDrop1 = false;
-	flag_DragDrop1 = false;
 
 	// Cards
 	uLayer = UILayer::create();
@@ -159,14 +153,27 @@ bool _Layer_CardChan_::init()
 	posCard_LeftX = 10 + w_card / 2;
 	posCard_RightX = WIDTH_DESIGN - 10 - w_card / 2;
 	posCard_TopX = WIDTH_DESIGN / 2;
+	posCard_BottomX = WIDTH_DESIGN / 2;
 
 	posCard_LeftY = HEIGHT_DESIGN / 2 - h_card / 2;
 	posCard_RightY = posCard_LeftY;
 	posCard_TopY = HEIGHT_DESIGN - h_card - 20;
+	posCard_BottomY = 30;
 
 	//Khoảng cách lá bài cửa trì
 	kc_me = kc_left = kc_right = kc_top = w_card;
 
+	//Drag drop cards of winner user !
+	pos_Left = WIDTH_DESIGN / 2 - h_card - 20;
+	pos_Right = WIDTH_DESIGN / 2 + h_card + 20;
+	pos_Bottom = HEIGHT_DESIGN / 2 + 50 - h_card;
+	pos_Top = HEIGHT_DESIGN / 2 + 55 + h_card;
+	kc_TB = pos_Top - pos_Bottom;
+	kc_RL = pos_Right - pos_Left;
+	flag_DragDrop1 = false;
+	flag_DragDrop1 = false;
+
+	//All Cards
 	ALL_CARDS = CCArray::create();
 	ALL_CARDS->retain();
 	createAllCards();
@@ -253,6 +260,34 @@ bool _Layer_CardChan_::init()
 	return true;
 }
 
+void _Layer_CardChan_::setIsGuess(bool _guess){
+	this->isGuess = _guess;
+}
+
+bool _Layer_CardChan_::checkListCardsUser(int pos){
+	switch(pos){
+	case kUserBot:
+		return checkCardInArray(CARD_C_ME, CARD_D_ME_bottom, CARD_D_ME_top);
+	case kUserLeft:
+		return checkCardInArray(CARD_C_LEFT, CARD_D_LEFT_bottom, CARD_D_LEFT_top);
+	case kUserRight:
+		return checkCardInArray(CARD_C_RIGHT, CARD_D_RIGHT_bottom, CARD_D_RIGHT_top);
+	case kUserTop:
+		return checkCardInArray(CARD_C_TOP, CARD_D_TOP_bottom, CARD_D_TOP_top);
+	default:
+		return false;
+	}
+	return false;
+}
+
+bool _Layer_CardChan_::checkCardInArray(CCArray *P1, CCArray *P2, CCArray *P3){
+	if (P1->count() > 0 || P2->count() > 0 || P3->count() > 0)
+	{
+		return true;
+	}
+	return false;
+}
+
 void _Layer_CardChan_::createAllCards(){
 
 	for(int i = 0; i < 130; i++)
@@ -269,6 +304,7 @@ void _Layer_CardChan_::createAllCards(){
 }
 
 void _Layer_CardChan_::resetAllCards(){
+	this->setTouchEnabled(false);
 	CCLOG("ALL_CARD %d",ALL_CARDS->count());
 	for(int i = 0; i < (int)ALL_CARDS->count(); i++)
 	{
@@ -318,6 +354,34 @@ void _Layer_CardChan_::resetAllCards(){
 	}
 	countNoc->setText("");
 	dianoc->setEnabled(false);
+}
+
+void _Layer_CardChan_::createOrRestoreListCards(int pos, string listCards){
+	if (!checkListCardsUser(pos))
+	{
+		switch(pos)
+		{
+			case kUserTop:
+				createCards4Guess(CARD_C_TOP, CARD_D_TOP_top, CARD_D_TOP_bottom, listCards);
+				break;
+			case kUserBot:
+				createCards4Guess(CARD_C_ME, CARD_D_ME_top, CARD_D_ME_bottom, listCards);
+				break;
+			case kUserLeft:
+				createCards4Guess(CARD_C_LEFT, CARD_D_LEFT_top, CARD_D_LEFT_bottom, listCards);
+				break;
+			case kUserRight:
+				createCards4Guess(CARD_C_RIGHT, CARD_D_RIGHT_top, CARD_D_RIGHT_bottom, listCards);
+				break;
+		}
+	}
+}
+
+void _Layer_CardChan_::createCards4Guess(CCArray *P_Chi, CCArray *P_D_Top, CCArray *P_D_Bottom, string listCards){
+	vector<string> arrList = mUtils::splitString(listCards, '/');
+	for (int i = 0; i < arrList.size(); i++)
+	{
+	}
 }
 
 void _Layer_CardChan_::setMyListCards(string listCards){
@@ -613,6 +677,10 @@ void _Layer_CardChan_::addCard_toCuaTri(CCNode* sender, void* data){
 		CARD_C_ME->addObject(pCard);
 		resortCard_CuaTri_Alluser(kUserMe);
 		break;
+	case kUserBot:
+		CARD_C_ME->addObject(pCard);
+		resortCard_CuaTri_Alluser(kUserMe);
+		break;
 	case kUserLeft:
 		CARD_C_LEFT->addObject(pCard);
 		resortCard_CuaTri_Alluser(kUserLeft);
@@ -774,10 +842,14 @@ void _Layer_CardChan_::action_BocNoc(int t_pos,string cardnu, string cardsu){
 
 	switch (pos) {
 	case kUserMe:
-		CCLOG("Me Draw");
 		toX = left_chi_me + (float)CARD_C_ME->count() * kc_me;
 		toY = bottom_chi_me;
 		f = kUserMe;
+		break;
+	case kUserBot:
+		toX = left_chi_me + (float)CARD_C_ME->count() * kc_me;
+		toY = bottom_chi_me;
+		f = kUserBot;
 		break;
 	case kUserLeft:
 		toX = left_chi_left + (float)CARD_C_LEFT->count() * kc_left;
@@ -820,6 +892,11 @@ void _Layer_CardChan_::action_AnCuaTren(int f_user, int t_user, string cardnu, s
 
 	switch (t_user) {
 	case kUserMe:
+		toX = (float)CARD_D_ME_top->count() * w_card + left_d_me;
+		toY = bottom_d_me;
+		f = kUserMe;
+		break;
+	case kUserBot:
 		toX = (float)CARD_D_ME_top->count() * w_card + left_d_me;
 		toY = bottom_d_me;
 		f = kUserMe;
@@ -874,6 +951,11 @@ void _Layer_CardChan_::action_ChiuBai(int f_user, int t_user, string cardnu, str
 	switch(tpos)
 	{
 	case kUserMe:
+		toX = (float)CARD_D_ME_top->count() * w_card + left_d_me;
+		toY = bottom_d_me;
+		f = kUserMe;
+		break;
+	case kUserBot:
 		toX = (float)CARD_D_ME_top->count() * w_card + left_d_me;
 		toY = bottom_d_me;
 		f = kUserMe;
@@ -1003,8 +1085,11 @@ void _Layer_CardChan_::action_TraCua_NOTME(int fpos, int tpos, string cardnu, st
 	pCard->setSizeCard(w_card, h_card);
 	pCard->setTouchEnabled(false);
 
-	//Xac dinh vi tri
+	//Xác định vị trí lá bài được đánh ra
 	switch (fpos) {
+	case kUserBot:
+		pCard->setPosition(ccp(posCard_BottomX, posCard_BottomY));
+		break;
 	case kUserLeft:
 		pCard->setPosition(ccp(posCard_LeftX, posCard_LeftY));
 		break;
@@ -1027,6 +1112,11 @@ void _Layer_CardChan_::action_TraCua_NOTME(int fpos, int tpos, string cardnu, st
 
 	switch(tpos){
 	case kUserMe:
+		toX = (float)CARD_C_ME->count() * kc_me + left_chi_me;
+		toY = bottom_chi_me;
+		f = kUserMe;
+		break;
+	case kUserBot:
 		toX = (float)CARD_C_ME->count() * kc_me + left_chi_me;
 		toY = bottom_chi_me;
 		f = kUserMe;
@@ -1064,8 +1154,7 @@ void _Layer_CardChan_::action_DanhBai(int f_user, string cardnu, string cardsu){
 		action_DanhBai_ME(cardnu, cardsu);
 	}
 	else{
-		int pos = f_user;
-		action_DanhBai_NOTME(pos, cardnu, cardsu);
+		action_DanhBai_NOTME(f_user, cardnu, cardsu);
 	}
 }
 
@@ -1138,6 +1227,12 @@ void _Layer_CardChan_::action_DanhBai_NOTME(int pos,string cardnu,string cardsu)
 	float toY = -1;
 	int f = -1;
 	switch (pos) {
+	case kUserBot:
+		pCard->setPosition(ccp(posCard_BottomX, posCard_BottomY));
+		toX = (float)CARD_C_ME->count() * kc_me + left_chi_me;
+		toY = bottom_chi_me;
+		f = kUserMe;
+		break;
 	case kUserLeft:
 		pCard->setPosition(ccp(posCard_LeftX, posCard_LeftY));
 		toX = (float)CARD_C_LEFT->count() * kc_left + left_chi_left;
@@ -1232,6 +1327,16 @@ void _Layer_CardChan_::action_ChuyenBai_NOTME(int pos, string cardnu, string car
 	int tmp = 0;
 
 	switch (pos) {
+	case kUserBot:
+		pCard->setPosition(ccp(posCard_BottomX, posCard_BottomY));
+		tmp = count_chiu_me > 0 ? count_chiu_me - 1 : 0;
+		pCard->setPos(CARD_D_ME_bottom->count() - tmp);
+		toX = (CARD_D_ME_bottom->count() - tmp) * w_card + left_d_me;
+		CCLog("D_ME_Bottom count = %d", CARD_D_ME_bottom->count());
+		CCLog("Jumpe here bottom toX = %f", toX);
+		toY = bottom_d_me - 25;
+		f = kUserMe;
+		break;
 	case kUserLeft:
 		pCard->setPosition(ccp(posCard_LeftX, posCard_LeftY));
 		tmp = count_chiu_left > 0 ? count_chiu_left - 1 : 0;
@@ -1265,6 +1370,9 @@ void _Layer_CardChan_::action_ChuyenBai_NOTME(int pos, string cardnu, string car
 	CCActionInterval *moveTo = CCMoveTo::create(0.4, ccp(toX,toY));
 	pCard->runAction(moveTo);
 	switch (f) {
+	case kUserMe:
+		CARD_D_ME_bottom->addObject(pCard);
+		break;
 	case kUserLeft:
 		CARD_D_LEFT_bottom->addObject(pCard);
 		break;
@@ -1316,6 +1424,15 @@ void _Layer_CardChan_::action_ChuyenBai_Chiu(int pos, string cardnu, string card
 			f = kUserMe;
 			break;
 
+		case kUserBot:
+			tmp = count_chiu_me / 3;
+			cmp = count_chiu_me % 3;
+			pCard->setPosition(ccp(posCard_BottomX, posCard_BottomY));
+			toX = (float)(CARD_D_ME_bottom->count() - tmp * 3 - cmp + tmp) * w_card + left_d_me;
+			toY = (bottom_d_me) - (25 / 2) * (cmp + 1);
+			count_chiu_me++;
+			f = kUserMe;
+			break;
 		case kUserLeft:
 			tmp = count_chiu_left / 3;
 			cmp = count_chiu_left % 3;
@@ -1418,9 +1535,17 @@ void _Layer_CardChan_::action_An_U(int f_user, int t_user, string cardnu, string
 }
 
 CardChan* _Layer_CardChan_::getCardFromPos_take(int pos){
+	if (isGuess == true)
+	{
+		//return;
+	}
 	CardChan* fcard = NULL;
 	switch (pos) {
 	case kUserMe:
+		fcard = (CardChan*)CARD_C_ME->lastObject();
+		CARD_C_ME->removeLastObject();
+		break;
+	case kUserBot:
 		fcard = (CardChan*)CARD_C_ME->lastObject();
 		CARD_C_ME->removeLastObject();
 		break;
@@ -1470,7 +1595,7 @@ void _Layer_CardChan_::scaleCardsHand_whenU(){
 }
 
 void _Layer_CardChan_::setCardsResuilt(string listCards){
-
+	this->setTouchEnabled(true);
 	dianoc->setEnabled(false);
 
 	vector<string> list = mUtils::splitString(listCards, ';');
@@ -1747,44 +1872,45 @@ float   _Layer_CardChan_::getDisPoint(CCPoint p1, CCPoint p2) {
 }
 
 void _Layer_CardChan_::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent) {
+	CCSetIterator iterator = pTouches->begin();
+	CCTouch *touch;
+	touch = (CCTouch*)(*iterator);
+	CCPoint tap;
+	tap = convertPoint(touch->getLocation());
+	disTouchBegan.setSize(0,0);
 
-// 	CCSetIterator iterator = pTouches->begin();
-// 	CCTouch *touch;
-// 	touch = (CCTouch*)(*iterator);
-// 	CCPoint tap;
-// 	tap = convertPoint(touch->getLocation());
-// 	this->pointTouchBegan = tap;
-// 	disTouchBegan.setSize(0,0);
-// 	if(tap.x > pos_Left && tap.x < pos_Right && tap.y > pos_Bottom && tap.y < pos_Top && flag_DragDrop1){
-// 		CCLOG("Tap tap tap !");
-// 		flag_DragDrop2 = true;
-// 		disTouchBegan.setSize(tap.x - pos_Left, tap.y - pos_Bottom);
-// 	}
+	if (tap.x > pos_Left && tap.x < pos_Right && tap.y > pos_Bottom && tap.y < pos_Top)
+	{
+		flag_DragDrop2 = true;
+		disTouchBegan.setSize(tap.x - pos_Left, tap.y - pos_Bottom);
+	}
 }
 
 void _Layer_CardChan_::ccTouchesMoved(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent){
-// 	CCSetIterator iterator;
-// 	CCTouch *touch;
-// 	CCPoint tap;
-// 
-// 	iterator = pTouches->begin();
-// 	touch = (CCTouch*)(*iterator);
-// 	tap = convertPoint(touch->getLocation());
-// 	if (flag_DragDrop2)
-// 	{
-// // 		tap.x -= disTouchBegan.width;
-// // 		tap.y -= disTouchBegan.height;
-// 		layerCardResult->setPosition(ccp(tap.x - WIDTH_DESIGN / 2 - disTouchBegan.width, tap.y - HEIGHT_DESIGN / 2 - disTouchBegan.height));
-// 		pos_Left = tap.x - (h_cardhand / 6 + h_card + 5);
-// 		pos_Right = tap.x + (h_cardhand / 6 + h_card + 5);
-// 		pos_Bottom = tap.y- (h_card + 5) / 2;
-// 		pos_Top = tap.y + h_card + 5;
-// 	}
+	CCSetIterator iterator;
+	CCTouch *touch;
+	CCPoint tap;
+
+	iterator = pTouches->begin();
+	touch = (CCTouch*)(*iterator);
+	tap = convertPoint(touch->getLocation());
+	if (flag_DragDrop2 == true)
+	{
+		layerCardResult->setPosition(ccp(tap.x - pos_Left - disTouchBegan.width, tap.y - pos_Bottom - disTouchBegan.height));
+	}
 }
 
 void _Layer_CardChan_::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
 {
-	flag_DragDrop2 = false;
+	if (flag_DragDrop2 == true)
+	{
+		pos_Left = WIDTH_DESIGN / 2 - h_card - 20 + layerCardResult->getPositionX();
+		pos_Right = WIDTH_DESIGN / 2 + h_card + 20 + layerCardResult->getPositionX();
+		pos_Bottom = HEIGHT_DESIGN / 2 + 50 - h_card + layerCardResult->getPositionY();
+		pos_Top = HEIGHT_DESIGN / 2 + 55 + h_card + layerCardResult->getPositionY(); 
+
+		flag_DragDrop2 = false;
+	}
 }
 
 void _Layer_CardChan_::btn_XemNoc_click(CCObject *sender, TouchEventType type){

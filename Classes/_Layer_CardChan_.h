@@ -28,7 +28,7 @@ enum{
 class _Layer_CardChan_ : public CCLayer
 {
 private:
-
+	bool isGuess;
 	float w_cardhand;
 	float h_cardhand;
 	float w_card;
@@ -81,10 +81,12 @@ private:
 	float posCard_LeftX;
 	float posCard_RightX;
 	float posCard_TopX;
+	float posCard_BottomX;
 
 	float posCard_LeftY;
 	float posCard_RightY;
 	float posCard_TopY;
+	float posCard_BottomY;
 
 	CCArray *CARD_ME;
 
@@ -128,6 +130,8 @@ private:
 	float pos_Top;
 	bool flag_DragDrop1;
 	bool flag_DragDrop2;
+	float kc_RL;
+	float kc_TB;
 
 public:
 	_Layer_CardChan_();
@@ -136,8 +140,16 @@ public:
 
 	CREATE_FUNC(_Layer_CardChan_);
 
+	void setIsGuess(bool _guess);
+	bool checkListCardsUser(int pos);
+	bool checkCardInArray(CCArray *P1, CCArray *P2, CCArray *P3);
+
+
 	void createAllCards();
 	void resetAllCards();
+
+	void createOrRestoreListCards(int pos, string listCards);
+	void createCards4Guess(CCArray *P_Chi, CCArray *P_D_Top, CCArray *P_D_Bottom, string listCards);
 
 	void setMyListCards(string listCards);
 	void rotateListCards(CCArray *P);

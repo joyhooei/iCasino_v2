@@ -104,6 +104,11 @@ private:
 	bool flag_MeDraw;
 	bool flag_AnBao;
 	string reason_anbao;
+
+	bool flag_Top;
+	bool flag_Bottom;
+	bool flag_Left;
+	bool flag_Right;
 	
 	int countBocCai;
 	int countDiscard;
@@ -144,9 +149,19 @@ public:
 	void notificationCallBack(bool isOK, int tag);
 
 	int getPosUserByName(string uid,string _list_user);
+	int getPosUserByName_ImGuess(string uid);
+
 	string getNamePlayer(string uid);
+
 	void updateUser(string list);
+	void updateUser_ImGuess();
+	void updateUser_ImPlayer();
+
 	void updateUser2Player(vector<string> arrUser);
+	void updateUser2Player_ImGuess(vector<string> arrUser);
+	void updateUser2Player_ImPlayer(vector<string> arrUser);
+
+	bool IamGuess();
 
 	void setInfoAvatar(int pos,string aI,string name, int money, string url);
 
@@ -169,6 +184,8 @@ public:
 	void displayLayerKetQua(string resuilt);
 
 	void eventTakeCards(string f_user, string t_user, string cardnu, string cardsu, int crdorg);
+	void eventTakeCards_Showing(string f_user, string t_user, string cardnu, string cardsu, int crdorg);
+	void eventTakeCards_Playing(string f_user, string t_user, string cardnu, string cardsu, int crdorg);
 
 	void btn_ready_click(CCObject *sender, TouchEventType type);
 	void btn_take_click(CCObject *sender, TouchEventType type);

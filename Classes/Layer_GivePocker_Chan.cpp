@@ -398,7 +398,7 @@ void Layer_GivePocker_Chan::setIntervalBocNoc(){
 	{
 		if (posBocCai == kUserMe)
 		{
-			pPoint = CCPoint(ccp(WIDTH_DESIGN / 2, 90));
+			pPoint = CCPoint(ccp(WIDTH_DESIGN / 2 + 50, 90));
 		}
 		else
 		{
@@ -409,7 +409,7 @@ void Layer_GivePocker_Chan::setIntervalBocNoc(){
 	{
 		switch(posBocCai){
 		case kUserMe:
-			pPoint = CCPoint(ccp(WIDTH_DESIGN / 2, 90));
+			pPoint = CCPoint(ccp(WIDTH_DESIGN / 2 + 50, 90));
 			break;
 		case kUserLeft:
 			pPoint = CCPoint(ccp(105, HEIGHT_DESIGN / 2));
