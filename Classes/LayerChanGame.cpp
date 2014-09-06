@@ -647,6 +647,11 @@ void LayerChanGame::eventListCard(){
 	}
 
 	CCLog("uid: %s, listcards: %s", _usrn.c_str(), _lc.c_str());
+	vector<string> str = mUtils::splitString(_lc,'/');
+	for (int i = 0; i < str.size(); i++)
+	{
+		CCLog("%d : %s", i, str.at(i).c_str());
+	}
 	if (IamGuess())
 	{
 		int pos = getPosUserByName_ImGuess(_usrn);
@@ -1805,6 +1810,7 @@ void LayerChanGame::setEndGame(){
 	layerAvatars->getUserByPos(kUserLeft)->getLblNTFChan()->setVisible(false);
 	layerAvatars->getUserByPos(kUserRight)->getLblNTFChan()->setVisible(false);
 	layerAvatars->getUserByPos(kUserTop)->getLblNTFChan()->setVisible(false);
+	layerAvatars->getUserByPos(kUserBot)->getLblNTFChan()->setVisible(false);
 
 	stopTimer_Me();
 	currentPlayer = "";

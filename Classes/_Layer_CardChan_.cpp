@@ -309,7 +309,7 @@ void _Layer_CardChan_::resetAllCards(){
 	for(int i = 0; i < (int)ALL_CARDS->count(); i++)
 	{
 		CardChan *pCard = (CardChan*)ALL_CARDS->objectAtIndex(i);
-		pCard->setColor(ccWHITE);
+		pCard->setColor(ccc3(255,255,255));
 		pCard->setVisible(false);
 		pCard->setTouchEnabled(false);
 		pCard->setRotation(0);
@@ -1537,32 +1537,41 @@ void _Layer_CardChan_::action_An_U(int f_user, int t_user, string cardnu, string
 CardChan* _Layer_CardChan_::getCardFromPos_take(int pos){
 	if (isGuess == true)
 	{
-		//return;
 	}
 	CardChan* fcard = NULL;
 	switch (pos) {
 	case kUserMe:
+		if(CARD_C_ME->count() == 0)
+			return NULL;
 		fcard = (CardChan*)CARD_C_ME->lastObject();
 		CARD_C_ME->removeLastObject();
 		break;
 	case kUserBot:
+		if (CARD_C_ME->count() == 0)
+			return NULL;
 		fcard = (CardChan*)CARD_C_ME->lastObject();
 		CARD_C_ME->removeLastObject();
 		break;
 	case kUserLeft:
+		if (CARD_C_LEFT)
+			return NULL;		
 		fcard = (CardChan*)CARD_C_LEFT->lastObject();
 		CARD_C_LEFT->removeLastObject();
 		break;
 	case kUserRight:
+		if (CARD_C_RIGHT->count() == 0)
+			return NULL;
 		fcard = (CardChan*)CARD_C_RIGHT->lastObject();
 		CARD_C_RIGHT->removeLastObject();
 		break;
 	case kUserTop:
+		if (CARD_C_TOP->count() == 0)
+			return NULL;
 		fcard = (CardChan*)CARD_C_TOP->lastObject();
 		CARD_C_TOP->removeLastObject();
 		break;
 	default:
-		break;
+		return NULL;
 	}
 	return fcard;
 }

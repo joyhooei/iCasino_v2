@@ -155,19 +155,35 @@ public:
      Tach xau
      */
     static vector<string> splitString(string &S,const char &str){
-        vector<string> arrStr;
-        string::iterator t,t2;
-        for(t=S.begin();t<S.end();){
-            // Lặp từ vị trí bắt đầu
-            t2=find(t, S.end(),str); // Tìm vị trí space ' ' đầu tiên
-            //kể từ vị trí t
-            if(t!=t2)
-                arrStr.push_back(string(t,t2));
+//         vector<string> arrStr;
+//         string::iterator t,t2;
+//         for(t=S.begin();t<S.end();){
+//             // Lặp từ vị trí bắt đầu
+//             t2=find(t, S.end(),str); // Tìm vị trí space ' ' đầu tiên
+//             //kể từ vị trí t
+//             if(t!=t2)
+//                 arrStr.push_back(string(t,t2));
+// 			if( t2 == S.end() )
+// 				break;
+//             t=t2+1; // chuyển sang vị trí sau
+//         }
+//         return arrStr;
+//         
+		vector<string> arrStr;
+		string::iterator t,t2;
+		for(t=S.begin();t<S.end();){
+			// Lặp từ vị trí bắt đầu
+			t2=find(t, S.end(),str); // Tìm vị trí space ' ' đầu tiên
+			//kể từ vị trí t
+			if(t!=t2)
+				arrStr.push_back(string(t,t2));
+			else  if( t2 != S.end() )
+				arrStr.push_back("");
 			if( t2 == S.end() )
 				break;
-            t=t2+1; // chuyển sang vị trí sau
-        }
-        return arrStr;
+			t=t2+1; // chuyển sang vị trí sau
+		}
+		return arrStr;
     }
     /*
      Get current date time
